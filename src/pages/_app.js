@@ -13,6 +13,8 @@ import 'nprogress/nprogress.css';
 
 import ThemeProvider from '@/theme/ThemeProvider';
 
+import '@/styles/globals.css'
+
 const Noop = ({ children }) => <>{children}</>;
 
 export default function MyApp(props) {

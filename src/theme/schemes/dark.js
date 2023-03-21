@@ -7,5 +7,18 @@ export default createTheme ({
 		primary: {
 			main: '#f5831f',
 		},
+		card: {
+			main: '#180e05',
+			darker: '#180e05'
+		}
+	},
+	components: {
+		MuiLink: {
+			styleOverrides: {
+				root: {
+					textDecoration:'none'
+				}
+			}
+		},
 	}
 })
