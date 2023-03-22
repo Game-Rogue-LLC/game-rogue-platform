@@ -1,8 +1,14 @@
+import {
+	Box
+} from "@mui/material"
+
 import Header from './Header'
 import Footer from './Footer'
 import Navbar from './Navbar'
 import PageHeader from './PageHeader'
 import PageContainer from './PageContainer'
+
+import OrganizationSidebar from '@/content/OrganizationSidebar'
 
 const AdminLayout = (props) => {
 	const {children} = props;
@@ -13,17 +19,29 @@ const AdminLayout = (props) => {
 			minHeight: '100vh',
 			justifyContent: 'space-between'
 		}}>
-			<div style={{
-				
-			}}>
+			<div>
 				<Header/>
-				<Navbar/>
 			</div>
-			<PageContainer>
-				<PageHeader/>
-				{children}
-			</PageContainer>
-			<Footer/>
+			<div style={{
+				display: 'flex',
+				justifyContent: 'space-between',
+				flex: 1
+			}}>
+				<OrganizationSidebar/>
+				<div style={{
+					flex:1,
+					flexFlow: 'column',
+					display: 'flex',
+					justifyContent: 'space-between',
+				}}>
+					<Navbar/>
+					<PageContainer>
+						<PageHeader/>
+						{children}
+					</PageContainer>
+					<Footer/>
+				</div>
+			</div>
 		</div>
 	)
 }

@@ -10,6 +10,9 @@ export default createTheme ({
 		card: {
 			main: '#180e05',
 			darker: '#180e05'
+		},
+		backgroundColor: {
+			header: '#28180a'
 		}
 	},
 	components: {
