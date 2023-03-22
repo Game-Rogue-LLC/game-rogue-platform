@@ -9,7 +9,7 @@ const PageContainer = ({children}) => {
 			flex: 1,
 			padding: '2em 0',
 		}}>
-			<Container maxWidth='xxl'>
+			<Container maxWidth='xl'>
 				{children}
 			</Container>
 		</div>

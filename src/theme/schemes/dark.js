@@ -13,6 +13,9 @@ export default createTheme ({
 		},
 		backgroundColor: {
 			header: '#28180a'
+		},
+		action : {
+			selectedOpacity: .1
 		}
 	},
 	components: {

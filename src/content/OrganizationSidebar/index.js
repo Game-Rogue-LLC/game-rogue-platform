@@ -15,6 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import ArrowRight from '@mui/icons-material/ArrowRight';
 import Home from '@mui/icons-material/Home';
 import Settings from '@mui/icons-material/Settings';
+import { Menu, MenuItem } from '@mui/material';
 
 import OrganizationMenu from './Menu'
 
@@ -22,6 +23,9 @@ import People from '@mui/icons-material/People';
 import PermMedia from '@mui/icons-material/PermMedia';
 import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
+
+import { AppContext } from '@/context/app';
+import Link from 'next/link';
 
 const events = [
 	{ icon: <People />, label: 'Event 1' },
@@ -74,6 +78,22 @@ const FirePaper = styled(Paper)(({theme})=>({
 }));
 
 export default function CustomizedList(props) {
+	const { organizations } = React.useContext(AppContext);
+	const [showMenu, setShowMenu] = React.useState(false);
+	const [anchorElMenu, setAnchorElMenu] = React.useState(null);
+
+	const handleOpenMenu = (event) => {
+	  setAnchorElMenu(event.currentTarget);
+	};
+
+	const handleCloseMenu = () => {
+	  setAnchorElMenu(null);
+	};
+
+	const toggleShowMenu = (e) => {
+		setShowMenu((prevState) => !prevState);
+	}
+
 	return (
     <Box sx={{ display: 'flex', boxShadow: '2px 0px 7px #301701ba', zIndex: 1, position: 'relative' }}>
 		<Box sx={{
@@ -98,57 +118,83 @@ export default function CustomizedList(props) {
 					</ListItem>
 					<Divider />
 					<ListItem component="div" disablePadding>
-					<ListItemButton sx={{ height: 56 }}>
-						<ListItemIcon>
-						<Home color="primary" />
-						</ListItemIcon>
-						<ListItemText
-						primary="Profile"
-						primaryTypographyProps={{
-							color: 'primary',
-							fontWeight: 'medium',
-							variant: 'body2',
-						}}
-						/>
-					</ListItemButton>
-					<Tooltip title="Events Settings">
-						<IconButton
-						size="large"
-						sx={{
-							'& svg': {
-							color: 'rgba(255,255,255,0.8)',
-							transition: '0.2s',
-							transform: 'translateX(0) rotate(0)',
-							},
-							'&:hover, &:focus': {
-							bgcolor: 'unset',
-							'& svg:first-of-type': {
-								transform: 'translateX(-4px) rotate(-20deg)',
-							},
-							'& svg:last-of-type': {
-								right: 0,
-								opacity: 1,
-							},
-							},
-							'&:after': {
-							content: '""',
-							position: 'absolute',
-							height: '80%',
-							display: 'block',
-							left: 0,
-							width: '1px',
-							bgcolor: 'divider',
-							},
-						}}
+						<ListItemButton sx={{ height: 56 }}>
+							<ListItemIcon>
+							<Home color="primary" />
+							</ListItemIcon>
+							<ListItemText
+								primary="Profile"
+								primaryTypographyProps={{
+									color: 'primary',
+									fontWeight: 'medium',
+									variant: 'body2',
+								}}
+							/>
+						</ListItemButton>
+						<Tooltip title="Events Settings">
+							<IconButton
+								size="large"
+								sx={{
+									'& svg': {
+									color: 'rgba(255,255,255,0.8)',
+									transition: '0.2s',
+									transform: 'translateX(0) rotate(0)',
+									},
+									'&:hover, &:focus': {
+									bgcolor: 'unset',
+									'& svg:first-of-type': {
+										transform: 'translateX(-4px) rotate(-20deg)',
+									},
+									'& svg:last-of-type': {
+										right: 0,
+										opacity: 1,
+									},
+									},
+									'&:after': {
+									content: '""',
+									position: 'absolute',
+									height: '80%',
+									display: 'block',
+									left: 0,
+									width: '1px',
+									bgcolor: 'divider',
+									},
+								}}
+								onClick={handleOpenMenu}
+							>
+								<Settings />
+								<ArrowRight sx={{ position: 'absolute', right: 4, opacity: 0 }} />
+							</IconButton>
+						</Tooltip>
+						<Menu
+							sx={{ mt: '45px' }}
+							id="menu-appbar"
+							anchorEl={anchorElMenu}
+							anchorOrigin={{
+								vertical: 'top',
+								horizontal: 'right',
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: 'top',
+								horizontal: 'left',
+							}}
+							open={Boolean(anchorElMenu)}
+							onClose={handleCloseMenu}
 						>
-						<Settings />
-						<ArrowRight sx={{ position: 'absolute', right: 4, opacity: 0 }} />
-						</IconButton>
-					</Tooltip>
+							<MenuItem onClick={handleCloseMenu}>
+								<Link href='/organization/create'>
+									<Typography textAlign="center">Add Organization</Typography>
+								</Link>
+							</MenuItem>
+						</Menu>
 					</ListItem>
 					<Divider />
 					{organizations.map((item)=>
-						<OrganizationMenu key={"organization_menu_"+item._id} organization={item} />
+						<>
+							<OrganizationMenu key={"organization_menu_"+item._id} organization={item} />
+							<Divider />
+						</>
 					)}
 				</FireNav>
 			</FirePaper>
