@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import {makeStyles} from '@mui/styles'
 import { Link, useTheme } from '@mui/material'
+import { styled, alpha } from '@mui/material/styles';
 
 import routes from './routes'
 
@@ -52,12 +53,12 @@ function Navbar() {
     <AppBar 
 		position="static" 
 		sx={{
-			borderTop: `2px #f5831f solid`,
-			borderBottom: `2px #f5831f solid`,
+			// borderTop: `2px #f5831f solid`,
+			// borderBottom: `2px #f5831f solid`,
 			backgroundColor: theme.palette.card.darker,
 			backgroundImage: 'none'
 		}}>
-		<Container maxWidth="xl">
+		<Container maxWidth="xxl">
 			<Toolbar classes={{root:toolbarStyle.root}} disableGutters>
 
 			<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -113,25 +114,25 @@ function Navbar() {
 
 			<Box sx={{ flexGrow: 0 }}>
 				<Tooltip title="Open settings">
-				<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-					<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-				</IconButton>
+					<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+						<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+					</IconButton>
 				</Tooltip>
 				<Menu
-				sx={{ mt: '45px' }}
-				id="menu-appbar"
-				anchorEl={anchorElUser}
-				anchorOrigin={{
-					vertical: 'top',
-					horizontal: 'right',
-				}}
-				keepMounted
-				transformOrigin={{
-					vertical: 'top',
-					horizontal: 'right',
-				}}
-				open={Boolean(anchorElUser)}
-				onClose={handleCloseUserMenu}
+					sx={{ mt: '45px' }}
+					id="menu-appbar"
+					anchorEl={anchorElUser}
+					anchorOrigin={{
+						vertical: 'top',
+						horizontal: 'right',
+					}}
+					keepMounted
+					transformOrigin={{
+						vertical: 'top',
+						horizontal: 'right',
+					}}
+					open={Boolean(anchorElUser)}
+					onClose={handleCloseUserMenu}
 				>
 				{settings.map((setting) => (
 					<MenuItem key={setting} onClick={handleCloseUserMenu}>

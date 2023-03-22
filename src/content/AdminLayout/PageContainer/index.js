@@ -1,14 +1,15 @@
 import {
-	Container
+	Container,
+	Box
 } from '@mui/material'
 
 const PageContainer = ({children}) => {
 	return (
 		<div style={{
-			flex:1,
-			padding: '2em 0'
+			flex: 1,
+			padding: '2em 0',
 		}}>
-			<Container maxWidth='lg'>
+			<Container maxWidth='xxl'>
 				{children}
 			</Container>
 		</div>
