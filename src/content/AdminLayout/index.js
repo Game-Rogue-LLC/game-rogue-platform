@@ -10,7 +10,7 @@ import OrganizationSidebar from '@/content/OrganizationSidebar'
 import { AppContext } from "@/context/app"
 
 const AdminLayout = (props) => {
-	const {children} = props;
+	const { children } = props;
 	const { organizations } = useContext(AppContext);
 
 	return (
@@ -21,29 +21,29 @@ const AdminLayout = (props) => {
 			justifyContent: 'space-between'
 		}}>
 			<div>
-				<Header/>
+				<Header />
 			</div>
 			<div style={{
 				display: 'flex',
 				justifyContent: 'space-between',
 				flex: 1
 			}}>
-				{ organizations.length > 0 ?
-					<OrganizationSidebar/>
+				{organizations?.length > 0 ?
+					<OrganizationSidebar />
 					: <></>
 				}
 				<div style={{
-					flex:1,
+					flex: 1,
 					flexFlow: 'column',
 					display: 'flex',
 					justifyContent: 'space-between',
 				}}>
-					{ organizations && organizations.length > 0 && <Navbar/> }
+					{organizations?.length > 0 && <Navbar />}
 					<PageContainer>
-						<PageHeader/>
+						<PageHeader />
 						{children}
 					</PageContainer>
-					<Footer/>
+					<Footer />
 				</div>
 			</div>
 		</div>

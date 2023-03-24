@@ -4,12 +4,15 @@ const AppContext = createContext({});
 
 export default (props) => {
     const [organizations, setOrganizations] = useState([]);
+    const [currentOrganization, setCurrentOrganization] = useState(null);
+    const [title, setTitle] = useState(null);
 
-    const addOrganization = (newOrg) => {
-        setOrganizations([
+    const addOrganization = async (newOrg) => {
+        await setOrganizations([
             ...organizations,
             newOrg
         ])
+        setCurrentOrganization(newOrg);
     }
 
     const addEvent = (event) => {
@@ -24,7 +27,7 @@ export default (props) => {
     }
 
     return (
-        <AppContext.Provider value={{ organizations, addOrganization, addEvent }}>
+        <AppContext.Provider value={{ organizations, addOrganization, addEvent, currentOrganization, setCurrentOrganization, title, setTitle }}>
             {props.children}
         </AppContext.Provider>
     )

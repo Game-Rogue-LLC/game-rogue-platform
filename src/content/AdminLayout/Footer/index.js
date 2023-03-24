@@ -16,7 +16,7 @@ const Footer = () => {
 			display: 'flex',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			backgroundColor: theme.palette.card.main
+			bgcolor: theme.palette.card.main
 		}}>
 			<Box sx={{flexGrow:1}}>
 				<Typography variant="h6">Welcome to Game Rogue</Typography>
