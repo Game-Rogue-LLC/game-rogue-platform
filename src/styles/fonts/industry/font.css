@@ -1,0 +1,21 @@
+@font-face {
+    font-family: 'Industry';
+    src: url('Industry-Bold.eot');
+    src: local('Industry Bold'), local('Industry-Bold'),
+        url('Industry-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Industry-Bold.woff') format('woff'),
+        url('Industry-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Industry';
+    src: url('Industry-BoldItalic.eot');
+    src: local('Industry Bold Italic'), local('Industry-BoldItalic'),
+        url('Industry-BoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('Industry-BoldItalic.woff') format('woff'),
+        url('Industry-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}

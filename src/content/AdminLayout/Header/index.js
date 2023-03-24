@@ -6,9 +6,10 @@ import {
 	Menu,
 	Divider,
 	IconButton,
-	Link,
 	useTheme,
 } from '@mui/material'
+
+import Link from 'next/link';
 
 import { styled, alpha } from '@mui/material/styles';
 import {useState} from 'react'

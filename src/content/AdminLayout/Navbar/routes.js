@@ -20,8 +20,5 @@ export default [
 	},{
 		href:'/organizer',
 		label: 'Organizer+'
-	},{
-		href:'/profile',
-		label: 'Organizer Profile'
-	},
+	}
 ]

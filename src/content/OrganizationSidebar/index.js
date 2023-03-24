@@ -78,7 +78,7 @@ const FirePaper = styled(Paper)(({theme})=>({
 }));
 
 export default function CustomizedList(props) {
-	const { organizations } = React.useContext(AppContext);
+	const { organizations, currentOrganization, setCurrentOrganization } = React.useContext(AppContext);
 	const [showMenu, setShowMenu] = React.useState(false);
 	const [anchorElMenu, setAnchorElMenu] = React.useState(null);
 
@@ -123,7 +123,7 @@ export default function CustomizedList(props) {
 							<Home color="primary" />
 							</ListItemIcon>
 							<ListItemText
-								primary="Profile"
+								primary={`James' s Profile`}
 								primaryTypographyProps={{
 									color: 'primary',
 									fontWeight: 'medium',
