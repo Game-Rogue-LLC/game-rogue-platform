@@ -77,7 +77,7 @@ const FirePaper = styled(Paper)(({theme})=>({
 	borderRadius: 0,
 }));
 
-export default function CustomizedList(props) {
+export default function OrganizationSidebar(props) {
 	const { organizations, currentOrganization, setCurrentOrganization } = React.useContext(AppContext);
 	const [showMenu, setShowMenu] = React.useState(false);
 	const [anchorElMenu, setAnchorElMenu] = React.useState(null);
@@ -103,7 +103,7 @@ export default function CustomizedList(props) {
 		}}>
 			<FirePaper elevation={0} sx={{ width: '100%', height: '100%', maxWidth: '100%', position: 'absolute', overflowX:'hidden', overflowY:'auto' }}>
 				<FireNav component="nav" disablePadding>
-					<ListItem sx={{
+					<ListItem key={"profile_container"} sx={{
 							display: 'flex',
 							flexFlow: 'column',
 							alignItems: 'center',
@@ -117,7 +117,7 @@ export default function CustomizedList(props) {
 						</Box>
 					</ListItem>
 					<Divider />
-					<ListItem component="div" disablePadding>
+					<ListItem key={"profile_menu_container"} component="div" disablePadding>
 						<ListItemButton sx={{ height: 56 }}>
 							<ListItemIcon>
 							<Home color="primary" />
@@ -191,10 +191,7 @@ export default function CustomizedList(props) {
 					</ListItem>
 					<Divider />
 					{organizations.map((item)=>
-						<>
-							<OrganizationMenu key={"organization_menu_"+item._id} organization={item} />
-							<Divider />
-						</>
+						<OrganizationMenu key={"organization_menu_"+item._id} organization={item} />
 					)}
 				</FireNav>
 			</FirePaper>

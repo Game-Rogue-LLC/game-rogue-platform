@@ -69,11 +69,12 @@ const Page = (props) => {
     }
 
     React.useEffect(() => {
-        organizations.forEach(elem => {
-            if (elem.events?.length >= 5)
+        for (let i = 0; i < organizations?.length; i++) {
+            if (organizations[i]?.events?.length >= 5) {
                 setDisabled(true);
-            return;
-        });
+                break;
+            }
+        }
     }, [organizations])
 
     React.useEffect(() => {

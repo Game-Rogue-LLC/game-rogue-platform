@@ -1,17 +1,15 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import {
-	Box,
-	FormControl,
-	InputLabel,
-	FormHelperText,
-	Grid,
 	Paper,
-	useTheme,
-	Typography,
-	TextField,
-	Alert,
-	OutlinedInput
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+    TableContainer,
+    TableFooter,
+	useTheme
 } from '@mui/material';
 
 import AdminLayout from '@/content/AdminLayout';
@@ -26,18 +24,54 @@ const Page = (props) => {
     })
 
 	return (
-		<Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-			<Grid container rowSpacing={3}>
-				<Grid item xs={12}>
-					<Typography variant='h6'>
-						Matches
-					</Typography>
-				</Grid>
-                <Alert variant='filled' severity='error' sx={{ mt: 2, width: '100%' }}>
-                    '1253234235'
-                </Alert>
-			</Grid>
-		</Paper>
+        <TableContainer component={Paper} variant='elevation'>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell align='center'>MATCH ID</TableCell>
+                        <TableCell align='center'>STATUS</TableCell>
+                        <TableCell align='center'>ADMIN</TableCell>
+                        <TableCell align='center'>CREATED</TableCell>
+                        <TableCell align='center'>CATEGORY</TableCell>
+                        <TableCell align='center'>SCHEDULED</TableCell>
+                        <TableCell align='center'>SOCIAL POST</TableCell>
+                        <TableCell align='center'>HIGHLIGHTS</TableCell>
+                        <TableCell align='center'>STREAM NOW</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                        <TableCell align='center'>12345</TableCell>
+                        <TableCell align='center'>IN PROGRESS</TableCell>
+                        <TableCell align='center'>INST1NCT</TableCell>
+                        <TableCell align='center'>MAY 3</TableCell>
+                        <TableCell align='center'>ROUND II</TableCell>
+                        <TableCell align='center'>ONGOING</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align='center'>12346</TableCell>
+                        <TableCell align='center'>COMPLETED</TableCell>
+                        <TableCell align='center'>TITANE</TableCell>
+                        <TableCell align='center'>MAY 1</TableCell>
+                        <TableCell align='center'>ROUND I</TableCell>
+                        <TableCell align='center'>May 2, 7:00pm EST</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{ border: 'none' }}>
+                            <Button variant='contained' sx={{ borderRadius: 0, color: 'white', bgcolor: 'black' }}>
+                                PAST MATCHES
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </TableContainer>
 	)
 }
 

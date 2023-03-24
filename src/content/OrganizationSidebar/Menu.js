@@ -24,104 +24,109 @@ const Menu = (props) => {
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     return (
-        <Box
-            sx={{
-                bgcolor: open ? alpha(
-                    theme.palette.primary.main,
-                    theme.palette.action.selectedOpacity,
-                ) : null,
-                pb: 0,
-            }}
-        >
-            <ListItemButton
-                alignItems="flex-start"
+        <>
+            <Box
                 sx={{
-                    px: 3,
-                    py: 2.5,
-                    alignItems: 'center'
-                    // '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
+                    bgcolor: open ? alpha(
+                        theme.palette.primary.main,
+                        theme.palette.action.selectedOpacity,
+                    ) : null,
+                    pb: 0,
                 }}
             >
-                <ListItemText
-                    primary={organization.name}
-                    primaryTypographyProps={{
-                        fontSize: 15,
-                        fontWeight: 'medium',
-                        lineHeight: '20px',
-                        mb: '2px',
+                <ListItem
+                    key={organization._id}
+                    alignItems="flex-start"
+                    sx={{
+                        px: 3,
+                        py: 2.5,
+                        alignItems: 'center'
+                        // '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
                     }}
-                    secondary={!open && organization?.tagline}
-                    secondaryTypographyProps={{
-                        noWrap: true,
-                        fontSize: 12,
-                        lineHeight: '16px',
-                        // color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
-                    }}
-                    sx={{ my: 0 }}
-                    onClick={() => {
-                        console.log(1234)
-                        setCurrentOrganization(organization);
-                    }}
-                />
-                <IconButton >
-                    <KeyboardArrowDown
-                        sx={{
-                            // opacity: 0,
-                            transform: open ? 'rotate(-180deg)' : 'rotate(0)',
-                            transition: '0.2s',
+                >
+                    <ListItemText
+                        primary={organization.name}
+                        primaryTypographyProps={{
+                            fontSize: 15,
+                            fontWeight: 'medium',
+                            lineHeight: '20px',
+                            mb: '2px',
                         }}
+                        secondary={!open && organization?.tagline}
+                        secondaryTypographyProps={{
+                            noWrap: true,
+                            fontSize: 12,
+                            lineHeight: '16px',
+                            // color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
+                        }}
+                        sx={{ my: 0 }}
+                        onClick={() => {
+                            console.log(1234)
+                            setCurrentOrganization(organization);
+                        }}
+                    />
+                    <IconButton
                         onClick={() => {
                             setOpen(!open);
                         }}
-                    />
-                </IconButton>
-            </ListItemButton>
-            {open &&
-                <>
-                    {organization.events?.map((item, idx) => (
-                        <ListItemButton
-                            key={"event_menu_" + organization._id + "_" + idx}
-                            sx={{ minHeight: 32, color: 'rgba(255,255,255,.8)' }}
-                        >
-                            <ListItemIcon sx={{ color: 'inherit' }}>
-                                {item.icon}
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={item.label}
-                                primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
-                            />
-                        </ListItemButton>
-                    ))}
-                    <Box sx={{
-                        display: 'flex'
-                    }}>
-                        <Button
-                            variant='outlined'
-                            onClick={() => Router.push('/profile?organization=' + organization._id)}
+                    >
+                        <KeyboardArrowDown
                             sx={{
-                                flexGrow: 1,
-                                m: 1
+                                // opacity: 0,
+                                transform: open ? 'rotate(-180deg)' : 'rotate(0)',
+                                transition: '0.2s',
                             }}
-                            size='small'
-                        >
-                            Organizer Profile
-                        </Button>
-                        <Button
-                            variant='contained'
-                            onClick={() => Router.push('/event/create?organization=' + organization._id)}
-                            sx={{
-                                flexGrow: 0,
-                                my: 1,
-                                mr: 1,
-                                color: 'white',
-                                border: '1px solid rgba(255, 255, 255, .5)'
-                            }}
-                            color='secondary'
-                            size='small'
-                        > + </Button>
-                    </Box>
-                </>}
-        </Box>
+                        />
+                    </IconButton>
+                </ListItem>
+                {open &&
+                    <>
+                        {organization.events?.map((item, idx) => (
+                            <ListItemButton
+                                key={"event_menu_" + organization._id + "_" + idx}
+                                sx={{ minHeight: 32, color: 'rgba(255,255,255,.8)' }}
+                            >
+                                <ListItemIcon sx={{ color: 'inherit' }}>
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={item.label}
+                                    primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
+                                />
+                            </ListItemButton>
+                        ))}
+                        <Box sx={{
+                            display: 'flex'
+                        }}>
+                            <Button
+                                variant='outlined'
+                                onClick={() => Router.push('/profile?organization=' + organization._id)}
+                                sx={{
+                                    flexGrow: 1,
+                                    m: 1
+                                }}
+                                size='small'
+                            >
+                                Organizer Profile
+                            </Button>
+                            <Button
+                                variant='contained'
+                                onClick={() => Router.push('/event/create?organization=' + organization._id)}
+                                sx={{
+                                    flexGrow: 0,
+                                    my: 1,
+                                    mr: 1,
+                                    color: 'white',
+                                    border: '1px solid rgba(255, 255, 255, .5)'
+                                }}
+                                color='secondary'
+                                size='small'
+                            > + </Button>
+                        </Box>
+                    </>}
+            </Box>
+            <Divider />
+        </>
     )
 }
 
