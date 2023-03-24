@@ -11,13 +11,14 @@ import { AppContext } from "@/context/app"
 
 const AdminLayout = (props) => {
 	const { children } = props;
-	const { organizations } = useContext(AppContext);
+	const { activeCount } = useContext(AppContext);
 
 	return (
 		<div style={{
 			display: 'flex',
 			flexFlow: 'column',
 			minHeight: '100vh',
+			width: '100vw',
 			justifyContent: 'space-between'
 		}}>
 			<div>
@@ -28,7 +29,7 @@ const AdminLayout = (props) => {
 				justifyContent: 'space-between',
 				flex: 1
 			}}>
-				{organizations?.length > 0 ?
+				{activeCount > 0 ?
 					<OrganizationSidebar />
 					: <></>
 				}
@@ -38,7 +39,7 @@ const AdminLayout = (props) => {
 					display: 'flex',
 					justifyContent: 'space-between',
 				}}>
-					{organizations?.length > 0 && <Navbar />}
+					{activeCount > 0 && <Navbar />}
 					<PageContainer>
 						<PageHeader />
 						{children}

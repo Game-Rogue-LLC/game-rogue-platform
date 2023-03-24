@@ -190,9 +190,10 @@ export default function OrganizationSidebar(props) {
 						</Menu>
 					</ListItem>
 					<Divider />
-					{organizations.map((item)=>
+					{organizations.map((item)=> (
+						!item?.deleted &&
 						<OrganizationMenu key={"organization_menu_"+item._id} organization={item} />
-					)}
+					))}
 				</FireNav>
 			</FirePaper>
 		</Box>

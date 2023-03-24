@@ -117,9 +117,9 @@ function Navbar() {
                     <Box sx={{ flexGrow: 0 }}>
                         {currentOrganization &&
                             <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt={currentOrganization.name} src="/static/images/avatar/2.jpg" />
-                                </IconButton>
+                                <Box sx={{ height: '30px', position: 'relative', pr: 2 }}>
+                                    <img src='/Game_Rogue_Text_2_copy.png' height={'100%'} />
+                                </Box>
                             </Tooltip>}
                         <Menu
                             sx={{ mt: '45px' }}

@@ -18,7 +18,7 @@ export default [
 		href:'/organization/archived',
 		label: 'Archived'
 	},{
-		href:'/organization/organizer',
+		href:'/profile',
 		label: 'Organizer+'
 	}
 ]

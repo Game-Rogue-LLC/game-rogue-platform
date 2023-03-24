@@ -15,13 +15,14 @@ import {
 import { alpha } from '@mui/material/styles';
 
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { AppContext } from '@/context/app';
 
 const Menu = (props) => {
     const { organization } = props;
-    const { setCurrentOrganization } = React.useContext(AppContext);
+    const { currentOrganization, setCurrentOrganization } = React.useContext(AppContext);
     const [open, setOpen] = React.useState(false);
+    const router = useRouter();
     const theme = useTheme();
     return (
         <>
@@ -61,8 +62,7 @@ const Menu = (props) => {
                         }}
                         sx={{ my: 0 }}
                         onClick={() => {
-                            console.log(1234)
-                            setCurrentOrganization(organization);
+                            setCurrentOrganization({...organization});
                         }}
                     />
                     <IconButton
@@ -100,7 +100,7 @@ const Menu = (props) => {
                         }}>
                             <Button
                                 variant='outlined'
-                                onClick={() => Router.push('/profile?organization=' + organization._id)}
+                                onClick={() => router.push('/profile?organization=' + organization._id)}
                                 sx={{
                                     flexGrow: 1,
                                     m: 1
@@ -111,13 +111,14 @@ const Menu = (props) => {
                             </Button>
                             <Button
                                 variant='contained'
-                                onClick={() => Router.push('/event/create?organization=' + organization._id)}
+                                onClick={() => router.push('/event/create?organization=' + organization._id)}
                                 sx={{
                                     flexGrow: 0,
                                     my: 1,
                                     mr: 1,
                                     color: 'white',
-                                    border: '1px solid rgba(255, 255, 255, .5)'
+                                    border: '1px solid rgba(255, 255, 255, .5)',
+                                    display: currentOrganization?.events?.length >= 5 ? 'none' : 'block'
                                 }}
                                 color='secondary'
                                 size='small'
