@@ -24,7 +24,7 @@ const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { organization } = props;
-    const { organizations, addEvent, setTitle } = React.useContext(AppContext);
+    const { organizations, addEvent, setTitle, currentOrganization } = React.useContext(AppContext);
     const [org, setOrg] = React.useState(organization || "");
     const [inputs, setInputs] = React.useState({ name: '' });
 	const [valid, setValid] = React.useState({ name: true });
@@ -69,17 +69,14 @@ const Page = (props) => {
     }
 
     React.useEffect(() => {
-        for (let i = 0; i < organizations?.length; i++) {
-            if (organizations[i]?.events?.length >= 5) {
-                setDisabled(true);
-                break;
-            }
-        }
-    }, [organizations])
-
-    React.useEffect(() => {
         setTitle('REGISTER AN EVENT');
     }, [])
+
+    React.useEffect(() => {
+        console.log(currentOrganization, '1')
+        if (currentOrganization?.events?.length >= 5)
+            setDisabled(true);
+    }, [currentOrganization])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>

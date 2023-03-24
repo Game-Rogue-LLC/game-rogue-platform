@@ -16,11 +16,12 @@ import {
 
 import AdminLayout from '@/content/AdminLayout';
 import { AppContext } from '@/context/app';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 
 const Page = (props) => {
 	const theme = useTheme();
-	const { organizations, addOrganization, setTitle } = React.useContext(AppContext);
+	const router = useRouter();
+	const { organizations, addOrganization, setTitle, activeCount } = React.useContext(AppContext);
 	const [inputs, setInputs] = React.useState({ name: '', tagline: '' });
 	const [valid, setValid] = React.useState({ name: true, tagline: true });
 	const [disabled, setDisabled] = React.useState(false);
@@ -49,7 +50,7 @@ const Page = (props) => {
 			tagline: ''
 		})
 		await addOrganization(newOrg);
-		Router.push('/organization/match');
+		router.push('/organization/match');
 	}
 
 	const handleInputs = (e) => {
@@ -62,7 +63,7 @@ const Page = (props) => {
 	}
 
 	React.useEffect(() => {
-		if (organizations?.length >= 3)
+		if (activeCount >= 3)
 			setDisabled(true);
 	}, [organizations])
 
