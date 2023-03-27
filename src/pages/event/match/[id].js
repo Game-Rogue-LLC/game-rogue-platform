@@ -14,17 +14,20 @@ import {
 
 import AdminLayout from '@/content/AdminLayout';
 import { AppContext } from '@/context/app';
+import { useRouter } from 'next/router';
 
 const Page = (props) => {
 	const theme = useTheme();
+    const router = useRouter();
     const { setTitle } = React.useContext(AppContext);
+    console.log(router.query)
 
     React.useEffect(() => {
-        setTitle('EVENTS');
+        setTitle('MATCHES');
     })
 
 	return (
-        <TableContainer component={Paper} sx={{ textTransform: 'uppercase' }} variant='elevation'>
+        <TableContainer component={Paper} variant='elevation'>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -43,29 +46,29 @@ const Page = (props) => {
                     <TableRow>
                         <TableCell align='center'>12345</TableCell>
                         <TableCell align='center'>IN PROGRESS</TableCell>
-                        <TableCell align='center'>Inst1nct</TableCell>
-                        <TableCell align='center'>may 3</TableCell>
-                        <TableCell align='center'>round ii</TableCell>
-                        <TableCell align='center'>ongoing</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
+                        <TableCell align='center'>INST1NCT</TableCell>
+                        <TableCell align='center'>MAY 3</TableCell>
+                        <TableCell align='center'>ROUND II</TableCell>
+                        <TableCell align='center'>ONGOING</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell align='center'>12346</TableCell>
-                        <TableCell align='center'>completed</TableCell>
-                        <TableCell align='center'>titane</TableCell>
-                        <TableCell align='center'>may 1</TableCell>
-                        <TableCell align='center'>round i</TableCell>
-                        <TableCell align='center'>may 2, 7:00pm est</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
+                        <TableCell align='center'>COMPLETED</TableCell>
+                        <TableCell align='center'>TITANE</TableCell>
+                        <TableCell align='center'>MAY 1</TableCell>
+                        <TableCell align='center'>ROUND I</TableCell>
+                        <TableCell align='center'>May 2, 7:00pm EST</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                        <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ border: 'none' }}>
                             <Button variant='contained' sx={{ borderRadius: 0, color: 'white', bgcolor: 'black' }}>
-                                PAST EVENTS
+                                PAST MATCHES
                             </Button>
                         </TableCell>
                     </TableRow>

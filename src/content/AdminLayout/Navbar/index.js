@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
@@ -29,9 +28,16 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const NavItem = styled(Button)(({theme}) => ({
+    color: theme.palette.card.main,
+    ':hover': {
+        backgroundColor: alpha(theme.palette.card.main, theme.palette.action.selectedOpacity)
+    }
+}))
+
 function Navbar() {
     const theme = useTheme()
-    const { currentOrganization } = React.useContext(AppContext);
+    const { current } = React.useContext(AppContext);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -102,20 +108,20 @@ function Navbar() {
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {routes.map((route) => (
-                            <Button
+                            <NavItem
                                 key={route.href}
                                 onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                sx={{ my: 2, color: 'black', display: 'block' }}
                             >
                                 <Link href={route.href}>
                                     {route.label}
                                 </Link>
-                            </Button>
+                            </NavItem>
                         ))}
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        {currentOrganization &&
+                        {current.organization &&
                             <Tooltip title="Open settings">
                                 <Box sx={{ height: '30px', position: 'relative', pr: 2 }}>
                                     <img src='/Game_Rogue_Text_2_copy.png' height={'100%'} />

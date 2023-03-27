@@ -34,16 +34,16 @@ import ContentBlock from '@/pages/profile/components/content-block';
 const Page = (props) => {
 	const router = useRouter();
 	const theme = useTheme();
-	const { organizations, addOrganization, updateOrganization, deleteOrganization, setTitle, currentOrganization } = React.useContext(AppContext);
+	const { organizations, addOrganization, updateOrganization, deleteOrganization, setTitle, current } = React.useContext(AppContext);
 	const [inputs, setInputs] = React.useState({
-		name: currentOrganization?.name,
-		tagline: currentOrganization?.tagline,
-		credit: currentOrganization?.credit,
-		paypal: currentOrganization?.paypal,
-		twitter: currentOrganization?.twitter,
-		instagram: currentOrganization?.instagram,
-		youtube: currentOrganization?.youtube,
-		twitch: currentOrganization?.twitch
+		name: current.organization?.name,
+		tagline: current.organization?.tagline,
+		credit: current.organization?.credit,
+		paypal: current.organization?.paypal,
+		twitter: current.organization?.twitter,
+		instagram: current.organization?.instagram,
+		youtube: current.organization?.youtube,
+		twitch: current.organization?.twitch
 	})
 	const [valid, setValid] = React.useState({
 		name: true,

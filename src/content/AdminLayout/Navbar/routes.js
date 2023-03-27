@@ -1,24 +1,21 @@
 export default [
 	{
-		href:'/organization/match',
+		href:'/event/:id/match',
 		label: 'Matches'
 	},{
-		href:'/organization/ticket',
+		href:'/event/:id/ticket',
 		label: 'Tickets'
 	},{
-		href:'/organization/staff',
+		href:'/event/:id/staff',
 		label: 'Staff'
 	},{
-		href:'/organization/participant',
+		href:'/event/:id/participant',
 		label: 'Participants'
 	},{
-		href:'/organization/event',
+		href:'/event/:id/event',
 		label: 'Edit Event'
 	},{
-		href:'/organization/archived',
+		href:'/event/:id/archived',
 		label: 'Archived'
-	},{
-		href:'/profile',
-		label: 'Organizer+'
 	}
 ]

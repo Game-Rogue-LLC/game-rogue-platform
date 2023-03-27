@@ -14,10 +14,13 @@ import {
 
 import AdminLayout from '@/content/AdminLayout';
 import { AppContext } from '@/context/app';
+import { useRouter } from 'next/router';
 
 const Page = (props) => {
 	const theme = useTheme();
+    const router = useRouter();
     const { setTitle } = React.useContext(AppContext);
+    console.log(router.query)
 
     React.useEffect(() => {
         setTitle('MATCHES');

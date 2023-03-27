@@ -29,7 +29,7 @@ const AdminLayout = (props) => {
 				justifyContent: 'space-between',
 				flex: 1
 			}}>
-				{activeCount > 0 ?
+				{activeCount?.organization > 0 ?
 					<OrganizationSidebar />
 					: <></>
 				}
@@ -39,7 +39,7 @@ const AdminLayout = (props) => {
 					display: 'flex',
 					justifyContent: 'space-between',
 				}}>
-					{activeCount > 0 && <Navbar />}
+					{activeCount?.organization > 0 && activeCount?.event > 0 && <Navbar />}
 					<PageContainer>
 						<PageHeader />
 						{children}

@@ -53,10 +53,17 @@ export default createTheme ({
 				}
 			}
 		},
-		AppBar: {
+		MuiAppBar: {
 			styleOverrides: {
 				root: {
 					backgroundColor: '#CCCACA'
+				}
+			}
+		},
+		MuiPaper: {
+			styleOverrides: {
+				root: {
+					backgroundColor: '#180e05'
 				}
 			}
 		}
