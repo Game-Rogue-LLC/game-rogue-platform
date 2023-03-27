@@ -1,7 +1,7 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import {
     Box,
+    Button,
     FormControl,
     FormHelperText,
     Grid,
@@ -24,7 +24,7 @@ const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { organization } = props;
-    const { organizations, addEvent, setTitle, current } = React.useContext(AppContext);
+    const { organizations, addEvent, title, setTitle, current } = React.useContext(AppContext);
     const [org, setOrg] = React.useState(organization || "");
     const [inputs, setInputs] = React.useState({ name: '' });
 	const [valid, setValid] = React.useState({ name: true });
@@ -74,8 +74,9 @@ const Page = (props) => {
     }
 
     React.useEffect(() => {
-        setTitle('REGISTER AN EVENT');
-    }, [])
+        if (title != 'REGISTER AN EVENT')
+            setTitle('REGISTER AN EVENT');
+    }, [title])
 
     React.useEffect(() => {
         if (current.organization?.events?.length >= 5)
