@@ -44,7 +44,7 @@ const Page = (props) => {
         setOrg(router.query.organization)
     }, [router])
 
-    const handleCreate = async (e) => {
+    const handleCreate = (e) => {
 		if (!validate({ name: 'name', value: inputs?.name })) {
 			return;
 		}
@@ -55,7 +55,7 @@ const Page = (props) => {
             icon: <Event />,
             label: inputs.name
         }
-        await addEvent({
+        addEvent({
             ...newEvent
         })
         router.push(`/event/match/${newEvent._id}`);
