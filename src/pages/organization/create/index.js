@@ -50,7 +50,7 @@ const Page = (props) => {
 			tagline: ''
 		})
 		await addOrganization(newOrg);
-		router.push('/organization/match');
+		router.push(`/profile?organization=${newOrg._id}`);
 	}
 
 	const handleInputs = (e) => {

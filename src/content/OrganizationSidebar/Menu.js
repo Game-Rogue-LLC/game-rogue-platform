@@ -20,7 +20,7 @@ import { AppContext } from '@/context/app';
 
 const Menu = (props) => {
     const { organization } = props;
-    const { currentOrganization, setCurrentOrganization } = React.useContext(AppContext);
+    const { events, current, setCurrent } = React.useContext(AppContext);
     const [open, setOpen] = React.useState(false);
     const router = useRouter();
     const theme = useTheme();
@@ -62,7 +62,10 @@ const Menu = (props) => {
                         }}
                         sx={{ my: 0 }}
                         onClick={() => {
-                            setCurrentOrganization({...organization});
+                            setCurrent(prev => ({
+                                ...prev,
+                                organization: {...organization}
+                            }));
                         }}
                     />
                     <IconButton
@@ -81,7 +84,7 @@ const Menu = (props) => {
                 </ListItem>
                 {open &&
                     <>
-                        {organization.events?.map((item, idx) => (
+                        {events.filter((val, i) => organization.events?.includes(val._id)).map((item, idx) => (
                             <ListItemButton
                                 key={"event_menu_" + organization._id + "_" + idx}
                                 sx={{ minHeight: 32, color: 'rgba(255,255,255,.8)' }}
@@ -118,7 +121,7 @@ const Menu = (props) => {
                                     mr: 1,
                                     color: 'white',
                                     border: '1px solid rgba(255, 255, 255, .5)',
-                                    display: currentOrganization?.events?.length >= 5 ? 'none' : 'block'
+                                    display: current.organization?.events?.length >= 5 ? 'none' : 'block'
                                 }}
                                 color='secondary'
                                 size='small'

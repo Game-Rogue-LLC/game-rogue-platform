@@ -13,18 +13,18 @@ import {
     Typography,
     useTheme,
 } from '@mui/material';
-import People from '@mui/icons-material/People';
 
 import AdminLayout from '@/content/AdminLayout';
 import { AppContext } from '@/context/app';
 
 import { useRouter } from 'next/router';
+import { Event } from '@mui/icons-material';
 
 const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { organization } = props;
-    const { organizations, addEvent, setTitle, currentOrganization } = React.useContext(AppContext);
+    const { organizations, addEvent, setTitle, current } = React.useContext(AppContext);
     const [org, setOrg] = React.useState(organization || "");
     const [inputs, setInputs] = React.useState({ name: '' });
 	const [valid, setValid] = React.useState({ name: true });
@@ -44,16 +44,21 @@ const Page = (props) => {
         setOrg(router.query.organization)
     }, [router])
 
-    const handleCreate = (e) => {
+    const handleCreate = async (e) => {
 		if (!validate({ name: 'name', value: inputs?.name })) {
 			return;
 		}
 		setValid({ name: true });
-        addEvent({
+        const newEvent = {
+			_id: new Date().getTime(),
             organization: org,
-            icon: <People />,
+            icon: <Event />,
             label: inputs.name
+        }
+        await addEvent({
+            ...newEvent
         })
+        router.push(`/event/match/${newEvent._id}`);
     }
 
     const handleChange = (e) => {
@@ -73,10 +78,9 @@ const Page = (props) => {
     }, [])
 
     React.useEffect(() => {
-        console.log(currentOrganization, '1')
-        if (currentOrganization?.events?.length >= 5)
+        if (current.organization?.events?.length >= 5)
             setDisabled(true);
-    }, [currentOrganization])
+    }, [current])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>

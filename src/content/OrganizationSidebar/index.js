@@ -78,7 +78,7 @@ const FirePaper = styled(Paper)(({theme})=>({
 }));
 
 export default function OrganizationSidebar(props) {
-	const { organizations, currentOrganization, setCurrentOrganization } = React.useContext(AppContext);
+	const { organizations, current, setCurrent } = React.useContext(AppContext);
 	const [showMenu, setShowMenu] = React.useState(false);
 	const [anchorElMenu, setAnchorElMenu] = React.useState(null);
 
