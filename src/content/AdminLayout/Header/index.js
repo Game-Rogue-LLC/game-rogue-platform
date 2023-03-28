@@ -117,13 +117,13 @@ const Header = () => {
 				open={open}
 				onClose={handleClose}
 			>
-				<MenuItem onClick={handleClose} disableRipple>
+				<MenuItem onClick={handleClose} key='create-organization' disableRipple>
 					<Link href="/organization/create">
 						CREATE
 					</Link>
 				</MenuItem>
 				<Divider sx={{ my: 0.5 }} />
-				<MenuItem onClick={handleClose} disableRipple>
+				<MenuItem onClick={handleClose} key='production-setting' disableRipple>
 					PRODUCTION SETTING
 				</MenuItem>
 			</StyledMenu>

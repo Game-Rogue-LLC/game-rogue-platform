@@ -29,7 +29,7 @@ import AdminLayout from '@/content/AdminLayout';
 import { AppContext } from '@/context/app';
 import { useRouter } from 'next/router';
 import { CreditCard, Instagram, Twitter, YouTube } from '@mui/icons-material';
-import ContentBlock from '@/pages/profile/components/content-block';
+import ContentBlock from '@/pages/profile/components/ContentBlock';
 
 const Page = (props) => {
 	const router = useRouter();
@@ -116,7 +116,7 @@ const Page = (props) => {
 		<Box>
 			<Paper sx={{ p: 4 }}>
 				<Typography variant='h6'>Disband/Delete Profile</Typography>
-				<Button variant='contained' sx={{ borderRadius: 0, mt: 2 }} onClick={handleOpen}>Disband</Button>
+				<Button variant='contained' sx={{ mt: 2 }} onClick={handleOpen}>Disband</Button>
 				<Dialog
 					open={open}
 					onClose={handleClose}

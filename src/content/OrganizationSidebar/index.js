@@ -182,7 +182,7 @@ export default function OrganizationSidebar(props) {
 							open={Boolean(anchorElMenu)}
 							onClose={handleCloseMenu}
 						>
-							<MenuItem onClick={handleCloseMenu}>
+							<MenuItem onClick={handleCloseMenu} key='organization-create'>
 								<Link href='/organization/create'>
 									<Typography textAlign="center">Add Organization</Typography>
 								</Link>

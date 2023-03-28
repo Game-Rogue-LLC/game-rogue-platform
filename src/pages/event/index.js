@@ -123,10 +123,10 @@ const Page = (props) => {
                                 value={org}
                                 label="Organization"
                                 onChange={handleChange}
-                                variant="standard"
+                                variant="outlined"
                                 disabled={disabled}
                             >
-                                {organizations?.map((val, i) => <MenuItem value={val._id}>{val.name}</MenuItem>)}
+                                {organizations?.map((val, i) => <MenuItem key={val._id} value={val._id}>{val.name}</MenuItem>)}
                             </Select>
                         </FormControl>
                     </Grid>

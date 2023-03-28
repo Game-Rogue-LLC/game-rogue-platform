@@ -43,6 +43,9 @@ export default createTheme ({
 		},
 		label: {
 			fontFamily: 'ProximaNovaRegular'
+		},
+		subtitle2: {
+			color: 'gray'
 		}
 	},
 	components: {
