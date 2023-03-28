@@ -121,7 +121,7 @@ const Page = (props) => {
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
             <Grid container spacing={2} rowSpacing={4}>
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12}>
                     <Typography variant='h6'>Organization</Typography>
                     <Select
                         labelId="organization-select-label"
@@ -137,7 +137,7 @@ const Page = (props) => {
                         {organizations?.map((val, i) => <MenuItem key={val._id} value={val._id}>{val.name}</MenuItem>)}
                     </Select>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Event Format</Typography>
                     <Select
                         labelId="format-select-label"
@@ -154,7 +154,7 @@ const Page = (props) => {
                         <MenuItem key='league' value={1}>League</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Game Type</Typography>
                     <Box sx={{ mt: 1 }}>
                         {inputs?.format == 0 ?
@@ -192,7 +192,7 @@ const Page = (props) => {
                             </Select>}
                     </Box>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Event Seed</Typography>
                     <Select
                         labelId="seed-select-label"
@@ -221,8 +221,8 @@ const Page = (props) => {
                     <Typography variant='h6'>Event Date</Typography>
                     <DatePicker value={inputs.date} setValue={setDate} sx={{ mt: 1 }} />
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
-                    <Typography variant='h6'>Event Name</Typography>
+                <Grid item xs={12} md={6}>
+                    <Typography variant='h6'>Game</Typography>
                     <Select
                         labelId="game-select-label"
                         id="game-select"
@@ -237,7 +237,7 @@ const Page = (props) => {
                         <MenuItem key='rainbow-six-siege' value={0}>Rainbow Six Siege</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Platform</Typography>
                     <Select
                         labelId="platform-select-label"
@@ -253,7 +253,7 @@ const Page = (props) => {
                         <MenuItem key='pc' value={0}>PC</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Region</Typography>
                     <Select
                         labelId="region-select-label"
@@ -269,7 +269,7 @@ const Page = (props) => {
                         <MenuItem key='north-american' value={0}>North American</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Time Zone</Typography>
                     <Select
                         labelId="timezone-select-label"
