@@ -17,6 +17,7 @@ import 'nprogress/nprogress.css';
 import ThemeProvider from '@/theme/ThemeProvider';
 
 import '@/styles/globals.css'
+import { AuthContextProvider } from '@/context/AuthContext';
 
 const Noop = ({ children }) => <>{children}</>;
 
@@ -29,7 +30,7 @@ export default function MyApp(props) {
 	Router.events.on('routeChangeComplete', nProgress.done);
 
 	useEffect(() => {
-		router.push('/organization/create')
+		// router.push('/organization/create')
 	}, [])
 
 	const getLayout = Component.getLayout ?? ((page) => page);
@@ -43,11 +44,13 @@ export default function MyApp(props) {
 				{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 				<CssBaseline />
 				<AppProvider>
-					{getLayout(
-						<ContextProvider>
-							<Component {...pageProps} />
-						</ContextProvider>
-					)}
+					<AuthContextProvider>
+						{getLayout(
+							<ContextProvider>
+								<Component {...pageProps} />
+							</ContextProvider>
+						)}
+					</AuthContextProvider>
 				</AppProvider>
 			</ThemeProvider>
 		</CacheProvider>
