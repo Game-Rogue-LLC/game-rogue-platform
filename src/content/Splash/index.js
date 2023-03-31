@@ -10,17 +10,21 @@ export default function Splash() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div style={{paddingBottom:"30px"}}>
-            <img src='/logo.svg' />
-        </div>
-        <div>
-            <InfinitySpin 
-            width='200'
-            color="#0e8fe5"
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)'
+        }}>
+          <div>
+            <InfinitySpin
+              width='200'
+              color="#0e8fe5"
             />
-        </div>
-        <div style={{fontSize: "23px", fontWeight: 100}}>
+          </div>
+          <div style={{ fontSize: "23px", fontWeight: 100 }}>
             Signing in. Please wait...
+          </div>
         </div>
       </main>
     </div>

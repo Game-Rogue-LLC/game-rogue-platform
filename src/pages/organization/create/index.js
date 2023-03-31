@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 const Page = (props) => {
 	const theme = useTheme();
 	const router = useRouter();
-	const { organizations, addOrganization, setTitle, activeCount } = React.useContext(AppContext);
+	const { organizations, addOrganization, setTitle, activeCount, readData } = React.useContext(AppContext);
 	const [inputs, setInputs] = React.useState({ name: '', tagline: '' });
 	const [valid, setValid] = React.useState({ name: true, tagline: true });
 	const [disabled, setDisabled] = React.useState(false);

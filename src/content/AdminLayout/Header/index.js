@@ -12,7 +12,9 @@ import {
 import Link from 'next/link';
 
 import { styled, alpha } from '@mui/material/styles';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useUser } from '@/libfirebase/useUser';
+import { Logout } from '@mui/icons-material';
 
 const StyledMenu = styled((props) => (
 	<Menu
@@ -61,6 +63,11 @@ const Header = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const theme = useTheme();
+	const user = useUser();
+
+	useEffect(() => {
+		console.log(user?.user)
+	}, [user])
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -87,7 +94,8 @@ const Header = () => {
 			</Box>
 			<Box sx={{
 				display: 'flex',
-				justifyContent: 'flex-end'
+				justifyContent: 'flex-end',
+				pr: 4
 			}}>
 				<Button
 					id="demo-customized-button"
@@ -104,9 +112,14 @@ const Header = () => {
 				>
 					ORGANISE
 				</Button>
-				<IconButton sx={{ pr: 6 }}>
-					<Avatar alt="James Fury" src="/static/images/avatar/2.jpg" />
+				<IconButton>
+					<Avatar alt={user?.user?.name} src={user?.user?.profilePic} />
 				</IconButton>
+				<Box sx={{ display: 'flex', alignItems: 'center' }}>
+					<IconButton onClick={user.logout} sx={{ h: 'auto' }}>
+						<Logout />
+					</IconButton>
+				</Box>
 			</Box>
 			<StyledMenu
 				id="demo-customized-menu"

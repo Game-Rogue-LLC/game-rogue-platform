@@ -1,10 +1,14 @@
 import { useRouter } from 'next/router';
 import { createContext, useEffect, useState } from 'react';
+import { db } from '@/lib/firebase/initFirebase'
+import { addDoc, doc, getDoc, setDoc, collection, getDocs, query, where } from "firebase/firestore"
+import { useUser } from '@/libfirebase/useUser';
 
 const AppContext = createContext({});
 
 export default (props) => {
     const router = useRouter();
+    const { user } = useUser();
     const [organizations, setOrganizations] = useState([]);
     const [events, setEvents] = useState([]);
     const [current, setCurrent] = useState({
@@ -19,20 +23,27 @@ export default (props) => {
 
     const addOrganization = async (organization) => {
         organization = {
-			_id: new Date().getTime(),
             ...organization,
+            uid: user?.id,
             deleted: false
         }
-        await setOrganizations([
-            ...organizations,
-            {
-                ...organization
-            }
-        ])
-        setCurrent(prev => ({
-            ...prev,
-            organization: {...organization}
-        }));
+        sendData('organization', organization, null)
+            .then(async (data) => {
+                console.log(data)
+                // await setOrganizations([
+                //     ...organizations,
+                //     {
+                //         ...organization
+                //     }
+                // ])
+                // setCurrent(prev => ({
+                //     ...prev,
+                //     organization: { ...organization }
+                // }));
+            })
+            .catch(err => {
+                console.error(err)
+            })
     }
 
     const addEvent = async (event) => {
@@ -48,7 +59,7 @@ export default (props) => {
         ])
         setCurrent(prev => ({
             ...prev,
-            event: {...event}
+            event: { ...event }
         }));
         let temp = [...organizations];
         temp.forEach((val, i) => {
@@ -89,18 +100,58 @@ export default (props) => {
         router.push('/organization/create');
     }
 
+    const readData = async (_collection) => {
+        try {
+            const dbRef = collection(db, _collection)
+            const q = query(dbRef, where('uid', '==', user?.id));
+            await getDocs(q)
+                .then(docsSnap => {
+                    let temp = []
+                    docsSnap.forEach(doc => {
+                        temp.push(doc.data())
+                    })
+                    console.log(temp)
+                    setOrganizations(temp)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const sendData = async (_collection, data, id) => {
+        try {
+            if (id) {
+                const docRef = doc(db, _collection, id);
+                await setDoc(docRef, { ...data });
+                const docSnap = await getDoc(db, _collection, id);
+                return docSnap.data()
+            } else {
+                const dbRef = collection(db, _collection);
+                const docRef = await addDoc(dbRef, { ...data });
+                const docSnap = await getDoc(db, _collection, docRef.id)
+                return docSnap.data()
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         for (let i = 0; i < organizations.length; i++) {
-            if (organizations[i]._id == current.organization?._id) {
+            if (organizations[i].id == current.organization?.id) {
                 setCurrent(prev => ({
                     ...prev,
-                    organization: {...organizations[i]}
+                    organization: { ...organizations[i] }
                 }));
                 break;
             }
         }
         const aoc = (organizations.filter((val, i) => val.deleted === false)).length,
             aec = (events.filter((val, i) => val.deleted === false)).length
+        console.log(aoc, aec)
         setActiveCount({
             organization: aoc,
             event: aec
@@ -108,7 +159,7 @@ export default (props) => {
     }, [organizations, events])
 
     return (
-        <AppContext.Provider value={{ organizations, addOrganization, events, addEvent, current, setCurrent, updateOrganization, deleteOrganization, title, setTitle, activeCount }}>
+        <AppContext.Provider value={{ organizations, addOrganization, events, addEvent, current, setCurrent, updateOrganization, deleteOrganization, title, setTitle, activeCount, readData, sendData }}>
             {props.children}
         </AppContext.Provider>
     )

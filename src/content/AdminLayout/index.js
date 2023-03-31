@@ -8,10 +8,21 @@ import PageContainer from './PageContainer'
 
 import OrganizationSidebar from '@/content/OrganizationSidebar'
 import { AppContext } from "@/context/app"
+import { useRouter } from 'next/router';
 
 const AdminLayout = (props) => {
 	const { children } = props;
-	const { activeCount } = useContext(AppContext);
+	const { organizations, activeCount, readData } = useContext(AppContext);
+	const router = useRouter()
+
+	useEffect(() => {
+		if (activeCount?.organization == 0)
+			router.push('/organization/create')
+	}, [activeCount])
+
+	useEffect(() => {
+		readData('organization')
+	}, [])
 
 	return (
 		<div style={{

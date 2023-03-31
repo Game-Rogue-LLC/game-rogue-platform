@@ -23,12 +23,7 @@ const Auth = () => {
                     <Card>
                         <Box p={4}>
                             <Box>
-                                <Link href="/" passHref>
-                                    <img src="/logo.svg" style={{ height: "5rem" }}></img>
-                                </Link>
-                                <Typography variant="h3" color={"#A4A6B3"} sx={{ mb: 5 }}>DASHBOARDTECHGUYS</Typography>
-                                <Typography variant="h2" sx={{ mb: 1 }}>Log In to Admin Portal</Typography>
-                                <Typography variant="h5" color={"#9FA2B4"}>Enter your email and password below</Typography>
+                                <Typography variant="h2" sx={{ mb: 1 }}>Log In</Typography>
                             </Box>
                             <Box>
                                 <FirebaseAuth />

@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import createEmotionCache from '../config/createEmotionCache';
 import AppProvider from '@/context/app';
-
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -28,10 +27,6 @@ export default function MyApp(props) {
 	Router.events.on('routeChangeStart', nProgress.start);
 	Router.events.on('routeChangeError', nProgress.done);
 	Router.events.on('routeChangeComplete', nProgress.done);
-
-	useEffect(() => {
-		// router.push('/organization/create')
-	}, [])
 
 	const getLayout = Component.getLayout ?? ((page) => page);
 
