@@ -13,8 +13,8 @@ import Link from 'next/link';
 
 import { styled, alpha } from '@mui/material/styles';
 import { useEffect, useState } from 'react'
-import { useUser } from '@/libfirebase/useUser';
 import { Logout } from '@mui/icons-material';
+import { useAuthContext } from '@/srccontext/AuthContext';
 
 const StyledMenu = styled((props) => (
 	<Menu
@@ -63,11 +63,8 @@ const Header = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
 	const theme = useTheme();
-	const user = useUser();
+	const user = useAuthContext();
 
-	useEffect(() => {
-		console.log(user?.user)
-	}, [user])
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -116,7 +113,7 @@ const Header = () => {
 					<Avatar alt={user?.user?.name} src={user?.user?.profilePic} />
 				</IconButton>
 				<Box sx={{ display: 'flex', alignItems: 'center' }}>
-					<IconButton onClick={user.logout} sx={{ h: 'auto' }}>
+					<IconButton onClick={user?.logout} sx={{ h: 'auto' }}>
 						<Logout />
 					</IconButton>
 				</Box>

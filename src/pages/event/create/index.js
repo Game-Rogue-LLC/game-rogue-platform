@@ -18,14 +18,14 @@ import { useRouter } from 'next/router';
 import { Event } from '@mui/icons-material';
 
 import AdminLayout from '@/content/AdminLayout';
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 import DatePicker from '@/pages/components/DatePicker';
 
 const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { organization } = props;
-    const { organizations, addEvent, title, setTitle, current } = React.useContext(AppContext);
+    const { organizations, addEvent, title, setTitle, current } = useAppContext();
     const [orgId, setOrgId] = React.useState(organization || "");
     const [inputs, setInputs] = React.useState({
         name: '',
@@ -109,9 +109,8 @@ const Page = (props) => {
     }
 
     React.useEffect(() => {
-        if (title != 'REGISTER AN EVENT')
-            setTitle('REGISTER AN EVENT');
-    }, [title])
+        setTitle('REGISTER AN EVENT');
+    }, [])
 
     React.useEffect(() => {
         if (current.organization?.events?.length >= 5)
@@ -291,7 +290,7 @@ const Page = (props) => {
                     </Select>
                 </Grid>
                 {/** PLACE SCHEDULE HERE */}
-                <Grid item xs={12} md={6} lg={4} sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                <Grid item xs={12} md={6} lg={4} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <Box>
                         <Typography variant='h6'>Add a Rulebook</Typography>
                         <Typography variant='subtitle2'>Publicly shared (.pdf) and must be accepted by competitors.</Typography>
@@ -304,7 +303,7 @@ const Page = (props) => {
                         </Button>
                     </Box>
                 </Grid>
-                <Grid item xs={12} md={6} lg={4} sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                <Grid item xs={12} md={6} lg={4} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <Box>
                         <Typography variant='h6'>Add Terms and Conditions</Typography>
                         <Typography variant='subtitle2'>Must be accepted by competitors and is displayed alongside rulebooks.</Typography>
@@ -317,7 +316,7 @@ const Page = (props) => {
                         </Button>
                     </Box>
                 </Grid>
-                <Grid item xs={12} md={6} lg={4} sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                <Grid item xs={12} md={6} lg={4} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <Box>
                         <Typography variant='h6'>Add Privacy Policy</Typography>
                         <Typography variant='subtitle2'>Must be accepted by competitors and is displayed alongside rulebooks and terms and conditions.</Typography>

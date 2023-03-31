@@ -21,42 +21,42 @@ import {
 import People from '@mui/icons-material/People';
 
 import AdminLayout from '@/content/AdminLayout';
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 
 import { useRouter } from 'next/router';
 
 const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
-    const { organizations, addEvent, setTitle, current } = React.useContext(AppContext);
+    const { organizations, addEvent, setTitle, current } = useAppContext();
     const [org, setOrg] = React.useState(organization || "");
     const [inputs, setInputs] = React.useState({ name: '' });
-	const [valid, setValid] = React.useState({ name: true });
-	const [disabled, setDisabled] = React.useState(false);
-	const [open, setOpen] = React.useState(false);
+    const [valid, setValid] = React.useState({ name: true });
+    const [disabled, setDisabled] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
-	const handleOpen = (e) => {
-		setOpen(true);
-	}
+    const handleOpen = (e) => {
+        setOpen(true);
+    }
 
-	const handleClose = (e) => {
-		setOpen(false);
-	}
+    const handleClose = (e) => {
+        setOpen(false);
+    }
 
-	const handleDelete = (e) => {
-		deleteOrganization(orgId);
-		setOpen(false)
-	}
+    const handleDelete = (e) => {
+        deleteOrganization(orgId);
+        setOpen(false)
+    }
 
-	const validate = ({ name, value }) => {
-		if (value) {
-			setValid(prevState => ({ ...prevState, [name]: true }));
-			return true;
-		} else {
-			setValid(prevState => ({ ...prevState, [name]: false }));
-			return false;
-		}
-	}
+    const validate = ({ name, value }) => {
+        if (value) {
+            setValid(prevState => ({ ...prevState, [name]: true }));
+            return true;
+        } else {
+            setValid(prevState => ({ ...prevState, [name]: false }));
+            return false;
+        }
+    }
 
     const handleChange = (e) => {
         setOrg(e.target.value);
@@ -80,32 +80,32 @@ const Page = (props) => {
     }, [current])
 
     return (
-		<Box>
-			<Paper sx={{ p: 4 }}>
-				<Typography variant='h6'>Disband/Delete Profile</Typography>
-				<Button variant='contained' sx={{ borderRadius: 0, mt: 2 }} onClick={handleOpen}>Disband</Button>
-				<Dialog
-					open={open}
-					onClose={handleClose}
-					aria-labelledby="alert-dialog-title"
-					aria-describedby="alert-dialog-description"
-				>
-					<DialogTitle id="alert-dialog-title">
-						{"Delete the organizer profile?"}
-					</DialogTitle>
-					<DialogContent>
-						<DialogContentText id="alert-dialog-description">
-							Do you really want to delete this profile?
-						</DialogContentText>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={handleClose}>Cancel</Button>
-						<Button onClick={handleDelete} autoFocus>
-							OK
-						</Button>
-					</DialogActions>
-				</Dialog>
-			</Paper>
+        <Box>
+            <Paper sx={{ p: 4 }}>
+                <Typography variant='h6'>Disband/Delete Profile</Typography>
+                <Button variant='contained' sx={{ borderRadius: 0, mt: 2 }} onClick={handleOpen}>Disband</Button>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Delete the organizer profile?"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Do you really want to delete this profile?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleDelete} autoFocus>
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </Paper>
 
             <Paper sx={{ p: 4, mt: 4 }}>
                 <Grid container spacing={3}>
@@ -126,7 +126,7 @@ const Page = (props) => {
                                 variant="outlined"
                                 disabled={disabled}
                             >
-                                {organizations?.map((val, i) => <MenuItem key={val._id} value={val._id}>{val.name}</MenuItem>)}
+                                {organizations?.map((val, i) => <MenuItem key={val.id} value={val.id}>{val.name}</MenuItem>)}
                             </Select>
                         </FormControl>
                     </Grid>

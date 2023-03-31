@@ -2,19 +2,18 @@ import {
 	Typography,
 	useTheme
 } from '@mui/material'
-import { useContext } from 'react';
 
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 
 const PageHeader = () => {
 	const theme = useTheme();
-	const { title, setTitle } = useContext(AppContext);
+	const { title, setTitle } = useAppContext();
 	return (
-	<>
-		<Typography variant="h4" mb={2} color={theme.palette.primary.main} sx={{ fontStyle: 'italic' }}>
-			{title}
-		</Typography>
-	</>
+		<>
+			<Typography variant="h4" mb={2} color={theme.palette.primary.main} sx={{ fontStyle: 'italic' }}>
+				{title}
+			</Typography>
+		</>
 	)
 }
 

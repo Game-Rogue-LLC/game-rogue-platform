@@ -16,14 +16,19 @@ import { alpha } from '@mui/material/styles';
 
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { useRouter } from 'next/router';
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 
 const Menu = (props) => {
     const { organization } = props;
-    const { events, current, setCurrent } = React.useContext(AppContext);
+    const { events, current, setCurrent } = useAppContext();
     const [open, setOpen] = React.useState(false);
     const router = useRouter();
     const theme = useTheme();
+
+    const handleOpen = () => {
+        setOpen(!open);
+    }
+
     return (
         <>
             <Box
@@ -36,7 +41,7 @@ const Menu = (props) => {
                 }}
             >
                 <ListItem
-                    key={organization._id}
+                    key={organization.id}
                     alignItems="flex-start"
                     sx={{
                         px: 3,
@@ -61,17 +66,9 @@ const Menu = (props) => {
                             // color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
                         }}
                         sx={{ my: 0 }}
-                        onClick={() => {
-                            setCurrent(prev => ({
-                                ...prev,
-                                organization: {...organization}
-                            }));
-                        }}
                     />
                     <IconButton
-                        onClick={() => {
-                            setOpen(!open);
-                        }}
+                        onClick={handleOpen}
                     >
                         <KeyboardArrowDown
                             sx={{
@@ -84,9 +81,9 @@ const Menu = (props) => {
                 </ListItem>
                 {open &&
                     <>
-                        {events.filter((val, i) => organization.events?.includes(val._id)).map((item, idx) => (
+                        {events.filter((val, i) => organization.events?.includes(val.id)).map((item, idx) => (
                             <ListItemButton
-                                key={"event_menu_" + organization._id + "_" + idx}
+                                key={"event_menu_" + organization.id + "_" + idx}
                                 sx={{ minHeight: 32, color: 'rgba(255,255,255,.8)' }}
                             >
                                 <ListItemIcon sx={{ color: 'inherit' }}>
@@ -103,7 +100,7 @@ const Menu = (props) => {
                         }}>
                             <Button
                                 variant='outlined'
-                                onClick={() => router.push('/profile?organization=' + organization._id)}
+                                onClick={() => router.push('/profile?organization=' + organization.id)}
                                 sx={{
                                     flexGrow: 1,
                                     m: 1
@@ -114,7 +111,7 @@ const Menu = (props) => {
                             </Button>
                             <Button
                                 variant='contained'
-                                onClick={() => router.push('/event/create?organization=' + organization._id)}
+                                onClick={() => router.push('/event/create?organization=' + organization.id)}
                                 sx={{
                                     flexGrow: 0,
                                     my: 1,

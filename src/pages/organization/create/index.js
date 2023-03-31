@@ -15,13 +15,13 @@ import {
 } from '@mui/material';
 
 import AdminLayout from '@/content/AdminLayout';
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 import { useRouter } from 'next/router';
 
 const Page = (props) => {
 	const theme = useTheme();
 	const router = useRouter();
-	const { organizations, addOrganization, setTitle, activeCount, readData } = React.useContext(AppContext);
+	const { organizations, addOrganization, setTitle, activeCount, readData } = useAppContext();
 	const [inputs, setInputs] = React.useState({ name: '', tagline: '' });
 	const [valid, setValid] = React.useState({ name: true, tagline: true });
 	const [disabled, setDisabled] = React.useState(false);
@@ -42,7 +42,6 @@ const Page = (props) => {
 		}
 		setValid({ name: true, tagline: true });
 		const newOrg = {
-			_id: new Date().getTime(),
 			...inputs
 		}
 		setInputs({
@@ -63,13 +62,13 @@ const Page = (props) => {
 	}
 
 	React.useEffect(() => {
-		if (activeCount >= 3)
+		if (activeCount.organization >= 3)
 			setDisabled(true);
-	}, [organizations])
+	}, [activeCount])
 
 	React.useEffect(() => {
 		setTitle('REGISTER AN ORGANIZATION');
-	})
+	}, [])
 
 	return (
 		<Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>

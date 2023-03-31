@@ -19,42 +19,9 @@ import { Menu, MenuItem } from '@mui/material';
 
 import OrganizationMenu from './Menu'
 
-import People from '@mui/icons-material/People';
-import PermMedia from '@mui/icons-material/PermMedia';
-import Dns from '@mui/icons-material/Dns';
-import Public from '@mui/icons-material/Public';
-
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 import Link from 'next/link';
-import { useUser } from '@/libfirebase/useUser';
-
-const events = [
-	{ icon: <People />, label: 'Event 1' },
-	{ icon: <Dns />, label: 'Event 2' },
-	{ icon: <PermMedia />, label: 'Event 3' },
-	{ icon: <Public />, label: 'Event 4' },
-];
-
-const organizations = [
-	{
-		_id: 1,
-		name: 'Organization 1',
-		description: "This is the organization or user",
-		events: events,
-	},
-	{
-		_id: 2,
-		name: 'Organization 2',
-		description: "This is the organization or user",
-		events: events,
-	},
-	{
-		_id: 3,
-		name: 'Organization 3',
-		description: "This is the organization or user",
-		events: events,
-	},
-]
+import { useAuthContext } from '@/srccontext/AuthContext';
 
 const FireNav = styled(List)(({ theme }) => ({
 	'& .MuiPaper-root': {
@@ -79,9 +46,9 @@ const FirePaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function OrganizationSidebar(props) {
-	const { organizations, current, setCurrent } = React.useContext(AppContext);
+	const { organizations, current, setCurrent } = useAppContext();
 	const [showMenu, setShowMenu] = React.useState(false);
-	const { user } = useUser();
+	const { user } = useAuthContext();
 	const [anchorElMenu, setAnchorElMenu] = React.useState(null);
 
 	const handleOpenMenu = (event) => {
@@ -192,10 +159,12 @@ export default function OrganizationSidebar(props) {
 							</Menu>
 						</ListItem>
 						<Divider />
-						{organizations.map((item) => (
-							!item?.deleted &&
-							<OrganizationMenu key={"organization_menu_" + item._id} organization={item} />
-						))}
+						{Object.keys(organizations).map((id) => {
+							const item = organizations[id];
+							return (
+								<OrganizationMenu key={"organization_menu_" + id} organization={item} />
+							)
+						})}
 					</FireNav>
 				</FirePaper>
 			</Box>

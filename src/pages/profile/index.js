@@ -26,7 +26,7 @@ import {
 } from '@mui/material';
 
 import AdminLayout from '@/content/AdminLayout';
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 import { useRouter } from 'next/router';
 import { CreditCard, Instagram, Twitter, YouTube } from '@mui/icons-material';
 import ContentBlock from '@/pages/profile/components/ContentBlock';
@@ -34,17 +34,16 @@ import ContentBlock from '@/pages/profile/components/ContentBlock';
 const Page = (props) => {
 	const router = useRouter();
 	const theme = useTheme();
-	const { organizations, addOrganization, updateOrganization, deleteOrganization, setTitle, current } = React.useContext(AppContext);
-	const [inputs, setInputs] = React.useState({
-		name: current.organization?.name,
-		tagline: current.organization?.tagline,
-		credit: current.organization?.credit,
-		paypal: current.organization?.paypal,
-		twitter: current.organization?.twitter,
-		instagram: current.organization?.instagram,
-		youtube: current.organization?.youtube,
-		twitch: current.organization?.twitch
-	})
+	const {
+		organizations,
+		updateOrganization,
+		deleteOrganization,
+		setTitle,
+		current,
+		setCurrent,
+		setCurrentOrganization
+	} = useAppContext();
+	const [inputs, setInputs] = React.useState(null)
 	const [valid, setValid] = React.useState({
 		name: true,
 		tagline: true
@@ -106,11 +105,16 @@ const Page = (props) => {
 	}
 
 	React.useEffect(() => {
-	}, [organizations])
+		setInputs({ ...organizations[current.organization] })
+	}, [current])
+
+	React.useEffect(() => {
+		setCurrentOrganization(orgId);
+	}, [orgId])
 
 	React.useEffect(() => {
 		setTitle('ORGANIZER PROFILE');
-	})
+	}, [])
 
 	return (
 		<Box>
@@ -145,14 +149,14 @@ const Page = (props) => {
 				<InputLabel htmlFor="org-name" sx={{ mt: 2 }}>Organization Name</InputLabel>
 				<FormHelperText>Controls the publically visible name of this organization.</FormHelperText>
 				<FormControl fullWidth error={!valid?.name}>
-					<OutlinedInput id="org-name" name="name" aria-describedby="org-name-helper" value={inputs.name} onChange={handleInputs} disabled={disabled}
+					<OutlinedInput id="org-name" name="name" aria-describedby="org-name-helper" value={inputs?.name} onChange={handleInputs} disabled={disabled}
 						sx={{ mt: 1 }} fullWidth />
 					{!valid?.name && <FormHelperText id="org-name-helper" sx={{ mt: 2 }}>Name is required.</FormHelperText>}
 				</FormControl>
-				
+
 				<InputLabel htmlFor="org-tag" sx={{ mt: 2 }}>Tagline</InputLabel>
 				<FormControl fullWidth sx={{ mt: 1 }} error={!valid?.tagline}>
-					<OutlinedInput id="org-tag" name="tagline" aria-describedby="org-tag-helper" value={inputs.tagline} inputProps={{ maxLength: 50 }} required
+					<OutlinedInput id="org-tag" name="tagline" aria-describedby="org-tag-helper" value={inputs?.tagline} inputProps={{ maxLength: 50 }} required
 						onChange={handleInputs} disabled={disabled} fullWidth />
 					{!valid?.tagline && <FormHelperText id="org-tag-helper" sx={{ mt: 2 }}>Tagline is required.</FormHelperText>}
 				</FormControl>
@@ -168,7 +172,7 @@ const Page = (props) => {
 				<Box sx={{ mt: 2 }}>
 					<InputLabel htmlFor="org-twitter">Twitter</InputLabel>
 					<FormControl fullWidth error={!valid?.name}>
-						<OutlinedInput id="org-twitter" name="twitter" aria-describedby="org-twitter-helper" value={inputs.twitter} onChange={handleInputs} disabled={disabled}
+						<OutlinedInput id="org-twitter" name="twitter" aria-describedby="org-twitter-helper" value={inputs?.twitter} onChange={handleInputs} disabled={disabled}
 							sx={{ mt: 1 }} fullWidth startAdornment={
 								<InputAdornment position='start'>
 									<Twitter fontSize='large' />
@@ -180,7 +184,7 @@ const Page = (props) => {
 				<Box sx={{ mt: 2 }}>
 					<InputLabel htmlFor="org-instagram">Instagram</InputLabel>
 					<FormControl fullWidth error={!valid?.name}>
-						<OutlinedInput id="org-instagram" name="instagram" aria-describedby="org-instagram-helper" value={inputs.instagram} onChange={handleInputs} disabled={disabled}
+						<OutlinedInput id="org-instagram" name="instagram" aria-describedby="org-instagram-helper" value={inputs?.instagram} onChange={handleInputs} disabled={disabled}
 							sx={{ mt: 1 }} fullWidth startAdornment={
 								<InputAdornment position='start'>
 									<Instagram fontSize='large' />
@@ -192,7 +196,7 @@ const Page = (props) => {
 				<Box sx={{ mt: 2 }}>
 					<InputLabel htmlFor="org-youtube">YouTube</InputLabel>
 					<FormControl fullWidth error={!valid?.name}>
-						<OutlinedInput id="org-youtube" name="youtube" aria-describedby="org-youtube-helper" value={inputs.youtube} onChange={handleInputs} disabled={disabled}
+						<OutlinedInput id="org-youtube" name="youtube" aria-describedby="org-youtube-helper" value={inputs?.youtube} onChange={handleInputs} disabled={disabled}
 							sx={{ mt: 1 }} fullWidth startAdornment={
 								<InputAdornment position='start'>
 									<YouTube fontSize='large' />
@@ -204,7 +208,7 @@ const Page = (props) => {
 				<Box sx={{ mt: 2 }}>
 					<InputLabel htmlFor="org-discord">Discord</InputLabel>
 					<FormControl fullWidth error={!valid?.name}>
-						<OutlinedInput id="org-discord" name="discord" aria-describedby="org-discord-helper" value={inputs.discord} onChange={handleInputs} disabled={disabled}
+						<OutlinedInput id="org-discord" name="discord" aria-describedby="org-discord-helper" value={inputs?.discord} onChange={handleInputs} disabled={disabled}
 							sx={{ mt: 1 }} fullWidth startAdornment={
 								<InputAdornment position='start'>
 									<img src='/static/images/discord.svg' height={'30px'} />
@@ -216,7 +220,7 @@ const Page = (props) => {
 				<Box sx={{ mt: 2 }}>
 					<InputLabel htmlFor="org-twitch">Twitch</InputLabel>
 					<FormControl fullWidth error={!valid?.name}>
-						<OutlinedInput id="org-twitch" name="twitch" aria-describedby="org-twitch-helper" value={inputs.twitch} onChange={handleInputs} disabled={disabled}
+						<OutlinedInput id="org-twitch" name="twitch" aria-describedby="org-twitch-helper" value={inputs?.twitch} onChange={handleInputs} disabled={disabled}
 							sx={{ mt: 1 }} fullWidth startAdornment={
 								<InputAdornment position='start'>
 									<SvgIcon fontSize='large'>

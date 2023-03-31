@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import {
-	Paper,
+    Paper,
     Table,
     TableHead,
     TableBody,
@@ -9,21 +9,21 @@ import {
     TableCell,
     TableContainer,
     TableFooter,
-	useTheme
+    useTheme
 } from '@mui/material';
 
 import AdminLayout from '@/content/AdminLayout';
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 
 const Page = (props) => {
-	const theme = useTheme();
-    const { setTitle } = React.useContext(AppContext);
+    const theme = useTheme();
+    const { setTitle } = useAppContext();
 
     React.useEffect(() => {
         setTitle('STAFF');
-    })
+    }, [])
 
-	return (
+    return (
         <TableContainer component={Paper} sx={{ textTransform: 'uppercase' }} variant='elevation'>
             <Table>
                 <TableHead>
@@ -72,11 +72,11 @@ const Page = (props) => {
                 </TableBody>
             </Table>
         </TableContainer>
-	)
+    )
 }
 
 Page.getLayout = (page) => {
-	return <AdminLayout>{page}</AdminLayout>
+    return <AdminLayout>{page}</AdminLayout>
 }
 
 export default Page;

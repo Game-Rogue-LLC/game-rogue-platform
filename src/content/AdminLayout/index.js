@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import Header from './Header'
 import Footer from './Footer'
@@ -7,21 +7,21 @@ import PageHeader from './PageHeader'
 import PageContainer from './PageContainer'
 
 import OrganizationSidebar from '@/content/OrganizationSidebar'
-import { AppContext } from "@/context/app"
+import { useAppContext } from "@/context/app"
 import { useRouter } from 'next/router';
 
 const AdminLayout = (props) => {
 	const { children } = props;
-	const { organizations, activeCount, readData } = useContext(AppContext);
-	const router = useRouter()
+	const { organizations, activeCount, readOrganization } = useAppContext();
+	const router = useRouter();
+
+	// useEffect(() => {
+	// 	if (activeCount?.organization == 0)
+	// 		router.push('/organization/create')
+	// }, [activeCount])
 
 	useEffect(() => {
-		if (activeCount?.organization == 0)
-			router.push('/organization/create')
-	}, [activeCount])
-
-	useEffect(() => {
-		readData('organization')
+		readOrganization()
 	}, [])
 
 	return (
