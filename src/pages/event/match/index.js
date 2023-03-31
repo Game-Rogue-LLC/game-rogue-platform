@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import {
-	Paper,
+    Paper,
     Table,
     TableHead,
     TableBody,
@@ -9,24 +9,23 @@ import {
     TableCell,
     TableContainer,
     TableFooter,
-	useTheme
+    useTheme
 } from '@mui/material';
 
 import AdminLayout from '@/content/AdminLayout';
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 import { useRouter } from 'next/router';
 
 const Page = (props) => {
-	const theme = useTheme();
+    const theme = useTheme();
     const router = useRouter();
-    const { setTitle } = React.useContext(AppContext);
-    console.log(router.query)
+    const { setTitle } = useAppContext();
 
     React.useEffect(() => {
         setTitle('MATCHES');
-    })
+    }, [])
 
-	return (
+    return (
         <TableContainer component={Paper} variant='elevation'>
             <Table>
                 <TableHead>
@@ -75,11 +74,11 @@ const Page = (props) => {
                 </TableBody>
             </Table>
         </TableContainer>
-	)
+    )
 }
 
 Page.getLayout = (page) => {
-	return <AdminLayout>{page}</AdminLayout>
+    return <AdminLayout>{page}</AdminLayout>
 }
 
 export default Page;

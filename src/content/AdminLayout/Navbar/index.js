@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { makeStyles } from '@mui/styles'
 import { useTheme } from '@mui/material'
 import { styled, alpha } from '@mui/material/styles';
-import { AppContext } from '@/context/app';
+import { useAppContext } from '@/context/app';
 
 import routes from './routes'
 
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const NavItem = styled(Button)(({theme}) => ({
+const NavItem = styled(Button)(({ theme }) => ({
     color: theme.palette.card.main,
     ':hover': {
         backgroundColor: alpha(theme.palette.card.main, theme.palette.action.selectedOpacity)
@@ -37,7 +37,7 @@ const NavItem = styled(Button)(({theme}) => ({
 
 function Navbar() {
     const theme = useTheme()
-    const { current } = React.useContext(AppContext);
+    const { current } = useAppContext();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 

@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import createEmotionCache from '../config/createEmotionCache';
 import AppProvider from '@/context/app';
-
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -17,6 +16,7 @@ import 'nprogress/nprogress.css';
 import ThemeProvider from '@/theme/ThemeProvider';
 
 import '@/styles/globals.css'
+import { AuthContextProvider } from '@/context/AuthContext';
 
 const Noop = ({ children }) => <>{children}</>;
 
@@ -28,10 +28,6 @@ export default function MyApp(props) {
 	Router.events.on('routeChangeError', nProgress.done);
 	Router.events.on('routeChangeComplete', nProgress.done);
 
-	useEffect(() => {
-		router.push('/organization/create')
-	}, [])
-
 	const getLayout = Component.getLayout ?? ((page) => page);
 
 	return (
@@ -42,13 +38,15 @@ export default function MyApp(props) {
 			<ThemeProvider>
 				{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 				<CssBaseline />
-				<AppProvider>
-					{getLayout(
-						<ContextProvider>
-							<Component {...pageProps} />
-						</ContextProvider>
-					)}
-				</AppProvider>
+				<AuthContextProvider>
+					<AppProvider>
+						{getLayout(
+							<ContextProvider>
+								<Component {...pageProps} />
+							</ContextProvider>
+						)}
+					</AppProvider>
+				</AuthContextProvider>
 			</ThemeProvider>
 		</CacheProvider>
 	);
