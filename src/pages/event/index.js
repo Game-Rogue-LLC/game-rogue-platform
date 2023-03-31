@@ -29,7 +29,7 @@ const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { organizations, addEvent, setTitle, current } = useAppContext();
-    const [org, setOrg] = React.useState(organization || "");
+    const [org, setOrg] = React.useState("");
     const [inputs, setInputs] = React.useState({ name: '' });
     const [valid, setValid] = React.useState({ name: true });
     const [disabled, setDisabled] = React.useState(false);
@@ -155,15 +155,6 @@ const Page = (props) => {
 
 Page.getLayout = (page) => {
     return <AdminLayout>{page}</AdminLayout>
-}
-
-export async function getStaticProps(context) {
-    const cid = context.query.organization;
-    return {
-        props: {
-            organization: cid,
-        }
-    }
 }
 
 export default Page;

@@ -24,11 +24,11 @@ import DatePicker from '@/pages/components/DatePicker';
 const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
-    const { organization } = props;
-    const { organizations, addEvent, title, setTitle, current } = useAppContext();
-    const [orgId, setOrgId] = React.useState(organization || "");
+    const { organizations, addEvent, title, setTitle, current, setCurrentOrganization } = useAppContext();
+    const [orgId, setOrgId] = React.useState('');
     const [inputs, setInputs] = React.useState({
         name: '',
+        oid: 0,
         format: 0,
         tournament: 0,
         league: 0,
@@ -113,9 +113,21 @@ const Page = (props) => {
     }, [])
 
     React.useEffect(() => {
-        if (current.organization?.events?.length >= 5)
-            setDisabled(true);
-    }, [current])
+        setOrgId(router.query?.organization);
+    }, [router])
+
+    React.useEffect(() => {
+        setCurrentOrganization(orgId);
+        setInputs(prev => ({
+            ...prev,
+            oid: orgId
+        }))
+    }, [organizations, orgId])
+
+    // React.useEffect(() => {
+    //     if (current.organization?.events?.length >= 5)
+    //         setDisabled(true);
+    // }, [current])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
@@ -125,15 +137,18 @@ const Page = (props) => {
                     <Select
                         labelId="organization-select-label"
                         id="organization-select"
-                        value={orgId}
+                        value={inputs?.oid}
                         onChange={handleChange}
                         variant="outlined"
-                        name="organization"
+                        name="oid"
                         disabled={disabled}
                         sx={{ mt: 1 }}
                         fullWidth
                     >
-                        {organizations?.map((val, i) => <MenuItem key={val._id} value={val._id}>{val.name}</MenuItem>)}
+                        {Object.keys(organizations).map((key, i) => {
+                            const item = organizations[key];
+                            return <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
+                        })}
                     </Select>
                 </Grid>
                 <Grid item xs={12} lg={4}>
@@ -211,14 +226,14 @@ const Page = (props) => {
                 <Grid item xs={12}>
                     <Typography variant='h6'>Event Name</Typography>
                     <FormControl fullWidth error={!valid?.name} sx={{ mt: 1 }}>
-                        <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs.name} disabled={disabled}
+                        <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
                             onChange={handleInputs} />
                         {!valid?.name && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>Name is required.</FormHelperText>}
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant='h6'>Event Date</Typography>
-                    <DatePicker value={inputs.date} setValue={setDate} sx={{ mt: 1 }} />
+                    <DatePicker value={inputs?.date} setValue={setDate} sx={{ mt: 1 }} />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Game</Typography>
@@ -345,15 +360,6 @@ const Page = (props) => {
 
 Page.getLayout = (page) => {
     return <AdminLayout>{page}</AdminLayout>
-}
-
-export async function getStaticProps(context) {
-    const cid = context.query.organization;
-    return {
-        props: {
-            organization: cid,
-        }
-    }
 }
 
 export default Page;
