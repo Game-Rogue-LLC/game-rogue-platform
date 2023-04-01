@@ -32,7 +32,7 @@ export const AuthContextProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={user}>
-            {user.loading ? <Splash></Splash> : children}
+            {user.loading ? <Splash content='Signing in. Please wait...'></Splash> : children}
         </AuthContext.Provider>
     )
 }

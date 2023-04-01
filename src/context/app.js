@@ -157,7 +157,7 @@ export default (props) => {
             title, setTitle,
             activeCount, loading
         }}>
-            {isLoading ? <Splash></Splash> : props.children}
+            {isLoading ? <Splash content='Loading data...'></Splash> : props.children}
         </AppContext.Provider>
     )
 }

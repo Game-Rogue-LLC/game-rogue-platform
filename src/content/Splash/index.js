@@ -3,7 +3,8 @@ import Head from 'next/head'
 import { InfinitySpin } from 'react-loader-spinner'
 import { useTheme } from '@mui/material'
 
-export default function Splash() {
+export default function Splash(props) {
+  const { content } = props;
   const theme = useTheme();
   return (
     <div>
@@ -25,7 +26,7 @@ export default function Splash() {
             />
           </div>
           <div style={{ fontSize: "23px", fontWeight: 100 }}>
-            Signing in. Please wait...
+            {content}
           </div>
         </div>
       </main>
