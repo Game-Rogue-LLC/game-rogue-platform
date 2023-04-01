@@ -10,6 +10,7 @@ const Auth = () => {
     const router = useRouter();
 
     useEffect(() => {
+        console.log(user)
         if (user.loading == false && user.user) {
             router.push('/');
         }
