@@ -32,7 +32,9 @@ export default (props) => {
     const [title, setTitle] = useState(null);
 
     const setOrganization = async (data, activeCount) => {
+        console.log('setting data...');
         await setOrganizations(data);
+        console.log('finished setting data')
         setLoading(prev => ({
             ...prev,
             organization: false
@@ -41,8 +43,6 @@ export default (props) => {
             ...prev,
             organization: activeCount
         }))
-        if (Object.keys(data).length == 0)
-            router.push('/organization/create');
     }
 
     const setEvent = async (data, activeCount) => {
@@ -143,6 +143,11 @@ export default (props) => {
     useEffect(() => {
         changeLoading()
     }, [changeLoading])
+
+    useEffect(() => {
+        if (Object.keys(organizations).length == 0)
+            router.push('/organization/create')
+    }, [organizations])
 
     const isLoading = useMemo(() => {
         return loading?.user || loading?.organization || loading?.event
