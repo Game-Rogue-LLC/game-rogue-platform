@@ -25,10 +25,10 @@ const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { organizations, addEvent, title, setTitle, current, setCurrentOrganization } = useAppContext();
-    const [orgId, setOrgId] = React.useState('');
+    const [orgId, setOrgId] = React.useState(router.query.organization || '');
     const [inputs, setInputs] = React.useState({
         name: '',
-        oid: 0,
+        oid: orgId,
         format: 0,
         tournament: 0,
         league: 0,
@@ -41,10 +41,10 @@ const Page = (props) => {
         rulebook: '*.pdf',
         terms: '*.pdf',
         privacy: '*.pdf'
-    });
+    })
     const [valid, setValid] = React.useState({
         name: true
-    });
+    })
     const [disabled, setDisabled] = React.useState(false);
 
     const validate = ({ name, value }) => {

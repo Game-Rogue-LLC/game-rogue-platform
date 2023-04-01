@@ -1,39 +1,56 @@
 import { Edit } from "@mui/icons-material";
 import {
     Box,
-    Button,
     IconButton,
     InputLabel,
     OutlinedInput,
     Paper,
     Typography
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 
 const ContentBlock = (props) => {
+    const { contentBlock, handleChange, handleUpload, save, saving } = props;
+
+    const handleInputs = (e) => {
+        const { name, value } = e.target;
+        const content = {
+            ...contentBlock,
+            [name]: value
+        }
+        handleChange(content);
+    }
+
     return (
         <Paper sx={{ p: 4, mt: 4 }}>
             <Typography variant='h6'>Content Block</Typography>
             <Box sx={{ textAlign: 'center', position: 'relative' }}>
-                <IconButton sx={{ position: 'absolute', right: 0, bottom: 0 }} color='primary'>
+                <IconButton sx={{ position: 'absolute', right: 0, bottom: 0 }} color='primary' component='label'>
                     <Edit />
+                    <input type="file" accept="image/*" name="upload-image" id="upload-image" hidden onChange={(e) => handleUpload(e, 'image')} />
                 </IconButton>
-                <img src='/Game_Rogue_Text_2_copy.png' style={{ width: '600px' }} />
+                <img src={contentBlock?.image} style={{ height: '200px', maxWidth: '600px', objectFit: 'contain' }} />
             </Box>
             <Box>
                 <InputLabel htmlFor="content-url" sx={{ mt: 2 }}>URL</InputLabel>
-                <OutlinedInput id="content-url" name="url" value='https://gamerogue.com' aria-describedby="content-url-helper" sx={{ mt: 1 }} fullWidth />
+                <OutlinedInput id="content-url" name="url" value={contentBlock?.url || ''} onChange={handleInputs} aria-describedby="content-url-helper" sx={{ mt: 1 }} fullWidth />
             </Box>
             <Box>
                 <InputLabel htmlFor="content-title" sx={{ mt: 2 }}>Title</InputLabel>
-                <OutlinedInput id="content-title" name="title" value='Game Rogue' aria-describedby="content-title-helper" sx={{ mt: 1 }} fullWidth />
+                <OutlinedInput id="content-title" name="title" value={contentBlock?.title || ''} onChange={handleInputs} aria-describedby="content-title-helper" sx={{ mt: 1 }} fullWidth />
             </Box>
             <Box>
                 <InputLabel htmlFor="content-text" sx={{ mt: 2 }}>Text</InputLabel>
-                <OutlinedInput id="content-text" name="text" value='This is the organization of the game rogue.' aria-describedby="content-text-helper" sx={{ mt: 1 }} inputProps={{ maxLength: 50 }} fullWidth />
+                <OutlinedInput id="content-text" name="text" value={contentBlock?.text || ''} onChange={handleInputs} aria-describedby="content-text-helper" sx={{ mt: 1 }} inputProps={{ maxLength: 50 }} fullWidth />
             </Box>
-            <Button variant='contained' sx={{ mt: 2 }}>
+            <LoadingButton
+                loading={saving}
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={save}
+            >
                 Save
-            </Button>
+            </LoadingButton>
         </Paper>
     )
 }

@@ -20,10 +20,6 @@ const AdminLayout = (props) => {
 	// 		router.push('/organization/create')
 	// }, [activeCount])
 
-	useEffect(() => {
-		readOrganization()
-	}, [])
-
 	return (
 		<div style={{
 			display: 'flex',

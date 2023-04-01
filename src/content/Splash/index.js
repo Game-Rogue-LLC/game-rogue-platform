@@ -1,8 +1,10 @@
 import Head from 'next/head'
 // import styles from 'styles/Home.module.css'
 import { InfinitySpin } from 'react-loader-spinner'
+import { useTheme } from '@mui/material'
 
 export default function Splash() {
+  const theme = useTheme();
   return (
     <div>
       <Head>
@@ -19,7 +21,7 @@ export default function Splash() {
           <div>
             <InfinitySpin
               width='200'
-              color="#0e8fe5"
+              color={theme.palette.primary.main}
             />
           </div>
           <div style={{ fontSize: "23px", fontWeight: 100 }}>
