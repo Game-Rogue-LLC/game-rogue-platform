@@ -122,7 +122,7 @@ export default (props) => {
         uploadFile: eventStore.uploadFile
     }
 
-    const changeLoading = useCallback(() => {
+    useEffect(() => {
         setLoading(prev => ({
             ...prev,
             user: userLoading
@@ -139,10 +139,6 @@ export default (props) => {
             }
         }
     }, [userLoading])
-
-    useEffect(() => {
-        changeLoading()
-    }, [changeLoading])
 
     useEffect(() => {
         if (loading?.organization == false && Object.keys(organizations).length == 0)
