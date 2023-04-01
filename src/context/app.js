@@ -145,9 +145,9 @@ export default (props) => {
     }, [changeLoading])
 
     useEffect(() => {
-        if (Object.keys(organizations).length == 0)
+        if (loading?.organization == false && Object.keys(organizations).length == 0)
             router.push('/organization/create')
-    }, [organizations])
+    }, [organizations, loading?.organization])
 
     const isLoading = useMemo(() => {
         return loading?.user || loading?.organization || loading?.event
