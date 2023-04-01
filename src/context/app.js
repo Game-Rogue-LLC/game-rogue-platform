@@ -70,6 +70,7 @@ export default (props) => {
 
     const organization = {
         readOrganization: () => {
+            console.log('reading organization...')
             organizationStore.read(user?.id, setOrganization)
         },
         saveOrganization: (data, id) => {
@@ -119,10 +120,14 @@ export default (props) => {
             user: userLoading
         }))
         if (userLoading === false && user) {
+            console.log('user loading completed.')
             if (loading?.organization === true) {
+                console.log('organization loading started...')
                 organization.readOrganization();
+                console.log('organization loading ...')
             } else {
                 nProgress.done();
+                console.log('organization loading finished')
             }
         }
     }, [userLoading])
