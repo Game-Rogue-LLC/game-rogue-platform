@@ -129,7 +129,7 @@ export default (props) => {
         }))
         if (userLoading === false && user) {
             console.log('user loading completed.')
-            if (loading?.organization === true) {
+            if (loading.organization === true) {
                 console.log('organization loading started...')
                 organization.readOrganization();
                 console.log('organization loading ...')
@@ -141,12 +141,12 @@ export default (props) => {
     }, [userLoading])
 
     useEffect(() => {
-        if (loading?.organization == false && Object.keys(organizations).length == 0)
+        if (loading.organization == false && Object.keys(organizations).length == 0)
             router.push('/organization/create')
-    }, [organizations, loading?.organization])
+    }, [organizations, loading])
 
     const isLoading = useMemo(() => {
-        return loading?.user || loading?.organization || loading?.event
+        return loading.user || loading.organization || loading.event
     }, [loading])
 
     return (

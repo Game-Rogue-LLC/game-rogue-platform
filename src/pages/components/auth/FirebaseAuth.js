@@ -26,7 +26,7 @@ const firebaseAuthConfig = {
         // add additional auth flows below
         GoogleAuthProvider.PROVIDER_ID,
     ],
-    signInSuccessUrl: '/organization/create',
+    signInSuccessUrl: '/',
     credentialHelper: 'none',
     callbacks: {
         signInSuccessWithAuthResult: async ({ user }, redirectUrl) => {
