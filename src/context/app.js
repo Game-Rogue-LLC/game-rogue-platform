@@ -3,6 +3,7 @@ import { createContext, useEffect, useMemo, useState, useCallback } from 'react'
 import { useAuthContext } from './AuthContext';
 import { useContext } from 'react';
 import organizationStore from '@/lib/firestore/collections/organization';
+import eventStore from '@/lib/firestore/collections/event';
 import nProgress from 'nprogress';
 import Splash from '@/srccontent/Splash';
 
@@ -22,39 +23,13 @@ export default (props) => {
     const [loading, setLoading] = useState({
         user: userLoading && true,
         organization: true,
-        event: false
+        event: true
     })
     const [activeCount, setActiveCount] = useState({
         organization: 0,
         event: 0
     });
     const [title, setTitle] = useState(null);
-
-    // Add Event
-    const addEvent = async (event) => {
-        event = {
-            ...event,
-            deleted: false
-        }
-        await setEvents([
-            ...events,
-            {
-                ...event
-            }
-        ])
-        setCurrent(prev => ({
-            ...prev,
-            event: { ...event }
-        }));
-        let temp = [...organizations];
-        temp.forEach((val, i) => {
-            if (val.id == event?.organization) {
-                if (!val.events) val.events = [];
-                val.events.push(event?.id);
-            }
-        })
-        setOrganizations(temp);
-    }
 
     const setOrganization = async (data, activeCount) => {
         await setOrganizations(data);
@@ -65,6 +40,20 @@ export default (props) => {
         setActiveCount(prev => ({
             ...prev,
             organization: activeCount
+        }))
+        if (data.length == 0)
+            router.push('/organization/create');
+    }
+
+    const setEvent = async (data, activeCount) => {
+        await setEvents(data);
+        setLoading(prev => ({
+            ...prev,
+            event: false
+        }))
+        setActiveCount(prev => ({
+            ...prev,
+            event: activeCount
         }))
     }
 
@@ -101,17 +90,36 @@ export default (props) => {
     }
 
     const event = {
-        readEvent: () => { },
-        saveEvent: () => { },
-        addEvent: async () => { },
-        updateEvent: (id, newEvent) => { },
-        deleteEvent: async (id) => { },
+        readEvent: () => {
+            console.log('reading organization...')
+            eventStore.read(user?.id, setEvent)
+        },
+        saveEvent: (data, id) => {
+            return eventStore.save(data, id)
+        },
+        addEvent: async (event) => {
+            event = {
+                ...event,
+                uid: user?.id,
+                oid: current?.organization,
+                deleted: false
+            }
+            return eventStore.save(event, null)
+        },
+        updateEvent: (id, newEvent) => {
+            return eventStore.save(newEvent, id)
+        },
+        deleteEvent: async (id) => {
+            eventStore.save({ deleted: true }, id)
+            router.push('/event/create');
+        },
         setCurrentEvent: async (id) => {
             setCurrent(prev => ({
                 ...prev,
                 event: id
             }))
-        }
+        },
+        uploadFile: eventStore.uploadFile
     }
 
     const changeLoading = useCallback(() => {
@@ -143,7 +151,7 @@ export default (props) => {
     return (
         <AppContext.Provider value={{
             organizations, ...organization,
-            events, addEvent,
+            events, ...event,
             current, setCurrent,
             title, setTitle,
             activeCount
