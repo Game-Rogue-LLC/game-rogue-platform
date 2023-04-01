@@ -23,8 +23,7 @@ export const AuthContextProvider = ({ children }) => {
     // }
 
     useEffect(() => {
-        if (user.loading) nProgress.start()
-        else nProgress.done();
+        // if (user.loading) nProgress.start()
     }, [user]);
 
     return (

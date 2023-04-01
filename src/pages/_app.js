@@ -11,7 +11,7 @@ const clientSideEmotionCache = createEmotionCache();
 import { useEffect } from 'react';
 
 import nProgress from 'nprogress';
-import 'nprogress/nprogress.css';
+import '@/styles/nprogress.css';
 
 import ThemeProvider from '@/theme/ThemeProvider';
 
