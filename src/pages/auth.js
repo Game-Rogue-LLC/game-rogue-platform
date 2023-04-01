@@ -1,17 +1,18 @@
 import { useEffect } from 'react'
 import FirebaseAuth from '@/pages/components/auth/FirebaseAuth'
 import { Container, Box, Card, Typography, TextField, Button } from '@mui/material'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 
 import { useAuthContext } from '@/src/context/AuthContext';
 
 const Auth = () => {
     const { user, loading } = useAuthContext();
+    const router = useRouter();
     useEffect(() => {
         if (loading) {
         }
         else {
-            if (user) Router.push('/organization/create')
+            if (user) router.push('/organization/create')
         }
     }, [loading])
 

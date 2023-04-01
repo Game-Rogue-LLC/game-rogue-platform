@@ -41,7 +41,7 @@ export default (props) => {
             ...prev,
             organization: activeCount
         }))
-        if (data.length == 0)
+        if (Object.keys(data).length == 0)
             router.push('/organization/create');
     }
 
