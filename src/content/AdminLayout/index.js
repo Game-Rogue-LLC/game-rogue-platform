@@ -9,6 +9,7 @@ import PageContainer from './PageContainer'
 import OrganizationSidebar from '@/content/OrganizationSidebar'
 import { useAppContext } from "@/context/app"
 import { useRouter } from 'next/router';
+import AppProvider from '@/context/app';
 
 const AdminLayout = (props) => {
 	const { children } = props;
@@ -58,4 +59,12 @@ const AdminLayout = (props) => {
 	)
 }
 
-export default AdminLayout
+const ContextProvider = (props) => {
+	return (
+		<AppProvider>
+			<AdminLayout {...props} />
+		</AppProvider>
+	)
+}
+
+export default ContextProvider

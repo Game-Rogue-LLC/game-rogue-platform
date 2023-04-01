@@ -1,20 +1,20 @@
 import { useEffect } from 'react'
 import FirebaseAuth from '@/pages/components/auth/FirebaseAuth'
 import { Container, Box, Card, Typography, TextField, Button } from '@mui/material'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 
 import { useAuthContext } from '@/src/context/AuthContext';
 
 const Auth = () => {
-    const { user, loading } = useAuthContext();
-    useEffect(() => {
-        if (loading) {
-        }
-        else {
-            if (user) Router.push('/organization/create')
-        }
-    }, [loading])
+    const user = useAuthContext();
+    const router = useRouter();
 
+    useEffect(() => {
+        console.log(user)
+        if (user.loading == false && user.user) {
+            router.push('/');
+        }
+    }, [user])
     return (
         <Box pt={20} sx={{ backgroundColor: "#363740", width: "100vw", height: "100vh", position: "fixed", top: 0, color: "#fff", textAlign: "center" }}>
             <Container maxWidth="sm">
