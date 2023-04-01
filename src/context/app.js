@@ -23,7 +23,7 @@ export default (props) => {
     const [loading, setLoading] = useState({
         user: userLoading && true,
         organization: true,
-        event: true
+        event: false
     })
     const [activeCount, setActiveCount] = useState({
         organization: 0,

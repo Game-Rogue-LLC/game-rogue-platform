@@ -2,6 +2,7 @@ import { createContext, useEffect, useState, useContext } from 'react';
 import { useUser } from '@/lib/firebase/useUser';
 import nProgress from 'nprogress';
 import Splash from '@/content/Splash';
+import { useRouter } from 'next/router';
 
 const initialState = {
     loading: true,
@@ -14,6 +15,7 @@ export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }) => {
     const user = useUser();
+    const router = useRouter();
     // const user = {
     //     loading: false,
     //     user: {
@@ -23,7 +25,9 @@ export const AuthContextProvider = ({ children }) => {
     // }
 
     useEffect(() => {
-        // if (user.loading) nProgress.start()
+        if (!user.loading) {
+            if (!user) router.push('/auth');
+        }
     }, [user]);
 
     return (
