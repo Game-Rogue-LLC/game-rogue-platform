@@ -56,7 +56,7 @@ export default (props) => {
 
     useEffect(() => {
         if (loading == false) {
-            if (Object.keys(organizations).length == 0)
+            if (user && Object.keys(organizations).length == 0)
                 router.push('/organization/create')
         }
     }, [organizations, loading])

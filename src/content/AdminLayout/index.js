@@ -9,20 +9,11 @@ import OrganizationSidebar from '@/content/OrganizationSidebar'
 import AppProvider from '@/context/app'
 import OrganizationProvider, { useOrganizationContext } from '@/context/OrganizationContext'
 import EventProvider, { useEventContext } from '@/context/EventContext'
-import { useAuthContext } from '@/srccontext/AuthContext'
 
 const AdminLayout = (props) => {
 	const { children } = props;
 	const { activeCount: activeOrganizationCount, current: currentOrganization } = useOrganizationContext();
 	const { activeCount: activeEventCount, current: currentEvent } = useEventContext();
-
-	const user = useAuthContext()
-
-	useEffect(() => {
-		if (!user) {
-			router.push('/auth');
-		}
-	}, []);
 
 	return (
 		<div style={{

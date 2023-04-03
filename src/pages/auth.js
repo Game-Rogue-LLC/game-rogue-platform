@@ -14,6 +14,7 @@ const Auth = () => {
             router.push('/');
         }
     }, [user])
+
     return (
         <Box pt={20} sx={{ backgroundColor: "#363740", width: "100vw", height: "100vh", position: "fixed", top: 0, color: "#fff", textAlign: "center" }}>
             <Container maxWidth="sm">

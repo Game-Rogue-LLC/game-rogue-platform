@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 
 import AdminLayout from '@/content/AdminLayout'
-import { useAppContext } from '@/srccontext/app';
+import { useAppContext } from '@/context/app';
 
 const MyApp = (props) => {
 	const { setTitle } = useAppContext();
