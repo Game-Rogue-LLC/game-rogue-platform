@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import {
     Box,
     Button,
@@ -13,6 +13,7 @@ import {
     useTheme,
 } from '@mui/material'
 import { useRouter } from 'next/router'
+import { LoadingButton } from '@mui/lab'
 
 import AdminLayout from '@/content/AdminLayout'
 import { useAppContext } from '@/context/app'
@@ -24,10 +25,22 @@ const Page = (props) => {
     const theme = useTheme()
     const router = useRouter()
     const { setTitle } = useAppContext()
-    const { organizations, current: currentOrganization, setCurrent: setCurrentOrganization } = useOrganizationContext()
-    const { addEvent, setCurrent: setCurrentEvent } = useEventContext()
-    const [orgId, setOrgId] = React.useState(null)
-    const [inputs, setInputs] = React.useState({
+    const { organizations } = useOrganizationContext()
+    const {
+        events,
+        addEvent,
+        updateEvent,
+        activeCount: activeEventCount,
+        current: currentEvent,
+        setCurrent: setCurrentEvent,
+        uploadFile
+    } = useEventContext()
+    const [orgId, setOrgId] = useState(null)
+    const [saving, setSaving] = useState(false)
+    const [rulebook, setRulebook] = useState(null)
+    const [terms, setTerms] = useState(null)
+    const [privacy, setPrivacy] = useState(null)
+    const initialInput = {
         name: '',
         oid: orgId || '',
         format: 0,
@@ -42,11 +55,12 @@ const Page = (props) => {
         rulebook: '*.pdf',
         terms: '*.pdf',
         privacy: '*.pdf'
-    })
-    const [valid, setValid] = React.useState({
+    }
+    const [inputs, setInputs] = useState({ ...initialInput })
+    const [valid, setValid] = useState({
         name: true
     })
-    const [disabled, setDisabled] = React.useState(false);
+    const [disabled, setDisabled] = useState(false);
 
     const validate = ({ name, value }) => {
         if (value) {
@@ -65,49 +79,103 @@ const Page = (props) => {
         }))
     }
 
-    const handleCreate = (e) => {
-        if (!validate({ name: 'name', value: inputs?.name })) {
-            return;
+    const handle = {
+        create: (e) => {
+            if (!validate({ name: 'name', value: inputs?.name })) {
+                return;
+            }
+            setValid({ name: true });
+            const newEvent = {
+                ...inputs,
+                oid: orgId
+            }
+            setSaving(true)
+            addEvent(newEvent)
+                .then(async data => {
+                    if (data.code === 'succeed') {
+                        let saved = true
+                        if (rulebook) {
+                            await uploadFile(rulebook, data.id, 'rulebook', (url) => {
+                                updateEvent(data.id, { rulebook: url })
+                                    .then(res => {
+                                        saved = saved && (res.code == 'succeed')
+                                        setSaving(false)
+                                    })
+                                    .catch(err => {
+                                        setSaving(false)
+                                        console.log(err)
+                                    })
+                            })
+                        }
+                        if (terms) {
+                            await uploadFile(terms, data.id, 'terms', (url) => {
+                                updateEvent(data.id, { terms: url })
+                                    .then(res => {
+                                        saved = saved && (res.code == 'succeed')
+                                        setSaving(false)
+                                    })
+                                    .catch(err => {
+                                        setSaving(false)
+                                        console.log(err)
+                                    })
+                            })
+                        }
+                        if (privacy) {
+                            await uploadFile(privacy, data.id, 'privacy', (url) => {
+                                updateEvent(data.id, { privacy: url })
+                                    .then(res => {
+                                        saved = saved && (res.code == 'succeed')
+                                        setSaving(false)
+                                    })
+                                    .catch(err => {
+                                        setSaving(false)
+                                        console.log(err)
+                                    })
+                            })
+                        }
+                        if (saved) alert('Event data saved successfully!')
+                    } else if (res.code === 'failed') {
+                        console.log(res.message)
+                        setSaving(false)
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    setSaving(false)
+                })
+        },
+        change: (e) => {
+            const { name, value } = e.target
+            setInputs(prev => ({
+                ...prev,
+                [name]: value
+            }))
+        },
+        inputs: (e) => {
+            const { name, value } = e.target
+            setInputs({
+                ...inputs,
+                [name]: value
+            })
+        },
+        upload: (e, name) => {
+            const file = e.target?.files[0]
+            if (name === 'rulebook') setRulebook(file)
+            if (name === 'terms') setTerms(file)
+            if (name === 'privacy') setPrivacy(file)
+            setInputs(prev => ({
+                ...prev,
+                [name]: file?.name
+            }))
         }
-        setValid({ name: true });
-        const newEvent = {
-            oid: orgId,
-            label: inputs?.name
-        }
-        addEvent({
-            ...newEvent
-        })
     }
 
-    const handleChange = (e) => {
-        const { name, value } = e.target
-        setInputs(prev => ({
-            ...prev,
-            [name]: value
-        }))
-    }
-
-    const handleInputs = (e) => {
-        const { name, value } = e.target
-        setInputs({
-            ...inputs,
-            [name]: value
-        })
-    }
-
-    const handleUpload = (e, name) => {
-        setInputs(prev => ({
-            ...prev,
-            [name]: e.target?.files[0]?.name
-        }))
-    }
-
-    React.useEffect(() => {
+    useEffect(() => {
         setTitle('REGISTER AN EVENT')
         setCurrentEvent(null)
     }, [])
 
-    React.useEffect(() => {
+    useEffect(() => {
         const newOrg = router.query?.organization
         setOrgId(newOrg)
         setInputs(prev => ({
@@ -116,10 +184,11 @@ const Page = (props) => {
         }))
     }, [router])
 
-    React.useEffect(() => {
-        if (organizations[orgId]?.events?.length >= 5)
-            setDisabled(true);
-    }, [orgId])
+    useEffect(() => {
+        if (activeEventCount[orgId] >= 5)
+            setDisabled(true)
+        else setDisabled(false)
+    }, [orgId, activeEventCount])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
@@ -130,7 +199,7 @@ const Page = (props) => {
                         labelId="organization-select-label"
                         id="organization-select"
                         value={inputs?.oid}
-                        onChange={handleChange}
+                        onChange={handle.change}
                         variant="outlined"
                         name="oid"
                         disabled={disabled}
@@ -150,7 +219,7 @@ const Page = (props) => {
                         id="format-select"
                         value={inputs?.format}
                         name="format"
-                        onChange={handleChange}
+                        onChange={handle.change}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -169,7 +238,7 @@ const Page = (props) => {
                                 id="tournament-select"
                                 value={inputs?.tournament}
                                 name="tournament"
-                                onChange={handleChange}
+                                onChange={handle.change}
                                 variant="outlined"
                                 disabled={disabled}
                                 fullWidth
@@ -185,7 +254,7 @@ const Page = (props) => {
                                 id="league-select-temp"
                                 value={inputs?.league}
                                 name="league"
-                                onChange={handleChange}
+                                onChange={handle.change}
                                 variant="outlined"
                                 disabled={disabled}
                                 fullWidth
@@ -205,7 +274,7 @@ const Page = (props) => {
                         id="seed-select"
                         value={inputs?.seed}
                         name="seed"
-                        onChange={handleChange}
+                        onChange={handle.change}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -219,13 +288,13 @@ const Page = (props) => {
                     <Typography variant='h6'>Event Name</Typography>
                     <FormControl fullWidth error={!valid?.name} sx={{ mt: 1 }}>
                         <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
-                            onChange={handleInputs} />
+                            onChange={handle.inputs} />
                         {!valid?.name && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>Name is required.</FormHelperText>}
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant='h6'>Event Date</Typography>
-                    <DatePicker value={inputs?.date} setValue={setDate} sx={{ mt: 1 }} />
+                    <DatePicker value={inputs?.date} setValue={setDate} sx={{ mt: 1 }} disabled={disabled} />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Game</Typography>
@@ -234,7 +303,7 @@ const Page = (props) => {
                         id="game-select"
                         value={inputs?.game}
                         name="game"
-                        onChange={handleChange}
+                        onChange={handle.change}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -250,7 +319,7 @@ const Page = (props) => {
                         id="platform-select"
                         value={inputs?.platform}
                         name="platform"
-                        onChange={handleChange}
+                        onChange={handle.change}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -266,7 +335,7 @@ const Page = (props) => {
                         id="region-select"
                         value={inputs?.region}
                         name="region"
-                        onChange={handleChange}
+                        onChange={handle.change}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -282,7 +351,7 @@ const Page = (props) => {
                         id="timezone-select"
                         value={inputs?.timezone}
                         name="timezone"
-                        onChange={handleChange}
+                        onChange={handle.change}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -304,9 +373,9 @@ const Page = (props) => {
                     </Box>
                     <Box>
                         <Typography variant='body2' align='center'>{inputs?.rulebook}</Typography>
-                        <Button variant="outlined" sx={{ mt: 1 }} component="label" fullWidth>
+                        <Button variant="outlined" sx={{ mt: 1 }} component="label" fullWidth disabled={disabled}>
                             + Upload
-                            <input type="file" accept=".pdf" name="upload-rulebook" id="upload-rulebook" hidden onChange={(e) => handleUpload(e, 'rulebook')} />
+                            <input type="file" accept=".pdf" name="upload-rulebook" id="upload-rulebook" hidden onChange={(e) => handle.upload(e, 'rulebook')} />
                         </Button>
                     </Box>
                 </Grid>
@@ -317,9 +386,9 @@ const Page = (props) => {
                     </Box>
                     <Box>
                         <Typography variant='body2' align='center'>{inputs?.terms}</Typography>
-                        <Button variant="outlined" sx={{ mt: 1 }} component="label" fullWidth>
+                        <Button variant="outlined" sx={{ mt: 1 }} component="label" fullWidth disabled={disabled}>
                             + Upload
-                            <input type="file" accept=".pdf" name="upload-terms" id="upload-terms" hidden onChange={(e) => handleUpload(e, 'terms')} />
+                            <input type="file" accept=".pdf" name="upload-terms" id="upload-terms" hidden onChange={(e) => handle.upload(e, 'terms')} />
                         </Button>
                     </Box>
                 </Grid>
@@ -330,20 +399,21 @@ const Page = (props) => {
                     </Box>
                     <Box>
                         <Typography variant='body2' align='center'>{inputs?.privacy}</Typography>
-                        <Button variant="outlined" sx={{ mt: 1 }} component="label" fullWidth>
+                        <Button variant="outlined" sx={{ mt: 1 }} component="label" fullWidth disabled={disabled}>
                             + Upload
-                            <input type="file" accept=".pdf" name="upload-privacy" id="upload-privacy" hidden onChange={(e) => handleUpload(e, 'privacy')} />
+                            <input type="file" accept=".pdf" name="upload-privacy" id="upload-privacy" hidden onChange={(e) => handle.upload(e, 'privacy')} />
                         </Button>
                     </Box>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button
+                    <LoadingButton
+                        loading={saving}
                         variant='contained'
-                        onClick={handleCreate}
+                        onClick={handle.create}
                         disabled={disabled}
                     >
                         Register
-                    </Button>
+                    </LoadingButton>
                 </Grid>
             </Grid>
         </Paper>

@@ -5,7 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 
 const CustomDatePicker = (props) => {
-    const { className, name, sx, value, setValue } = props;
+    const { className, name, sx, value, setValue, disabled } = props;
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
@@ -14,6 +14,7 @@ const CustomDatePicker = (props) => {
                 value={dayjs(value)}
                 onChange={newValue => setValue(newValue)}
                 sx={sx}
+                disabled={disabled}
             />
         </LocalizationProvider>
     )

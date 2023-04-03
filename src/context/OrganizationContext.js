@@ -18,10 +18,9 @@ export default (props) => {
     const [loading, setLoading] = useState(true)
     const [activeCount, setActiveCount] = useState(0);
 
-    const setOrganization = async (data, activeCount) => {
+    const setOrganization = async (data, active) => {
         await setOrganizations(data);
-        setActiveCount(activeCount)
-        return
+        setActiveCount(active)
     }
 
     const organization = {
