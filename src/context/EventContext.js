@@ -18,11 +18,11 @@ export default (props) => {
     const [events, setEvents] = useState({})
     const [current, setCurrent] = useState(null)
     const [loading, setLoading] = useState(false)
-    const [activeCount, setActiveCount] = useState(0)
+    const [activeCount, setActiveCount] = useState({})
 
-    const setEvent = async (data, activeCount) => {
+    const setEvent = async (data, active) => {
         await setEvents(data);
-        setActiveCount(activeCount)
+        setActiveCount(active)
     }
 
     const event = {
@@ -41,8 +41,8 @@ export default (props) => {
             }
             return await eventStore.save(event, null)
         },
-        updateEvent: (id, newEvent) => {
-            return eventStore.save(newEvent, id)
+        updateEvent: async (id, newEvent) => {
+            return await eventStore.save(newEvent, id)
         },
         deleteEvent: async (id) => {
             eventStore.save({ deleted: true }, id)

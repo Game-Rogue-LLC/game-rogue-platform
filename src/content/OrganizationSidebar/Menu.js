@@ -94,7 +94,7 @@ const Menu = (props) => {
                                     <Event />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={events[id].label}
+                                    primary={events[id].name}
                                     primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
                                 />
                             </ListItemButton>

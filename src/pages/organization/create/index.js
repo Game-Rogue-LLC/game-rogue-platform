@@ -74,7 +74,8 @@ const Page = (props) => {
 
 	React.useEffect(() => {
 		if (activeCount >= 3)
-			setDisabled(true);
+			setDisabled(true)
+		else setDisabled(false)
 	}, [activeCount])
 
 	React.useEffect(() => {
