@@ -61,7 +61,7 @@ const ContextProvider = (props) => {
 		if (!user) {
 			router.push('/auth');
 		}
-	}, [user]);
+	}, []);
 
 	return (
 		<AppProvider>
