@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 import { useContext } from 'react';
 import eventStore from '@/lib/firestore/collections/event';
 import nProgress from 'nprogress';
@@ -12,7 +12,7 @@ const EventContext = createContext({});
 export const useEventContext = () => useContext(EventContext)
 
 export default (props) => {
-    const { currentOrganization } = useOrganizationContext();
+    const { currentOrganization, loading: loadingOrganization } = useOrganizationContext();
     const { user } = useAuthContext();
     const router = useRouter()
     const [events, setEvents] = useState({})
@@ -69,18 +69,22 @@ export default (props) => {
         event.readEvent()
     }, [])
 
+    const isLoading = useMemo(() => {
+        return loadingOrganization && loading
+    })
+
     useEffect(() => {
-        if (loading == false && Object.keys(events).length == 0 && currentOrganization)
+        if (isLoading == false && Object.keys(events).length == 0 && currentOrganization)
             router.push('/event/create?organization=' + currentOrganization)
-    }, [events, loading, currentOrganization])
+    }, [events, isLoading, currentOrganization])
 
     return (
         <EventContext.Provider value={{
             events, ...event,
             current, setCurrent,
-            activeCount, loading
+            activeCount
         }}>
-            {loading ? <Splash content='Loading data...'></Splash> : props.children}
+            {isLoading ? <Splash content='Loading data...'></Splash> : props.children}
         </EventContext.Provider>
     )
 }

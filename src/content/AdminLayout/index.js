@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import Navbar from './Navbar'
@@ -9,6 +9,7 @@ import OrganizationSidebar from '@/content/OrganizationSidebar'
 import AppProvider from '@/context/app'
 import OrganizationProvider, { useOrganizationContext } from '@/context/OrganizationContext'
 import EventProvider, { useEventContext } from '@/context/EventContext'
+import { useAuthContext } from '@/srccontext/AuthContext'
 
 const AdminLayout = (props) => {
 	const { children } = props;
@@ -54,6 +55,14 @@ const AdminLayout = (props) => {
 }
 
 const ContextProvider = (props) => {
+	const user = useAuthContext()
+
+	useEffect(() => {
+		if (!user) {
+			router.push('/auth');
+		}
+	}, [user]);
+
 	return (
 		<AppProvider>
 			<OrganizationProvider>

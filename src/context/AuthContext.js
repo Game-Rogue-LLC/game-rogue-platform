@@ -24,14 +24,6 @@ export const AuthContextProvider = ({ children }) => {
     //     }
     // }
 
-    useEffect(() => {
-        if (!user.loading) {
-            if (!user) {
-                router.push('/auth');
-            }
-        }
-    }, [user]);
-
     return (
         <AuthContext.Provider value={user}>
             {user.loading ? <Splash content='Signing in. Please wait...'></Splash> : children}

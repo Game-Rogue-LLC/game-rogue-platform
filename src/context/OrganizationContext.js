@@ -65,9 +65,9 @@ export default (props) => {
         <OrganizationContext.Provider value={{
             organizations, ...organization,
             current, setCurrent,
-            activeCount
+            activeCount, loading
         }}>
-            {loading ? <Splash content='Loading data...'></Splash> : props.children}
+            {props.children}
         </OrganizationContext.Provider>
     )
 }
