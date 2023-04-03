@@ -16,6 +16,14 @@ const AdminLayout = (props) => {
 	const { activeCount: activeOrganizationCount, current: currentOrganization } = useOrganizationContext();
 	const { activeCount: activeEventCount, current: currentEvent } = useEventContext();
 
+	const user = useAuthContext()
+
+	useEffect(() => {
+		if (!user) {
+			router.push('/auth');
+		}
+	}, []);
+
 	return (
 		<div style={{
 			display: 'flex',
@@ -55,14 +63,6 @@ const AdminLayout = (props) => {
 }
 
 const ContextProvider = (props) => {
-	const user = useAuthContext()
-
-	useEffect(() => {
-		if (!user) {
-			router.push('/auth');
-		}
-	}, []);
-
 	return (
 		<AppProvider>
 			<OrganizationProvider>
