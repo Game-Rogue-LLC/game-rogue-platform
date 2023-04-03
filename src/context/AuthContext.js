@@ -26,7 +26,10 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (!user.loading) {
-            if (!user.user) router.push('/auth');
+            console.log(user)
+            if (!user.user) {
+                router.push('/auth');
+            }
         }
     }, [user]);
 
