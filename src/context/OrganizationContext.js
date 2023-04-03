@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from 'react';
 import { useContext } from 'react';
 import organizationStore from '@/lib/firestore/collections/organization';
 import nProgress from 'nprogress';
-import Splash from '@/srccontent/Splash';
+import Splash from '@/src/content/Splash';
 import { useAuthContext } from './AuthContext';
 
 const OrganizationContext = createContext({});
