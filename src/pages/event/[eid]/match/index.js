@@ -1,5 +1,5 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
+import * as React from 'react'
+import Button from '@mui/material/Button'
 import {
     Paper,
     Table,
@@ -10,20 +10,30 @@ import {
     TableContainer,
     TableFooter,
     useTheme
-} from '@mui/material';
-
-import AdminLayout from '@/content/AdminLayout';
-import { useAppContext } from '@/context/app';
-import { useRouter } from 'next/router';
+} from '@mui/material'
+import AdminLayout from '@/content/AdminLayout'
+import { useAppContext } from '@/context/app'
+import { useRouter } from 'next/router'
+import { useEventContext } from '@/src/context/EventContext'
+import { useOrganizationContext } from '@/src/context/OrganizationContext'
 
 const Page = (props) => {
-    const theme = useTheme();
-    const router = useRouter();
-    const { setTitle } = useAppContext();
+    const theme = useTheme()
+    const router = useRouter()
+    const { setTitle } = useAppContext()
+    const { setCurrent: setCurrentOrganization } = useOrganizationContext()
+    const { events, setCurrent: setCurrentEvent } = useEventContext()
+    const event = router.query?.eid
 
     React.useEffect(() => {
-        setTitle('MATCHES');
+        setTitle('MATCHES')
+        console.log(event)
     }, [])
+
+    React.useEffect(() => {
+        setCurrentEvent(event)
+        setCurrentOrganization(events[event]?.oid)
+    }, [events, event])
 
     return (
         <TableContainer component={Paper} variant='elevation'>

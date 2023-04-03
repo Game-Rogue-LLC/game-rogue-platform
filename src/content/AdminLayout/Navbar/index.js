@@ -18,6 +18,7 @@ import { styled, alpha } from '@mui/material/styles';
 import { useAppContext } from '@/context/app';
 
 import routes from './routes'
+import { useOrganizationContext } from '@/src/context/OrganizationContext';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -37,7 +38,7 @@ const NavItem = styled(Button)(({ theme }) => ({
 
 function Navbar() {
     const theme = useTheme()
-    const { current } = useAppContext();
+    const { current: currentOrganization } = useOrganizationContext();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -121,7 +122,7 @@ function Navbar() {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        {current.organization &&
+                        {currentOrganization &&
                             <Tooltip title="Open settings">
                                 <Box sx={{ height: '30px', position: 'relative', pr: 2 }}>
                                     <img src='/Game_Rogue_Text_2_copy.png' height={'100%'} />

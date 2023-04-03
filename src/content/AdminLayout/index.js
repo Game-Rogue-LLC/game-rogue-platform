@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-
+import { useEffect } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import Navbar from './Navbar'
@@ -7,19 +6,14 @@ import PageHeader from './PageHeader'
 import PageContainer from './PageContainer'
 
 import OrganizationSidebar from '@/content/OrganizationSidebar'
-import { useAppContext } from "@/context/app"
-import { useRouter } from 'next/router';
-import AppProvider from '@/context/app';
+import AppProvider from '@/context/app'
+import OrganizationProvider, { useOrganizationContext } from '@/context/OrganizationContext'
+import EventProvider, { useEventContext } from '@/context/EventContext'
 
 const AdminLayout = (props) => {
 	const { children } = props;
-	const { organizations, activeCount, readOrganization } = useAppContext();
-	const router = useRouter();
-
-	// useEffect(() => {
-	// 	if (activeCount?.organization == 0)
-	// 		router.push('/organization/create')
-	// }, [activeCount])
+	const { activeCount: activeOrganizationCount, current: currentOrganization } = useOrganizationContext();
+	const { activeCount: activeEventCount, current: currentEvent } = useEventContext();
 
 	return (
 		<div style={{
@@ -37,7 +31,7 @@ const AdminLayout = (props) => {
 				justifyContent: 'space-between',
 				flex: 1
 			}}>
-				{activeCount?.organization > 0 ?
+				{activeOrganizationCount > 0 ?
 					<OrganizationSidebar />
 					: <></>
 				}
@@ -47,7 +41,7 @@ const AdminLayout = (props) => {
 					display: 'flex',
 					justifyContent: 'space-between',
 				}}>
-					{activeCount?.organization > 0 && activeCount?.event > 0 && <Navbar />}
+					{activeOrganizationCount > 0 && activeEventCount > 0 && currentOrganization && currentEvent && <Navbar />}
 					<PageContainer>
 						<PageHeader />
 						{children}
@@ -62,7 +56,11 @@ const AdminLayout = (props) => {
 const ContextProvider = (props) => {
 	return (
 		<AppProvider>
-			<AdminLayout {...props} />
+			<OrganizationProvider>
+				<EventProvider>
+					<AdminLayout {...props} />
+				</EventProvider>
+			</OrganizationProvider>
 		</AppProvider>
 	)
 }

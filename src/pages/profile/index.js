@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
 	Box,
 	Button,
@@ -23,28 +23,30 @@ import {
 	FormControlLabel,
 	Switch,
 	Checkbox
-} from '@mui/material';
+} from '@mui/material'
 
-import { LoadingButton } from '@mui/lab';
-import AdminLayout from '@/content/AdminLayout';
-import { useAppContext } from '@/context/app';
-import { useRouter } from 'next/router';
-import { CreditCard, Instagram, Twitter, YouTube } from '@mui/icons-material';
-import ContentBlock from '@/pages/profile/components/ContentBlock';
+import { LoadingButton } from '@mui/lab'
+import AdminLayout from '@/content/AdminLayout'
+import { useAppContext } from '@/context/app'
+import { useRouter } from 'next/router'
+import { CreditCard, Instagram, Twitter, YouTube } from '@mui/icons-material'
+import ContentBlock from '@/pages/profile/components/ContentBlock'
+import { useOrganizationContext } from '@/src/context/OrganizationContext'
+import { useEventContext } from '@/src/context/EventContext'
 
 const Page = (props) => {
-	const router = useRouter();
-	const theme = useTheme();
+	const router = useRouter()
+	const theme = useTheme()
+	const { setTitle } = useAppContext()
 	const {
 		organizations,
 		updateOrganization,
 		deleteOrganization,
-		setTitle,
-		current,
-		setCurrent,
-		uploadContentImage,
-		setCurrentOrganization
-	} = useAppContext();
+		current: currentOrganization,
+		setCurrent: setCurrentOrganization,
+		uploadContentImage
+	} = useOrganizationContext()
+	const { setCurrent: setCurrentEvent } = useEventContext()
 	const [disabled, setDisabled] = React.useState(false);
 	const [open, setOpen] = React.useState(false);
 	const [orgId, setOrgId] = React.useState(null);
@@ -92,7 +94,7 @@ const Page = (props) => {
 				name: inputs?.name,
 				tagline: inputs?.tagline
 			}).then(res => {
-				if (res.code == 'success')
+				if (res.code == 'succeed')
 					alert(res.message)
 				setSaving(prev => ({
 					...prev,
@@ -117,7 +119,7 @@ const Page = (props) => {
 				twitchLink: inputs?.twitchLink,
 				discordLink: inputs?.discordLink
 			}).then(res => {
-				if (res.code == 'success')
+				if (res.code == 'succeed')
 					alert(res.message)
 				setSaving(prev => ({
 					...prev,
@@ -136,14 +138,14 @@ const Page = (props) => {
 				contentBlock: true
 			}))
 			if (contentImage) {
-				uploadContentImage(contentImage, current?.organization, (url) => {
+				uploadContentImage(contentImage, currentOrganization, (url) => {
 					updateOrganization(orgId, {
 						contentBlock: {
 							...inputs?.contentBlock,
 							image: url
 						}
 					}).then(res => {
-						if (res.code == 'success')
+						if (res.code == 'succeed')
 							alert(res.message)
 						setSaving(prev => ({
 							...prev,
@@ -162,7 +164,7 @@ const Page = (props) => {
 						...inputs?.contentBlock
 					}
 				}).then(res => {
-					if (res.code == 'success')
+					if (res.code == 'succeed')
 						alert(res.message)
 					setSaving(prev => ({
 						...prev,
@@ -192,7 +194,7 @@ const Page = (props) => {
 				credit: inputs?.credit,
 				paypal: inputs?.paypal
 			}).then(res => {
-				if (res.code == 'success')
+				if (res.code == 'succeed')
 					alert(res.message)
 				setSaving(prev => ({
 					...prev,
@@ -264,6 +266,7 @@ const Page = (props) => {
 
 	React.useEffect(() => {
 		setCurrentOrganization(orgId);
+		setCurrentEvent(null)
 		setInputs(prev => ({
 			...prev,
 			...organizations[orgId]

@@ -17,14 +17,16 @@ import {
 import AdminLayout from '@/content/AdminLayout';
 import { useAppContext } from '@/context/app';
 import { useRouter } from 'next/router';
+import { useOrganizationContext } from '@/src/context/OrganizationContext';
 
 const Page = (props) => {
-	const theme = useTheme();
-	const router = useRouter();
-	const { organizations, addOrganization, setTitle, activeCount, readData } = useAppContext();
-	const [inputs, setInputs] = React.useState({ name: '', tagline: '' });
-	const [valid, setValid] = React.useState({ name: true, tagline: true });
-	const [disabled, setDisabled] = React.useState(false);
+	const theme = useTheme()
+	const router = useRouter()
+	const { setTitle } = useAppContext()
+	const { addOrganization, activeCount } = useOrganizationContext()
+	const [inputs, setInputs] = React.useState({ name: '', tagline: '' })
+	const [valid, setValid] = React.useState({ name: true, tagline: true })
+	const [disabled, setDisabled] = React.useState(false)
 
 	const validate = ({ name, value }) => {
 		if (value) {
@@ -48,8 +50,17 @@ const Page = (props) => {
 			name: '',
 			tagline: ''
 		})
-		await addOrganization(newOrg);
-		router.push(`/`);
+		addOrganization(newOrg)
+			.then(res => {
+				if (res.code === 'succeed') {
+					router.push('/profile?organization=' + res.id)
+				} else if (res.code === 'failed') {
+					console.log(res.message)
+				}
+			})
+			.catch(err => {
+				console.log(err)
+			})
 	}
 
 	const handleInputs = (e) => {
@@ -62,7 +73,7 @@ const Page = (props) => {
 	}
 
 	React.useEffect(() => {
-		if (activeCount.organization >= 3)
+		if (activeCount >= 3)
 			setDisabled(true);
 	}, [activeCount])
 
@@ -83,15 +94,15 @@ const Page = (props) => {
 					<FormHelperText sx={{ mt: 2 }}>Controls the publically visible name of this organization.</FormHelperText>
 					<FormControl fullWidth error={!valid?.name}>
 						<OutlinedInput id="org-name" name="name" aria-describedby="org-name-helper" value={inputs.name} onChange={handleInputs} disabled={disabled}
-							sx={{ mt: 1 }} fullWidth />
+							sx={{ mt: 1 }} fullWidth required />
 						{!valid?.name && <FormHelperText id="org-name-helper" sx={{ mt: 2 }}>Name is required.</FormHelperText>}
 					</FormControl>
 				</Grid>
 				<Grid item xs={12}>
 					<InputLabel htmlFor="org-tag">Tagline</InputLabel>
 					<FormControl fullWidth sx={{ mt: 1 }} error={!valid?.tagline}>
-						<OutlinedInput id="org-tag" name="tagline" aria-describedby="org-tag-helper" value={inputs.tagline} inputProps={{ maxLength: 50 }} required
-							onChange={handleInputs} disabled={disabled} fullWidth />
+						<OutlinedInput id="org-tag" name="tagline" aria-describedby="org-tag-helper" value={inputs.tagline} inputProps={{ maxLength: 50 }}
+							onChange={handleInputs} disabled={disabled} fullWidth required />
 						{!valid?.tagline && <FormHelperText id="org-tag-helper" sx={{ mt: 2 }}>Tagline is required.</FormHelperText>}
 					</FormControl>
 				</Grid>
