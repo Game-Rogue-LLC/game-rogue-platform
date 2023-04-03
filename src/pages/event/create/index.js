@@ -17,8 +17,8 @@ import { useRouter } from 'next/router'
 import AdminLayout from '@/content/AdminLayout'
 import { useAppContext } from '@/context/app'
 import DatePicker from '@/pages/components/DatePicker'
-import { useOrganizationContext } from '@/srccontext/OrganizationContext'
-import { useEventContext } from '@/srccontext/EventContext'
+import { useOrganizationContext } from '@/src/context/OrganizationContext'
+import { useEventContext } from '@/src/context/EventContext'
 
 const Page = (props) => {
     const theme = useTheme()

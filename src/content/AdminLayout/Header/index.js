@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { styled, alpha } from '@mui/material/styles';
 import { useEffect, useState } from 'react'
 import { Logout } from '@mui/icons-material';
-import { useAuthContext } from '@/srccontext/AuthContext';
+import { useAuthContext } from '@/src/context/AuthContext';
 
 const StyledMenu = styled((props) => (
 	<Menu

@@ -14,8 +14,8 @@ import {
 import AdminLayout from '@/content/AdminLayout'
 import { useAppContext } from '@/context/app'
 import { useRouter } from 'next/router'
-import { useEventContext } from '@/srccontext/EventContext'
-import { useOrganizationContext } from '@/srccontext/OrganizationContext'
+import { useEventContext } from '@/src/context/EventContext'
+import { useOrganizationContext } from '@/src/context/OrganizationContext'
 
 const Page = (props) => {
     const theme = useTheme()

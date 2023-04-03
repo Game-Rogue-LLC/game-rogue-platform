@@ -31,8 +31,8 @@ import { useAppContext } from '@/context/app'
 import { useRouter } from 'next/router'
 import { CreditCard, Instagram, Twitter, YouTube } from '@mui/icons-material'
 import ContentBlock from '@/pages/profile/components/ContentBlock'
-import { useOrganizationContext } from '@/srccontext/OrganizationContext'
-import { useEventContext } from '@/srccontext/EventContext'
+import { useOrganizationContext } from '@/src/context/OrganizationContext'
+import { useEventContext } from '@/src/context/EventContext'
 
 const Page = (props) => {
 	const router = useRouter()

@@ -26,7 +26,7 @@ import {
 import OrganizationMenu from './Menu'
 import { useAppContext } from '@/context/app'
 import { useAuthContext } from '@/context/AuthContext'
-import { useOrganizationContext } from '@/srccontext/OrganizationContext';
+import { useOrganizationContext } from '@/src/context/OrganizationContext';
 
 const FireNav = styled(List)(({ theme }) => ({
 	'& .MuiPaper-root': {

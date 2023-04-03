@@ -18,7 +18,7 @@ import { styled, alpha } from '@mui/material/styles';
 import { useAppContext } from '@/context/app';
 
 import routes from './routes'
-import { useOrganizationContext } from '@/srccontext/OrganizationContext';
+import { useOrganizationContext } from '@/src/context/OrganizationContext';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 

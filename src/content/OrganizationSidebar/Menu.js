@@ -14,7 +14,7 @@ import { alpha } from '@mui/material/styles'
 import { useRouter } from 'next/router'
 import { Event, KeyboardArrowDown } from '@mui/icons-material'
 import { useEventContext } from '@/context/EventContext'
-import { useOrganizationContext } from '@/srccontext/OrganizationContext'
+import { useOrganizationContext } from '@/src/context/OrganizationContext'
 
 const Menu = (props) => {
     const { organization } = props
