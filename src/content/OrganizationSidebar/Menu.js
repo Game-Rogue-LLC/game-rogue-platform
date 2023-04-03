@@ -1,5 +1,4 @@
-import * as React from 'react';
-
+import * as React from 'react'
 import {
     Box,
     Button,
@@ -10,20 +9,20 @@ import {
     useTheme,
     Divider,
     IconButton,
-} from "@mui/material"
-
-import { alpha } from '@mui/material/styles';
-
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import { useRouter } from 'next/router';
-import { useAppContext } from '@/context/app';
+} from '@mui/material'
+import { alpha } from '@mui/material/styles'
+import { useRouter } from 'next/router'
+import { Event, KeyboardArrowDown } from '@mui/icons-material'
+import { useEventContext } from '@/context/EventContext'
+import { useOrganizationContext } from '@/srccontext/OrganizationContext'
 
 const Menu = (props) => {
-    const { organization } = props;
-    const { events, current, setCurrent } = useAppContext();
-    const [open, setOpen] = React.useState(false);
-    const router = useRouter();
-    const theme = useTheme();
+    const { organization } = props
+    const { events, setCurrent: setCurrentEvent } = useEventContext()
+    const { setCurrent: setCurrentOrganization } = useOrganizationContext()
+    const [open, setOpen] = React.useState(false)
+    const router = useRouter()
+    const theme = useTheme()
 
     const handleOpen = () => {
         setOpen(!open);
@@ -58,7 +57,7 @@ const Menu = (props) => {
                             lineHeight: '20px',
                             mb: '2px',
                         }}
-                        secondary={!open && organization?.tagline}
+                        secondary={!open && organization.tagline}
                         secondaryTypographyProps={{
                             noWrap: true,
                             fontSize: 12,
@@ -81,16 +80,21 @@ const Menu = (props) => {
                 </ListItem>
                 {open &&
                     <>
-                        {events.filter((val, i) => organization.events?.includes(val.id)).map((item, idx) => (
+                        {Object.keys(events).filter((key, i) => organization.id == events[key].oid).map((id, idx) => (
                             <ListItemButton
                                 key={"event_menu_" + organization.id + "_" + idx}
                                 sx={{ minHeight: 32, color: 'rgba(255,255,255,.8)' }}
+                                onClick={() => {
+                                    setCurrentOrganization(organization.id)
+                                    setCurrentEvent(id)
+                                    router.push('/event/' + id + '/match')
+                                }}
                             >
                                 <ListItemIcon sx={{ color: 'inherit' }}>
-                                    {item.icon}
+                                    <Event />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={item.label}
+                                    primary={events[id].label}
                                     primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
                                 />
                             </ListItemButton>
@@ -118,7 +122,7 @@ const Menu = (props) => {
                                     mr: 1,
                                     color: 'white',
                                     border: '1px solid rgba(255, 255, 255, .5)',
-                                    display: current.organization?.events?.length >= 5 ? 'none' : 'block'
+                                    display: organization.events?.length >= 5 ? 'none' : 'block'
                                 }}
                                 color='secondary'
                                 size='small'

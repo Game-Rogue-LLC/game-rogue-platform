@@ -1,34 +1,35 @@
-import * as React from 'react';
+import * as React from 'react'
 import {
     Box,
     Button,
     FormControl,
     FormHelperText,
     Grid,
-    Input,
-    InputLabel,
     MenuItem,
     OutlinedInput,
     Paper,
     Select,
     Typography,
     useTheme,
-} from '@mui/material';
-import { useRouter } from 'next/router';
-import { Event } from '@mui/icons-material';
+} from '@mui/material'
+import { useRouter } from 'next/router'
 
-import AdminLayout from '@/content/AdminLayout';
-import { useAppContext } from '@/context/app';
-import DatePicker from '@/pages/components/DatePicker';
+import AdminLayout from '@/content/AdminLayout'
+import { useAppContext } from '@/context/app'
+import DatePicker from '@/pages/components/DatePicker'
+import { useOrganizationContext } from '@/srccontext/OrganizationContext'
+import { useEventContext } from '@/srccontext/EventContext'
 
 const Page = (props) => {
-    const theme = useTheme();
-    const router = useRouter();
-    const { organizations, addEvent, title, setTitle, current, setCurrentOrganization } = useAppContext();
-    const [orgId, setOrgId] = React.useState(router.query.organization || '');
+    const theme = useTheme()
+    const router = useRouter()
+    const { setTitle } = useAppContext()
+    const { organizations, current: currentOrganization, setCurrent: setCurrentOrganization } = useOrganizationContext()
+    const { addEvent, setCurrent: setCurrentEvent } = useEventContext()
+    const [orgId, setOrgId] = React.useState(null)
     const [inputs, setInputs] = React.useState({
         name: '',
-        oid: orgId,
+        oid: orgId || '',
         format: 0,
         tournament: 0,
         league: 0,
@@ -49,17 +50,13 @@ const Page = (props) => {
 
     const validate = ({ name, value }) => {
         if (value) {
-            setValid(prevState => ({ ...prevState, [name]: true }));
+            setValid(prevState => ({ ...prevState, [name]: true }))
             return true;
         } else {
-            setValid(prevState => ({ ...prevState, [name]: false }));
+            setValid(prevState => ({ ...prevState, [name]: false }))
             return false;
         }
     }
-
-    React.useEffect(() => {
-        setOrgId(router.query.organization)
-    }, [router])
 
     const setDate = (newDate) => {
         setInputs(prev => ({
@@ -74,19 +71,16 @@ const Page = (props) => {
         }
         setValid({ name: true });
         const newEvent = {
-            _id: new Date().getTime(),
-            organization: orgId,
-            icon: <Event />,
-            label: inputs.name
+            oid: orgId,
+            label: inputs?.name
         }
         addEvent({
             ...newEvent
         })
-        router.push(`/event/match/${newEvent._id}`);
     }
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         setInputs(prev => ({
             ...prev,
             [name]: value
@@ -94,7 +88,7 @@ const Page = (props) => {
     }
 
     const handleInputs = (e) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         setInputs({
             ...inputs,
             [name]: value
@@ -109,25 +103,23 @@ const Page = (props) => {
     }
 
     React.useEffect(() => {
-        setTitle('REGISTER AN EVENT');
+        setTitle('REGISTER AN EVENT')
+        setCurrentEvent(null)
     }, [])
 
     React.useEffect(() => {
-        setOrgId(router.query?.organization);
+        const newOrg = router.query?.organization
+        setOrgId(newOrg)
+        setInputs(prev => ({
+            ...prev,
+            oid: newOrg
+        }))
     }, [router])
 
     React.useEffect(() => {
-        setCurrentOrganization(orgId);
-        setInputs(prev => ({
-            ...prev,
-            oid: orgId
-        }))
-    }, [organizations, orgId])
-
-    // React.useEffect(() => {
-    //     if (current.organization?.events?.length >= 5)
-    //         setDisabled(true);
-    // }, [current])
+        if (organizations[orgId]?.events?.length >= 5)
+            setDisabled(true);
+    }, [orgId])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>

@@ -25,7 +25,7 @@ export default function Splash(props) {
               color={theme.palette.primary.main}
             />
           </div>
-          <div style={{ fontSize: "23px", fontWeight: 100 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', fontSize: "23px", fontWeight: 100 }}>
             {content}
           </div>
         </div>

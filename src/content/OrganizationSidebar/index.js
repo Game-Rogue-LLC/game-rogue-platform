@@ -1,27 +1,32 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import ArrowRight from '@mui/icons-material/ArrowRight';
-import Home from '@mui/icons-material/Home';
-import Settings from '@mui/icons-material/Settings';
-import { Menu, MenuItem } from '@mui/material';
+import * as React from 'react'
+import Link from 'next/link'
+import { styled, ThemeProvider, createTheme } from '@mui/material/styles'
+import {
+	Avatar,
+	Box,
+	Divider,
+	IconButton,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Menu,
+	MenuItem,
+	Paper,
+	Tooltip,
+	Typography
+} from '@mui/material'
+import {
+	ArrowRight,
+	Home,
+	Settings
+} from '@mui/icons-material';
 
 import OrganizationMenu from './Menu'
-
-import { useAppContext } from '@/context/app';
-import Link from 'next/link';
-import { useAuthContext } from '@/srccontext/AuthContext';
+import { useAppContext } from '@/context/app'
+import { useAuthContext } from '@/context/AuthContext'
+import { useOrganizationContext } from '@/srccontext/OrganizationContext';
 
 const FireNav = styled(List)(({ theme }) => ({
 	'& .MuiPaper-root': {
@@ -46,7 +51,7 @@ const FirePaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function OrganizationSidebar(props) {
-	const { organizations, current, setCurrent } = useAppContext();
+	const { organizations } = useOrganizationContext();
 	const [showMenu, setShowMenu] = React.useState(false);
 	const { user } = useAuthContext();
 	const [anchorElMenu, setAnchorElMenu] = React.useState(null);
