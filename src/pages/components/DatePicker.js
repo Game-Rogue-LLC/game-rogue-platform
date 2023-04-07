@@ -9,6 +9,7 @@ const CustomDatePicker = (props) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+                {...props}
                 name={name}
                 className={`${className}`}
                 value={dayjs(value)}
