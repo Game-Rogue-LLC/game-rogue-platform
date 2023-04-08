@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "react-snap",
     "build": "next build",
     "export": "next export",
     "start": "next start",
