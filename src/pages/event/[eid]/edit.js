@@ -24,8 +24,9 @@ import { useEventContext } from '@/src/context/EventContext'
 const Page = (props) => {
     const theme = useTheme()
     const router = useRouter()
+    const [eid, setEID] = useState(null)
     const { setTitle } = useAppContext()
-    const { organizations } = useOrganizationContext()
+    const { organizations, setCurrent: setCurrentOrganization } = useOrganizationContext()
     const {
         events,
         addEvent,
@@ -80,7 +81,7 @@ const Page = (props) => {
     }
 
     const handle = {
-        create: (e) => {
+        save: async (e) => {
             if (!validate({ name: 'name', value: inputs?.name })) {
                 return;
             }
@@ -90,66 +91,32 @@ const Page = (props) => {
                 oid: orgId
             }
             setSaving(true)
-            addEvent(newEvent)
-                .then(async data => {
-                    if (data.code === 'succeed') {
-                        let saved = true
-                        if (rulebook) {
-                            await uploadFile(rulebook, data.id, 'rulebook', (url) => {
-                                updateEvent(data.id, { rulebook: url })
-                                    .then(res => {
-                                        saved = saved && (res.code == 'succeed')
-                                        setSaving(false)
-                                    })
-                                    .catch(err => {
-                                        setSaving(false)
-                                        console.log(err)
-                                    })
-                            })
-                        }
-                        if (terms) {
-                            await uploadFile(terms, data.id, 'terms', (url) => {
-                                updateEvent(data.id, { terms: url })
-                                    .then(res => {
-                                        saved = saved && (res.code == 'succeed')
-                                        setSaving(false)
-                                    })
-                                    .catch(err => {
-                                        setSaving(false)
-                                        console.log(err)
-                                    })
-                            })
-                        }
-                        if (privacy) {
-                            await uploadFile(privacy, data.id, 'privacy', (url) => {
-                                updateEvent(data.id, { privacy: url })
-                                    .then(res => {
-                                        saved = saved && (res.code == 'succeed')
-                                        setSaving(false)
-                                    })
-                                    .catch(err => {
-                                        setSaving(false)
-                                        console.log(err)
-                                    })
-                            })
-                        }
-                        if (saved) alert('Event data saved successfully!')
-                    } else if (res.code === 'failed') {
-                        console.log(res.message)
-                        setSaving(false)
-                    }
+            let saved = true
+            if (rulebook) {
+                await uploadFile(rulebook, data.id, 'rulebook', (url) => {
+                    updateEvent(data.id, { rulebook: url })
+                        .then(res => saved = saved && (res.code == 'succeed'))
+                        .catch(err => console.log(err))
                 })
-                .catch(err => {
-                    console.log(err)
-                    setSaving(false)
+            }
+            if (terms) {
+                await uploadFile(terms, data.id, 'terms', (url) => {
+                    updateEvent(data.id, { terms: url })
+                        .then(res => saved = saved && (res.code == 'succeed'))
+                        .catch(err => console.log(err))
                 })
-        },
-        change: (e) => {
-            const { name, value } = e.target
-            setInputs(prev => ({
-                ...prev,
-                [name]: value
-            }))
+            }
+            if (privacy) {
+                await uploadFile(privacy, data.id, 'privacy', (url) => {
+                    updateEvent(data.id, { privacy: url })
+                        .then(res => saved = saved && (res.code == 'succeed'))
+                        .catch(err => console.log(err))
+                })
+            }
+            if (saved) {
+                alert('Event data saved successfully!')
+                setSaving(false)
+            }
         },
         inputs: (e) => {
             const { name, value } = e.target
@@ -171,24 +138,22 @@ const Page = (props) => {
     }
 
     useEffect(() => {
-        setTitle('REGISTER AN EVENT')
-        setCurrentEvent(null)
+        setTitle('EDIT EVENT')
     }, [])
 
     useEffect(() => {
-        const newOrg = router.query?.organization
-        setOrgId(newOrg)
-        setInputs(prev => ({
-            ...prev,
-            oid: newOrg
-        }))
-    }, [router])
+        setCurrentOrganization(events[eid]?.oid)
+        setCurrentEvent(eid)
+    }, [eid, events])
 
     useEffect(() => {
-        if (activeEventCount[orgId] >= 5)
-            setDisabled(true)
-        else setDisabled(false)
-    }, [orgId, activeEventCount])
+        const newEid = router.query?.eid
+        setEID(newEid)
+        setInputs(prev => ({
+            ...prev,
+            ...events[newEid]
+        }))
+    }, [router])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
@@ -199,7 +164,7 @@ const Page = (props) => {
                         labelId="organization-select-label"
                         id="organization-select"
                         value={inputs?.oid}
-                        onChange={handle.change}
+                        onChange={handle.inputs}
                         variant="outlined"
                         name="oid"
                         disabled={disabled}
@@ -219,7 +184,7 @@ const Page = (props) => {
                         id="format-select"
                         value={inputs?.format}
                         name="format"
-                        onChange={handle.change}
+                        onChange={handle.inputs}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -238,7 +203,7 @@ const Page = (props) => {
                                 id="tournament-select"
                                 value={inputs?.tournament}
                                 name="tournament"
-                                onChange={handle.change}
+                                onChange={handle.inputs}
                                 variant="outlined"
                                 disabled={disabled}
                                 fullWidth
@@ -254,7 +219,7 @@ const Page = (props) => {
                                 id="league-select-temp"
                                 value={inputs?.league}
                                 name="league"
-                                onChange={handle.change}
+                                onChange={handle.inputs}
                                 variant="outlined"
                                 disabled={disabled}
                                 fullWidth
@@ -274,7 +239,7 @@ const Page = (props) => {
                         id="seed-select"
                         value={inputs?.seed}
                         name="seed"
-                        onChange={handle.change}
+                        onChange={handle.inputs}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -303,7 +268,7 @@ const Page = (props) => {
                         id="game-select"
                         value={inputs?.game}
                         name="game"
-                        onChange={handle.change}
+                        onChange={handle.inputs}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -319,7 +284,7 @@ const Page = (props) => {
                         id="platform-select"
                         value={inputs?.platform}
                         name="platform"
-                        onChange={handle.change}
+                        onChange={handle.inputs}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -335,7 +300,7 @@ const Page = (props) => {
                         id="region-select"
                         value={inputs?.region}
                         name="region"
-                        onChange={handle.change}
+                        onChange={handle.inputs}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -351,7 +316,7 @@ const Page = (props) => {
                         id="timezone-select"
                         value={inputs?.timezone}
                         name="timezone"
-                        onChange={handle.change}
+                        onChange={handle.inputs}
                         variant="outlined"
                         disabled={disabled}
                         sx={{ mt: 1 }}
@@ -412,7 +377,7 @@ const Page = (props) => {
                         onClick={handle.create}
                         disabled={disabled}
                     >
-                        Register
+                        Save
                     </LoadingButton>
                 </Grid>
             </Grid>

@@ -1,21 +1,21 @@
 export default [
 	{
-		href:'/event/:id/match',
+		href: '/match',
 		label: 'Matches'
-	},{
-		href:'/event/:id/ticket',
+	}, {
+		href: '/ticket',
 		label: 'Tickets'
-	},{
-		href:'/event/:id/staff',
+	}, {
+		href: '/staff',
 		label: 'Staff'
-	},{
-		href:'/event/:id/participant',
+	}, {
+		href: '/participant',
 		label: 'Participants'
-	},{
-		href:'/event/:id/event',
+	}, {
+		href: '/event/:eid/edit',
 		label: 'Edit Event'
-	},{
-		href:'/event/:id/archived',
+	}, {
+		href: '/archived',
 		label: 'Archived'
 	}
 ]

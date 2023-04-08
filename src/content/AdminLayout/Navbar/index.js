@@ -19,6 +19,7 @@ import { useAppContext } from '@/context/app';
 
 import routes from './routes'
 import { useOrganizationContext } from '@/src/context/OrganizationContext';
+import { useEventContext } from '@/src/context/EventContext';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -39,6 +40,7 @@ const NavItem = styled(Button)(({ theme }) => ({
 function Navbar() {
     const theme = useTheme()
     const { current: currentOrganization } = useOrganizationContext();
+    const { current: currentEvent } = useEventContext()
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -108,17 +110,62 @@ function Navbar() {
                     </Box>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {routes.map((route) => (
-                            <NavItem
-                                key={route.href}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'black', display: 'block' }}
-                            >
-                                <Link href={route.href}>
-                                    {route.label}
-                                </Link>
-                            </NavItem>
-                        ))}
+                        <NavItem
+                            key={`/match?event=${currentEvent}`}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            <Link href={`/match?event=${currentEvent}`}>
+                                Matches
+                            </Link>
+                        </NavItem>
+                        <NavItem
+                            key={`/ticket?event=${currentEvent}`}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            <Link href={`/ticket?event=${currentEvent}`}>
+                                Tickets
+                            </Link>
+                        </NavItem>
+                        <NavItem
+                            key={`/staff?event=${currentEvent}`}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            <Link href={`/staff?event=${currentEvent}`}>
+                                Staff
+                            </Link>
+                        </NavItem>
+                        <NavItem
+                            key={`/participant?event=${currentEvent}`}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            <Link href={`/participant?event=${currentEvent}`}>
+                                Participants
+                            </Link>
+                        </NavItem>
+                        <NavItem
+                            key={`/event/${currentEvent}/edit`}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            <Link href={`/event/${currentEvent}/edit`}>
+                                Edit Event
+                            </Link>
+                        </NavItem>
+                        <NavItem
+                            key={`/archived?event=${currentEvent}`}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            <Link href={`/archived?event=${currentEvent}`}>
+                                Archived
+                            </Link>
+                        </NavItem>
+                        <NavItem
+                            key={`/match/organize?event=${currentEvent}`}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            <Link href={`/match/organize?event=${currentEvent}`}>
+                                Organize Matches
+                            </Link>
+                        </NavItem>
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
@@ -139,7 +186,7 @@ function Navbar() {
                             keepMounted
                             transformOrigin={{
                                 vertical: 'top',
-                                horizontal: 'right',
+                                horizontal: 'right'
                             }}
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}

@@ -1,7 +1,7 @@
 import { alpha, createTheme, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
 
-export default createTheme ({
+export default createTheme({
 	palette: {
 		mode: 'dark',
 		primary: {
@@ -17,7 +17,7 @@ export default createTheme ({
 		backgroundColor: {
 			header: '#28180a'
 		},
-		action : {
+		action: {
 			selectedOpacity: .1
 		}
 	},
@@ -52,7 +52,7 @@ export default createTheme ({
 		MuiLink: {
 			styleOverrides: {
 				root: {
-					textDecoration:'none'
+					textDecoration: 'none'
 				}
 			}
 		},

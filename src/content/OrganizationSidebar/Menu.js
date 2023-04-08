@@ -87,7 +87,7 @@ const Menu = (props) => {
                                 onClick={() => {
                                     setCurrentOrganization(organization.id)
                                     setCurrentEvent(id)
-                                    router.push('/event/' + id + '/match')
+                                    router.push('/match?event=' + id)
                                 }}
                             >
                                 <ListItemIcon sx={{ color: 'inherit' }}>

@@ -12,12 +12,12 @@ const EventContext = createContext({});
 export const useEventContext = () => useContext(EventContext)
 
 export default (props) => {
-    const { currentOrganization, loading: loadingOrganization } = useOrganizationContext();
+    const { current: currentOrganization, loading: loadingOrganization } = useOrganizationContext();
     const { user } = useAuthContext();
     const router = useRouter()
     const [events, setEvents] = useState({})
     const [current, setCurrent] = useState(null)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [activeCount, setActiveCount] = useState({})
 
     const setEvent = async (data, active) => {
@@ -46,7 +46,7 @@ export default (props) => {
         },
         deleteEvent: async (id) => {
             eventStore.save({ deleted: true }, id)
-            router.push('/event/create')
+            router.push('/event/create?organization=' + currentOrganization)
         },
         setCurrentEvent: async (id) => {
             setCurrent(id)
@@ -70,21 +70,21 @@ export default (props) => {
     }, [])
 
     const isLoading = useMemo(() => {
-        return loadingOrganization && loading
-    })
+        return loadingOrganization || loading
+    }, [loading, loadingOrganization])
 
-    useEffect(() => {
-        if (isLoading == false && Object.keys(events).length == 0 && currentOrganization)
-            router.push('/event/create?organization=' + currentOrganization)
-    }, [events, isLoading, currentOrganization])
+    // useEffect(() => {
+    //     if (isLoading == false && Object.keys(events).length == 0 && currentOrganization)
+    //         router.push('/event/create?organization=' + currentOrganization)
+    // }, [events, isLoading, currentOrganization])
 
     return (
         <EventContext.Provider value={{
             events, ...event,
             current, setCurrent,
-            activeCount
+            activeCount, loading
         }}>
-            {isLoading ? <Splash content='Loading data...'></Splash> : props.children}
+            {props.children}
         </EventContext.Provider>
     )
 }

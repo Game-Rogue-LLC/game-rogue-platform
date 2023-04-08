@@ -9,11 +9,23 @@ import OrganizationSidebar from '@/content/OrganizationSidebar'
 import AppProvider from '@/context/app'
 import OrganizationProvider, { useOrganizationContext } from '@/context/OrganizationContext'
 import EventProvider, { useEventContext } from '@/context/EventContext'
+import MatchProvider, { useMatchContext } from '@/context/MatchContext'
+
+import { useAuthContext } from '@/src/context/AuthContext'
+import { useRouter } from 'next/router'
 
 const AdminLayout = (props) => {
 	const { children } = props;
 	const { activeCount: activeOrganizationCount, current: currentOrganization } = useOrganizationContext();
 	const { activeCount: activeEventCount, current: currentEvent } = useEventContext();
+
+	const { user } = useAuthContext()
+	const router = useRouter()
+
+	if (!user) {
+		router.push('/auth')
+		return <></>
+	}
 
 	return (
 		<div style={{
@@ -58,7 +70,9 @@ const ContextProvider = (props) => {
 		<AppProvider>
 			<OrganizationProvider>
 				<EventProvider>
-					<AdminLayout {...props} />
+					<MatchProvider>
+						<AdminLayout {...props} />
+					</MatchProvider>
 				</EventProvider>
 			</OrganizationProvider>
 		</AppProvider>
