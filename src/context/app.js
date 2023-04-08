@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { createContext, useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { useAuthContext } from './AuthContext';
+import store from '@/lib/firestore/collections'
 
 const AppContext = createContext({});
 
@@ -13,8 +14,10 @@ export default (props) => {
     const [title, setTitle] = useState(null);
 
     useEffect(() => {
-        if (!user) {
+        if (!user.user) {
             router.push('/auth');
+        } else {
+            console.log('playerstore: ', store.playerStore)
         }
     }, [user])
 

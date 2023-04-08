@@ -3,6 +3,7 @@ import { useUser } from '@/lib/firebase/useUser';
 import nProgress from 'nprogress';
 import Splash from '@/content/Splash';
 import { useRouter } from 'next/router';
+import { Redirect } from 'next/dist/lib/load-custom-routes';
 
 const initialState = {
     loading: true,

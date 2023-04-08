@@ -11,10 +11,21 @@ import OrganizationProvider, { useOrganizationContext } from '@/context/Organiza
 import EventProvider, { useEventContext } from '@/context/EventContext'
 import MatchProvider, { useMatchContext } from '@/context/MatchContext'
 
+import { useAuthContext } from '@/src/context/AuthContext'
+import { useRouter } from 'next/router'
+
 const AdminLayout = (props) => {
 	const { children } = props;
 	const { activeCount: activeOrganizationCount, current: currentOrganization } = useOrganizationContext();
 	const { activeCount: activeEventCount, current: currentEvent } = useEventContext();
+
+	const { user } = useAuthContext()
+	const router = useRouter()
+
+	if (!user) {
+		router.push('/auth')
+		return <></>
+	}
 
 	return (
 		<div style={{

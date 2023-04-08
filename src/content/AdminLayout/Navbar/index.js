@@ -158,6 +158,14 @@ function Navbar() {
                                 Archived
                             </Link>
                         </NavItem>
+                        <NavItem
+                            key={`/match/organize?event=${currentEvent}`}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            <Link href={`/match/organize?event=${currentEvent}`}>
+                                Organize Matches
+                            </Link>
+                        </NavItem>
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
