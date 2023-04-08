@@ -53,12 +53,12 @@ export default (props) => {
         organization.readOrganization()
     }, [])
 
-    useEffect(() => {
-        if (loading == false) {
-            if (user && Object.keys(organizations).length == 0)
-                router.push('/organization/create')
-        }
-    }, [organizations, loading])
+    // useEffect(() => {
+    //     if (loading == false) {
+    //         if (user && Object.keys(organizations).length == 0)
+    //             router.push('/organization/create')
+    //     }
+    // }, [organizations, loading])
 
     return (
         <OrganizationContext.Provider value={{

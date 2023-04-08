@@ -10,7 +10,7 @@ export default function (props) {
     else if (win == 0) color = 'gray'
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', ...sx, color }}>
-            {team.icon}&nbsp;Team {team.id + 1}
+            {team?.icon}&nbsp;Team {team?.id + 1}
         </Box>
     )
 }

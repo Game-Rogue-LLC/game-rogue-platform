@@ -73,10 +73,10 @@ export default (props) => {
         return loadingOrganization || loading
     }, [loading, loadingOrganization])
 
-    useEffect(() => {
-        if (isLoading == false && Object.keys(events).length == 0 && currentOrganization)
-            router.push('/event/create?organization=' + currentOrganization)
-    }, [events, isLoading, currentOrganization])
+    // useEffect(() => {
+    //     if (isLoading == false && Object.keys(events).length == 0 && currentOrganization)
+    //         router.push('/event/create?organization=' + currentOrganization)
+    // }, [events, isLoading, currentOrganization])
 
     return (
         <EventContext.Provider value={{

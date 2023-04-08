@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "react-snap",
     "build": "next build",
     "export": "next export",
     "start": "next start",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@g-loot/react-tournament-brackets": "^1.0.28",
     "@mui/icons-material": "^5.11.11",
     "@mui/lab": "^5.0.0-alpha.123",
     "@mui/material": "^5.11.13",
@@ -25,6 +27,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-firebaseui": "^6.0.0",
-    "react-loader-spinner": "^5.3.4"
+    "react-loader-spinner": "^5.3.4",
+    "react-snap": "^1.23.0"
   }
 }

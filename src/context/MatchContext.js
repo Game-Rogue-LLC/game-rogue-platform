@@ -118,10 +118,10 @@ export default (props) => {
         return loadingOrganization || loadingEvent || loading
     }, [loadingOrganization, loadingEvent, loading])
 
-    useEffect(() => {
-        if (isLoading == false && Object.keys(matches).length == 0 && currentEvent)
-            router.push('/match/create?event=' + currentEvent)
-    }, [matches, isLoading, currentEvent])
+    // useEffect(() => {
+    //     if (isLoading == false && Object.keys(matches).length == 0 && currentEvent)
+    //         router.push('/match/create?event=' + currentEvent)
+    // }, [matches, isLoading, currentEvent])
 
     return (
         <MatchContext.Provider value={{
