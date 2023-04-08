@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components';
 
 const primaryColor = '#180e05'
 
+export default primaryColor
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
