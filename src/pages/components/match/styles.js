@@ -2,7 +2,9 @@ import styled, { css } from 'styled-components';
 
 const primaryColor = '#180e05'
 
-export default primaryColor
+export default () => {
+  return <>Style</>
+}
 
 export const Wrapper = styled.div`
   display: flex;
