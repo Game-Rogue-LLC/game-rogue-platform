@@ -3,7 +3,7 @@ import { ThemeProvider } from '@mui/material';
 import { themeCreator } from './base';
 import { StylesProvider } from '@mui/styles';
 
-export const ThemeContext = createContext((_themeName) => {});
+export const ThemeContext = createContext((_themeName) => { });
 
 const ThemeProviderWrapper = (props) => {
   const [themeName, _setThemeName] = useState('dark');
@@ -11,7 +11,7 @@ const ThemeProviderWrapper = (props) => {
   useEffect(() => {
     let curThemeName =
       window.localStorage.getItem('appTheme') || 'dark';
-	if (curThemeName != 'dark') curThemeName = 'light';
+    if (curThemeName != 'dark') curThemeName = 'light';
     _setThemeName(curThemeName);
   }, []);
 
@@ -23,7 +23,7 @@ const ThemeProviderWrapper = (props) => {
 
   return (
     <StylesProvider injectFirst>
-      <ThemeContext.Provider value={{setThemeName, themeName}}>
+      <ThemeContext.Provider value={{ setThemeName, themeName }}>
         <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
       </ThemeContext.Provider>
     </StylesProvider>

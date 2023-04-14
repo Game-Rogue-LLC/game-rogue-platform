@@ -2,7 +2,8 @@ import { useRouter } from 'next/router';
 import { createContext, useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { useAuthContext } from './AuthContext';
-import store from '@/lib/firestore/collections'
+import store from '@/lib/firestore/collections';
+import { nanoid } from 'nanoid';
 
 const AppContext = createContext({});
 
@@ -17,7 +18,26 @@ export default (props) => {
         if (!user.user) {
             router.push('/auth');
         } else {
-            console.log('playerstore: ', store.playerStore)
+            store.player.exists(user.user.id)
+                .then(res => {
+                    if (res.code === 'failed') {
+                        const { token, ...rest } = user.user;
+                        const newPlayer = {
+                            _id: nanoid(5),
+                            ...rest,
+                            deleted: false
+                        }
+                        store.player.save(user.user.id, newPlayer)
+                            .then(res => {
+                                if (res.code === 'succeed') {
+                                    // alert(res.message)
+                                }
+                            })
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
     }, [user])
 
