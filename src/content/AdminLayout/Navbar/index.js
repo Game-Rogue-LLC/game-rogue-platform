@@ -15,11 +15,12 @@ import MenuItem from '@mui/material/MenuItem';
 import { makeStyles } from '@mui/styles'
 import { useTheme } from '@mui/material'
 import { styled, alpha } from '@mui/material/styles';
-import { useAppContext } from '@/context/app';
+import { useAppContext } from '@/src/context/app';
 
 import routes from './routes'
 import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useEventContext } from '@/src/context/EventContext';
+import { DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -172,7 +173,7 @@ function Navbar() {
                         {currentOrganization &&
                             <Tooltip title="Open settings">
                                 <Box sx={{ height: '30px', position: 'relative', pr: 2 }}>
-                                    <img src={organizations[currentOrganization]?.contentBlock.image} height={'100%'} />
+                                    <img src={organizations[currentOrganization]?.contentBlock?.image || DEFAULT_CONTENTBLOCK_IMAGE} height={'100%'} />
                                 </Box>
                             </Tooltip>}
                         <Menu

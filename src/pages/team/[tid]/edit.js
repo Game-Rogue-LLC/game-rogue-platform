@@ -19,16 +19,16 @@ import {
 import { LoadingButton } from '@mui/lab';
 import { Edit } from '@mui/icons-material';
 
-import AdminLayout from '@/content/AdminLayout';
-import { useAppContext } from '@/context/app';
+import AdminLayout from '@/src/content/AdminLayout';
+import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
 import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import CountrySelect from '@/src/pages/components/CountrySelect';
 import GameSelect from '@/src/pages/components/GameSelect';
 import { useUser } from '@/lib/firebase/useUser';
+import { DEFAULT_LOGO } from '@/src/config/global';
 
-const DEFAULT_LOGO = '/GR_Letters.png';
 const initialInputs = {
     name: '',
     short: '',

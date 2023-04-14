@@ -10,12 +10,12 @@ const clientSideEmotionCache = createEmotionCache();
 import { useEffect } from 'react';
 
 import nProgress from 'nprogress';
-import '@/styles/nprogress.css';
+import '@/src/styles/nprogress.css';
 
-import ThemeProvider from '@/theme/ThemeProvider';
+import ThemeProvider from '@/src/theme/ThemeProvider';
 
-import '@/styles/globals.css'
-import { AuthContextProvider } from '@/context/AuthContext';
+import '@/src/styles/globals.css'
+import { AuthContextProvider } from '@/src/context/AuthContext';
 
 const Noop = ({ children }) => <>{children}</>;
 

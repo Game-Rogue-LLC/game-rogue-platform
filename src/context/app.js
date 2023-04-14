@@ -25,6 +25,8 @@ export default (props) => {
                         const newPlayer = {
                             _id: nanoid(5),
                             ...rest,
+                            gender: 0,
+                            residency: '',
                             deleted: false
                         }
                         store.player.save(user.user.id, newPlayer)

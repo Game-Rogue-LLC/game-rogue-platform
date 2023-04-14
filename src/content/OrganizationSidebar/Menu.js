@@ -13,7 +13,7 @@ import {
 import { alpha } from '@mui/material/styles'
 import { useRouter } from 'next/router'
 import { Event, KeyboardArrowDown } from '@mui/icons-material'
-import { useEventContext } from '@/context/EventContext'
+import { useEventContext } from '@/src/context/EventContext'
 import { useOrganizationContext } from '@/src/context/OrganizationContext'
 
 const Menu = (props) => {
