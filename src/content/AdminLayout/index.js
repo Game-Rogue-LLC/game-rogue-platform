@@ -13,6 +13,7 @@ import MatchProvider, { useMatchContext } from '@/context/MatchContext'
 
 import { useAuthContext } from '@/src/context/AuthContext'
 import { useRouter } from 'next/router'
+import TournamentProvider from '@/src/context/TournamentContext'
 
 const AdminLayout = (props) => {
 	const { children } = props;
@@ -68,13 +69,15 @@ const AdminLayout = (props) => {
 const ContextProvider = (props) => {
 	return (
 		<AppProvider>
-			<OrganizationProvider>
-				<EventProvider>
-					<MatchProvider>
-						<AdminLayout {...props} />
-					</MatchProvider>
-				</EventProvider>
-			</OrganizationProvider>
+			<TournamentProvider>
+				<OrganizationProvider>
+					<EventProvider>
+						<MatchProvider>
+							<AdminLayout {...props} />
+						</MatchProvider>
+					</EventProvider>
+				</OrganizationProvider>
+			</TournamentProvider>
 		</AppProvider>
 	)
 }

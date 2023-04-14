@@ -60,16 +60,25 @@ const StyledMenu = styled((props) => (
 }));
 
 const Header = () => {
-	const [anchorEl, setAnchorEl] = useState(null);
-	const open = Boolean(anchorEl);
+	const [anchorElOrganization, setAnchorElOrganization] = useState(null);
+	const [anchorElTeams, setAnchorElTeams] = useState(null);
+	const openOrganization = Boolean(anchorElOrganization);
+	const openTeams = Boolean(anchorElTeams);
 	const theme = useTheme();
 	const user = useAuthContext();
 
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
+	const handleClickOrganization = (event) => {
+		setAnchorElOrganization(event.currentTarget);
 	};
-	const handleClose = () => {
-		setAnchorEl(null);
+	const handleCloseOrganization = () => {
+		setAnchorElOrganization(null);
+	};
+
+	const handleClickTeams = (event) => {
+		setAnchorElTeams(event.currentTarget);
+	};
+	const handleCloseTeams = () => {
+		setAnchorElTeams(null);
 	};
 
 	return (
@@ -95,19 +104,34 @@ const Header = () => {
 				pr: 4
 			}}>
 				<Button
-					id="demo-customized-button"
-					aria-controls={open ? 'demo-customized-menu' : undefined}
+					id="organization-button"
+					aria-controls={openOrganization ? 'organization-menu' : undefined}
 					aria-haspopup="true"
-					aria-expanded={open ? 'true' : undefined}
+					aria-expanded={openOrganization ? 'true' : undefined}
 					// variant="contained"
 					disableElevation
-					onClick={handleClick}
+					onClick={handleClickOrganization}
 					sx={{
 						m: 'auto'
 					}}
 				// endIcon={<KeyboardArrowDownIcon />}
 				>
 					ORGANISE
+				</Button>
+				<Button
+					id="teams-button"
+					aria-controls={openTeams ? 'teams-menu' : undefined}
+					aria-haspopup="true"
+					aria-expanded={openTeams ? 'true' : undefined}
+					// variant="contained"
+					disableElevation
+					onClick={handleClickTeams}
+					sx={{
+						m: 'auto'
+					}}
+				// endIcon={<KeyboardArrowDownIcon />}
+				>
+					TEAMS
 				</Button>
 				<IconButton>
 					<Avatar alt={user?.user?.name} src={user?.user?.profilePic} />
@@ -119,22 +143,48 @@ const Header = () => {
 				</Box>
 			</Box>
 			<StyledMenu
-				id="demo-customized-menu"
+				id="organization-menu"
 				MenuListProps={{
-					'aria-labelledby': 'demo-customized-button',
+					'aria-labelledby': 'organization-button',
 				}}
-				anchorEl={anchorEl}
-				open={open}
-				onClose={handleClose}
+				anchorEl={anchorElOrganization}
+				open={openOrganization}
+				onClose={handleCloseOrganization}
 			>
-				<MenuItem onClick={handleClose} key='create-organization' disableRipple>
+				<MenuItem onClick={handleCloseOrganization} key='create-organization' disableRipple>
 					<Link href="/organization/create">
 						CREATE
 					</Link>
 				</MenuItem>
 				<Divider sx={{ my: 0.5 }} />
-				<MenuItem onClick={handleClose} key='production-setting' disableRipple>
+				<MenuItem onClick={handleCloseOrganization} key='production-setting' disableRipple>
 					PRODUCTION SETTING
+				</MenuItem>
+			</StyledMenu>
+			<StyledMenu
+				id="teams-menu"
+				MenuListProps={{
+					'aria-labelledby': 'teams-button',
+				}}
+				anchorEl={anchorElTeams}
+				open={openTeams}
+				onClose={handleCloseTeams}
+			>
+				<MenuItem onClick={handleCloseTeams} key='team-index' disableRipple>
+					<Link href="/team">
+						TEAMS
+					</Link>
+				</MenuItem>
+				<Divider sx={{ my: 0.5 }} />
+				<MenuItem onClick={handleCloseTeams} key='create-team' disableRipple>
+					<Link href="/team/create">
+						CREATE
+					</Link>
+				</MenuItem>
+				<MenuItem onClick={handleCloseTeams} key='join-team' disableRipple>
+					<Link href="/team/join">
+						JOIN
+					</Link>
 				</MenuItem>
 			</StyledMenu>
 		</div>

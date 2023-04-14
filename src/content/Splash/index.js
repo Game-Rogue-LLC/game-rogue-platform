@@ -20,10 +20,11 @@ export default function Splash(props) {
           transform: 'translate(-50%, -50%)'
         }}>
           <div>
-            <InfinitySpin
+            {/* <InfinitySpin
               width='200'
               color={theme.palette.primary.main}
-            />
+            /> */}
+            <img src="/loading.gif" />
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', fontSize: "23px", fontWeight: 100 }}>
             {content}

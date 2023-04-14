@@ -39,7 +39,7 @@ const NavItem = styled(Button)(({ theme }) => ({
 
 function Navbar() {
     const theme = useTheme()
-    const { current: currentOrganization } = useOrganizationContext();
+    const { organizations, current: currentOrganization } = useOrganizationContext();
     const { current: currentEvent } = useEventContext()
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -172,7 +172,7 @@ function Navbar() {
                         {currentOrganization &&
                             <Tooltip title="Open settings">
                                 <Box sx={{ height: '30px', position: 'relative', pr: 2 }}>
-                                    <img src='/Game_Rogue_Text_2_copy.png' height={'100%'} />
+                                    <img src={organizations[currentOrganization]?.contentBlock.image} height={'100%'} />
                                 </Box>
                             </Tooltip>}
                         <Menu
