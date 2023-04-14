@@ -15,11 +15,11 @@ import {
 import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
 
-import AdminLayout from '@/content/AdminLayout'
-import { useAppContext } from '@/context/app'
-import DatePicker from '@/pages/components/DatePicker'
-import { useOrganizationContext } from '@/context/OrganizationContext'
-import { useEventContext } from '@/context/EventContext'
+import AdminLayout from '@/src/content/AdminLayout'
+import { useAppContext } from '@/src/context/app'
+import DatePicker from '@/src/pages/components/DatePicker'
+import { useOrganizationContext } from '@/src/context/OrganizationContext'
+import { useEventContext } from '@/src/context/EventContext'
 import { useMatchContext } from '@/src/context/MatchContext'
 
 const Page = (props) => {

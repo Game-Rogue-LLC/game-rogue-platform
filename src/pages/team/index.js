@@ -12,8 +12,8 @@ import {
     TableFooter,
     useTheme
 } from '@mui/material'
-import AdminLayout from '@/content/AdminLayout'
-import { useAppContext } from '@/context/app'
+import AdminLayout from '@/src/content/AdminLayout'
+import { useAppContext } from '@/src/context/app'
 import { Router, useRouter } from 'next/router'
 import { useEventContext } from '@/src/context/EventContext'
 import { useOrganizationContext } from '@/src/context/OrganizationContext'

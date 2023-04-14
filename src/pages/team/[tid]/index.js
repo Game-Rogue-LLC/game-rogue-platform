@@ -20,11 +20,10 @@ import {
     TableCell,
     Avatar
 } from '@mui/material';
-import { Edit } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
-import AdminLayout from '@/content/AdminLayout';
-import { useAppContext } from '@/context/app';
+import AdminLayout from '@/src/content/AdminLayout';
+import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
 import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
@@ -48,11 +47,33 @@ const Page = (props) => {
     const [inputs, setInputs] = useState({ ...initialInputs });
     const { team, player } = useTournamentContext();
     const [tid, setTID] = useState(null);
+    const [inviteUrl, setInviteUrl] = useState('');
+
+    const handle = {
+        invite: (e) => {
+            navigator.clipboard.writeText(inviteUrl)
+                .then(() => {
+                    console.log('Content copied successfully!');
+                }, () => {
+                    console.error('Failed to copy');
+                })
+        }
+    }
 
     useEffect(() => {
-        setTID(router.query?.tid);
-        console.log(tid, team.teams[tid])
-    }, [router])
+        const nid = router.query?.tid;
+        setTID(nid);
+        setInviteUrl(window.location.protocol + '://' + window.location.host + '/team/join?id=' + nid + '&&accessCode=' + team.teams[nid]?.accessCode);
+    }, [router, team.teams])
+
+    useEffect(() => {
+        if (team.teams[tid]) {
+            setInputs(prev => ({
+                ...prev,
+                ...team.teams[tid]
+            }))
+        }
+    }, [tid])
 
     useEffect(() => {
         setTitle('TEAM INFO');
@@ -63,17 +84,23 @@ const Page = (props) => {
             <Grid container rowSpacing={3} spacing={2}>
                 <Grid item xs={4} sx={{ minWidth: '200px' }}>
                     <Box textAlign={'center'}>
-                        <img src={inputs.logo ?? '/GR_Letters.png'} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                        <img src={inputs.lightLogo ?? '/GR_Letters.png'} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
                     </Box>
-                    <Box>
+                    <Box mt={1}>
                         <Grid container rowSpacing={2} spacing={2}>
                             <Grid item xs={12} sx={{ textAlign: 'center' }}>
-                                <Button variant='contained' sx={{ width: '150px' }}>INVITE URL</Button>
+                                <Button
+                                    variant='contained'
+                                    sx={{ width: '150px' }}
+                                    onClick={handle.invite}
+                                >
+                                    INVITE URL
+                                </Button>
                             </Grid>
                             <Grid item xs={12} sx={{ textAlign: 'center' }}>
                                 <Button variant='contained' sx={{ width: '150px' }}>LEAVE TEAM</Button>
                             </Grid>
-                            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                            <Grid item xs={12} sx={{ textAlign: 'center' }} hidden={team.teams[tid]?.uid != user.id}>
                                 <Button variant='contained' sx={{ width: '150px' }} onClick={(e) => router.push('/team/' + tid + '/edit')}>
                                     EDIT TEAM
                                 </Button>

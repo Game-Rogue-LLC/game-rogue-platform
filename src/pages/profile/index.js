@@ -26,11 +26,11 @@ import {
 } from '@mui/material'
 
 import { LoadingButton } from '@mui/lab'
-import AdminLayout from '@/content/AdminLayout'
-import { useAppContext } from '@/context/app'
+import AdminLayout from '@/src/content/AdminLayout'
+import { useAppContext } from '@/src/context/app'
 import { useRouter } from 'next/router'
 import { CreditCard, Instagram, Twitter, YouTube } from '@mui/icons-material'
-import ContentBlock from '@/pages/profile/components/ContentBlock'
+import ContentBlock from '@/src/pages/profile/components/ContentBlock'
 import { useOrganizationContext } from '@/src/context/OrganizationContext'
 import { useEventContext } from '@/src/context/EventContext'
 

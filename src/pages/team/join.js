@@ -13,9 +13,10 @@ import {
     Alert,
     OutlinedInput
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
-import AdminLayout from '@/content/AdminLayout';
-import { useAppContext } from '@/context/app';
+import AdminLayout from '@/src/content/AdminLayout';
+import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
 import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
@@ -38,37 +39,37 @@ const Page = (props) => {
     const [valid, setValid] = useState({ name: true });
     const [disabled, setDisabled] = useState(false);
     const { team } = useTournamentContext();
+    const [joining, setJoining] = useState(false);
+
+    const joinTeam = async (data) => {
+        setJoining(true);
+        const res = await team.check(data)
+        if (res.code === 'succeed' && team.teams[data.id].players.findIndex(val => val.id == user.id) < 0) {
+            const newTeam = {
+                players: [
+                    ...team.teams[data.id].players,
+                    {
+                        id: user.id,
+                        position: 1, // Player
+                        joinedOn: new Date()
+                    }
+                ]
+            }
+            const upd = await team.update(data.id, newTeam);
+            if (upd.code === 'succeed') {
+                router.push('/team/' + data.id);
+            }
+        } else {
+            console.log(res.message);
+        }
+        setJoining(false);
+    }
 
     const handle = {
         join: async (e) => {
-            team.check(inputs)
-                .then(res => {
-                    if (res.code === 'succeed') {
-                        const newTeam = {
-                            players: [
-                                ...team.teams[inputs.id].players,
-                                {
-                                    id: user.id,
-                                    position: 1, // Player
-                                    joinedOn: new Date()
-                                }
-                            ]
-                        };
-                        team.update(inputs.id, newTeam)
-                            .then(res => {
-                                if (res.code === 'succeed') {
-                                    router.push('/team/' + inputs.id);
-                                }
-                            })
-                    } else if (res.code === 'failed') {
-                        console.log(res.message)
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            joinTeam(inputs);
         },
-        inputs: (e) => {
+        inputs: async (e) => {
             const { name, value } = e.target;
             setInputs({
                 ...inputs,
@@ -76,6 +77,16 @@ const Page = (props) => {
             })
         }
     }
+
+    useEffect(() => {
+        const { id, accessCode } = router.query
+        if (id !== undefined && accessCode !== undefined) {
+            joinTeam({
+                id,
+                accessCode
+            })
+        }
+    }, [router])
 
     useEffect(() => {
         setTitle('JOIN A TEAM');
@@ -99,9 +110,13 @@ const Page = (props) => {
                     </FormControl>
                 </Grid>
                 <Grid item>
-                    <Button variant='contained' onClick={handle.join}>
+                    <LoadingButton
+                        loading={joining}
+                        variant='contained'
+                        onClick={handle.join}
+                    >
                         Join
-                    </Button>
+                    </LoadingButton>
                 </Grid>
             </Grid>
         </Paper>

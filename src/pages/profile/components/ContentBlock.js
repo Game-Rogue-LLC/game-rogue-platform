@@ -8,6 +8,7 @@ import {
     Typography
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
 
 const ContentBlock = (props) => {
     const { contentBlock, handleChange, handleUpload, save, saving } = props;
@@ -29,7 +30,7 @@ const ContentBlock = (props) => {
                     <Edit />
                     <input type="file" accept="image/*" name="upload-image" id="upload-image" hidden onChange={(e) => handleUpload(e, 'image')} />
                 </IconButton>
-                <img src={contentBlock?.image} style={{ height: '200px', maxWidth: '600px', objectFit: 'contain' }} />
+                <img src={contentBlock?.image || DEFAULT_CONTENTBLOCK_IMAGE} style={{ height: '200px', maxWidth: '600px', objectFit: 'contain' }} />
             </Box>
             <Box>
                 <InputLabel htmlFor="content-url" sx={{ mt: 2 }}>URL</InputLabel>

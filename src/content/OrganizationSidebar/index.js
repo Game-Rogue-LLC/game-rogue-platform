@@ -24,8 +24,8 @@ import {
 } from '@mui/icons-material';
 
 import OrganizationMenu from './Menu'
-import { useAppContext } from '@/context/app'
-import { useAuthContext } from '@/context/AuthContext'
+import { useAppContext } from '@/src/context/app'
+import { useAuthContext } from '@/src/context/AuthContext'
 import { useOrganizationContext } from '@/src/context/OrganizationContext';
 
 const FireNav = styled(List)(({ theme }) => ({

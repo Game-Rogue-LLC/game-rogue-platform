@@ -2,14 +2,14 @@ import { useState, useContext, createContext, useEffect } from "react";
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 import store from '@/lib/firestore/collections';
-import { useUser } from "@/lib/firebase/useUser";
+import { useAuthContext } from "./AuthContext";
 
 const TournamentContext = createContext({})
 
 export const useTournamentContext = () => useContext(TournamentContext);
 
 const TournamentProvider = (props) => {
-    const { user } = useUser();
+    const { user } = useAuthContext();
     const [tournaments, setTournaments] = useState([]);
     const [matches, setMatches] = useState([])
     const [participants, setParticipants] = useState([])
@@ -30,9 +30,9 @@ const TournamentProvider = (props) => {
             const res = await store.team.save(nanoid(5), newTeam);
             return res;
         },
-        read: async () => {
+        read: async (uid) => {
             setTeamLoading(true);
-            const res = await store.team.read(async (data) => {
+            const res = await store.team.read(uid, async (data) => {
                 await setTeams(data);
                 console.log('teams: ', data)
             }, () => setTeamLoading(false));
@@ -107,9 +107,11 @@ const TournamentProvider = (props) => {
     }
     /* End Team Data / Functions */
     useEffect(() => {
-        team.read();
-        player.read();
-    }, [])
+        if (user) {
+            team.read(user.id);
+            player.read();
+        }
+    }, [user])
 
     return (
         <TournamentContext.Provider value={{ tournaments, matches, participants, team, player }}>

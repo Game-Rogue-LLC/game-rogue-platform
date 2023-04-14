@@ -14,8 +14,8 @@ import {
 	OutlinedInput
 } from '@mui/material';
 
-import AdminLayout from '@/content/AdminLayout';
-import { useAppContext } from '@/context/app';
+import AdminLayout from '@/src/content/AdminLayout';
+import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
 import { useOrganizationContext } from '@/src/context/OrganizationContext';
 

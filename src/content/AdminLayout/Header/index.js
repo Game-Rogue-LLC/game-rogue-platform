@@ -62,10 +62,19 @@ const StyledMenu = styled((props) => (
 const Header = () => {
 	const [anchorElOrganization, setAnchorElOrganization] = useState(null);
 	const [anchorElTeams, setAnchorElTeams] = useState(null);
+	const [anchorElUser, setAnchorElUser] = useState(null);
 	const openOrganization = Boolean(anchorElOrganization);
 	const openTeams = Boolean(anchorElTeams);
+	const openUser = Boolean(anchorElUser);
 	const theme = useTheme();
 	const user = useAuthContext();
+
+	const handleClickUser = (event) => {
+		setAnchorElUser(event.currentTarget);
+	};
+	const handleCloseUser = () => {
+		setAnchorElUser(null);
+	};
 
 	const handleClickOrganization = (event) => {
 		setAnchorElOrganization(event.currentTarget);
@@ -133,7 +142,13 @@ const Header = () => {
 				>
 					TEAMS
 				</Button>
-				<IconButton>
+				<IconButton
+					id='user-button'
+					aria-controls={openUser ? 'user-menu' : undefined}
+					aria-haspopup="true"
+					aria-expanded={openUser ? 'true' : undefined}
+					onClick={handleClickUser}
+				>
 					<Avatar alt={user?.user?.name} src={user?.user?.profilePic} />
 				</IconButton>
 				<Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -142,6 +157,27 @@ const Header = () => {
 					</IconButton>
 				</Box>
 			</Box>
+			<StyledMenu
+				id="user-menu"
+				MenuListProps={{
+					'aria-labelledby': 'user-button',
+				}}
+				anchorEl={anchorElUser}
+				open={openUser}
+				onClose={handleCloseUser}
+			>
+				<MenuItem onClick={handleCloseUser} key='user-profile' disableRipple>
+					<Link href={"/user/" + user?.user?.id}>
+						PROFILE
+					</Link>
+				</MenuItem>
+				<Divider sx={{ my: 0.5 }} />
+				<MenuItem onClick={handleCloseUser} key='edit-user' disableRipple>
+					<Link href={"/user/" + user?.user?.id + "/edit"}>
+						EDIT
+					</Link>
+				</MenuItem>
+			</StyledMenu>
 			<StyledMenu
 				id="organization-menu"
 				MenuListProps={{
