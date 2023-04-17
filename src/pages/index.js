@@ -1,22 +1,1425 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 
-import AdminLayout from '@/src/content/AdminLayout'
+import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
+import {
+    AppBar,
+    Avatar,
+    Box,
+    Container,
+    Divider,
+    Toolbar,
+    Grid,
+    IconButton,
+    InputAdornment,
+    Menu,
+    MenuItem,
+    OutlinedInput,
+    SvgIcon,
+    Typography,
+    useTheme,
+    FormControl,
+    styled,
+    alpha
+} from '@mui/material';
+import Stepper from '@/src/pages/components/Stepper';
+import {
+    ArrowBackIos,
+    ArrowForwardIos,
+    Instagram,
+    Twitter,
+    Search,
+    YouTube,
+    Logout
+} from '@mui/icons-material';
+import { Carousel } from 'react-responsive-carousel';
+import Link from 'next/link';
+import { useAuthContext } from '../context/AuthContext';
+
+const featuredTournaments = [
+    {
+        src: '/static/images/back2.png',
+        name: '',
+        content: <Box
+            sx={{
+                position: 'relative',
+                bottom: '0',
+                left: '0',
+                width: '100%',
+                background: '#f5831f',
+                color: '#fff',
+                padding: '10px',
+                fontSize: '12px',
+                border: 'solid 2px white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2
+            }}
+        >
+            <Typography variant='h4' sx={{ textAlign: 'left', color: 'black', fontSize: '40px', fontWeight: 'bold' }}>
+                $1,500 2023 GAME ROGUE MAJORS
+            </Typography>
+            <Typography variant='body1' sx={{ textAlign: 'left', color: 'white', fontSize: '25px' }}>
+                PC - Rainbow Six Siege  3/1,12,18,19/22, 7:00 PM EST 1st - 4th Place Prizes
+            </Typography>
+        </Box>
+    },
+    {
+        src: '/static/images/back2.png',
+        name: '',
+        content: <Box
+            sx={{
+                position: 'relative',
+                bottom: '0',
+                left: '0',
+                width: '100%',
+                background: '#f5831f',
+                color: '#fff',
+                padding: '10px',
+                fontSize: '12px',
+                border: 'solid 2px white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2
+            }}
+        >
+            <Typography variant='h4' sx={{ textAlign: 'left', color: 'black', fontSize: '40px', fontWeight: 'bold' }}>
+                $1,500 2023 GAME ROGUE MAJORS
+            </Typography>
+            <Typography variant='body1' sx={{ textAlign: 'left', color: 'white', fontSize: '25px' }}>
+                PC - Rainbow Six Siege  3/1,12,18,19/22, 7:00 PM EST 1st - 4th Place Prizes
+            </Typography>
+        </Box>
+    }
+]
+
+const images = [
+    '/static/images/1.png',
+    '/static/images/2.png',
+    '/static/images/3.png',
+    '/static/images/4.png',
+    '/static/images/6.png'
+]
+
+const StyledMenu = styled((props) => (
+    <Menu {...props} />
+))(({ theme }) => ({
+    '& .MuiPaper-root': {
+        backgroundColor: '#0f0f0f',
+        borderRadius: 0,
+        // backgroundColor: '#000',
+        marginTop: theme.spacing(1),
+        padding: theme.spacing(1),
+        minWidth: 180,
+        boxShadow:
+            'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+        '& .MuiMenu-list': {
+            padding: '0 10px',
+        },
+        '& .MuiMenuItem-root': {
+            color: 'white',
+            // marginRight: theme.spacing(1.5),
+            justifyContent: 'center',
+            textAlign: 'center',
+            '&:hover': {
+                color: theme.palette.primary.main,
+                backgroundColor: 'transparent'
+            },
+        },
+    },
+}));
 
 const MyApp = (props) => {
-	const { setTitle } = useAppContext();
-	React.useEffect(() => {
-		setTitle('Welcome to Game Rogue');
-	}, [])
-	return (
-		<div>
-		</div>
-	);
-}
+    const theme = useTheme();
+    const user = useAuthContext();
+    const { setTitle } = useAppContext();
+    const [activeImg, setActiveImg] = useState(0);
+    const [logoNav, setLogoNav] = useState(true);
+    const [banner, setBanner] = useState(0);
+    const [aboutUsHover, setAboutUsHover] = useState(false);
+    const [search, setSearch] = useState('');
+    const [fund, setFund] = useState('');
+    const [anchorElRogueSocial, setAnchorElRogueSocial] = useState(null);
+    const [anchorElOrganize, setAnchorElOrganize] = useState(null);
+    const [anchorElSupport, setAnchorElSupport] = useState(null);
+    const [anchorElTools, setAnchorElTools] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
+    const openRogueSocial = Boolean(anchorElRogueSocial);
+    const openOrganize = Boolean(anchorElOrganize);
+    const openSupport = Boolean(anchorElSupport);
+    const openTools = Boolean(anchorElTools);
+    const openUser = Boolean(anchorElUser);
 
-MyApp.getLayout = (page) => {
-	return <AdminLayout>{page}</AdminLayout>
+    const handle = {
+        switchLogoNav: (e) => {
+            setLogoNav(prev => !prev);
+        },
+        changeSearch: (e) => {
+            setSearch(e.target.value);
+        },
+        changeFund: (e) => {
+            setFund(e.target.value);
+        }
+    }
+
+    const handleClickUser = (event) => {
+        setAnchorElUser(event.currentTarget);
+    }
+    const handleCloseUser = () => {
+        setAnchorElUser(null);
+    }
+
+    const handleClickOrganize = (event) => {
+        setAnchorElOrganize(event.currentTarget);
+    }
+    const handleCloseOrganize = () => {
+        setAnchorElOrganize(null);
+    }
+
+    const handleClickRogueSocial = (event) => {
+        setAnchorElRogueSocial(event.currentTarget);
+    }
+    const handleCloseRogueSocial = () => {
+        setAnchorElRogueSocial(null);
+    }
+
+    const handleClickSupport = (event) => {
+        setAnchorElSupport(event.currentTarget);
+    }
+    const handleCloseSupport = () => {
+        setAnchorElSupport(null);
+    }
+
+    const handleClickTools = (event) => {
+        setAnchorElTools(event.currentTarget);
+    }
+    const handleCloseTools = () => {
+        setAnchorElTools(null);
+    }
+
+    useEffect(() => {
+        setTitle('Welcome to Game Rogue');
+        setInterval(() => {
+            setBanner(prev => (prev + 1) % 6);
+        }, 3000)
+        setInterval(() => {
+            setActiveImg(prev => (prev + 1) % 5)
+        }, 3000)
+    }, [])
+
+    return (
+        <Box sx={{ background: 'black' }}>
+            <AppBar
+                position='fixed'
+                sx={{
+                    height: '73px',
+                    // backgroundColor: 'rgba(0, 0, 0, 0.2)'
+                    backgroundColor: 'black',
+                    backgroundImage: 'none'
+                }}
+            >
+                <Container maxWidth="xxl" sx={{ borderBottom: 'solid 3px #f5831f' }}>
+                    <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 8, alignItems: 'center' }}>
+                            <FormControl>
+                                <OutlinedInput id="search" name="search" placeholder='Search' value={search} onChange={handle.changeSearch}
+                                    sx={{
+                                        height: '40px'
+                                    }}
+                                    startAdornment={
+                                        <InputAdornment position='start'>
+                                            <Search fontSize='large' />
+                                        </InputAdornment>
+                                    }
+                                />
+                            </FormControl>
+                            <Button
+                                sx={{
+                                    background: 'transparent',
+                                    color: 'white',
+                                    ':hover': {
+                                        color: theme.palette.primary.main,
+                                        background: 'transparent'
+                                    }
+                                }}
+                                disableRipple
+                                id='rogue-social-button'
+                                aria-controls={openRogueSocial ? 'rogue-social-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={openRogueSocial ? 'true' : undefined}
+                                // variant="contained"
+                                disableElevation
+                                onClick={handleClickRogueSocial}
+                            >
+                                <Typography
+                                    variant='h4'
+                                    sx={{
+                                        color: 'white',
+                                        fontSize: '1rem',
+                                        ':hover': {
+                                            color: theme.palette.primary.main
+                                        }
+                                    }}
+                                >
+                                    ROGUE SOCIAL
+                                </Typography>
+                            </Button>
+                            <Button
+                                sx={{
+                                    background: 'transparent',
+                                    color: 'white',
+                                    ':hover': {
+                                        color: theme.palette.primary.main,
+                                        background: 'transparent'
+                                    }
+                                }}
+                                disableRipple
+                            >
+                                <Typography
+                                    variant='h4'
+                                    sx={{
+                                        color: 'white',
+                                        fontSize: '1rem',
+                                        ':hover': {
+                                            color: theme.palette.primary.main
+                                        }
+                                    }}
+                                >
+                                    LIVE
+                                </Typography>
+                            </Button>
+                            <Button
+                                sx={{
+                                    background: 'transparent',
+                                    color: 'white',
+                                    ':hover': {
+                                        color: theme.palette.primary.main,
+                                        background: 'transparent'
+                                    }
+                                }}
+                                disableRipple
+                            >
+                                <Typography
+                                    variant='h4'
+                                    sx={{
+                                        color: 'white',
+                                        fontSize: '1rem',
+                                        ':hover': {
+                                            color: theme.palette.primary.main
+                                        }
+                                    }}
+                                >
+                                    ARTICLES
+                                </Typography>
+                            </Button>
+                            <Button
+                                sx={{
+                                    background: 'transparent',
+                                    color: 'white',
+                                    ':hover': {
+                                        color: theme.palette.primary.main,
+                                        background: 'transparent'
+                                    }
+                                }}
+                                disableRipple
+                            >
+                                <Typography
+                                    variant='h4'
+                                    sx={{
+                                        color: 'white',
+                                        fontSize: '1rem',
+                                        ':hover': {
+                                            color: theme.palette.primary.main
+                                        }
+                                    }}
+                                >
+                                    SHOP
+                                </Typography>
+                            </Button>
+                        </Box>
+                        <Box sx={{ display: 'flex', gap: 4 }}>
+                            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 8, alignItems: 'center' }}>
+                                <Button
+                                    sx={{
+                                        background: 'transparent',
+                                        color: 'white',
+                                        ':hover': {
+                                            color: theme.palette.primary.main,
+                                            background: 'transparent'
+                                        }
+                                    }}
+                                    disableRipple
+                                    id={'organize-button'}
+                                    aria-controls={openOrganize ? 'organize-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openOrganize ? 'true' : undefined}
+                                    // variant="contained"
+                                    disableElevation
+                                    onClick={handleClickOrganize}
+                                >
+                                    <Typography
+                                        variant='h4'
+                                        sx={{
+                                            color: 'white',
+                                            fontSize: '1rem',
+                                            ':hover': {
+                                                color: theme.palette.primary.main
+                                            }
+                                        }}
+                                    >
+                                        ORGANIZE
+                                    </Typography>
+                                </Button>
+                                <Button
+                                    sx={{
+                                        background: 'transparent',
+                                        color: 'white',
+                                        ':hover': {
+                                            color: theme.palette.primary.main,
+                                            background: 'transparent'
+                                        }
+                                    }}
+                                    disableRipple
+                                    id={'tools-button'}
+                                    aria-controls={openTools ? 'tools-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openTools ? 'true' : undefined}
+                                    // variant="contained"
+                                    disableElevation
+                                    onClick={handleClickTools}
+                                >
+                                    <Typography
+                                        variant='h4'
+                                        sx={{
+                                            color: 'white',
+                                            fontSize: '1rem',
+                                            ':hover': {
+                                                color: theme.palette.primary.main
+                                            }
+                                        }}
+                                    >
+                                        TOOLS
+                                    </Typography>
+                                </Button>
+                                <Button
+                                    sx={{
+                                        background: 'transparent',
+                                        color: 'white',
+                                        ':hover': {
+                                            color: theme.palette.primary.main,
+                                            background: 'transparent'
+                                        }
+                                    }}
+                                    disableRipple
+                                    id={'support-button'}
+                                    aria-controls={openSupport ? 'support-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openSupport ? 'true' : undefined}
+                                    // variant="contained"
+                                    disableElevation
+                                    onClick={handleClickSupport}
+                                >
+                                    <Typography
+                                        variant='h4'
+                                        sx={{
+                                            color: 'white',
+                                            fontSize: '1rem',
+                                            ':hover': {
+                                                color: theme.palette.primary.main
+                                            }
+                                        }}
+                                    >
+                                        SUPPORT
+                                    </Typography>
+                                </Button>
+                                <Button
+                                    sx={{
+                                        background: 'transparent',
+                                        color: 'white',
+                                        ':hover': {
+                                            color: theme.palette.primary.main,
+                                            background: 'transparent'
+                                        }
+                                    }}
+                                    disableRipple
+                                >
+                                    <Typography
+                                        variant='h4'
+                                        sx={{
+                                            color: 'white',
+                                            fontSize: '1rem',
+                                            ':hover': {
+                                                color: theme.palette.primary.main
+                                            }
+                                        }}
+                                    >
+                                        PLUS PLANS
+                                    </Typography>
+                                </Button>
+                            </Box>
+                            <Box
+                                sx={{
+                                    display: (user?.user ? 'flex' : 'none'),
+                                    alignItems: 'center',
+                                    gap: 2
+                                }}
+                            >
+                                <OutlinedInput id="fund" name="fund" placeholder='Add fund' value={fund} onChange={handle.changeFund}
+                                    sx={{
+                                        height: '40px'
+                                    }}
+                                />
+                                <IconButton
+                                    id='user-button'
+                                    aria-controls={openUser ? 'user-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={openUser ? 'true' : undefined}
+                                    onClick={handleClickUser}
+                                >
+                                    <Avatar alt={user?.user?.name} src={user?.user?.profilePic} />
+                                </IconButton>
+                                <IconButton onClick={user?.logout} sx={{ h: 'auto' }}>
+                                    <Logout />
+                                </IconButton>
+                            </Box>
+                        </Box>
+                    </Toolbar>
+                    {/** Menus from NavBar Items */}
+                    <StyledMenu
+                        id="rogue-social-menu"
+                        MenuListProps={{
+                            'aria-labelledby': 'rogue-social-button',
+                        }}
+                        disablePortal={true}
+                        disableScrollLock={true}
+                        keepMounted
+                        anchorEl={anchorElRogueSocial}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center'
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center'
+                        }}
+                        open={openRogueSocial}
+                        onClose={handleCloseRogueSocial}
+                    >
+                        <MenuItem onClick={handleCloseRogueSocial} key='teams' disableRipple>
+                            <Link href={"/team"}>
+                                TEAMS
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseRogueSocial} key='scouting' disableRipple>
+                            <Link href={"/team"}>
+                                SCOUTING
+                            </Link>
+                        </MenuItem>
+                    </StyledMenu>
+                    <StyledMenu
+                        id="organize-menu"
+                        MenuListProps={{
+                            'aria-labelledby': 'organize-button',
+                        }}
+                        disablePortal={true}
+                        disableScrollLock={true}
+                        keepMounted
+                        anchorEl={anchorElOrganize}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center'
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center'
+                        }}
+                        open={openOrganize}
+                        onClose={handleCloseOrganize}
+                    >
+                        <MenuItem onClick={handleCloseOrganize} key='create-organization' disableRipple>
+                            <Link href={"/organization/create"}>
+                                CREATE
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseOrganize} key='production-settings' disableRipple>
+                            <Link href={"/"}>
+                                PRODUCTION SETTINGS
+                            </Link>
+                        </MenuItem>
+                    </StyledMenu>
+                    <StyledMenu
+                        id="tools-menu"
+                        MenuListProps={{
+                            'aria-labelledby': 'tools-button',
+                        }}
+                        disablePortal={true}
+                        disableScrollLock={true}
+                        keepMounted
+                        anchorEl={anchorElTools}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center'
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center'
+                        }}
+                        open={openTools}
+                        onClose={handleCloseTools}
+                    >
+                        <MenuItem onClick={handleCloseTools} key='instant-video' disableRipple>
+                            <Link href={"/"}>
+                                INSTANT VIDEO
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseTools} key='instant-media' disableRipple>
+                            <Link href={"/"}>
+                                INSTANT MEDIA
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseTools} key='instant-articlese' disableRipple>
+                            <Link href={"/"}>
+                                INSTANT ARTICLES
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseTools} key='start-production' disableRipple>
+                            <Link href={"/"}>
+                                START PRODUCTION
+                            </Link>
+                        </MenuItem>
+                    </StyledMenu>
+                    <StyledMenu
+                        id="support-menu"
+                        MenuListProps={{
+                            'aria-labelledby': 'support-button',
+                        }}
+                        disablePortal={true}
+                        disableScrollLock={true}
+                        keepMounted
+                        anchorEl={anchorElSupport}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center'
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center'
+                        }}
+                        sx={{
+                            mt: 1
+                        }}
+                        open={openSupport}
+                        onClose={handleCloseSupport}
+                    >
+                        <MenuItem onClick={handleCloseSupport} key='tickets' disableRipple>
+                            <Link href={"/ticket"}>
+                                TICKETS
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseSupport} key='wiki' disableRipple>
+                            <Link href={"/"}>
+                                WIKI
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseSupport} key='faq' disableRipple>
+                            <Link href={"/"}>
+                                FAQ
+                            </Link>
+                        </MenuItem>
+                    </StyledMenu>
+                    <StyledMenu
+                        id="user-menu"
+                        MenuListProps={{
+                            'aria-labelledby': 'user-button',
+                        }}
+                        disablePortal={true}
+                        disableScrollLock={true}
+                        keepMounted
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right'
+                        }}
+                        sx={{
+                            mt: 1
+                        }}
+                        open={openUser}
+                        onClose={handleCloseUser}
+                    >
+                        <MenuItem onClick={handleCloseUser} key='user-profile' disableRipple>
+                            <Link href={"/user/" + user?.user?.id}>
+                                PROFILE
+                            </Link>
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseUser} key='edit-user' disableRipple>
+                            <Link href={"/user/" + user?.user?.id + "/edit"}>
+                                EDIT
+                            </Link>
+                        </MenuItem>
+                    </StyledMenu>
+                    {/** End Menus */}
+                </Container>
+            </AppBar>
+            <Box
+                component={'section'}
+                sx={{
+                    position: 'relative',
+                    marginTop: '73px',
+                    height: '57px',
+                    backgroundColor: 'transparent'
+                }}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        background: 'white',
+                        width: '100%',
+                        height: '57px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        opacity: (banner % 2 == 0 ? 1 : 0),
+                        transition: 'all 0.5s'
+                    }}
+                >
+                    <img src="/static/images/GRLOGO_O_B.webp" style={{ height: '57px' }} />
+                </Box>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        background: theme.palette.primary.main,
+                        width: '100%',
+                        height: '57px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        opacity: (banner == 1 ? 1 : 0),
+                        transition: 'all 0.5s'
+                    }}
+                >
+                    <Typography variant='h4' sx={{ position: 'absolute', color: 'white', fontSize: '30px' }}>
+                        TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK HERE!
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        background: theme.palette.primary.main,
+                        width: '100%',
+                        height: '57px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        opacity: (banner == 3 ? 1 : 0),
+                        transition: 'all 0.5s'
+                    }}
+                >
+                    <Typography variant='h4' sx={{ position: 'absolute', color: 'white', fontSize: '30px' }}>
+                        GET 10 PIECES OF TEAM MERCH FOR A FRACTION OF THE COST, TAILORED FOR YOU!
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        background: theme.palette.primary.main,
+                        width: '100%',
+                        height: '57px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        opacity: (banner == 5 ? 1 : 0),
+                        transition: 'all 0.5s'
+                    }}
+                >
+                    <Typography variant='h4' sx={{ position: 'absolute', color: 'white', fontSize: '30px' }}>
+                        LOOKING TO START A TEAM? LOOKING TO JOIN ONE? CLICK HERE!
+                    </Typography>
+                </Box>
+            </Box>
+            <Box
+                component={'section'}
+                sx={{
+                    backgroundImage: 'url(/static/images/back1.png)',
+                    height: '910px',
+                    backgroundPosition: 'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}
+            >
+                <Typography variant='h1' align='center' fontSize={'72px'} fontStyle={'italic'} color={'black'} lineHeight={'100.8px'}>
+                    PLUS PLANS
+                    <br />
+                    AVAILABLE NOW
+                    <br />
+                    <Button variant='contained' sx={{ mt: '22px', px: '22px', py: '8px', borderRadius: 0 }}>
+                        <Typography variant='h1' fontSize={'59px'} color={'white'} letterSpacing={'5.9px'}>
+                            SUBSCRIBE
+                        </Typography>
+                    </Button>
+                </Typography>
+            </Box>
+            <Box
+                component={'section'}
+                sx={{
+                    backgroundColor: 'black',
+                    paddingBottom: '50px',
+                    borderBottom: 'solid 3px #f5831f'
+                }}
+            >
+                <Box
+                    sx={{
+                        position: 'relative',
+                        width: '85%',
+                        mt: 1,
+                        mx: 'auto'
+                    }}
+                >
+                    <Typography variant='h1' fontSize={'40px'} fontStyle={'italic'}>
+                        FEATURED TOURNAMENTS
+                    </Typography>
+                    <Stepper
+                        data={featuredTournaments}
+                        sx={{
+                            marginTop: '29px',
+                            position: 'relative',
+                            boxShadow: 'rgba(255,255,255,0.6) 0px 0px 50px 9px'
+                        }}
+                        config={{
+                            showThumbs: false,
+                            showStatus: false,
+                            infiniteLoop: true,
+                            showIndicators: false,
+                            renderArrowPrev: (clickHandler) => (
+                                <button
+                                    onClick={clickHandler}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        bottom: 0,
+                                        left: 0,
+                                        display: 'flex',
+                                        padding: 30,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        backgroundColor: 'transparent',
+                                        cursor: 'pointer',
+                                        border: 'none',
+                                        zIndex: 20
+                                    }}
+                                >
+                                    <ArrowBackIos sx={{ fontSize: '60px', ':hover': { opacity: 0.7 } }}></ArrowBackIos>
+                                </button>
+                            ),
+                            renderArrowNext: (clickHandler) => (
+                                <button
+                                    onClick={clickHandler}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        bottom: 0,
+                                        right: 0,
+                                        display: 'flex',
+                                        padding: 30,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        backgroundColor: 'transparent',
+                                        cursor: 'pointer',
+                                        border: 'none',
+                                        zIndex: 20
+                                    }}
+                                >
+                                    <ArrowForwardIos sx={{ fontSize: '60px', ':hover': { opacity: 0.7 } }}></ArrowForwardIos>
+                                </button>
+                            )
+                        }}
+                    />
+                </Box>
+            </Box>
+            <Box
+                component={'section'}
+                sx={{
+                    position: 'relative',
+                    backgroundColor: '#101216',
+                    paddingTop: '80px',
+                    paddingBottom: '175px'
+                }}
+            >
+                <Box
+                    sx={{
+                        width: '80%',
+                        mx: 'auto'
+                    }}
+                >
+                    <Grid
+                        container
+                        columnSpacing={{
+                            xs: 0,
+                            xl: 28
+                        }}
+                    >
+                        <Grid
+                            item
+                            xs={12}
+                            xl={6}
+                        >
+                            <Box
+                                sx={{
+                                    borderRadius: '30px',
+                                    border: 'solid 3px rgba(227, 81, 6, 0.73)',
+                                    backgroundColor: 'black',
+                                    textAlign: 'center',
+                                    px: '20px',
+                                    minWidth: '500px'
+                                }}
+                            >
+                                <Typography
+                                    variant='h3'
+                                    sx={{
+                                        mt: '43px',
+                                        mb: '23px',
+                                        fontSize: '30px'
+                                    }}
+                                >
+                                    THE NEXT GENERATION OF ESPORTS
+                                </Typography>
+                                <Typography
+                                    variant='body1'
+                                    sx={{
+                                        fontSize: '23px'
+                                    }}
+                                >
+                                    Are you an event-hoster looking for an all-in-one package to produce pro-league level events from structure to productions?
+                                </Typography>
+                                <br />
+                                <Typography
+                                    variant='body1'
+                                    sx={{
+                                        fontSize: '23px'
+                                    }}
+                                >
+                                    Or a team looking to build with the most influential tools to win and grow?
+                                </Typography>
+                                <br />
+                                <Typography
+                                    variant='body1'
+                                    sx={{
+                                        fontSize: '23px'
+                                    }}
+                                >
+                                    Maybe your just a player or content creator looking for casual play or professional development?
+                                </Typography>
+                                <br />
+                                <Typography
+                                    variant='body1'
+                                    sx={{
+                                        fontSize: '23px'
+                                    }}
+                                >
+                                    We have every feature bundled in low-cost packages with the most fundamental features always available for free!
+                                </Typography>
+                                <Button
+                                    variant='contained'
+                                    sx={{
+                                        color: 'white',
+                                        px: 5,
+                                        my: 3,
+                                        borderRadius: 0
+                                    }}
+                                >
+                                    <Typography variant='h4' fontSize={'35px'}>
+                                        VIEW NOW
+                                    </Typography>
+                                </Button>
+                            </Box>
+                        </Grid>
+                        <Grid
+                            item
+                            xs={12}
+                            xl={6}
+                        >
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <img src='/static/images/laptop.png' />
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    position: 'relative',
+                    height: '937px',
+                    backgroundColor: theme.palette.primary.main
+                }}
+            >
+                {images.map((val, i) => (
+                    <Box component={'img'} src={images[i]} key={'img_' + i} style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        opacity: i == activeImg ? 1 : 0,
+                        transition: 'ease-in-out .5s'
+                    }}></Box>
+                ))}
+            </Box>
+            <Box
+                component={'section'}
+            >
+                <Carousel
+                    sx={{
+                        position: 'relative'
+                    }}
+                    showThumbs={false}
+                    showStatus={false}
+                    infiniteLoop={true}
+                    showIndicators={false}
+                    renderArrowPrev={(clickHandler) => (
+                        <button
+                            onClick={clickHandler}
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                bottom: 0,
+                                left: 0,
+                                display: 'flex',
+                                padding: 30,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                color: theme.palette.primary.main,
+                                backgroundColor: 'transparent',
+                                cursor: 'pointer',
+                                border: 'none',
+                                zIndex: 20
+                            }}
+                        >
+                            <ArrowBackIos sx={{ fontSize: '60px', ':hover': { opacity: 0.7 } }}></ArrowBackIos>
+                        </button>
+                    )}
+                    renderArrowNext={(clickHandler) => (
+                        <button
+                            onClick={clickHandler}
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                bottom: 0,
+                                right: 0,
+                                display: 'flex',
+                                padding: 30,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                color: theme.palette.primary.main,
+                                backgroundColor: 'transparent',
+                                cursor: 'pointer',
+                                border: 'none',
+                                zIndex: 20
+                            }}
+                        >
+                            <ArrowForwardIos sx={{ fontSize: '60px', ':hover': { opacity: 0.7 } }}></ArrowForwardIos>
+                        </button>
+                    )}
+                >
+                    <Box
+                        sx={{
+                            backgroundImage: 'url(/static/images/carousel1.png)',
+                            height: '478px'
+                        }}
+                    >
+                    </Box>
+                    <Box
+                        sx={{
+                            backgroundImage: 'url(/static/images/carousel2.png)',
+                            height: '478px'
+                        }}
+                    >
+                    </Box>
+                    <Box
+                        sx={{
+                            backgroundImage: 'url(/static/images/carousel3.png)',
+                            height: '478px'
+                        }}
+                    >
+                    </Box>
+                </Carousel>
+            </Box>
+            <Box component={'section'}>
+                <Box
+                    sx={{
+                        maxWidth: '940px',
+                        mx: 'auto',
+                        padding: '10px',
+                        textAlign: 'center',
+                        border: 'solid 3px rgba(227, 81, 6, 0.73)',
+                        mt: '70px',
+                        borderRadius: '30px',
+                        py: '30px'
+                    }}
+                >
+                    <Typography variant='h3' fontSize={'30px'}>
+                        WHAT IS GAME ROGUE?
+                    </Typography>
+                    <Typography variant='body1' fontSize={'23px'} sx={{ mt: 2 }}>
+                        Don't know Game Rogue? We've been hosting tournaments since 2018 and would love for you to join the experience! We tailor to our community, fulfilling our obligations time-in and time-out since our creation.
+                    </Typography>
+                    <Typography variant='body1' fontSize={'23px'} sx={{ mt: 2 }}>
+                        Thank you to our community for giving us the ability to host tournaments and provide the next generation of esports globally.
+                    </Typography>
+                    <Box
+                        component={'img'}
+                        src={'/static/images/Game_Rogue_Text_1.png'}
+                        alignSelf={'center'}
+                        maxWidth={'100%'}
+                        height={'80px'}
+                        sx={{
+                            mt: 2,
+                            mx: 'auto',
+                            width: 'auto',
+                            display: 'block'
+                        }}
+                    >
+                    </Box>
+                    <Button
+                        variant='contained'
+                        sx={{
+                            mt: 5,
+                            width: '275px',
+                            height: '65px',
+                            borderRadius: 0
+                        }}
+                        onMouseOver={() => setAboutUsHover(true)}
+                        onMouseOut={() => setAboutUsHover(false)}
+                    >
+                        <Typography
+                            variant='h4'
+                            sx={{
+                                color: 'white',
+                                fontSize: (aboutUsHover ? '35px' : '30px'),
+                                transition: 'ease-in-out 0.2s'
+                            }}
+                        >
+                            ABOUT US
+                        </Typography>
+                    </Button>
+                </Box>
+            </Box>
+            <Box
+                component='section'
+                id='back-to-top'
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    pt: '60px',
+                    pb: '40px'
+                }}
+            >
+                <Box
+                    sx={{
+                        textAlign: 'center'
+                    }}
+                >
+                    <Button
+                        onClick={() => document.scrollingElement.scroll({ left: 0, top: 0, behavior: 'smooth' })}
+                        sx={{
+                            background: 'none',
+                            ':hover': {
+                                background: 'none',
+                                opacity: 0.7
+                            },
+                            mx: 'auto'
+                        }}
+                    >
+                        <img src={'/static/images/back-to-top.svg'} style={{ width: '73px', height: '56px' }} />
+                    </Button>
+                    <Typography variant='body1' color='white' fontSize='23px'>
+                        BACK TO TOP
+                    </Typography>
+                </Box>
+            </Box>
+            <Box
+                component={'section'}
+            >
+                <Box
+                    sx={{
+                        position: 'relative',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        width: '50%',
+                        mx: 'auto'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            textAlign: 'center'
+                        }}
+                    >
+                        <Typography variant='h4' sx={{ color: theme.palette.primary.main, fontSize: '25px' }}>
+                            HOME
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            ABOUT US
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            TICKETS
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            WIKI
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            FAQS
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            SEARCH
+                        </Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            textAlign: 'center'
+                        }}
+                    >
+                        <Typography variant='h4' sx={{ color: theme.palette.primary.main, fontSize: '25px' }}>
+                            EVENTS
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            FEATURED
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            LIVE NOW
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            ONGOING
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            UPCOMING
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            PAST
+                        </Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            textAlign: 'center'
+                        }}
+                    >
+                        <Typography variant='h4' sx={{ color: theme.palette.primary.main, fontSize: '25px' }}>
+                            MY TEAM
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            MY MATCHES
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            MY PROFILE
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            ARTICLES
+                        </Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            textAlign: 'center'
+                        }}
+                    >
+                        <Typography variant='h4' sx={{ color: theme.palette.primary.main, fontSize: '25px' }}>
+                            SHOP
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            ROGUE MERCH
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            TEAM MERCH
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            CUSTOMIZE
+                        </Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            textAlign: 'center'
+                        }}
+                    >
+                        <Typography variant='h4' sx={{ color: theme.palette.primary.main, fontSize: '25px' }}>
+                            ORGANIZER
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            DASHBOARD
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            MARTCH CHATS
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            GO LIVE
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            COMMUNITY
+                        </Typography>
+                        <Typography variant='h4' sx={{ color: 'white', fontSize: '25px', mt: 3 }}>
+                            CREATE
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box
+                    sx={{
+                        width: '50%',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        mx: 'auto',
+                        mt: 5
+                    }}
+                >
+                    <Box>
+                        <img src='/static/images/security.png' />
+                        <img src='/static/images/lock.png' />
+                    </Box>
+                    <Box>
+                        <img src='/static/images/paypal.png' />
+                        <img src='/static/images/card.png' />
+                    </Box>
+                </Box>
+            </Box>
+            <Box
+                component={'section'}
+                sx={{
+                    width: '85%',
+                    mx: 'auto',
+                    mt: 2,
+                    borderTop: 'solid 3px white',
+                    pt: '40px',
+                    pb: '80px'
+                }}
+            >
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                    }}
+                >
+                    <img src='/GR_Letters.png' />
+                    <Box>
+                        <Typography
+                            variant='h4'
+                            sx={{
+                                color: theme.palette.primary.main,
+                                fontSize: '20px',
+                                textAlign: 'center'
+                            }}
+                        >
+                            Game Rogue, LLC
+                            <br />
+                            2023 &copy;
+                        </Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            gap: 1
+                        }}
+                    >
+                        <Link href={'#'}
+                            style={{
+                                height: '34px',
+                                width: '40px',
+                                backgroundColor: theme.palette.primary.main,
+                                p: 0,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            <img src='/static/images/discord.svg' style={{ height: '30px' }} />
+                        </Link>
+                        <Link href={'#'}
+                            style={{
+                                height: '34px',
+                                width: '40px',
+                                backgroundColor: theme.palette.primary.main,
+                                p: 0,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            <YouTube fontSize='large' sx={{ color: 'white' }} />
+                        </Link>
+                        <Link href={'#'}
+                            style={{
+                                height: '34px',
+                                width: '40px',
+                                backgroundColor: theme.palette.primary.main,
+                                p: 0,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            <SvgIcon fontSize='large'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="white" d="M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29l-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43Z" />
+                                </svg>
+                            </SvgIcon>
+                        </Link>
+                        <Link href={'#'}
+                            style={{
+                                height: '34px',
+                                width: '40px',
+                                backgroundColor: theme.palette.primary.main,
+                                p: 0,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            <Twitter fontSize='large' sx={{ color: 'white' }} />
+                        </Link>
+                        <Link href={'#'}
+                            style={{
+                                height: '34px',
+                                width: '40px',
+                                backgroundColor: theme.palette.primary.main,
+                                p: 0,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            <Instagram fontSize='large' sx={{ color: 'white' }} />
+                        </Link>
+                        <Link href={'#'}
+                            style={{
+                                height: '34px',
+                                width: '40px',
+                                backgroundColor: theme.palette.primary.main,
+                                p: 0,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '4px'
+                            }}
+                        >
+                            <img src='/static/images/tiktok.svg' style={{ height: '30px' }} />
+                        </Link>
+                    </Box>
+                </Box>
+            </Box>
+        </Box >
+    );
 }
 
 export default MyApp;

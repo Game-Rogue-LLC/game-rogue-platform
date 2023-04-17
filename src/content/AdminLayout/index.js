@@ -68,17 +68,15 @@ const AdminLayout = (props) => {
 
 const ContextProvider = (props) => {
 	return (
-		<AppProvider>
-			<TournamentProvider>
-				<OrganizationProvider>
-					<EventProvider>
-						<MatchProvider>
-							<AdminLayout {...props} />
-						</MatchProvider>
-					</EventProvider>
-				</OrganizationProvider>
-			</TournamentProvider>
-		</AppProvider>
+		<TournamentProvider>
+			<OrganizationProvider>
+				<EventProvider>
+					<MatchProvider>
+						<AdminLayout {...props} />
+					</MatchProvider>
+				</EventProvider>
+			</OrganizationProvider>
+		</TournamentProvider>
 	)
 }
 
