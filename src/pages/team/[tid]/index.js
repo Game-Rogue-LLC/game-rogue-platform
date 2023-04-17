@@ -30,6 +30,7 @@ import { useTournamentContext } from '@/src/context/TournamentContext';
 import CountrySelect from '@/src/pages/components/CountrySelect';
 import GameSelect from '@/src/pages/components/GameSelect';
 import { useAuthContext } from '@/src/context/AuthContext';
+import Link from 'next/link';
 
 const initialInputs = {
     name: '',
@@ -129,7 +130,7 @@ const Page = (props) => {
                                     <TableCell align='center'>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>
                                             <Avatar variant='circular' src={player.players[val.id].profilePic} />
-                                            {player.players[val.id].name}
+                                            <Link href={'/user/' + val.id}>{player.players[val.id].name}</Link>
                                         </Box>
                                     </TableCell>
                                     <TableCell align='center'>

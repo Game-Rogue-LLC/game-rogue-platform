@@ -1,17 +1,4 @@
 import { useEffect } from 'react'
-import Button from '@mui/material/Button'
-import {
-    Box,
-    Paper,
-    Table,
-    TableHead,
-    TableBody,
-    TableRow,
-    TableCell,
-    TableContainer,
-    TableFooter,
-    useTheme
-} from '@mui/material'
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import { Router, useRouter } from 'next/router'
@@ -21,6 +8,7 @@ import { useMatchContext } from '@/src/context/MatchContext'
 import dayjs from 'dayjs';
 import { useTournamentContext } from '@/src/context/TournamentContext'
 import { useAuthContext } from '@/src/context/AuthContext'
+import TeamTable from '@/src/pages/components/TeamTable'
 
 const Page = (props) => {
     const router = useRouter();
@@ -39,29 +27,7 @@ const Page = (props) => {
     }, [])
 
     return (
-        <TableContainer component={Paper} variant='elevation'>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell align='center'>TEAM ID</TableCell>
-                        <TableCell align='center'>GAME</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {Object.keys(team.teams).filter((key, i) => team.teams[key].players.findIndex(val => val.id == user.id) >= 0).map((id, i) => (
-                        <TableRow hover key={id} onClick={() => handle.show(id)} sx={{ cursor: 'pointer' }}>
-                            <TableCell align='center'>
-                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                                    <img src={team.teams[id].logo ?? '/GR_Letters.png'} style={{ height: '20px' }} />
-                                    {team.teams[id].name}
-                                </Box>
-                            </TableCell>
-                            <TableCell align='center'>{team.teams[id].game}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <TeamTable teams={team.teams} uid={user.id} />
     )
 }
 

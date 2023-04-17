@@ -16,6 +16,7 @@ import ThemeProvider from '@/src/theme/ThemeProvider';
 
 import '@/src/styles/globals.css'
 import { AuthContextProvider } from '@/src/context/AuthContext';
+import AppProvider from '@/src/context/app.js';
 
 const Noop = ({ children }) => <>{children}</>;
 
@@ -38,11 +39,13 @@ export default function MyApp(props) {
 				{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 				<CssBaseline />
 				<AuthContextProvider>
-					{getLayout(
-						<ContextProvider>
-							<Component {...pageProps} />
-						</ContextProvider>
-					)}
+					<AppProvider>
+						{getLayout(
+							<ContextProvider>
+								<Component {...pageProps} />
+							</ContextProvider>
+						)}
+					</AppProvider>
 				</AuthContextProvider>
 			</ThemeProvider>
 		</CacheProvider>
