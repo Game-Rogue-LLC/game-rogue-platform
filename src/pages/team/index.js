@@ -27,7 +27,7 @@ const Page = (props) => {
     }, [])
 
     return (
-        <TeamTable teams={team.teams} uid={user.id} />
+        <TeamTable teams={team.teams} uid={user.id} handle={handle.show} />
     )
 }
 

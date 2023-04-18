@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
+import TeamTable from '@/src/pages/components/TeamTable';
 
 const Page = (props) => {
     const router = useRouter();
@@ -20,7 +21,13 @@ const Page = (props) => {
     const [uid, setUID] = useState(null);
     const [item, setItem] = useState(null);
     const { setTitle } = useAppContext();
-    const { player } = useTournamentContext();
+    const { player, team } = useTournamentContext();
+
+    const handle = {
+        show: (id) => {
+            router.push('/team/' + id);
+        }
+    }
 
     useEffect(() => {
         setItem(player.players[uid]);
@@ -111,7 +118,10 @@ const Page = (props) => {
                         </Grid>
                     </Box>
                 </Grid>
-                <Grid item xs={12} container>
+                <Grid item xs container>
+                    <Box sx={{ border: 'solid 1px rgb(52, 43, 35)', width: '100%', borderRadius: '5px' }}>
+                        <TeamTable teams={team.teams} uid={uid} handle={handle.show} />
+                    </Box>
                 </Grid>
             </Grid>
         </Paper>
