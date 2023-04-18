@@ -25,19 +25,22 @@ import dayjs from 'dayjs';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
-import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import CountrySelect from '@/src/pages/components/CountrySelect';
-import GameSelect from '@/src/pages/components/GameSelect';
 import { useAuthContext } from '@/src/context/AuthContext';
 import Link from 'next/link';
+import { DEFAULT_LOGO } from '@/src/config/global';
 
 const initialInputs = {
     name: '',
     short: '',
     accessCode: '',
     residency: '',
-    game: ''
+    game: '',
+    type: 0,
+    darkLogo: DEFAULT_LOGO,
+    lightLogo: DEFAULT_LOGO,
+    description: '',
+    deleted: false
 }
 
 const Page = (props) => {
@@ -45,7 +48,7 @@ const Page = (props) => {
     const router = useRouter();
     const { user } = useAuthContext();
     const { setTitle } = useAppContext();
-    const [inputs, setInputs] = useState({ ...initialInputs });
+    const [item, setItem] = useState({ ...initialInputs });
     const { team, player } = useTournamentContext();
     const [tid, setTID] = useState(null);
     const [inviteUrl, setInviteUrl] = useState('');
@@ -54,7 +57,7 @@ const Page = (props) => {
         invite: (e) => {
             navigator.clipboard.writeText(inviteUrl)
                 .then(() => {
-                    console.log('Content copied successfully!');
+                    alert('Content copied successfully!');
                 }, () => {
                     console.error('Failed to copy');
                 })
@@ -64,17 +67,14 @@ const Page = (props) => {
     useEffect(() => {
         const nid = router.query?.tid;
         setTID(nid);
-        setInviteUrl(window.location.protocol + '://' + window.location.host + '/team/join?id=' + nid + '&&accessCode=' + team.teams[nid]?.accessCode);
-    }, [router, team.teams])
+    }, [router])
 
     useEffect(() => {
         if (team.teams[tid]) {
-            setInputs(prev => ({
-                ...prev,
-                ...team.teams[tid]
-            }))
+            setItem({ ...team.teams[tid] });
+            setInviteUrl(window.location.protocol + '://' + window.location.host + '/team/join?id=' + tid + '&&accessCode=' + team.teams[tid]?.accessCode);
         }
-    }, [tid])
+    }, [tid, team.teams])
 
     useEffect(() => {
         setTitle('TEAM INFO');
@@ -85,7 +85,7 @@ const Page = (props) => {
             <Grid container rowSpacing={3} spacing={2}>
                 <Grid item xs={4} sx={{ minWidth: '200px' }}>
                     <Box textAlign={'center'}>
-                        <img src={inputs.darkLogo ?? '/GR_Letters.png'} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                        <img src={item.darkLogo ?? '/GR_Letters.png'} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
                     </Box>
                     <Box mt={1}>
                         <Grid container rowSpacing={2} spacing={2}>
@@ -101,7 +101,7 @@ const Page = (props) => {
                             <Grid item xs={12} sx={{ textAlign: 'center' }}>
                                 <Button variant='contained' sx={{ width: '150px' }}>LEAVE TEAM</Button>
                             </Grid>
-                            <Grid item xs={12} sx={{ textAlign: 'center' }} hidden={team.teams[tid]?.uid != user.id}>
+                            <Grid item xs={12} sx={{ textAlign: 'center' }} hidden={item?.uid != user.id}>
                                 <Button variant='contained' sx={{ width: '150px' }} onClick={(e) => router.push('/team/' + tid + '/edit')}>
                                     EDIT TEAM
                                 </Button>
@@ -126,7 +126,7 @@ const Page = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {team.teams[tid]?.players.map((val, i) => (
+                                {item.players?.map((val, i) => (
                                     <TableRow hover key={'user_' + val.id}>
                                         <TableCell align='center'>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>

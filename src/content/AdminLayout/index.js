@@ -6,22 +6,17 @@ import PageHeader from './PageHeader'
 import PageContainer from './PageContainer'
 
 import OrganizationSidebar from '@/src/content/OrganizationSidebar'
-import AppProvider from '@/src/context/app'
-import OrganizationProvider, { useOrganizationContext } from '@/src/context/OrganizationContext'
-import EventProvider, { useEventContext } from '@/src/context/EventContext'
 import MatchProvider, { useMatchContext } from '@/src/context/MatchContext'
 
 import { useAuthContext } from '@/src/context/AuthContext'
 import { useRouter } from 'next/router'
-import TournamentProvider from '@/src/context/TournamentContext'
+import TournamentProvider, { useTournamentContext } from '@/src/context/TournamentContext'
 
 const AdminLayout = (props) => {
 	const { children } = props;
-	const { activeCount: activeOrganizationCount, current: currentOrganization } = useOrganizationContext();
-	const { activeCount: activeEventCount, current: currentEvent } = useEventContext();
-
-	const { user } = useAuthContext()
-	const router = useRouter()
+	const { user } = useAuthContext();
+	const router = useRouter();
+	const { organization, event } = useTournamentContext();
 
 	if (!user) {
 		router.push('/auth')
@@ -44,7 +39,7 @@ const AdminLayout = (props) => {
 				justifyContent: 'space-between',
 				flex: 1
 			}}>
-				{activeOrganizationCount > 0 ?
+				{organization.activeCount > 0 ?
 					<OrganizationSidebar />
 					: <></>
 				}
@@ -54,7 +49,7 @@ const AdminLayout = (props) => {
 					display: 'flex',
 					justifyContent: 'space-between',
 				}}>
-					{activeOrganizationCount > 0 && currentOrganization && activeEventCount[currentOrganization] > 0 && currentEvent && <Navbar />}
+					{organization.activeCount > 0 && organization.current && event.activeCount[organization.current] > 0 && event.current && <Navbar />}
 					<PageContainer>
 						<PageHeader />
 						{children}
@@ -69,13 +64,9 @@ const AdminLayout = (props) => {
 const ContextProvider = (props) => {
 	return (
 		<TournamentProvider>
-			<OrganizationProvider>
-				<EventProvider>
-					<MatchProvider>
-						<AdminLayout {...props} />
-					</MatchProvider>
-				</EventProvider>
-			</OrganizationProvider>
+			<MatchProvider>
+				<AdminLayout {...props} />
+			</MatchProvider>
 		</TournamentProvider>
 	)
 }

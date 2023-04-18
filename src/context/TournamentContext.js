@@ -1,8 +1,9 @@
-import { useState, useContext, createContext, useEffect } from "react";
+import { useState, useContext, createContext, useEffect, useMemo } from "react";
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 import store from '@/lib/firestore/collections';
 import { useAuthContext } from "./AuthContext";
+import Splash from "../content/Splash";
 
 const TournamentContext = createContext({})
 
@@ -20,7 +21,79 @@ const TournamentProvider = (props) => {
     //     })
     // }, [])
 
-    /* Begin Team Data / Functions */
+    /** Begin Organization Data / Functions */
+    const [organizations, setOrganizations] = useState({});
+    const [currentOrganization, setCurrentOrganization] = useState(null);
+    const [organizationLoading, setOrganizationLoading] = useState(true);
+    const [activeOrganizationCount, setActiveOrganizationCount] = useState(0);
+    const organization = {
+        organizations,
+        setOrganizations,
+        current: useMemo(() => currentOrganization, [currentOrganization]),
+        setCurrent: setCurrentOrganization,
+        activeCount: useMemo(() => activeOrganizationCount, [activeOrganizationCount]),
+        setActiveCount: setActiveOrganizationCount,
+        create: async (newOrganization) => {
+            const res = await store.organization.save(null, newOrganization);
+            return res;
+        },
+        read: async (uid) => {
+            setOrganizationLoading(true);
+            const res = await store.organization.read(uid, async (data, active) => {
+                await setOrganizations(data);
+                setActiveOrganizationCount(active);
+                console.log('organizations: ', data, active);
+            }, () => setOrganizationLoading(false));
+        },
+        update: async (id, newOrganization) => {
+            const res = await store.organization.save(id, newOrganization);
+            return res;
+        },
+        delete: async (id) => {
+            res = await store.organization.save(id, { deleted: true });
+            return res;
+        },
+        upload: store.organization.uploadFile
+    }
+    /** End Organization Data / Functions */
+
+    /** Begin Event Data / Functions */
+    const [events, setEvents] = useState({});
+    const [currentEvent, setCurrentEvent] = useState(null);
+    const [eventLoading, setEventLoading] = useState(true);
+    const [activeEventCount, setActiveEventCount] = useState({});
+    const event = {
+        events,
+        setEvents,
+        current: useMemo(() => currentEvent, [currentEvent]),
+        setCurrent: setCurrentEvent,
+        activeCount: useMemo(() => activeEventCount, [activeEventCount]),
+        setActiveCount: setActiveEventCount,
+        create: async (newEvent) => {
+            const res = await store.event.save(null, newEvent);
+            return res;
+        },
+        read: async (uid) => {
+            setEventLoading(true);
+            const res = await store.event.read(uid, async (data, active) => {
+                await setEvents(data);
+                setActiveEventCount(active);
+                console.log('events: ', data, active);
+            }, () => setEventLoading(false));
+        },
+        update: async (id, newEvent) => {
+            const res = await store.event.save(id, newEvent);
+            return res;
+        },
+        delete: async (id) => {
+            res = await store.event.save(id, { deleted: true });
+            return res;
+        },
+        upload: store.event.uploadFile
+    }
+    /** End Event Data / Functions */
+
+    /** Begin Team Data / Functions */
     const [teams, setTeams] = useState({});
     const [teamLoading, setTeamLoading] = useState(true);
     const team = {
@@ -42,8 +115,8 @@ const TournamentProvider = (props) => {
             return res;
         },
         delete: async (id) => {
-            await store.team.save(id, { deleted: true });
-            router.push('/team/create');
+            const res = await store.team.save(id, { deleted: true });
+            return res;
         },
         check: async ({ id, accessCode }) => {
             console.log(id, accessCode)
@@ -77,9 +150,9 @@ const TournamentProvider = (props) => {
             }
         ]
     }
-    /* End Team Data / Functions */
+    /** End Team Data / Functions */
 
-    /* Begin Player Data / Functions */
+    /** Begin Player Data / Functions */
     const [players, setPlayers] = useState({});
     const [playerLoading, setPlayerLoading] = useState(true);
     const player = {
@@ -105,16 +178,23 @@ const TournamentProvider = (props) => {
             // router.push('/');
         }
     }
-    /* End Team Data / Functions */
+    /** End Team Data / Functions */
+
+    const loading = useMemo(() => {
+        return organizationLoading || eventLoading || teamLoading || playerLoading;
+    }, [organizationLoading, eventLoading, teamLoading, playerLoading])
+
     useEffect(() => {
         if (user) {
+            organization.read(user.id);
+            event.read(user.id);
             team.read(user.id);
             player.read();
         }
     }, [user])
 
     return (
-        <TournamentContext.Provider value={{ tournaments, matches, participants, team, player }}>
+        <TournamentContext.Provider value={{ tournaments, matches, participants, organization, event, team, player, loading }}>
             {props.children}
         </TournamentContext.Provider>
     )

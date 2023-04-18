@@ -18,58 +18,81 @@ import { LoadingButton } from '@mui/lab'
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import DatePicker from '@/src/pages/components/DatePicker'
-import { useOrganizationContext } from '@/src/context/OrganizationContext'
 import { useEventContext } from '@/src/context/EventContext'
+import Validator from 'validatorjs'
+import { useTournamentContext } from '@/src/context/TournamentContext'
+
+const initialInputs = {
+    name: '',
+    oid: '',
+    format: 0,
+    tournament: 0,
+    league: 0,
+    seed: 0,
+    date: new Date(),
+    game: 0,
+    platform: 0,
+    region: 0,
+    timezone: 0,
+    rulebook: '',
+    terms: '',
+    privacy: '',
+    deleted: false
+}
+
+const rules = {
+    name: 'required'
+}
+
+const customMessages = {
+    'required.name': 'Event Name is required.'
+}
 
 const Page = (props) => {
     const theme = useTheme()
     const router = useRouter()
     const { setTitle } = useAppContext()
-    const { organizations } = useOrganizationContext()
-    const {
-        events,
-        addEvent,
-        updateEvent,
-        activeCount: activeEventCount,
-        current: currentEvent,
-        setCurrent: setCurrentEvent,
-        uploadFile
-    } = useEventContext()
-    const [orgId, setOrgId] = useState(null)
-    const [saving, setSaving] = useState(false)
-    const [rulebook, setRulebook] = useState(null)
-    const [terms, setTerms] = useState(null)
-    const [privacy, setPrivacy] = useState(null)
-    const initialInput = {
-        name: '',
-        oid: orgId || '',
-        format: 0,
-        tournament: 0,
-        league: 0,
-        seed: 0,
-        date: new Date(),
-        game: 0,
-        platform: 0,
-        region: 0,
-        timezone: 0,
-        rulebook: '*.pdf',
-        terms: '*.pdf',
-        privacy: '*.pdf'
-    }
-    const [inputs, setInputs] = useState({ ...initialInput })
-    const [valid, setValid] = useState({
-        name: true
-    })
+    const { organization, event } = useTournamentContext();
+    const [oid, setOID] = useState(organization?.current);
+    const [saving, setSaving] = useState(false);
+    const [rulebook, setRulebook] = useState(null);
+    const [terms, setTerms] = useState(null);
+    const [privacy, setPrivacy] = useState(null);
+    const [inputs, setInputs] = useState({ ...initialInputs });
+    const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
 
-    const validate = ({ name, value }) => {
-        if (value) {
-            setValid(prevState => ({ ...prevState, [name]: true }))
-            return true;
-        } else {
-            setValid(prevState => ({ ...prevState, [name]: false }))
+    useEffect(() => {
+        setTitle('REGISTER AN EVENT');
+        event.setCurrent(null);
+    }, [])
+
+    useEffect(() => {
+        if (router?.query.organization) {
+            const newOID = router.query.organization;
+            organization.setCurrent(newOID);
+            setOID(newOID);
+            setInputs(prev => ({
+                ...prev,
+                oid: newOID
+            }))
+        }
+    }, [router])
+
+    useEffect(() => {
+        if (event.activeCount[oid] >= 5)
+            setDisabled(true)
+        else setDisabled(false)
+    }, [oid, event.activeCount])
+
+    const validate = (data, rule, messages) => {
+        let validator = new Validator(data, rule, messages);
+        if (validator.fails()) {
+            setErrors(validator.errors.errors);
             return false;
         }
+        setErrors({});
+        return true;
     }
 
     const setDate = (newDate) => {
@@ -80,54 +103,49 @@ const Page = (props) => {
     }
 
     const handle = {
-        create: (e) => {
-            if (!validate({ name: 'name', value: inputs?.name })) {
+        create: async (e) => {
+            if (validate(inputs, rules, customMessages) === false) {
                 return;
             }
-            setValid({ name: true });
-            const newEvent = {
-                ...inputs,
-                oid: orgId
-            }
+            let newEvent = { ...inputs }
             setSaving(true)
-            addEvent(newEvent)
-                .then(async data => {
-                    if (data.code === 'succeed') {
-                        let saved = true
-                        if (rulebook) {
-                            await uploadFile(rulebook, data.id, 'rulebook', (url) => {
-                                updateEvent(data.id, { rulebook: url })
-                                    .then(res => saved = saved && (res.code == 'succeed'))
-                                    .catch(err => console.log(err))
-                            })
-                        }
-                        if (terms) {
-                            await uploadFile(terms, data.id, 'terms', (url) => {
-                                updateEvent(data.id, { terms: url })
-                                    .then(res => saved = saved && (res.code == 'succeed'))
-                                    .catch(err => console.log(err))
-                            })
-                        }
-                        if (privacy) {
-                            await uploadFile(privacy, data.id, 'privacy', (url) => {
-                                updateEvent(data.id, { privacy: url })
-                                    .then(res => saved = saved && (res.code == 'succeed'))
-                                    .catch(err => console.log(err))
-                            })
-                        }
-                        if (saved) {
-                            alert('Event data saved successfully!')
-                            setSaving(false)
-                        }
-                    } else if (res.code === 'failed') {
-                        console.log(res.message)
-                        setSaving(false)
+            const data = await event.create(newEvent);
+            if (data.code === 'succeed') {
+                let uploaded = true;
+                newEvent = {};
+
+                if (rulebook) {
+                    uploaded = false;
+                    const res = await event.upload(rulebook, data.id, 'rulebook');
+                    if (res.code === 'succeed') {
+                        newEvent.rulebook = res.url;
+                        uploaded = true;
                     }
-                })
-                .catch(err => {
-                    console.log(err)
-                    setSaving(false)
-                })
+                }
+                if (terms) {
+                    uploaded = false;
+                    const res = await event.upload(terms, data.id, 'terms');
+                    if (res.code === 'succeed') {
+                        newEvent.terms = res.url;
+                        uploaded = true;
+                    }
+                }
+                if (privacy) {
+                    uploaded = false;
+                    const res = await event.upload(privacy, data.id, 'privacy');
+                    if (res.code === 'succeed') {
+                        newEvent.privacy = res.url;
+                        uploaded = true;
+                    }
+                }
+                const res = await event.update(data.id, newEvent);
+                if (res.code === 'succeed') {
+                    alert('Saved successfully!');
+                }
+            } else if (data.code === 'failed') {
+                console.log(data.message);
+            }
+            setSaving(false);
         },
         inputs: (e) => {
             const { name, value } = e.target
@@ -148,26 +166,6 @@ const Page = (props) => {
         }
     }
 
-    useEffect(() => {
-        setTitle('REGISTER AN EVENT')
-        setCurrentEvent(null)
-    }, [])
-
-    useEffect(() => {
-        const newOrg = router.query?.organization
-        setOrgId(newOrg)
-        setInputs(prev => ({
-            ...prev,
-            oid: newOrg
-        }))
-    }, [router])
-
-    useEffect(() => {
-        if (activeEventCount[orgId] >= 5)
-            setDisabled(true)
-        else setDisabled(false)
-    }, [orgId, activeEventCount])
-
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
             <Grid container spacing={2} rowSpacing={4}>
@@ -184,8 +182,8 @@ const Page = (props) => {
                         sx={{ mt: 1 }}
                         fullWidth
                     >
-                        {Object.keys(organizations).map((key, i) => {
-                            const item = organizations[key];
+                        {Object.keys(organization.organizations).map((key, i) => {
+                            const item = organization.organizations[key];
                             return <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                         })}
                     </Select>
@@ -264,10 +262,10 @@ const Page = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant='h6'>Event Name</Typography>
-                    <FormControl fullWidth error={!valid?.name} sx={{ mt: 1 }}>
+                    <FormControl fullWidth error={errors.name !== undefined} sx={{ mt: 1 }}>
                         <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
                             onChange={handle.inputs} />
-                        {!valid?.name && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>Name is required.</FormHelperText>}
+                        {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>

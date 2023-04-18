@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import {
     Paper,
@@ -14,28 +14,35 @@ import {
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import { useRouter } from 'next/router'
-import { useEventContext } from '@/src/context/EventContext'
-import { useOrganizationContext } from '@/src/context/OrganizationContext'
 import { useMatchContext } from '@/src/context/MatchContext'
 import dayjs from 'dayjs'
+import { useTournamentContext } from '@/src/context/TournamentContext'
 
 const Page = (props) => {
-    const theme = useTheme()
-    const router = useRouter()
-    const { setTitle } = useAppContext()
-    const { setCurrent: setCurrentOrganization } = useOrganizationContext()
-    const { events, current: currentEvent, setCurrent: setCurrentEvent } = useEventContext()
-    const { match } = useMatchContext()
-    const event = router.query?.event
+    const theme = useTheme();
+    const router = useRouter();
+    const { setTitle } = useAppContext();
+    const { organization, event } = useTournamentContext();
+    const { match } = useMatchContext();
+    const [eid, setEID] = useState(router.query.event);
 
     useEffect(() => {
         setTitle('MATCHES')
     }, [])
 
     useEffect(() => {
-        setCurrentEvent(event)
-        setCurrentOrganization(events[event]?.oid)
-    }, [events, event])
+        if (eid) {
+            event.setCurrent(eid);
+            organization.setCurrent(event.events[eid]?.oid);
+            console.log(eid, event.events[eid]?.oid);
+        }
+    }, [eid, event.events])
+
+    useEffect(() => {
+        if (router.query.event) {
+            setEID(router.query.event);
+        }
+    }, [router])
 
     return (
         <TableContainer component={Paper} variant='elevation'>
@@ -54,7 +61,7 @@ const Page = (props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {Object.keys(match.matches).filter((key, i) => match.matches[key].eid == currentEvent).map((id, i) => (
+                    {Object.keys(match.matches).filter((key, i) => match.matches[key].eid == eid).map((id, i) => (
                         <TableRow key={id}>
                             <TableCell align='center'>{match.matches[id]._id || id}</TableCell>
                             <TableCell align='center'>{match.states[match.matches[id].status].name}</TableCell>
@@ -75,7 +82,7 @@ const Page = (props) => {
                     ))}
                     <TableRow>
                         <TableCell sx={{ border: 'none' }}>
-                            <Button variant='contained' onClick={() => router.push('/match/create?event=' + currentEvent)}>
+                            <Button variant='contained' onClick={() => router.push('/match/create?event=' + eid)}>
                                 CREATE MATCH
                             </Button>
                         </TableCell>

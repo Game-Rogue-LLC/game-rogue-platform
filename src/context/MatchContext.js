@@ -7,14 +7,14 @@ import Splash from '@/src/content/Splash';
 import { useOrganizationContext } from './OrganizationContext';
 import { useEventContext } from './EventContext';
 import { useAuthContext } from './AuthContext';
+import { useTournamentContext } from './TournamentContext';
 
 const MatchContext = createContext({});
 
 export const useMatchContext = () => useContext(MatchContext)
 
 export default (props) => {
-    const { current: currentOrganization, loading: loadingOrganization } = useOrganizationContext();
-    const { current: currentEvent, loading: loadingEvent } = useEventContext();
+    const { organization, event } = useTournamentContext();
     const { user } = useAuthContext();
     const router = useRouter()
     const [matches, setMatches] = useState({})
@@ -53,7 +53,7 @@ export default (props) => {
         },
         delete: async (id) => {
             matchStore.save({ deleted: true }, id)
-            router.push('/match/create?event=' + currentEvent)
+            router.push('/match/create?event=' + event.current)
         },
         uploadFile: matchStore.uploadFile,
         states: [
@@ -115,13 +115,13 @@ export default (props) => {
     }, [])
 
     const isLoading = useMemo(() => {
-        return loadingOrganization || loadingEvent || loading
-    }, [loadingOrganization, loadingEvent, loading])
+        return organization.loading || event.loading || loading
+    }, [organization.loading, event.loading, loading])
 
     // useEffect(() => {
-    //     if (isLoading == false && Object.keys(matches).length == 0 && currentEvent)
-    //         router.push('/match/create?event=' + currentEvent)
-    // }, [matches, isLoading, currentEvent])
+    //     if (isLoading == false && Object.keys(matches).length == 0 && event.current)
+    //         router.push('/match/create?event=' + event.current)
+    // }, [matches, isLoading, event.current])
 
     return (
         <MatchContext.Provider value={{

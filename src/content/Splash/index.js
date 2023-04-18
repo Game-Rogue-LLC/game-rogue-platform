@@ -9,7 +9,7 @@ export default function Splash(props) {
   return (
     <div>
       <Head>
-        <title>Signing In...</title>
+        <title>{content}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>

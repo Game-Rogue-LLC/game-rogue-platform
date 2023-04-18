@@ -24,9 +24,8 @@ import {
 } from '@mui/icons-material';
 
 import OrganizationMenu from './Menu'
-import { useAppContext } from '@/src/context/app'
 import { useAuthContext } from '@/src/context/AuthContext'
-import { useOrganizationContext } from '@/src/context/OrganizationContext';
+import { useTournamentContext } from '@/src/context/TournamentContext';
 
 const FireNav = styled(List)(({ theme }) => ({
 	'& .MuiPaper-root': {
@@ -51,7 +50,7 @@ const FirePaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function OrganizationSidebar(props) {
-	const { organizations } = useOrganizationContext();
+	const { organization } = useTournamentContext();
 	const [showMenu, setShowMenu] = React.useState(false);
 	const { user } = useAuthContext();
 	const [anchorElMenu, setAnchorElMenu] = React.useState(null);
@@ -164,8 +163,8 @@ export default function OrganizationSidebar(props) {
 							</Menu>
 						</ListItem>
 						<Divider />
-						{Object.keys(organizations).map((id) => {
-							const item = organizations[id];
+						{Object.keys(organization.organizations).map((id) => {
+							const item = organization.organizations[id];
 							return (
 								<OrganizationMenu key={"organization_menu_" + id} organization={item} />
 							)

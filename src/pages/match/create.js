@@ -18,43 +18,35 @@ import { LoadingButton } from '@mui/lab'
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import DatePicker from '@/src/pages/components/DatePicker'
-import { useOrganizationContext } from '@/src/context/OrganizationContext'
-import { useEventContext } from '@/src/context/EventContext'
 import { useMatchContext } from '@/src/context/MatchContext'
+import { useTournamentContext } from '@/src/context/TournamentContext'
+
+const initialInputs = {
+    eid: '',
+    status: 0,
+    admin: 0,
+    category: 0,
+    schedule: 0,
+    deleted: false
+}
 
 const Page = (props) => {
-    const theme = useTheme()
-    const router = useRouter()
-    const { setTitle } = useAppContext()
-    const { organizations, setCurrent: setCurrentOrganization } = useOrganizationContext()
-    const {
-        events,
-        addEvent,
-        updateEvent,
-        activeCount: activeEventCount,
-        current: currentEvent,
-        setCurrent: setCurrentEvent,
-        uploadFile
-    } = useEventContext()
-    const { match } = useMatchContext()
-    const initialInput = {
-        eid: '',
-        status: 0,
-        admin: 0,
-        category: 0,
-        schedule: 0
-    }
-    const [saving, setSaving] = useState(false)
-    const [inputs, setInputs] = useState({ ...initialInput })
+    const theme = useTheme();
+    const router = useRouter();
+    const { setTitle } = useAppContext();
+    const { organization, event } = useTournamentContext();
+    const { match } = useMatchContext();
+    const [saving, setSaving] = useState(false);
+    const [inputs, setInputs] = useState({ ...initialInputs });
     const [disabled, setDisabled] = useState(false);
-    const event = router?.query.event
+    const [eid, setEID] = useState(router?.query.event);
 
     const handle = {
         create: async (e) => {
             const newMatch = {
                 ...inputs,
                 _id: new Date().getTime(),
-                created: new Date()
+                createdAt: new Date()
             }
             setSaving(true)
             const res = await match.add(newMatch)
@@ -87,17 +79,17 @@ const Page = (props) => {
     }, [])
 
     useEffect(() => {
-        initialInput.eid = currentEvent
-        setInputs(prev => ({
-            ...prev,
-            eid: currentEvent
-        }))
-    }, [currentEvent])
-
-    useEffect(() => {
-        setCurrentEvent(event)
-        setCurrentOrganization(events[event]?.oid)
-    }, [events, event])
+        if (router?.query.event) {
+            const newEID = router.query.event;
+            setEID(newEID);
+            event.setCurrent(newEID);
+            organization.setCurrent(event.events[newEID]?.oid);
+            setInputs(prev => ({
+                ...prev,
+                eid: newEID
+            }))
+        }
+    }, [router])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>

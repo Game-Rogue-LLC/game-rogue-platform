@@ -1,11 +1,7 @@
 import { useEffect } from 'react'
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
-import { Router, useRouter } from 'next/router'
-import { useEventContext } from '@/src/context/EventContext'
-import { useOrganizationContext } from '@/src/context/OrganizationContext'
-import { useMatchContext } from '@/src/context/MatchContext'
-import dayjs from 'dayjs';
+import { useRouter } from 'next/router'
 import { useTournamentContext } from '@/src/context/TournamentContext'
 import { useAuthContext } from '@/src/context/AuthContext'
 import TeamTable from '@/src/pages/components/TeamTable'

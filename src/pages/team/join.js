@@ -14,14 +14,12 @@ import {
     OutlinedInput
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import Validator from 'validatorjs';
 
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
-import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import CountrySelect from '@/src/pages/components/CountrySelect';
-import GameSelect from '@/src/pages/components/GameSelect';
 import { useAuthContext } from '@/src/context/AuthContext';
 
 const initialInputs = {
@@ -29,19 +27,39 @@ const initialInputs = {
     accessCode: ''
 }
 
+const rules = {
+    id: 'required',
+    accessCode: 'required'
+}
+
+const customMessages = {
+    'required.id': 'Team ID is required.',
+    'required.accessCode': 'Access Code is required.'
+}
+
 const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { user } = useAuthContext();
     const { setTitle } = useAppContext();
-    const { addOrganization, activeCount } = useOrganizationContext();
     const [inputs, setInputs] = useState({ ...initialInputs });
-    const [valid, setValid] = useState({ name: true });
+    const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
     const { team } = useTournamentContext();
     const [joining, setJoining] = useState(false);
 
+    const validate = (data, rule, messages) => {
+        let validator = new Validator(data, rule, messages);
+        if (validator.fails()) {
+            setErrors(validator.errors.errors);
+            return false;
+        }
+        setErrors({});
+        return true;
+    }
+
     const joinTeam = async (data) => {
+        if (validate(inputs, rules, customMessages) === false) return;
         setJoining(true);
         const res = await team.check(data)
         if (res.code === 'succeed' && team.teams[data.id].players.findIndex(val => val.id == user.id) < 0) {
@@ -81,10 +99,7 @@ const Page = (props) => {
     useEffect(() => {
         const { id, accessCode } = router.query
         if (id !== undefined && accessCode !== undefined) {
-            joinTeam({
-                id,
-                accessCode
-            })
+            setInputs({ id, accessCode });
         }
     }, [router])
 
@@ -96,17 +111,19 @@ const Page = (props) => {
         <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
             <Grid container rowSpacing={3} spacing={2}>
                 <Grid item xs={12} md={6}>
-                    <InputLabel htmlFor="team-id">Team Name</InputLabel>
-                    <FormControl fullWidth>
-                        <OutlinedInput id="team-id" name="id" value={inputs.id} onChange={handle.inputs}
+                    <InputLabel htmlFor="team-id">Team ID</InputLabel>
+                    <FormControl fullWidth error={errors.id !== undefined}>
+                        <OutlinedInput id="team-id" name="id" value={inputs.id} onChange={handle.inputs} aria-describedby="team-id-helper"
                             sx={{ mt: 1 }} fullWidth required />
+                        {errors.id !== undefined && <FormHelperText id="team-id-helper" sx={{ mt: 2 }}>{errors.id}</FormHelperText>}
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <InputLabel htmlFor="team-access-code">Access Code</InputLabel>
-                    <FormControl fullWidth>
-                        <OutlinedInput id="team-access-code" name="accessCode" value={inputs.accessCode}
+                    <FormControl fullWidth error={errors.accessCode !== undefined}>
+                        <OutlinedInput id="team-access-code" name="accessCode" value={inputs.accessCode} aria-describedby="team-access-code-helper"
                             onChange={handle.inputs} sx={{ mt: 1 }} fullWidth required />
+                        {errors.accessCode !== undefined && <FormHelperText id="team-access-code-helper" sx={{ mt: 2 }}>{errors.accessCode}</FormHelperText>}
                     </FormControl>
                 </Grid>
                 <Grid item>

@@ -17,7 +17,6 @@ import {
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
-import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import CountrySelect from '@/src/pages/components/CountrySelect';
 import GameSelect from '@/src/pages/components/GameSelect';
@@ -30,7 +29,8 @@ const initialInputs = {
     accessCode: '',
     residency: '',
     game: '',
-    players: []
+    players: [],
+    deleted: false
 }
 
 const rules = {
@@ -39,19 +39,24 @@ const rules = {
     accessCode: 'required|min:4'
 }
 
+const customMessages = {
+    'required.name': 'Team Name is required.',
+    'required.short': 'Short Name is required.',
+    'required.accessCode': 'Access Code is required.'
+}
+
 const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { user } = useAuthContext();
     const { setTitle } = useAppContext();
-    const { addOrganization, activeCount } = useOrganizationContext();
     const [inputs, setInputs] = useState({ ...initialInputs });
     const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
     const { team } = useTournamentContext();
 
-    const validate = (data, rule) => {
-        let validator = new Validator(data, rule);
+    const validate = (data, rule, messages) => {
+        let validator = new Validator(data, rule, messages);
         if (validator.fails()) {
             setErrors(validator.errors.errors);
             return false;
@@ -62,29 +67,23 @@ const Page = (props) => {
 
     const handle = {
         create: async (e) => {
-            if (validate(inputs, rules) === false) return;
+            if (validate(inputs, rules, customMessages) === false) return;
             const newTeam = {
                 ...inputs,
                 uid: user.id,
-                deleted: false,
                 players: [{
                     id: user.id,
                     position: 0, // Manager
                     joinedOn: new Date()
                 }]
             };
-            team.create(newTeam)
-                .then(res => {
-                    if (res.code === 'succeed') {
-                        router.push('/team/' + res.id)
-                    } else if (res.code === 'failed') {
-                        console.log(res.message)
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            setInputs({ ...initialInputs });
+
+            const res = await team.create(newTeam)
+            if (res.code === 'succeed') {
+                router.push('/team/' + res.id)
+            } else if (res.code === 'failed') {
+                console.log(res.message)
+            }
         },
         inputs: (e) => {
             const { name, value } = e.target;
