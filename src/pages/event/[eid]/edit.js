@@ -18,59 +18,56 @@ import { LoadingButton } from '@mui/lab'
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import DatePicker from '@/src/pages/components/DatePicker'
-import { useOrganizationContext } from '@/src/context/OrganizationContext'
-import { useEventContext } from '@/src/context/EventContext'
+import { useTournamentContext } from '@/src/context/TournamentContext'
+
+const initialInputs = {
+    name: '',
+    oid: '',
+    format: 0,
+    tournament: 0,
+    league: 0,
+    seed: 0,
+    date: new Date(),
+    game: 0,
+    platform: 0,
+    region: 0,
+    timezone: 0,
+    rulebook: '',
+    terms: '',
+    privacy: '',
+    deleted: false
+}
+
+const rules = {
+    name: 'required'
+}
+
+const customMessages = {
+    'required.name': 'Event Name is required.'
+}
 
 const Page = (props) => {
     const theme = useTheme()
     const router = useRouter()
     const [eid, setEID] = useState(null)
     const { setTitle } = useAppContext()
-    const { organizations, setCurrent: setCurrentOrganization } = useOrganizationContext()
-    const {
-        events,
-        addEvent,
-        updateEvent,
-        activeCount: activeEventCount,
-        current: currentEvent,
-        setCurrent: setCurrentEvent,
-        uploadFile
-    } = useEventContext()
-    const [orgId, setOrgId] = useState(null)
+    const { organization, event } = useTournamentContext();
     const [saving, setSaving] = useState(false)
     const [rulebook, setRulebook] = useState(null)
     const [terms, setTerms] = useState(null)
     const [privacy, setPrivacy] = useState(null)
-    const initialInput = {
-        name: '',
-        oid: orgId || '',
-        format: 0,
-        tournament: 0,
-        league: 0,
-        seed: 0,
-        date: new Date(),
-        game: 0,
-        platform: 0,
-        region: 0,
-        timezone: 0,
-        rulebook: '*.pdf',
-        terms: '*.pdf',
-        privacy: '*.pdf'
-    }
-    const [inputs, setInputs] = useState({ ...initialInput })
-    const [valid, setValid] = useState({
-        name: true
-    })
+    const [inputs, setInputs] = useState({ ...initialInputs })
+    const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
 
-    const validate = ({ name, value }) => {
-        if (value) {
-            setValid(prevState => ({ ...prevState, [name]: true }))
-            return true;
-        } else {
-            setValid(prevState => ({ ...prevState, [name]: false }))
+    const validate = (data, rule, messages) => {
+        let validator = new Validator(data, rule, messages);
+        if (validator.fails()) {
+            setErrors(validator.errors.errors);
             return false;
         }
+        setErrors({});
+        return true;
     }
 
     const setDate = (newDate) => {
@@ -82,41 +79,42 @@ const Page = (props) => {
 
     const handle = {
         save: async (e) => {
-            if (!validate({ name: 'name', value: inputs?.name })) {
+            if (validate(inputs, rules, customMessages) === false) {
                 return;
             }
-            setValid({ name: true });
-            const newEvent = {
-                ...inputs,
-                oid: orgId
-            }
+            const newEvent = { ...inputs };
             setSaving(true)
-            let saved = true
-            if (rulebook) {
-                await uploadFile(rulebook, data.id, 'rulebook', (url) => {
-                    updateEvent(data.id, { rulebook: url })
-                        .then(res => saved = saved && (res.code == 'succeed'))
-                        .catch(err => console.log(err))
-                })
+            const res = await event.update(eid, newEvent);
+            if (res.code === 'succeed') {
+                let saved = true;
+                if (rulebook) {
+                    await event.upload(rulebook, eid, 'rulebook', (url) => {
+                        event.update(eid, { rulebook: url })
+                            .then(res => saved = saved && (res.code == 'succeed'))
+                            .catch(err => console.log(err))
+                    })
+                }
+                if (terms) {
+                    await event.upload(terms, eid, 'terms', (url) => {
+                        event.update(eid, { terms: url })
+                            .then(res => saved = saved && (res.code == 'succeed'))
+                            .catch(err => console.log(err))
+                    })
+                }
+                if (privacy) {
+                    await event.upload(privacy, eid, 'privacy', (url) => {
+                        event.update(eid, { privacy: url })
+                            .then(res => saved = saved && (res.code == 'succeed'))
+                            .catch(err => console.log(err))
+                    })
+                }
+                if (saved) {
+                    alert('Event data saved successfully!');
+                }
+            } else {
+                console.log(res);
             }
-            if (terms) {
-                await uploadFile(terms, data.id, 'terms', (url) => {
-                    updateEvent(data.id, { terms: url })
-                        .then(res => saved = saved && (res.code == 'succeed'))
-                        .catch(err => console.log(err))
-                })
-            }
-            if (privacy) {
-                await uploadFile(privacy, data.id, 'privacy', (url) => {
-                    updateEvent(data.id, { privacy: url })
-                        .then(res => saved = saved && (res.code == 'succeed'))
-                        .catch(err => console.log(err))
-                })
-            }
-            if (saved) {
-                alert('Event data saved successfully!')
-                setSaving(false)
-            }
+            setSaving(false);
         },
         inputs: (e) => {
             const { name, value } = e.target
@@ -142,18 +140,21 @@ const Page = (props) => {
     }, [])
 
     useEffect(() => {
-        setCurrentOrganization(events[eid]?.oid)
-        setCurrentEvent(eid)
-    }, [eid, events])
+        if (router.query.eid) {
+            setEID(router.query.eid)
+        }
+    }, [router])
 
     useEffect(() => {
-        const newEid = router.query?.eid
-        setEID(newEid)
-        setInputs(prev => ({
-            ...prev,
-            ...events[newEid]
-        }))
-    }, [router])
+        if (eid) {
+            event.setCurrent(eid);
+            organization.setCurrent(event.events[eid].oid);
+            setInputs(prev => ({
+                ...prev,
+                ...event.events[eid]
+            }))
+        }
+    }, [eid, event.events])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
@@ -171,8 +172,8 @@ const Page = (props) => {
                         sx={{ mt: 1 }}
                         fullWidth
                     >
-                        {Object.keys(organizations).map((key, i) => {
-                            const item = organizations[key];
+                        {Object.keys(organization.organizations).map((key, i) => {
+                            const item = organization.organizations[key];
                             return <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                         })}
                     </Select>
@@ -197,39 +198,40 @@ const Page = (props) => {
                 <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Game Type</Typography>
                     <Box sx={{ mt: 1 }}>
-                        {inputs?.format == 0 ?
-                            <Select
-                                labelId="tournament-select-label"
-                                id="tournament-select"
-                                value={inputs?.tournament}
-                                name="tournament"
-                                onChange={handle.inputs}
-                                variant="outlined"
-                                disabled={disabled}
-                                fullWidth
-                            >
-                                <MenuItem key='single-elimination' value={0}>Single Elimination</MenuItem>
-                                <MenuItem key='double-elimination' value={1}>Double Elimination</MenuItem>
-                                <MenuItem key='ladder-elimination' value={2}>Ladder Elimination</MenuItem>
-                                <MenuItem key='pyramid-elimination' value={3}>Pyramid Elimination</MenuItem>
-                            </Select>
-                            :
-                            <Select
-                                labelId="league-select"
-                                id="league-select-temp"
-                                value={inputs?.league}
-                                name="league"
-                                onChange={handle.inputs}
-                                variant="outlined"
-                                disabled={disabled}
-                                fullWidth
-                            >
-                                <MenuItem key='straight-round-robin' value={0}>Straight Round Robin</MenuItem>
-                                <MenuItem key='round-robin-double-split' value={1}>Round Robin Double Split</MenuItem>
-                                <MenuItem key='round-robin-triple-split' value={2}>Round Robin Triple Split</MenuItem>
-                                <MenuItem key='round-robin-quadruple-split' value={3}>Round Robin Quadruple Split</MenuItem>
-                                <MenuItem key='semi-round-robin' value={4}>Semi Round Robin</MenuItem>
-                            </Select>}
+                        {
+                            inputs?.format == 0
+                                ? <Select
+                                    labelId="tournament-select-label"
+                                    id="tournament-select"
+                                    value={inputs?.tournament}
+                                    name="tournament"
+                                    onChange={handle.inputs}
+                                    variant="outlined"
+                                    disabled={disabled}
+                                    fullWidth
+                                >
+                                    <MenuItem key='single-elimination' value={0}>Single Elimination</MenuItem>
+                                    <MenuItem key='double-elimination' value={1}>Double Elimination</MenuItem>
+                                    <MenuItem key='ladder-elimination' value={2}>Ladder Elimination</MenuItem>
+                                    <MenuItem key='pyramid-elimination' value={3}>Pyramid Elimination</MenuItem>
+                                </Select>
+                                : <Select
+                                    labelId="league-select"
+                                    id="league-select-temp"
+                                    value={inputs?.league}
+                                    name="league"
+                                    onChange={handle.inputs}
+                                    variant="outlined"
+                                    disabled={disabled}
+                                    fullWidth
+                                >
+                                    <MenuItem key='straight-round-robin' value={0}>Straight Round Robin</MenuItem>
+                                    <MenuItem key='round-robin-double-split' value={1}>Round Robin Double Split</MenuItem>
+                                    <MenuItem key='round-robin-triple-split' value={2}>Round Robin Triple Split</MenuItem>
+                                    <MenuItem key='round-robin-quadruple-split' value={3}>Round Robin Quadruple Split</MenuItem>
+                                    <MenuItem key='semi-round-robin' value={4}>Semi Round Robin</MenuItem>
+                                </Select>
+                        }
                     </Box>
                 </Grid>
                 <Grid item xs={12} lg={4}>
@@ -251,10 +253,10 @@ const Page = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant='h6'>Event Name</Typography>
-                    <FormControl fullWidth error={!valid?.name} sx={{ mt: 1 }}>
+                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
                         <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
                             onChange={handle.inputs} />
-                        {!valid?.name && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>Name is required.</FormHelperText>}
+                        {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>

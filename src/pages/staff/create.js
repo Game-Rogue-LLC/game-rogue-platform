@@ -23,11 +23,9 @@ import { STAFF_ROLES } from '@/src/config/global';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
-import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { useAuthContext } from '@/src/context/AuthContext';
 import Validator from 'validatorjs';
-import organization from '@/lib/firestore/collections/organization';
 
 const initialInputs = {
     uid: '',
@@ -49,13 +47,26 @@ const Page = (props) => {
     const router = useRouter();
     const { user } = useAuthContext();
     const { setTitle } = useAppContext();
-    const { organizations, addOrganization, activeCount, current: currentOrganization, setCurrent: setCurrentOrganization } = useOrganizationContext();
-    const { player } = useTournamentContext();
+    const { organization, player } = useTournamentContext();
     const [inputs, setInputs] = useState({ ...initialInputs });
     const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
-    const { team } = useTournamentContext();
     const [activeStep, setActiveStep] = useState(0);
+
+    useEffect(() => {
+        if (router?.query.organization) {
+            const newOID = router.query.organization;
+            organization.setCurrent(newOID);
+        }
+    }, [router])
+
+    useEffect(() => {
+        console.log(inputs)
+    }, [inputs])
+
+    useEffect(() => {
+        setTitle('REGISTER A TEAM');
+    }, [])
 
     const validate = (data, rule, msg) => {
         let validator = new Validator(data, rule, msg);
@@ -75,7 +86,7 @@ const Page = (props) => {
 
     const handle = {
         create: async (e) => {
-            let newStaff = organizations[currentOrganization]?.staff;
+            let newStaff = organization.organizations[organization.current]?.staff;
             if (!newStaff) newStaff = [];
             newStaff = [
                 ...newStaff.filter(val => val.uid !== inputs.uid),
@@ -88,17 +99,14 @@ const Page = (props) => {
                     modifiedAt: new Date()
                 }
             ]
-            organization.save({ staff: newStaff }, currentOrganization)
-                .then(res => {
-                    if (res.code === 'succeed') {
-                        router.push('/staff?organization=' + currentOrganization);
-                    } else if (res.code === 'failed') {
-                        console.log(res.message)
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+
+            const res = await organization.update(organization.current, { staff: newStaff })
+
+            if (res.code === 'succeed') {
+                router.push('/staff?organization=' + organization.current);
+            } else if (res.code === 'failed') {
+                console.log(res.message)
+            }
         },
         inputs: (e) => {
             const { name, value } = e.target;
@@ -121,20 +129,6 @@ const Page = (props) => {
             setActiveStep(0);
         }
     }
-
-    useEffect(() => {
-        if (router.query.organization) {
-            setCurrentOrganization(router.query.organization);
-        }
-    }, [router])
-
-    useEffect(() => {
-        console.log(inputs)
-    }, [inputs])
-
-    useEffect(() => {
-        setTitle('REGISTER A TEAM');
-    }, [])
 
     return (
         <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>

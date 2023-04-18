@@ -23,8 +23,6 @@ import {
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import { useRouter } from 'next/router'
-import { useEventContext } from '@/src/context/EventContext'
-import { useOrganizationContext } from '@/src/context/OrganizationContext'
 import { useMatchContext } from '@/src/context/MatchContext'
 import dayjs from 'dayjs'
 import { AutomateProvider, useAutomateContext } from '@/src/context/AutomateContext'
@@ -39,6 +37,7 @@ import MatchItem from '../components/MatchItem'
 import TeamItem from '../components/TeamItem'
 
 import MatchComponent from '../components/match/MatchComponent'
+import { useTournamentContext } from '@/src/context/TournamentContext'
 
 const SingleEliminationBracket = dynamic(() => import('@g-loot/react-tournament-brackets').then((mod) => mod.SingleEliminationBracket), {
     ssr: false, // This ensures the component is only rendered on the client-side
@@ -51,17 +50,16 @@ const Match = dynamic(() => import('@g-loot/react-tournament-brackets').then((mo
 });
 
 const Page = (props) => {
-    const theme = useTheme()
-    const router = useRouter()
-    const { setTitle } = useAppContext()
-    const { setCurrent: setCurrentOrganization } = useOrganizationContext()
-    const { events, current: currentEvent, setCurrent: setCurrentEvent } = useEventContext()
+    const theme = useTheme();
+    const router = useRouter();
+    const { setTitle } = useAppContext();
+    const { organization, event } = useTournamentContext();
     const { teams, setTeams, autoArrangeTeams, getRandomArray, matches, setMatches, round, setRound, scores, setScores } = useAutomateContext()
     const { match } = useMatchContext()
     const [tab, setTab] = useState("0")
     const [group, setGroup] = useState("0")
     const [team, setTeam] = useState("all")
-    const [event, setEvent] = useState(null)
+    const [eid, setEID] = useState(null)
     const [roundTeams, setRoundTeams] = useState([])
     const [windowDefined, setWindowDefined] = useState(false)
     const [automated0, setAutomated0] = useState(false)
@@ -297,11 +295,15 @@ const Page = (props) => {
     }, [group])
 
     useEffect(() => {
-        const newEvent = router.query?.event
-        setEvent(newEvent)
-        setCurrentEvent(newEvent)
-        setCurrentOrganization(events[newEvent]?.oid)
-    }, [router, events])
+        if (router.query.event) {
+            setEID(router.query.event);
+        }
+    }, [router])
+
+    useEffect(() => {
+        event.setCurrent(eid);
+        organization.setCurrent(event.events[eid]?.oid);
+    }, [eid, event.events])
 
     useEffect(() => {
         if (round == 1) {

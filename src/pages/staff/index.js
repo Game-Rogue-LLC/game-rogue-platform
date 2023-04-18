@@ -17,10 +17,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
-import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useRouter } from 'next/router';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import { useEventContext } from '@/src/context/EventContext';
 
 dayjs.extend(relativeTime);
 
@@ -28,18 +26,17 @@ const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { setTitle } = useAppContext();
-    const { organizations, current: currentOrganization, setCurrent: setCurrentOrganization } = useOrganizationContext();
-    const { player } = useTournamentContext();
+    const { organization, player } = useTournamentContext();
 
     const handle = {
         addStaff: (e) => {
-            router.push('/staff/create?organization=' + currentOrganization);
+            router.push('/staff/create?organization=' + organization.current);
         }
     }
 
     useEffect(() => {
         if (router.query.organization) {
-            setCurrentOrganization(router.query.organization);
+            organization.setCurrent(router.query.organization);
         }
     }, [router])
 
@@ -60,8 +57,8 @@ const Page = (props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {organizations[currentOrganization]?.staff?.length > 0
-                        ? organizations[currentOrganization].staff.map((val, i) => (
+                    {organization.organizations[organization.current]?.staff?.length > 0
+                        ? organization.organizations[organization.current].staff.map((val, i) => (
                             <TableRow key={'staff_' + i}>
                                 <TableCell align='center'>{player.players[val.uid]?.name + '#' + player.players[val.uid]?._id}</TableCell>
                                 <TableCell align='center'>{STAFF_ROLES[val.role].name}</TableCell>

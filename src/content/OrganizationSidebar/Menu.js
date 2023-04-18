@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react';
 import {
     Box,
     Button,
@@ -10,19 +10,17 @@ import {
     Divider,
     IconButton,
 } from '@mui/material'
-import { alpha } from '@mui/material/styles'
-import { useRouter } from 'next/router'
-import { Event, KeyboardArrowDown } from '@mui/icons-material'
-import { useEventContext } from '@/src/context/EventContext'
-import { useOrganizationContext } from '@/src/context/OrganizationContext'
+import { alpha } from '@mui/material/styles';
+import { useRouter } from 'next/router';
+import { Event, KeyboardArrowDown } from '@mui/icons-material';
+import { useTournamentContext } from '@/src/context/TournamentContext';
 
 const Menu = (props) => {
-    const { organization } = props
-    const { events, setCurrent: setCurrentEvent } = useEventContext()
-    const { setCurrent: setCurrentOrganization } = useOrganizationContext()
-    const [open, setOpen] = React.useState(false)
-    const router = useRouter()
-    const theme = useTheme()
+    const { organization: item } = props;
+    const { organization, event } = useTournamentContext();
+    const [open, setOpen] = useState(false);
+    const router = useRouter();
+    const theme = useTheme();
 
     const handleOpen = () => {
         setOpen(!open);
@@ -40,7 +38,7 @@ const Menu = (props) => {
                 }}
             >
                 <ListItem
-                    key={organization.id}
+                    key={item.id}
                     alignItems="flex-start"
                     sx={{
                         px: 3,
@@ -50,14 +48,14 @@ const Menu = (props) => {
                     }}
                 >
                     <ListItemText
-                        primary={organization.name}
+                        primary={item.name}
                         primaryTypographyProps={{
                             fontSize: 15,
                             fontWeight: 'medium',
                             lineHeight: '20px',
                             mb: '2px',
                         }}
-                        secondary={!open && organization.tagline}
+                        secondary={!open && item.tagline}
                         secondaryTypographyProps={{
                             noWrap: true,
                             fontSize: 12,
@@ -80,21 +78,21 @@ const Menu = (props) => {
                 </ListItem>
                 {open &&
                     <>
-                        {Object.keys(events).filter((key, i) => organization.id == events[key].oid).map((id, idx) => (
+                        {Object.keys(event.events).filter((key, i) => item.id == event.events[key].oid).map((id, idx) => (
                             <ListItemButton
-                                key={"event_menu_" + organization.id + "_" + idx}
+                                key={"event_menu_" + item.id + "_" + idx}
                                 sx={{ minHeight: 32, color: 'rgba(255,255,255,.8)' }}
                                 onClick={() => {
-                                    setCurrentOrganization(organization.id)
-                                    setCurrentEvent(id)
-                                    router.push('/match?event=' + id)
+                                    organization.setCurrent(item.id);
+                                    event.setCurrent(id);
+                                    router.push('/match?event=' + id);
                                 }}
                             >
                                 <ListItemIcon sx={{ color: 'inherit' }}>
                                     <Event />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={events[id].name}
+                                    primary={event.events[id].name}
                                     primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
                                 />
                             </ListItemButton>
@@ -104,7 +102,7 @@ const Menu = (props) => {
                         }}>
                             <Button
                                 variant='outlined'
-                                onClick={() => router.push('/profile?organization=' + organization.id)}
+                                onClick={() => router.push('/profile?organization=' + item.id)}
                                 sx={{
                                     flexGrow: 1,
                                     m: 1
@@ -115,14 +113,14 @@ const Menu = (props) => {
                             </Button>
                             <Button
                                 variant='contained'
-                                onClick={() => router.push('/event/create?organization=' + organization.id)}
+                                onClick={() => router.push('/event/create?organization=' + item.id)}
                                 sx={{
                                     flexGrow: 0,
                                     my: 1,
                                     mr: 1,
                                     color: 'white',
                                     border: '1px solid rgba(255, 255, 255, .5)',
-                                    display: organization.events?.length >= 5 ? 'none' : 'block'
+                                    display: event.activeCount[item.id] >= 5 ? 'none' : 'block'
                                 }}
                                 color='secondary'
                                 size='small'

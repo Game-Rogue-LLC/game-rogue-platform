@@ -22,7 +22,6 @@ import { Edit } from '@mui/icons-material';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
-import { useOrganizationContext } from '@/src/context/OrganizationContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import CountrySelect from '@/src/pages/components/CountrySelect';
 import GameSelect from '@/src/pages/components/GameSelect';
@@ -96,16 +95,16 @@ const Page = (props) => {
                     uploaded = true;
                 }
             }
-            if (uploaded == true) {
+            if (uploaded) {
                 const res = await team.update(tid, newTeam);
                 if (res.code === 'succeed') {
-                    alert('Saved Successfully!')
+                    alert('Saved Successfully!');
                 }
             }
             setSaving(false);
         },
         delete: async (e) => {
-            const res = await team.update(tid, { deleted: true });
+            const res = await team.delete(tid);
             if (res.code === 'succeed') {
                 router.push('/team');
             }

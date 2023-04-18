@@ -18,9 +18,8 @@ import { styled, alpha } from '@mui/material/styles';
 import { useAppContext } from '@/src/context/app';
 
 import routes from './routes'
-import { useOrganizationContext } from '@/src/context/OrganizationContext';
-import { useEventContext } from '@/src/context/EventContext';
 import { DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
+import { useTournamentContext } from '@/src/context/TournamentContext';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -39,9 +38,8 @@ const NavItem = styled(Button)(({ theme }) => ({
 }))
 
 function Navbar() {
-    const theme = useTheme()
-    const { organizations, current: currentOrganization } = useOrganizationContext();
-    const { current: currentEvent } = useEventContext()
+    const theme = useTheme();
+    const { organization, event } = useTournamentContext();
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -112,68 +110,68 @@ function Navbar() {
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <NavItem
-                            key={`/match?event=${currentEvent}`}
+                            key={`/match?event=${event.current}`}
                             sx={{ my: 2, color: 'black', display: 'block' }}
                         >
-                            <Link href={`/match?event=${currentEvent}`}>
+                            <Link href={`/match?event=${event.current}`}>
                                 Matches
                             </Link>
                         </NavItem>
                         <NavItem
-                            key={`/ticket?event=${currentEvent}`}
+                            key={`/ticket?event=${event.current}`}
                             sx={{ my: 2, color: 'black', display: 'block' }}
                         >
-                            <Link href={`/ticket?event=${currentEvent}`}>
+                            <Link href={`/ticket?event=${event.current}`}>
                                 Tickets
                             </Link>
                         </NavItem>
                         <NavItem
-                            key={`/staff?event=${currentEvent}`}
+                            key={`/staff?organization=${organization.current}`}
                             sx={{ my: 2, color: 'black', display: 'block' }}
                         >
-                            <Link href={`/staff?organization=${currentOrganization}`}>
+                            <Link href={`/staff?organization=${organization.current}`}>
                                 Staff
                             </Link>
                         </NavItem>
                         <NavItem
-                            key={`/participant?event=${currentEvent}`}
+                            key={`/participant?event=${event.current}`}
                             sx={{ my: 2, color: 'black', display: 'block' }}
                         >
-                            <Link href={`/participant?event=${currentEvent}`}>
+                            <Link href={`/participant?event=${event.current}`}>
                                 Participants
                             </Link>
                         </NavItem>
                         <NavItem
-                            key={`/event/${currentEvent}/edit`}
+                            key={`/event/${event.current}/edit`}
                             sx={{ my: 2, color: 'black', display: 'block' }}
                         >
-                            <Link href={`/event/${currentEvent}/edit`}>
+                            <Link href={`/event/${event.current}/edit`}>
                                 Edit Event
                             </Link>
                         </NavItem>
                         <NavItem
-                            key={`/archived?event=${currentEvent}`}
+                            key={`/archived?event=${event.current}`}
                             sx={{ my: 2, color: 'black', display: 'block' }}
                         >
-                            <Link href={`/archived?event=${currentEvent}`}>
+                            <Link href={`/archived?event=${event.current}`}>
                                 Archived
                             </Link>
                         </NavItem>
                         <NavItem
-                            key={`/match/organize?event=${currentEvent}`}
+                            key={`/match/organize?event=${event.current}`}
                             sx={{ my: 2, color: 'black', display: 'block' }}
                         >
-                            <Link href={`/match/organize?event=${currentEvent}`}>
+                            <Link href={`/match/organize?event=${event.current}`}>
                                 Organize Matches
                             </Link>
                         </NavItem>
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        {currentOrganization &&
+                        {organization.current &&
                             <Tooltip title="Open settings">
                                 <Box sx={{ height: '30px', position: 'relative', pr: 2 }}>
-                                    <img src={organizations[currentOrganization]?.contentBlock?.image || DEFAULT_CONTENTBLOCK_IMAGE} height={'100%'} />
+                                    <img src={organization.organizations[organization.current]?.contentBlock?.image || DEFAULT_CONTENTBLOCK_IMAGE} height={'100%'} />
                                 </Box>
                             </Tooltip>}
                         <Menu
