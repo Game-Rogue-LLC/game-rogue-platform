@@ -41,7 +41,7 @@ export default (props) => {
                     console.log(err)
                 })
         }
-    }, [user])
+    }, [user.user])
 
     return (
         <AppContext.Provider value={{

@@ -18,6 +18,17 @@ import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
 import { useOrganizationContext } from '@/src/context/OrganizationContext';
+import Validator from 'validatorjs';
+
+const initialInputs = {
+	name: '',
+	tagline: ''
+}
+
+const rules = {
+	name: 'required',
+	tagline: 'required'
+}
 
 const Page = (props) => {
 	const theme = useTheme()
@@ -28,28 +39,22 @@ const Page = (props) => {
 	const [valid, setValid] = React.useState({ name: true, tagline: true })
 	const [disabled, setDisabled] = React.useState(false)
 
-	const validate = ({ name, value }) => {
-		if (value) {
-			setValid(prevState => ({ ...prevState, [name]: true }));
-			return true;
-		} else {
-			setValid(prevState => ({ ...prevState, [name]: false }));
+	const validate = (data, rule) => {
+		let validator = new Validator(data, rule);
+		if (validator.fails()) {
+			setErrors(validator.errors.errors);
 			return false;
 		}
+		setErrors({});
+		return true;
 	}
 
 	const handleCreate = async (e) => {
-		if (!validate({ name: 'name', value: inputs?.name }) | !validate({ name: 'tagline', value: inputs?.tagline })) {
-			return;
-		}
-		setValid({ name: true, tagline: true });
+		if (!validate(inputs, rules)) return;
 		const newOrg = {
 			...inputs
 		}
-		setInputs({
-			name: '',
-			tagline: ''
-		})
+		setInputs({ ...initialInputs })
 		addOrganization(newOrg)
 			.then(res => {
 				if (res.code === 'succeed') {
@@ -65,7 +70,6 @@ const Page = (props) => {
 
 	const handleInputs = (e) => {
 		const { name, value } = e.target;
-		validate({ name, value });
 		setInputs({
 			...inputs,
 			[name]: value
@@ -93,18 +97,18 @@ const Page = (props) => {
 				<Grid item xs={12}>
 					<InputLabel htmlFor="org-name">Organization Name</InputLabel>
 					<FormHelperText sx={{ mt: 2 }}>Controls the publically visible name of this organization.</FormHelperText>
-					<FormControl fullWidth error={!valid?.name}>
+					<FormControl fullWidth error={errors.name !== undefined}>
 						<OutlinedInput id="org-name" name="name" aria-describedby="org-name-helper" value={inputs.name} onChange={handleInputs} disabled={disabled}
 							sx={{ mt: 1 }} fullWidth required />
-						{!valid?.name && <FormHelperText id="org-name-helper" sx={{ mt: 2 }}>Name is required.</FormHelperText>}
+						{errors.name !== undefined && <FormHelperText id="org-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
 					</FormControl>
 				</Grid>
 				<Grid item xs={12}>
 					<InputLabel htmlFor="org-tag">Tagline</InputLabel>
-					<FormControl fullWidth sx={{ mt: 1 }} error={!valid?.tagline}>
+					<FormControl fullWidth sx={{ mt: 1 }} error={errors.tagline !== undefined}>
 						<OutlinedInput id="org-tag" name="tagline" aria-describedby="org-tag-helper" value={inputs.tagline} inputProps={{ maxLength: 50 }}
 							onChange={handleInputs} disabled={disabled} fullWidth required />
-						{!valid?.tagline && <FormHelperText id="org-tag-helper" sx={{ mt: 2 }}>Tagline is required.</FormHelperText>}
+						{errors.tagline !== undefined && <FormHelperText id="org-tag-helper" sx={{ mt: 2 }}>{errors.tagline}</FormHelperText>}
 					</FormControl>
 				</Grid>
 				<Grid item>

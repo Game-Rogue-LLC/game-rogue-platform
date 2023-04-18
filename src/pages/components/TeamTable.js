@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 
 const TeamTable = (props) => {
-    const { teams, uid } = props;
+    const { teams, uid, handle } = props;
     return (
         <TableContainer component={Paper} variant='elevation'>
             <Table>
@@ -22,7 +22,7 @@ const TeamTable = (props) => {
                 </TableHead>
                 <TableBody>
                     {Object.keys(teams).filter((key, i) => teams[key].players.findIndex(val => val.id == uid) >= 0).map((id, i) => (
-                        <TableRow hover key={id} onClick={() => handle.show(id)} sx={{ cursor: 'pointer' }}>
+                        <TableRow hover key={id} onClick={() => handle(id)} sx={{ cursor: 'pointer' }}>
                             <TableCell align='center'>
                                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
                                     <img src={teams[id].logo ?? '/GR_Letters.png'} style={{ height: '20px' }} />
