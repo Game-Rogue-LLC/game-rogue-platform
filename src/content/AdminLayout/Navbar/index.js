@@ -131,7 +131,7 @@ function Navbar() {
                             key={`/staff?event=${currentEvent}`}
                             sx={{ my: 2, color: 'black', display: 'block' }}
                         >
-                            <Link href={`/staff?event=${currentEvent}`}>
+                            <Link href={`/staff?organization=${currentOrganization}`}>
                                 Staff
                             </Link>
                         </NavItem>

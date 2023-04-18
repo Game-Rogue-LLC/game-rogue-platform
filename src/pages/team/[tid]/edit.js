@@ -39,7 +39,8 @@ const initialInputs = {
     type: 0,
     darkLogo: DEFAULT_LOGO,
     lightLogo: DEFAULT_LOGO,
-    description: ''
+    description: '',
+    deleted: false
 }
 
 const rules = {
@@ -102,6 +103,12 @@ const Page = (props) => {
                 }
             }
             setSaving(false);
+        },
+        delete: async (e) => {
+            const res = await team.update(tid, { deleted: true });
+            if (res.code === 'succeed') {
+                router.push('/team');
+            }
         },
         inputs: (e) => {
             const { name, value } = e.target;
@@ -264,11 +271,18 @@ const Page = (props) => {
                 <Grid item>
                     <LoadingButton
                         loading={saving}
+                        sx={{ mr: 2 }}
                         variant='contained'
                         onClick={handle.save}
                     >
                         Save
                     </LoadingButton>
+                    <Button
+                        variant='contained'
+                        onClick={handle.delete}
+                    >
+                        Delete Team
+                    </Button>
                 </Grid>
             </Grid>
         </Paper>

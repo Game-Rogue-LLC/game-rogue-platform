@@ -105,7 +105,9 @@ const Header = () => {
 				padding: '1.6em',
 				flex: 1
 			}}>
-				<img src={'/Game_Rogue_Text_2_copy.png'} style={{ height: '100%', visibility: 'visible' }} />
+				<Link href='/'>
+					<img src={'/Game_Rogue_Text_2_copy.png'} style={{ height: '100%', visibility: 'visible' }} />
+				</Link>
 			</Box>
 			<Box sx={{
 				display: 'flex',
@@ -125,7 +127,7 @@ const Header = () => {
 					}}
 				// endIcon={<KeyboardArrowDownIcon />}
 				>
-					ORGANISE
+					ORGANIZE
 				</Button>
 				<Button
 					id="teams-button"

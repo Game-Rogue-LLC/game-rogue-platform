@@ -1,0 +1,233 @@
+import { useEffect, useState, Fragment } from 'react';
+import Button from '@mui/material/Button';
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    FormHelperText,
+    Grid,
+    Paper,
+    useTheme,
+    Typography,
+    TextField,
+    Alert,
+    OutlinedInput,
+    Select,
+    MenuItem,
+    Stepper,
+    Step,
+    StepLabel
+} from '@mui/material';
+import { STAFF_ROLES } from '@/src/config/global';
+
+import AdminLayout from '@/src/content/AdminLayout';
+import { useAppContext } from '@/src/context/app';
+import { useRouter } from 'next/router';
+import { useOrganizationContext } from '@/src/context/OrganizationContext';
+import { useTournamentContext } from '@/src/context/TournamentContext';
+import { useAuthContext } from '@/src/context/AuthContext';
+import Validator from 'validatorjs';
+import organization from '@/lib/firestore/collections/organization';
+
+const initialInputs = {
+    uid: '',
+    role: ''
+}
+
+const rules = {
+    uid: 'required'
+}
+
+const errorMessages = {
+    'required.uid': 'Rogue ID is required.'
+}
+
+const steps = ['Input Rogue ID', 'Select staff position'];
+
+const Page = (props) => {
+    const theme = useTheme();
+    const router = useRouter();
+    const { user } = useAuthContext();
+    const { setTitle } = useAppContext();
+    const { organizations, addOrganization, activeCount, current: currentOrganization, setCurrent: setCurrentOrganization } = useOrganizationContext();
+    const { player } = useTournamentContext();
+    const [inputs, setInputs] = useState({ ...initialInputs });
+    const [errors, setErrors] = useState({});
+    const [disabled, setDisabled] = useState(false);
+    const { team } = useTournamentContext();
+    const [activeStep, setActiveStep] = useState(0);
+
+    const validate = (data, rule, msg) => {
+        let validator = new Validator(data, rule, msg);
+        if (validator.fails()) {
+            setErrors(validator.errors.errors);
+            return false;
+        }
+        if (!Object.keys(player.players).includes(data.uid)) {
+            setErrors({
+                uid: 'User with the id does not exist.'
+            })
+            return false;
+        }
+        setErrors({});
+        return true;
+    }
+
+    const handle = {
+        create: async (e) => {
+            let newStaff = organizations[currentOrganization]?.staff;
+            if (!newStaff) newStaff = [];
+            newStaff = [
+                ...newStaff.filter(val => val.uid !== inputs.uid),
+                {
+                    uid: inputs.uid,
+                    role: inputs.role,
+                    deleted: false,
+                    lastLogin: new Date(),
+                    createdAt: new Date(),
+                    modifiedAt: new Date()
+                }
+            ]
+            organization.save({ staff: newStaff }, currentOrganization)
+                .then(res => {
+                    if (res.code === 'succeed') {
+                        router.push('/staff?organization=' + currentOrganization);
+                    } else if (res.code === 'failed') {
+                        console.log(res.message)
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        inputs: (e) => {
+            const { name, value } = e.target;
+            setInputs({
+                ...inputs,
+                [name]: value
+            })
+        },
+        next: () => {
+            if (!validate(inputs, rules, errorMessages)) return;
+            setActiveStep(prev => prev + 1);
+        },
+        finish: () => {
+            setActiveStep(prev => prev + 1);
+        },
+        back: () => {
+            setActiveStep(prev => prev - 1);
+        },
+        reset: () => {
+            setActiveStep(0);
+        }
+    }
+
+    useEffect(() => {
+        if (router.query.organization) {
+            setCurrentOrganization(router.query.organization);
+        }
+    }, [router])
+
+    useEffect(() => {
+        console.log(inputs)
+    }, [inputs])
+
+    useEffect(() => {
+        setTitle('REGISTER A TEAM');
+    }, [])
+
+    return (
+        <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
+            <Box sx={{ width: '100%' }}>
+                <Stepper activeStep={activeStep}>
+                    {steps.map((label, index) => {
+                        return (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        );
+                    })}
+                </Stepper>
+                {activeStep === steps.length ? (
+                    <Fragment>
+                        <Typography sx={{ mt: 2, mb: 1 }}>
+                            All steps completed - you&apos;re finished
+                        </Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                            <Box sx={{ flex: '1 1 auto' }} />
+                            <Button onClick={handle.create}>Save</Button>
+                            <Button onClick={handle.reset}>Reset</Button>
+                        </Box>
+                    </Fragment>
+                ) : (
+                    activeStep === 0 ? (
+                        <Fragment>
+                            <FormControl fullWidth error={errors.uid !== undefined}>
+                                <OutlinedInput id="rogue-id" name="uid" value={inputs.uid} aria-describedby="rogue-id-helper"
+                                    onChange={handle.inputs} sx={{ mt: 1 }} fullWidth required />
+                                {errors.uid !== undefined && <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>{errors.uid}</FormHelperText>}
+                            </FormControl>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                                <Button
+                                    variant='contained'
+                                    disabled={activeStep === 0}
+                                    onClick={handle.back}
+                                    sx={{ mr: 1 }}
+                                >
+                                    Back
+                                </Button>
+                                <Box sx={{ flex: '1 1 auto' }} />
+                                <Button
+                                    variant='contained'
+                                    onClick={handle.next}
+                                >
+                                    Next
+                                </Button>
+                            </Box>
+                        </Fragment>
+                    ) : (
+                        <Fragment>
+                            <Select
+                                labelId="position-select-label"
+                                id="position-select"
+                                variant='outlined'
+                                sx={{ mt: 1 }}
+                                value={inputs.role}
+                                name='role'
+                                onChange={handle.inputs}
+                                fullWidth
+                            >
+                                {STAFF_ROLES.map((val, i) => (
+                                    <MenuItem key={'staff_role_' + val.id} value={val.id}>{val.name}</MenuItem>
+                                ))}
+                            </Select>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                                <Button
+                                    variant='contained'
+                                    disabled={activeStep === 0}
+                                    onClick={handle.back}
+                                    sx={{ mr: 1 }}
+                                >
+                                    Back
+                                </Button>
+                                <Box sx={{ flex: '1 1 auto' }} />
+                                <Button
+                                    variant='contained'
+                                    onClick={handle.finish}
+                                >
+                                    Finish
+                                </Button>
+                            </Box>
+                        </Fragment>
+                    )
+                )}
+            </Box>
+        </Paper>
+    )
+}
+
+Page.getLayout = (page) => {
+    return <AdminLayout>{page}</AdminLayout>
+}
+
+export default Page;
