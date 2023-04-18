@@ -85,7 +85,7 @@ const Page = (props) => {
             <Grid container rowSpacing={3} spacing={2}>
                 <Grid item xs={4} sx={{ minWidth: '200px' }}>
                     <Box textAlign={'center'}>
-                        <img src={inputs.lightLogo ?? '/GR_Letters.png'} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                        <img src={inputs.darkLogo ?? '/GR_Letters.png'} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
                     </Box>
                     <Box mt={1}>
                         <Grid container rowSpacing={2} spacing={2}>
@@ -110,38 +110,40 @@ const Page = (props) => {
                     </Box>
                 </Grid>
                 <Grid item xs={8}>
-                    <Table border={'solid 1px'} size='medium'>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell colSpan={4}>
-                                    <Typography variant='h4'>TEAM MEMBERS</Typography>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell align='center'>USER NAME</TableCell>
-                                <TableCell align='center'>POSITION</TableCell>
-                                <TableCell align='center'>RESIDENCY</TableCell>
-                                <TableCell align='center'>JOINED ON</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {team.teams[tid]?.players.map((val, i) => (
-                                <TableRow hover key={'user_' + val.id}>
-                                    <TableCell align='center'>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>
-                                            <Avatar variant='circular' src={player.players[val.id].profilePic} />
-                                            <Link href={'/user/' + val.id}>{player.players[val.id].name}</Link>
-                                        </Box>
+                    <Box sx={{ border: 'solid 1px rgb(52, 43, 35)', borderRadius: '5px', width: '100%' }}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell colSpan={4}>
+                                        <Typography variant='h4'>TEAM MEMBERS</Typography>
                                     </TableCell>
-                                    <TableCell align='center'>
-                                        {team.positions[val.position].name}
-                                    </TableCell>
-                                    <TableCell align='center'>{val.residency?.label}</TableCell>
-                                    <TableCell align='center'>{dayjs(val.joinedOn.toDate()).format('DD. MMM. YYYY')}</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                                <TableRow>
+                                    <TableCell align='center'>USER NAME</TableCell>
+                                    <TableCell align='center'>POSITION</TableCell>
+                                    <TableCell align='center'>RESIDENCY</TableCell>
+                                    <TableCell align='center'>JOINED ON</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {team.teams[tid]?.players.map((val, i) => (
+                                    <TableRow hover key={'user_' + val.id}>
+                                        <TableCell align='center'>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>
+                                                <Avatar variant='circular' src={player.players[val.id].profilePic} />
+                                                <Link href={'/user/' + val.id}>{player.players[val.id].name}</Link>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell align='center'>
+                                            {team.positions[val.position].name}
+                                        </TableCell>
+                                        <TableCell align='center'>{val.residency?.label}</TableCell>
+                                        <TableCell align='center'>{dayjs(val.joinedOn.toDate()).format('DD. MMM. YYYY')}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </Box>
                 </Grid>
             </Grid>
         </Paper>

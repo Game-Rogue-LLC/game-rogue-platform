@@ -25,7 +25,7 @@ const TeamTable = (props) => {
                         <TableRow hover key={id} onClick={() => handle(id)} sx={{ cursor: 'pointer' }}>
                             <TableCell align='center'>
                                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                                    <img src={teams[id].logo ?? '/GR_Letters.png'} style={{ height: '20px' }} />
+                                    <img src={teams[id].darkLogo ?? '/GR_Letters.png'} style={{ height: '20px' }} />
                                     {teams[id].name}
                                 </Box>
                             </TableCell>
