@@ -48,6 +48,12 @@ const rules = {
     accessCode: 'required|min:4'
 }
 
+const customMessages = {
+    'required.name': 'Team Name is required.',
+    'required.short': 'Short Name is required.',
+    'required.accessCode': 'Access Code is required.',
+}
+
 const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
@@ -61,8 +67,8 @@ const Page = (props) => {
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
 
-    const validate = (data, rule) => {
-        let validator = new Validator(data, rule);
+    const validate = (data, rule, messages) => {
+        let validator = new Validator(data, rule, messages);
         if (validator.fails()) {
             setErrors(validator.errors.errors);
             return false;
@@ -73,7 +79,7 @@ const Page = (props) => {
 
     const handle = {
         save: async (e) => {
-            if (validate(inputs, rules) === false) return;
+            if (validate(inputs, rules, customMessages) === false) return;
             setSaving(true);
             let newTeam = {
                 ...inputs

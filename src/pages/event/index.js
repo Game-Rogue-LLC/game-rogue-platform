@@ -48,16 +48,6 @@ const Page = (props) => {
         setOpen(false)
     }
 
-    const validate = ({ name, value }) => {
-        if (value) {
-            setValid(prevState => ({ ...prevState, [name]: true }));
-            return true;
-        } else {
-            setValid(prevState => ({ ...prevState, [name]: false }));
-            return false;
-        }
-    }
-
     const handleChange = (e) => {
         setOrg(e.target.value);
     }

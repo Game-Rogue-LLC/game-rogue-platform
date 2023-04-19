@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
     Box,
     Button,
@@ -11,14 +11,15 @@ import {
     Select,
     Typography,
     useTheme,
-} from '@mui/material'
-import { useRouter } from 'next/router'
-import { LoadingButton } from '@mui/lab'
+} from '@mui/material';
+import { useRouter } from 'next/router';
+import { LoadingButton } from '@mui/lab';
+import Validator from 'validatorjs';
 
-import AdminLayout from '@/src/content/AdminLayout'
-import { useAppContext } from '@/src/context/app'
-import DatePicker from '@/src/pages/components/DatePicker'
-import { useTournamentContext } from '@/src/context/TournamentContext'
+import AdminLayout from '@/src/content/AdminLayout';
+import { useAppContext } from '@/src/context/app';
+import DatePicker from '@/src/pages/components/DatePicker';
+import { useTournamentContext } from '@/src/context/TournamentContext';
 
 const initialInputs = {
     name: '',
@@ -27,7 +28,7 @@ const initialInputs = {
     tournament: 0,
     league: 0,
     seed: 0,
-    date: new Date(),
+    startAt: new Date(),
     game: 0,
     platform: 0,
     region: 0,
@@ -35,15 +36,18 @@ const initialInputs = {
     rulebook: '',
     terms: '',
     privacy: '',
+    participantsCount: 2,
     deleted: false
 }
 
 const rules = {
-    name: 'required'
+    name: 'required',
+    participantsCount: 'required'
 }
 
 const customMessages = {
-    'required.name': 'Event Name is required.'
+    'required.name': 'Event Name is required.',
+    'required.participantsCount': 'Participant Count is required.'
 }
 
 const Page = (props) => {
@@ -61,11 +65,24 @@ const Page = (props) => {
     const [disabled, setDisabled] = useState(false);
 
     const validate = (data, rule, messages) => {
+
+        if (data.participantsCount % 2) {
+            setErrors(prev => ({
+                ...prev,
+                participantsCount: 'Participant Count must be even number.'
+            }))
+        }
+
         let validator = new Validator(data, rule, messages);
         if (validator.fails()) {
-            setErrors(validator.errors.errors);
+            setErrors(prev => ({
+                ...prev,
+                ...validator.errors.errors
+            }));
             return false;
         }
+
+        if (data.participantsCount % 2) return false;
         setErrors({});
         return true;
     }
@@ -73,7 +90,7 @@ const Page = (props) => {
     const setDate = (newDate) => {
         setInputs(prev => ({
             ...prev,
-            date: new Date(newDate)
+            startAt: new Date(newDate)
         }))
     }
 
@@ -82,37 +99,38 @@ const Page = (props) => {
             if (validate(inputs, rules, customMessages) === false) {
                 return;
             }
-            const newEvent = { ...inputs };
+            let newEvent = { ...inputs };
+            let saved = true;
             setSaving(true)
+
+            if (rulebook) {
+                uploaded = false;
+                const res = await event.upload(rulebook, data.id, 'rulebook');
+                if (res.code === 'succeed') {
+                    newEvent.rulebook = res.url;
+                    uploaded = true;
+                }
+            }
+            if (terms) {
+                uploaded = false;
+                const res = await event.upload(terms, data.id, 'terms');
+                if (res.code === 'succeed') {
+                    newEvent.terms = res.url;
+                    uploaded = true;
+                }
+            }
+            if (privacy) {
+                uploaded = false;
+                const res = await event.upload(privacy, data.id, 'privacy');
+                if (res.code === 'succeed') {
+                    newEvent.privacy = res.url;
+                    uploaded = true;
+                }
+            }
+
             const res = await event.update(eid, newEvent);
             if (res.code === 'succeed') {
-                let saved = true;
-                if (rulebook) {
-                    await event.upload(rulebook, eid, 'rulebook', (url) => {
-                        event.update(eid, { rulebook: url })
-                            .then(res => saved = saved && (res.code == 'succeed'))
-                            .catch(err => console.log(err))
-                    })
-                }
-                if (terms) {
-                    await event.upload(terms, eid, 'terms', (url) => {
-                        event.update(eid, { terms: url })
-                            .then(res => saved = saved && (res.code == 'succeed'))
-                            .catch(err => console.log(err))
-                    })
-                }
-                if (privacy) {
-                    await event.upload(privacy, eid, 'privacy', (url) => {
-                        event.update(eid, { privacy: url })
-                            .then(res => saved = saved && (res.code == 'succeed'))
-                            .catch(err => console.log(err))
-                    })
-                }
-                if (saved) {
-                    alert('Event data saved successfully!');
-                }
-            } else {
-                console.log(res);
+                alert('Saved successfully!');
             }
             setSaving(false);
         },
@@ -148,7 +166,7 @@ const Page = (props) => {
     useEffect(() => {
         if (eid) {
             event.setCurrent(eid);
-            organization.setCurrent(event.events[eid].oid);
+            organization.setCurrent(event.events[eid]?.oid);
             setInputs(prev => ({
                 ...prev,
                 ...event.events[eid]
@@ -177,6 +195,14 @@ const Page = (props) => {
                             return <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                         })}
                     </Select>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant='h6'>Event Name</Typography>
+                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
+                        <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
+                            onChange={handle.inputs} />
+                        {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Event Format</Typography>
@@ -251,17 +277,17 @@ const Page = (props) => {
                         <MenuItem key='random' value={1}>Random</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography variant='h6'>Event Name</Typography>
-                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
-                        <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
-                            onChange={handle.inputs} />
-                        {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
+                <Grid item xs={12} lg={6}>
+                    <Typography variant='h6'>Participants</Typography>
+                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+                        <OutlinedInput id="participants-count" name="participantsCount" aria-describedby="participants-count-helper" value={inputs?.participantsCount} disabled={disabled}
+                            type='number' step={2} onChange={handle.inputs} />
+                        {errors.participantsCount !== undefined && <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>{errors.participantsCount}</FormHelperText>}
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} lg={6}>
                     <Typography variant='h6'>Event Date</Typography>
-                    <DatePicker value={inputs?.date} setValue={setDate} sx={{ mt: 1 }} disabled={disabled} />
+                    <DatePicker value={inputs?.startAt} setValue={setDate} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Game</Typography>
@@ -376,7 +402,7 @@ const Page = (props) => {
                     <LoadingButton
                         loading={saving}
                         variant='contained'
-                        onClick={handle.create}
+                        onClick={handle.save}
                         disabled={disabled}
                     >
                         Save
