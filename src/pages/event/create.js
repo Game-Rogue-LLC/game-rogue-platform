@@ -98,7 +98,7 @@ const Page = (props) => {
     const setDate = (newDate) => {
         setInputs(prev => ({
             ...prev,
-            date: newDate
+            date: new Date(newDate)
         }))
     }
 

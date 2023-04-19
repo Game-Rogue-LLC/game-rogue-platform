@@ -14,7 +14,7 @@ const MatchContext = createContext({});
 export const useMatchContext = () => useContext(MatchContext)
 
 export default (props) => {
-    const { organization, event } = useTournamentContext();
+    const { organization, event, loading: tournamentLoading } = useTournamentContext();
     const { user } = useAuthContext();
     const router = useRouter()
     const [matches, setMatches] = useState({})
@@ -115,8 +115,8 @@ export default (props) => {
     }, [])
 
     const isLoading = useMemo(() => {
-        return organization.loading || event.loading || loading
-    }, [organization.loading, event.loading, loading])
+        return tournamentLoading || loading;
+    }, [tournamentLoading, loading])
 
     // useEffect(() => {
     //     if (isLoading == false && Object.keys(matches).length == 0 && event.current)

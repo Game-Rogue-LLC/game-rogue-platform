@@ -26,12 +26,15 @@ const Page = (props) => {
     const handle = {
         show: (id) => {
             router.push('/team/' + id);
+        },
+        edit: (e) => {
+            router.push('/user/' + uid + '/edit');
         }
     }
 
     useEffect(() => {
         setItem(player.players[uid]);
-    }, [uid])
+    }, [player.players, uid])
 
     useEffect(() => {
         console.log(router.query.uid);
@@ -51,7 +54,7 @@ const Page = (props) => {
                         <Avatar alt={item?.name} src={item?.profilePic} sx={{ width: 150, height: 150, mx: 'auto' }} />
                     </Box>
                     <Box sx={{ width: '100%', textAlign: 'center' }}>
-                        <Button variant='contained' sx={{ mt: 2, mx: 'auto' }}>
+                        <Button variant='contained' sx={{ mt: 2, mx: 'auto' }} onClick={handle.edit}>
                             EDIT PROFILE
                         </Button>
                     </Box>
@@ -71,12 +74,24 @@ const Page = (props) => {
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    USER NAME
+                                    NAME
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant='b1'>
                                     {item?.name}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
+                                    USER NAME
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography variant='b1'>
+                                    {item?.userName}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -112,7 +127,13 @@ const Page = (props) => {
                             </Grid>
                             <Grid item>
                                 <Typography variant='b1'>
-                                    {item?.residency}
+                                    <img
+                                        loading="lazy"
+                                        width="20"
+                                        src={`https://flagcdn.com/w20/${item?.residency.code.toLowerCase()}.png`}
+                                        srcSet={`https://flagcdn.com/w40/${item?.residency.code.toLowerCase()}.png 2x`}
+                                        alt=""
+                                    />
                                 </Typography>
                             </Grid>
                         </Grid>

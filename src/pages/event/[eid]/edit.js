@@ -73,7 +73,7 @@ const Page = (props) => {
     const setDate = (newDate) => {
         setInputs(prev => ({
             ...prev,
-            date: newDate
+            date: new Date(newDate)
         }))
     }
 
@@ -125,9 +125,9 @@ const Page = (props) => {
         },
         upload: (e, name) => {
             const file = e.target?.files[0]
-            if (name === 'rulebook') setRulebook(file)
-            if (name === 'terms') setTerms(file)
-            if (name === 'privacy') setPrivacy(file)
+            if (name === 'rulebook') setRulebook(file);
+            if (name === 'terms') setTerms(file);
+            if (name === 'privacy') setPrivacy(file);
             setInputs(prev => ({
                 ...prev,
                 [name]: file?.name
@@ -136,12 +136,12 @@ const Page = (props) => {
     }
 
     useEffect(() => {
-        setTitle('EDIT EVENT')
+        setTitle('EDIT EVENT');
     }, [])
 
     useEffect(() => {
         if (router.query.eid) {
-            setEID(router.query.eid)
+            setEID(router.query.eid);
         }
     }, [router])
 

@@ -24,10 +24,10 @@ export default (props) => {
                         const { token, ...rest } = user.user;
                         const newPlayer = {
                             _id: nanoid(5),
-                            ...rest,
                             gender: 0,
-                            residency: '',
-                            deleted: false
+                            birthday: new Date(),
+                            deleted: false,
+                            ...rest
                         }
                         store.player.save(user.user.id, newPlayer)
                             .then(res => {

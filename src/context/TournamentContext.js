@@ -176,7 +176,8 @@ const TournamentProvider = (props) => {
         delete: async (id) => {
             await store.player.save(id, { deleted: true });
             // router.push('/');
-        }
+        },
+        upload: store.player.uploadFile
     }
     /** End Team Data / Functions */
 
