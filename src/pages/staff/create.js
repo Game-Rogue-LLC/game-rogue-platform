@@ -36,7 +36,7 @@ const rules = {
     uid: 'required'
 }
 
-const errorMessages = {
+const customMessages = {
     'required.uid': 'Rogue ID is required.'
 }
 
@@ -65,11 +65,11 @@ const Page = (props) => {
     }, [inputs])
 
     useEffect(() => {
-        setTitle('REGISTER A TEAM');
+        setTitle('ADD A STAFF');
     }, [])
 
-    const validate = (data, rule, msg) => {
-        let validator = new Validator(data, rule, msg);
+    const validate = (data, rule, messages) => {
+        let validator = new Validator(data, rule, messages);
         if (validator.fails()) {
             setErrors(validator.errors.errors);
             return false;
@@ -116,7 +116,7 @@ const Page = (props) => {
             })
         },
         next: () => {
-            if (!validate(inputs, rules, errorMessages)) return;
+            if (!validate(inputs, rules, customMessages)) return;
             setActiveStep(prev => prev + 1);
         },
         finish: () => {
@@ -149,8 +149,8 @@ const Page = (props) => {
                         </Typography>
                         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                             <Box sx={{ flex: '1 1 auto' }} />
-                            <Button onClick={handle.create}>Save</Button>
-                            <Button onClick={handle.reset}>Reset</Button>
+                            <Button variant='contained' onClick={handle.create}>Save</Button>
+                            <Button variant='contained' onClick={handle.reset}>Reset</Button>
                         </Box>
                     </Fragment>
                 ) : (

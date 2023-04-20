@@ -1,4 +1,4 @@
-import { useState, useContext, createContext, useEffect, useMemo } from "react";
+import { useState, useCallback, useContext, createContext, useEffect, useMemo } from "react";
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 import store from '@/lib/firestore/collections';
@@ -176,16 +176,17 @@ const TournamentProvider = (props) => {
         delete: async (id) => {
             await store.player.save(id, { deleted: true });
             // router.push('/');
-        }
+        },
+        upload: store.player.uploadFile
     }
     /** End Team Data / Functions */
 
-    const loading = useMemo(() => {
+    const isLoading = useMemo(() => {
         return organizationLoading || eventLoading || teamLoading || playerLoading;
     }, [organizationLoading, eventLoading, teamLoading, playerLoading])
 
-    useEffect(() => {
-        if (user) {
+    const loadTournament = useCallback(() => {
+        if (user && user.id) {
             organization.read(user.id);
             event.read(user.id);
             team.read(user.id);
@@ -193,9 +194,13 @@ const TournamentProvider = (props) => {
         }
     }, [user])
 
+    useEffect(() => {
+        loadTournament();
+    }, [loadTournament])
+
     return (
-        <TournamentContext.Provider value={{ tournaments, matches, participants, organization, event, team, player, loading }}>
-            {props.children}
+        <TournamentContext.Provider value={{ tournaments, matches, participants, organization, event, team, player }}>
+            {isLoading ? <Splash content={'Loading data...'} /> : props.children}
         </TournamentContext.Provider>
     )
 }

@@ -16,12 +16,12 @@ const TeamTable = (props) => {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell align='center'>TEAM ID</TableCell>
+                        <TableCell align='center'>TEAM NAME</TableCell>
                         <TableCell align='center'>GAME</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {Object.keys(teams).filter((key, i) => teams[key].players.findIndex(val => val.id == uid) >= 0).map((id, i) => (
+                    {teams && Object.keys(teams).filter((key, i) => teams[key].players.findIndex(val => val.id == uid) >= 0).map((id, i) => (
                         <TableRow hover key={id} onClick={() => handle(id)} sx={{ cursor: 'pointer' }}>
                             <TableCell align='center'>
                                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>

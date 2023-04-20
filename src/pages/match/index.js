@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Button from '@mui/material/Button'
 import {
     Paper,
@@ -44,6 +44,10 @@ const Page = (props) => {
         }
     }, [router])
 
+    const matchesForEID = useMemo(() => {
+        return Object.keys(match.matches).filter((key, i) => match.matches[key].eid == eid);
+    }, [eid, match.matches])
+
     return (
         <TableContainer component={Paper} variant='elevation'>
             <Table>
@@ -61,33 +65,50 @@ const Page = (props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {Object.keys(match.matches).filter((key, i) => match.matches[key].eid == eid).map((id, i) => (
-                        <TableRow key={id}>
-                            <TableCell align='center'>{match.matches[id]._id || id}</TableCell>
-                            <TableCell align='center'>{match.states[match.matches[id].status].name}</TableCell>
-                            <TableCell align='center'>{match.admins[match.matches[id].admin].name}</TableCell>
-                            <TableCell align='center'>{dayjs(match.matches[id].created.toDate()).format('MMM DD')}</TableCell>
-                            <TableCell align='center'>{match.categories[match.matches[id].category].name}</TableCell>
-                            <TableCell align='center'>
-                                {
-                                    match.matches[id].schedule < 2
-                                        ? match.schedules[match.matches[id].schedule].name
-                                        : dayjs(match.matches[id].created.toDate()).format('MMM DD, h:mm a')
-                                }
-                            </TableCell>
-                            <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
-                            <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
-                            <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
-                        </TableRow>
-                    ))}
+                    {
+                        matchesForEID.length > 0
+                            ?
+                            matchesForEID.map((id, i) => (
+                                <TableRow key={id}>
+                                    <TableCell align='center'>{match.matches[id]._id || id}</TableCell>
+                                    <TableCell align='center'>{match.states[match.matches[id].status].name}</TableCell>
+                                    <TableCell align='center'>{match.admins[match.matches[id].admin].name}</TableCell>
+                                    <TableCell align='center'>{dayjs(match.matches[id].created.toDate()).format('MMM DD')}</TableCell>
+                                    <TableCell align='center'>{match.categories[match.matches[id].category].name}</TableCell>
+                                    <TableCell align='center'>
+                                        {
+                                            match.matches[id].schedule < 2
+                                                ? match.schedules[match.matches[id].schedule].name
+                                                : dayjs(match.matches[id].created.toDate()).format('MMM DD, h:mm a')
+                                        }
+                                    </TableCell>
+                                    <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                                    <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                                    <TableCell align='center' sx={{ color: '#F5831F' }}>UPGRADE</TableCell>
+                                </TableRow>
+                            ))
+                            :
+                            <TableRow>
+                                <TableCell align='center' colSpan={9}>
+                                    NO MATCHES
+                                </TableCell>
+                            </TableRow>
+                    }
                     <TableRow>
                         <TableCell sx={{ border: 'none' }}>
-                            <Button variant='contained' onClick={() => router.push('/match/create?event=' + eid)}>
+                            <Button
+                                variant='contained'
+                                onClick={() => router.push('/match/create?event=' + eid)}
+                                sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
+                            >
                                 CREATE MATCH
                             </Button>
                         </TableCell>
                         <TableCell sx={{ border: 'none' }}>
-                            <Button variant='contained'>
+                            <Button
+                                variant='contained'
+                                sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
+                            >
                                 PAST MATCHES
                             </Button>
                         </TableCell>

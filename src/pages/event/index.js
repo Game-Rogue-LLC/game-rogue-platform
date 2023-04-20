@@ -48,16 +48,6 @@ const Page = (props) => {
         setOpen(false)
     }
 
-    const validate = ({ name, value }) => {
-        if (value) {
-            setValid(prevState => ({ ...prevState, [name]: true }));
-            return true;
-        } else {
-            setValid(prevState => ({ ...prevState, [name]: false }));
-            return false;
-        }
-    }
-
     const handleChange = (e) => {
         setOrg(e.target.value);
     }
@@ -74,10 +64,10 @@ const Page = (props) => {
         setTitle('REGISTER AN EVENT');
     }, [])
 
-    React.useEffect(() => {
-        if (current.organization?.events?.length >= 5)
-            setDisabled(true);
-    }, [current])
+    // React.useEffect(() => {
+    //     if (current.organization?.events?.length >= 5)
+    //         setDisabled(true);
+    // }, [current])
 
     return (
         <Box>
@@ -141,7 +131,7 @@ const Page = (props) => {
                     <Grid item xs={12}>
                         <Button
                             variant='contained'
-                            onClick={handleCreate}
+                            // onClick={handleCreate}
                             disabled={disabled}
                         >
                             Register

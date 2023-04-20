@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import {
     Paper,
@@ -11,61 +11,73 @@ import {
     TableFooter,
     useTheme
 } from '@mui/material';
-
+import { useRouter } from 'next/router';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
+import { useTournamentContext } from '@/src/context/TournamentContext';
 
 const Page = (props) => {
     const theme = useTheme();
+    const router = useRouter();
     const { setTitle } = useAppContext();
+    const { organization, event, team } = useTournamentContext();
+    const [eid, setEID] = useState(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         setTitle('PARTICIPANTS');
     }, [])
+
+    useEffect(() => {
+        if (router?.query.event) {
+            const newEID = router.query.event;
+            setEID(newEID);
+            event.setCurrent(newEID);
+            organization.setCurrent(event.events[newEID].oid);
+        }
+    }, [router])
+
+    const handle = {
+        addParticipant: (e) => {
+            router.push('/participant/create?event=' + eid);
+        }
+    }
 
     return (
         <TableContainer component={Paper} sx={{ textTransform: 'uppercase' }} variant='elevation'>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell align='center'>MATCH ID</TableCell>
-                        <TableCell align='center'>STATUS</TableCell>
-                        <TableCell align='center'>ADMIN</TableCell>
-                        <TableCell align='center'>CREATED</TableCell>
-                        <TableCell align='center'>CATEGORY</TableCell>
-                        <TableCell align='center'>SCHEDULED</TableCell>
-                        <TableCell align='center'>SOCIAL POST</TableCell>
-                        <TableCell align='center'>HIGHLIGHTS</TableCell>
-                        <TableCell align='center'>STREAM NOW</TableCell>
+                        <TableCell align='center'>TEAM ID</TableCell>
+                        <TableCell align='center'>TEAM NAME</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    <TableRow>
-                        <TableCell align='center'>12345</TableCell>
-                        <TableCell align='center'>IN PROGRESS</TableCell>
-                        <TableCell align='center'>Inst1nct</TableCell>
-                        <TableCell align='center'>may 3</TableCell>
-                        <TableCell align='center'>round ii</TableCell>
-                        <TableCell align='center'>ongoing</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell align='center'>12346</TableCell>
-                        <TableCell align='center'>completed</TableCell>
-                        <TableCell align='center'>titane</TableCell>
-                        <TableCell align='center'>may 1</TableCell>
-                        <TableCell align='center'>round i</TableCell>
-                        <TableCell align='center'>may 2, 7:00pm est</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                        <TableCell align='center' sx={{ color: '#F5831F' }}>upgrade</TableCell>
-                    </TableRow>
+                    {
+                        event.events[eid]?.participants?.length > 0
+                            ?
+                            event.events[eid].participants.map((participant) => {
+                                return (
+                                    <TableRow key={'participant_' + participant.tid}>
+                                        <TableCell align='center'>{participant.tid}</TableCell>
+                                        <TableCell align='center'>{team.teams[participant.tid]?.name}</TableCell>
+                                    </TableRow>
+                                )
+                            })
+                            :
+                            <TableRow>
+                                <TableCell align='center' colSpan={4}>
+                                    NO PARTICIPANTS
+                                </TableCell>
+                            </TableRow>
+                    }
                     <TableRow>
                         <TableCell sx={{ border: 'none' }}>
-                            <Button variant='contained' sx={{ borderRadius: 0, color: 'white', bgcolor: 'black' }}>
-                                PAST PARTICIPANTS
+                            <Button
+                                variant='contained'
+                                sx={{ borderRadius: 0, color: 'white', bgcolor: 'black' }}
+                                onClick={handle.addParticipant}
+                            >
+                                ADD PARTICIPANT
                             </Button>
                         </TableCell>
                     </TableRow>

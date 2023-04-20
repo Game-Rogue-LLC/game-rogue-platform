@@ -15,6 +15,7 @@ import { styled, alpha } from '@mui/material/styles';
 import { useEffect, useState } from 'react'
 import { Logout } from '@mui/icons-material';
 import { useAuthContext } from '@/src/context/AuthContext';
+import { useTournamentContext } from '@/src/context/TournamentContext';
 
 const StyledMenu = styled((props) => (
 	<Menu
@@ -68,6 +69,7 @@ const Header = () => {
 	const openUser = Boolean(anchorElUser);
 	const theme = useTheme();
 	const user = useAuthContext();
+	const { player } = useTournamentContext();
 
 	const handleClickUser = (event) => {
 		setAnchorElUser(event.currentTarget);
@@ -151,10 +153,10 @@ const Header = () => {
 					aria-expanded={openUser ? 'true' : undefined}
 					onClick={handleClickUser}
 				>
-					<Avatar alt={user?.user?.name} src={user?.user?.profilePic} />
+					<Avatar alt={player.players[user.user.id]?.name} src={player.players[user.user.id]?.profilePic} />
 				</IconButton>
 				<Box sx={{ display: 'flex', alignItems: 'center' }}>
-					<IconButton onClick={user?.logout} sx={{ h: 'auto' }}>
+					<IconButton onClick={user.logout} sx={{ h: 'auto' }}>
 						<Logout />
 					</IconButton>
 				</Box>
@@ -169,13 +171,13 @@ const Header = () => {
 				onClose={handleCloseUser}
 			>
 				<MenuItem onClick={handleCloseUser} key='user-profile' disableRipple>
-					<Link href={"/user/" + user?.user?.id}>
+					<Link href={"/user/" + user.user.id}>
 						PROFILE
 					</Link>
 				</MenuItem>
 				<Divider sx={{ my: 0.5 }} />
 				<MenuItem onClick={handleCloseUser} key='edit-user' disableRipple>
-					<Link href={"/user/" + user?.user?.id + "/edit"}>
+					<Link href={"/user/" + user.user.id + "/edit"}>
 						EDIT
 					</Link>
 				</MenuItem>

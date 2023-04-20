@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { createContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useContext } from 'react';
 import matchStore from '@/lib/firestore/collections/match';
 import nProgress from 'nprogress';
@@ -14,7 +14,7 @@ const MatchContext = createContext({});
 export const useMatchContext = () => useContext(MatchContext)
 
 export default (props) => {
-    const { organization, event } = useTournamentContext();
+    const { organization, event, loading: tournamentLoading } = useTournamentContext();
     const { user } = useAuthContext();
     const router = useRouter()
     const [matches, setMatches] = useState({})
@@ -35,7 +35,7 @@ export default (props) => {
             setCurrent(id)
         },
         read: async () => {
-            await matchStore.read(user?.id, setMatch, () => setLoading(false))
+            await matchStore.read(user.id, setMatch, () => setLoading(false))
         },
         save: (data, id) => {
             return matchStore.save(data, id)
@@ -43,7 +43,7 @@ export default (props) => {
         add: async (match) => {
             match = {
                 ...match,
-                uid: user?.id,
+                uid: user.id,
                 deleted: false
             }
             return await matchStore.save(match, null)
@@ -110,13 +110,15 @@ export default (props) => {
         ]
     }
 
-    useEffect(() => {
-        match.read()
-    }, [])
+    const loadMatch = useCallback(() => {
+        if (user) {
+            match.read();
+        }
+    }, [user])
 
-    const isLoading = useMemo(() => {
-        return organization.loading || event.loading || loading
-    }, [organization.loading, event.loading, loading])
+    useEffect(() => {
+        loadMatch();
+    }, [loadMatch])
 
     // useEffect(() => {
     //     if (isLoading == false && Object.keys(matches).length == 0 && event.current)
@@ -127,7 +129,7 @@ export default (props) => {
         <MatchContext.Provider value={{
             match
         }}>
-            {isLoading ? <Splash content='Loading data...'></Splash> : props.children}
+            {loading ? <Splash content='Loading data...'></Splash> : props.children}
         </MatchContext.Provider>
     )
 }

@@ -4,7 +4,7 @@ import {
     Select
 } from '@mui/material';
 
-const games = [
+export const games = [
     "Rainbow Six Siege",
     "Valorant",
     "Counter-Strike: Global Offensive",

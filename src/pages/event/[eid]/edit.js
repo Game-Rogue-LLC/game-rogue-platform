@@ -1,33 +1,42 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
     Box,
     Button,
     FormControl,
     FormHelperText,
     Grid,
+    IconButton,
     MenuItem,
     OutlinedInput,
+    TextField,
     Paper,
     Select,
     Typography,
     useTheme,
-} from '@mui/material'
-import { useRouter } from 'next/router'
-import { LoadingButton } from '@mui/lab'
+} from '@mui/material';
+import { useRouter } from 'next/router';
+import { LoadingButton } from '@mui/lab';
+import Validator from 'validatorjs';
 
-import AdminLayout from '@/src/content/AdminLayout'
-import { useAppContext } from '@/src/context/app'
-import DatePicker from '@/src/pages/components/DatePicker'
-import { useTournamentContext } from '@/src/context/TournamentContext'
+import { Edit } from '@mui/icons-material';
+import AdminLayout from '@/src/content/AdminLayout';
+import { useAppContext } from '@/src/context/app';
+import DateTimePicker from '@/src/components/DateTimePicker';
+import { useTournamentContext } from '@/src/context/TournamentContext';
+import { DEFAULT_LOGO, DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
 
 const initialInputs = {
     name: '',
+    banner: DEFAULT_CONTENTBLOCK_IMAGE,
+    darkLogo: DEFAULT_LOGO,
+    lightLogo: DEFAULT_LOGO,
     oid: '',
     format: 0,
     tournament: 0,
     league: 0,
     seed: 0,
-    date: new Date(),
+    startAt: new Date(),
+    registerTo: new Date(),
     game: 0,
     platform: 0,
     region: 0,
@@ -35,45 +44,88 @@ const initialInputs = {
     rulebook: '',
     terms: '',
     privacy: '',
+    checkin: 15,
+    description: '',
+    participantsCount: 2,
     deleted: false
 }
 
 const rules = {
-    name: 'required'
+    name: 'required',
+    checkin: 'required',
+    participantsCount: 'required'
 }
 
 const customMessages = {
-    'required.name': 'Event Name is required.'
+    'required.name': 'Event Name is required.',
+    'required.checkin': 'CheckIn is required.',
+    'required.participantsCount': 'Participant Count is required.'
 }
 
 const Page = (props) => {
-    const theme = useTheme()
-    const router = useRouter()
-    const [eid, setEID] = useState(null)
-    const { setTitle } = useAppContext()
+    const theme = useTheme();
+    const router = useRouter();
+    const [eid, setEID] = useState(null);
+    const { setTitle } = useAppContext();
     const { organization, event } = useTournamentContext();
-    const [saving, setSaving] = useState(false)
-    const [rulebook, setRulebook] = useState(null)
-    const [terms, setTerms] = useState(null)
-    const [privacy, setPrivacy] = useState(null)
+    const [saving, setSaving] = useState(false);
+    const [rulebook, setRulebook] = useState(null);
+    const [terms, setTerms] = useState(null);
+    const [privacy, setPrivacy] = useState(null);
+    const [banner, setBanner] = useState(null);
     const [inputs, setInputs] = useState({ ...initialInputs })
     const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
+    const [darkLogo, setDarkLogo] = useState(null);
+    const [lightLogo, setLightLogo] = useState(null);
+
+    useEffect(() => {
+        setTitle('EDIT EVENT');
+    }, [])
+
+    useEffect(() => {
+        if (router?.query.eid) {
+            setEID(router.query.eid);
+        }
+    }, [router])
+
+    useEffect(() => {
+        if (eid) {
+            event.setCurrent(eid);
+            organization.setCurrent(event.events[eid]?.oid);
+            setInputs({
+                ...event.events[eid]
+            })
+        }
+    }, [eid, event.events])
 
     const validate = (data, rule, messages) => {
+
+        if (data.participantsCount % 2) {
+            setErrors(prev => ({
+                ...prev,
+                participantsCount: 'Participant Count must be even number.'
+            }))
+        }
+
         let validator = new Validator(data, rule, messages);
         if (validator.fails()) {
-            setErrors(validator.errors.errors);
+            setErrors(prev => ({
+                ...prev,
+                ...validator.errors.errors
+            }));
             return false;
         }
+
+        if (data.participantsCount % 2) return false;
         setErrors({});
         return true;
     }
 
-    const setDate = (newDate) => {
+    const setDate = (name, newDate) => {
         setInputs(prev => ({
             ...prev,
-            date: newDate
+            [name]: new Date(newDate)
         }))
     }
 
@@ -82,37 +134,62 @@ const Page = (props) => {
             if (validate(inputs, rules, customMessages) === false) {
                 return;
             }
-            const newEvent = { ...inputs };
+            let newEvent = { ...inputs };
+            let uploaded = true;
             setSaving(true)
+
+            if (banner) {
+                uploaded = false;
+                const res = await event.upload(banner, eid, 'banner');
+                if (res.code === 'succeed') {
+                    newEvent.banner = res.url;
+                    uploaded = true;
+                }
+            }
+            if (darkLogo) {
+                uploaded = false;
+                const res = await event.upload(darkLogo, eid, 'darkLogo');
+                if (res.code === 'succeed') {
+                    newEvent.darkLogo = res.url;
+                    uploaded = true;
+                }
+            }
+            if (lightLogo) {
+                uploaded = false;
+                const res = await event.upload(lightLogo, eid, 'lightLogo');
+                if (res.code === 'succeed') {
+                    newEvent.lightLogo = res.url;
+                    uploaded = true;
+                }
+            }
+            if (rulebook) {
+                uploaded = false;
+                const res = await event.upload(rulebook, eid, 'rulebook');
+                if (res.code === 'succeed') {
+                    newEvent.rulebook = res.url;
+                    uploaded = true;
+                }
+            }
+            if (terms) {
+                uploaded = false;
+                const res = await event.upload(terms, eid, 'terms');
+                if (res.code === 'succeed') {
+                    newEvent.terms = res.url;
+                    uploaded = true;
+                }
+            }
+            if (privacy) {
+                uploaded = false;
+                const res = await event.upload(privacy, eid, 'privacy');
+                if (res.code === 'succeed') {
+                    newEvent.privacy = res.url;
+                    uploaded = true;
+                }
+            }
+
             const res = await event.update(eid, newEvent);
             if (res.code === 'succeed') {
-                let saved = true;
-                if (rulebook) {
-                    await event.upload(rulebook, eid, 'rulebook', (url) => {
-                        event.update(eid, { rulebook: url })
-                            .then(res => saved = saved && (res.code == 'succeed'))
-                            .catch(err => console.log(err))
-                    })
-                }
-                if (terms) {
-                    await event.upload(terms, eid, 'terms', (url) => {
-                        event.update(eid, { terms: url })
-                            .then(res => saved = saved && (res.code == 'succeed'))
-                            .catch(err => console.log(err))
-                    })
-                }
-                if (privacy) {
-                    await event.upload(privacy, eid, 'privacy', (url) => {
-                        event.update(eid, { privacy: url })
-                            .then(res => saved = saved && (res.code == 'succeed'))
-                            .catch(err => console.log(err))
-                    })
-                }
-                if (saved) {
-                    alert('Event data saved successfully!');
-                }
-            } else {
-                console.log(res);
+                alert('Saved successfully!');
             }
             setSaving(false);
         },
@@ -124,41 +201,103 @@ const Page = (props) => {
             })
         },
         upload: (e, name) => {
-            const file = e.target?.files[0]
-            if (name === 'rulebook') setRulebook(file)
-            if (name === 'terms') setTerms(file)
-            if (name === 'privacy') setPrivacy(file)
-            setInputs(prev => ({
-                ...prev,
-                [name]: file?.name
-            }))
+            const file = e.target?.files[0];
+            const url = URL.createObjectURL(file);
+            switch (name) {
+                case 'banner':
+                    console.log(1)
+                    setBanner(file);
+                    setInputs({
+                        ...inputs,
+                        banner: url
+                    })
+                    break;
+                case 'darkLogo':
+                    console.log(2)
+                    setDarkLogo(file);
+                    setInputs({
+                        ...inputs,
+                        darkLogo: url
+                    })
+                    break;
+                case 'lightLogo':
+                    console.log(3)
+                    setLightLogo(file);
+                    setInputs({
+                        ...inputs,
+                        lightLogo: url
+                    })
+                    break;
+                case 'rulebook':
+                    setRulebook(file);
+                    break;
+                case 'terms':
+                    setTerms(file);
+                    break;
+                case 'privacy':
+                    setPrivacy(file);
+                    break;
+            }
+        },
+        removeDarkLogo: (e) => {
+            setInputs({
+                ...inputs,
+                darkLogo: DEFAULT_LOGO
+            })
+        },
+        removeLightLogo: (e) => {
+            setInputs({
+                ...inputs,
+                lightLogo: DEFAULT_LOGO
+            })
         }
     }
-
-    useEffect(() => {
-        setTitle('EDIT EVENT')
-    }, [])
-
-    useEffect(() => {
-        if (router.query.eid) {
-            setEID(router.query.eid)
-        }
-    }, [router])
-
-    useEffect(() => {
-        if (eid) {
-            event.setCurrent(eid);
-            organization.setCurrent(event.events[eid].oid);
-            setInputs(prev => ({
-                ...prev,
-                ...event.events[eid]
-            }))
-        }
-    }, [eid, event.events])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
             <Grid container spacing={2} rowSpacing={4}>
+                <Grid item xs={12}>
+
+                    <Box display={'flex'} justifyContent={'center'} gap={4} alignItems={'center'} mt={2}>
+                        <Box display={'flex'} justifyContent={'center'} gap={2}>
+                            <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'baseline'}>
+                                <Button variant='contained' color='primary' component='label'>
+                                    UPLOAD DARK LOGO
+                                    <input type="file" accept="image/*" name="upload-dark-logo" id="upload-dark-logo" hidden onChange={(e) => handle.upload(e, 'darkLogo')} />
+                                </Button>
+                                <Button variant='contained' color='primary' component='label' onClick={handle.removeDarkLogo}>
+                                    REMOVE DARK LOGO
+                                </Button>
+                            </Box>
+                            <Box width={'200px'} height={'200px'} textAlign={'center'}>
+                                <img src={inputs.darkLogo || DEFAULT_LOGO} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                            </Box>
+                        </Box>
+                        <Box display={'flex'} justifyContent={'center'} gap={2}>
+                            <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'baseline'}>
+                                <Button variant='contained' color='primary' component='label'>
+                                    UPLOAD LIGHT LOGO
+                                    <input type="file" accept="image/*" name="upload-light-logo" id="upload-light-logo" hidden onChange={(e) => handle.upload(e, 'lightLogo')} />
+                                </Button>
+                                <Button variant='contained' color='primary' component='label' onClick={handle.removeLightLogo}>
+                                    REMOVE LIGHT LOGO
+                                </Button>
+                            </Box>
+                            <Box width={'200px'} height={'200px'} textAlign={'center'}>
+                                <img src={inputs.lightLogo || DEFAULT_LOGO} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                            </Box>
+                        </Box>
+                    </Box>
+
+                    <Box sx={{ textAlign: 'center', position: 'relative', mt: 3 }}>
+                        <IconButton sx={{ position: 'absolute', right: 0, bottom: 0 }} color='primary' component='label'>
+                            <Edit />
+                            <input type="file" accept="image/*" name="upload-banner" id="upload-banner" hidden onChange={(e) => handle.upload(e, 'banner')} />
+                        </IconButton>
+                        <img src={inputs?.banner || DEFAULT_CONTENTBLOCK_IMAGE} style={{ height: '200px', maxWidth: '600px', objectFit: 'cover', border: 'solid 1px rgba(255, 255, 255, 0.2)', borderRadius: '4px' }} />
+                    </Box>
+
+                </Grid>
                 <Grid item xs={12}>
                     <Typography variant='h6'>Organization</Typography>
                     <Select
@@ -178,7 +317,24 @@ const Page = (props) => {
                         })}
                     </Select>
                 </Grid>
-                <Grid item xs={12} lg={4}>
+                <Grid item xs={12}>
+                    <Box>
+                        <Typography variant='h6'>Event Name</Typography>
+                        <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
+                            <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
+                                onChange={handle.inputs} />
+                            {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ mt: 3 }}>
+                        <Typography variant='h6'>Event Description</Typography>
+                        <FormControl fullWidth sx={{ mt: 1 }}>
+                            <TextField multiline id="event-description" name="description" aria-describedby="event-description-helper" value={inputs?.description} disabled={disabled}
+                                onChange={handle.inputs} />
+                        </FormControl>
+                    </Box>
+                </Grid>
+                <Grid item xs={12} lg={6}>
                     <Typography variant='h6'>Event Format</Typography>
                     <Select
                         labelId="format-select-label"
@@ -195,7 +351,7 @@ const Page = (props) => {
                         <MenuItem key='league' value={1}>League</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12} lg={4}>
+                <Grid item xs={12} lg={6}>
                     <Typography variant='h6'>Game Type</Typography>
                     <Box sx={{ mt: 1 }}>
                         {
@@ -234,7 +390,7 @@ const Page = (props) => {
                         }
                     </Box>
                 </Grid>
-                <Grid item xs={12} lg={4}>
+                <Grid item xs={12} lg={6}>
                     <Typography variant='h6'>Event Seed</Typography>
                     <Select
                         labelId="seed-select-label"
@@ -251,17 +407,29 @@ const Page = (props) => {
                         <MenuItem key='random' value={1}>Random</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography variant='h6'>Event Name</Typography>
-                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
-                        <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
-                            onChange={handle.inputs} />
-                        {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
+                <Grid item xs={12} lg={6}>
+                    <Typography variant='h6'>Participants</Typography>
+                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+                        <OutlinedInput id="participants-count" name="participantsCount" aria-describedby="participants-count-helper" value={inputs?.participantsCount} disabled={disabled}
+                            type='number' step={2} onChange={handle.inputs} />
+                        {errors.participantsCount !== undefined && <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>{errors.participantsCount}</FormHelperText>}
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography variant='h6'>Event Date</Typography>
-                    <DatePicker value={inputs?.date} setValue={setDate} sx={{ mt: 1 }} disabled={disabled} />
+                <Grid item xs={12} lg={4}>
+                    <Typography variant='h6'>Start Date</Typography>
+                    <DateTimePicker value={inputs?.startAt} setValue={(newDate) => setDate('startAt', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                    <Typography variant='h6'>Register Date</Typography>
+                    <DateTimePicker value={inputs?.registerTo} setValue={(newDate) => setDate('registerTo', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                    <Typography variant='h6'>CheckIn</Typography>
+                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.checkin !== undefined}>
+                        <OutlinedInput id="check-in" name="checkin" aria-describedby="check-in-helper" value={inputs?.checkin} disabled={disabled}
+                            type='number' step={1} onChange={handle.inputs} />
+                        {errors.checkin !== undefined && <FormHelperText id="check-in-helper" sx={{ mt: 2 }}>{errors.checkin}</FormHelperText>}
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Game</Typography>
@@ -376,7 +544,7 @@ const Page = (props) => {
                     <LoadingButton
                         loading={saving}
                         variant='contained'
-                        onClick={handle.create}
+                        onClick={handle.save}
                         disabled={disabled}
                     >
                         Save

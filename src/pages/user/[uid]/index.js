@@ -13,7 +13,8 @@ import { useRouter } from 'next/router';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import TeamTable from '@/src/pages/components/TeamTable';
+import TeamTable from '@/src/components/TeamTable';
+import UserInfo from '@/src/components/UserInfo';
 
 const Page = (props) => {
     const router = useRouter();
@@ -26,12 +27,15 @@ const Page = (props) => {
     const handle = {
         show: (id) => {
             router.push('/team/' + id);
+        },
+        edit: (e) => {
+            router.push('/user/' + uid + '/edit');
         }
     }
 
     useEffect(() => {
         setItem(player.players[uid]);
-    }, [uid])
+    }, [player.players, uid])
 
     useEffect(() => {
         console.log(router.query.uid);
@@ -47,76 +51,7 @@ const Page = (props) => {
         <Paper sx={{ p: 4 }}>
             <Grid container spacing={2}>
                 <Grid item sx={{ width: 300 }}>
-                    <Box sx={{ textAlign: 'center' }}>
-                        <Avatar alt={item?.name} src={item?.profilePic} sx={{ width: 150, height: 150, mx: 'auto' }} />
-                    </Box>
-                    <Box sx={{ width: '100%', textAlign: 'center' }}>
-                        <Button variant='contained' sx={{ mt: 2, mx: 'auto' }}>
-                            EDIT PROFILE
-                        </Button>
-                    </Box>
-                    <Box sx={{ mt: 4 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    ACCOUNT ID
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='b1'>
-                                    {item?._id}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    USER NAME
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='b1'>
-                                    {item?.name}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    AGE
-                                </Typography>
-                            </Grid>
-                            <Grid>
-                                <Typography variant='b1'>
-                                    {item?.age}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    GENDER
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='b1'>
-                                    {item?.gender == 0 ? 'Male' : 'Female'}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    RESIDENCY
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='b1'>
-                                    {item?.residency}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Box>
+                    <UserInfo avatar={item?.profilePic} item={item} editable={false} handle={handle.edit} />
                 </Grid>
                 <Grid item xs container>
                     <Box sx={{ border: 'solid 1px rgb(52, 43, 35)', width: '100%', borderRadius: '5px' }}>

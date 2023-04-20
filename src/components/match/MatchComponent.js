@@ -30,7 +30,7 @@ function Match({
         <Wrapper>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <TopText>{topText}</TopText>
-                {(match.href || typeof onMatchClick === 'function') && (
+                {(match && (match.href || typeof onMatchClick === 'function')) && (
                     <Anchor
                         href={match.href}
                         onClick={event =>

@@ -38,15 +38,15 @@ export default function MyApp(props) {
 			<ThemeProvider>
 				{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 				<CssBaseline />
-				<AuthContextProvider>
-					<AppProvider>
+				<AppProvider>
+					<AuthContextProvider>
 						{getLayout(
 							<ContextProvider>
 								<Component {...pageProps} />
 							</ContextProvider>
 						)}
-					</AppProvider>
-				</AuthContextProvider>
+					</AuthContextProvider>
+				</AppProvider>
 			</ThemeProvider>
 		</CacheProvider>
 	);

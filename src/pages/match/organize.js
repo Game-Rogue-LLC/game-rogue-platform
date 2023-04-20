@@ -33,11 +33,12 @@ import {
 } from '@mui/lab'
 import { nanoid } from 'nanoid'
 import dynamic from 'next/dynamic'
-import MatchItem from '../components/MatchItem'
-import TeamItem from '../components/TeamItem'
+import MatchItem from '@/src/components/MatchItem'
+import TeamItem from '@/src/components/TeamItem'
 
-import MatchComponent from '../components/match/MatchComponent'
+import MatchComponent from '@/src/components/match/MatchComponent'
 import { useTournamentContext } from '@/src/context/TournamentContext'
+import defaultTheme from '@/src/components/match/themes/themes'
 
 const SingleEliminationBracket = dynamic(() => import('@g-loot/react-tournament-brackets').then((mod) => mod.SingleEliminationBracket), {
     ssr: false, // This ensures the component is only rendered on the client-side
@@ -105,7 +106,7 @@ const Page = (props) => {
     const filteredMatches = useMemo(() => {
         return matches.filter(val => val.round == 0)
             .slice(group * 6, group * 6 + 6)
-            .filter((val, i) => team == "all" || val.team1 == team || val.team2 == team)
+            .filter((val, i) => team == "all" || val.team1 == team || val.team2 == team);
     }, [group, team, matches])
 
     const generateScore = () => {
@@ -442,6 +443,7 @@ const Page = (props) => {
                                 },
                             }}
                             matches={games}
+                            theme={defaultTheme}
                             matchComponent={(props) => (
                                 <MatchComponent {...props}
                                     onPartyClick={(party, partyWon) => handlePartyClick(party, partyWon)}
