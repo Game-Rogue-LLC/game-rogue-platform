@@ -14,7 +14,7 @@ import {
 const Footer = (props) => {
     const theme = useTheme();
     return (
-        <Box component={'footer'}>
+        <Box component={'footer'} sx={{ mt: 5 }}>
             <Box
                 component={'section'}
             >
@@ -23,7 +23,7 @@ const Footer = (props) => {
                         position: 'relative',
                         display: 'flex',
                         justifyContent: 'space-between',
-                        width: '50%',
+                        maxWidth: '50%',
                         mx: 'auto'
                     }}
                 >

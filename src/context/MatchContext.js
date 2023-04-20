@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { createContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useContext } from 'react';
 import matchStore from '@/lib/firestore/collections/match';
 import nProgress from 'nprogress';
@@ -110,13 +110,15 @@ export default (props) => {
         ]
     }
 
-    useEffect(() => {
-        match.read()
-    }, [])
+    const loadMatch = useCallback(() => {
+        if (user) {
+            match.read();
+        }
+    }, [user])
 
-    const isLoading = useMemo(() => {
-        return tournamentLoading || loading;
-    }, [tournamentLoading, loading])
+    useEffect(() => {
+        loadMatch();
+    }, [loadMatch])
 
     // useEffect(() => {
     //     if (isLoading == false && Object.keys(matches).length == 0 && event.current)
@@ -127,7 +129,7 @@ export default (props) => {
         <MatchContext.Provider value={{
             match
         }}>
-            {isLoading ? <Splash content='Loading data...'></Splash> : props.children}
+            {loading ? <Splash content='Loading data...'></Splash> : props.children}
         </MatchContext.Provider>
     )
 }

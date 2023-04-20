@@ -7,10 +7,10 @@ import Footer from '@/src/content/PublicLayout/Footer';
 
 const PublicLayout = (props) => {
     return (
-        <Box sx={{ background: 'black' }}>
+        <Box sx={{ background: 'black', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Navbar />
 
-            <Box sx={{ background: 'black' }}>
+            <Box sx={{ background: 'black', flex: 1, marginTop: '73px' }}>
                 {props.children}
             </Box>
 

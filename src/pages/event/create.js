@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
     Box,
     Button,
+    IconButton,
     FormControl,
     FormHelperText,
     Grid,
@@ -11,10 +12,12 @@ import {
     Select,
     Typography,
     useTheme,
+    TextField,
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import { LoadingButton } from '@mui/lab'
 
+import { Edit } from '@mui/icons-material';
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import DatePicker from '@/src/pages/components/DatePicker'
@@ -22,8 +25,58 @@ import DateTimePicker from '@/src/pages/components/DateTimePicker'
 import { useEventContext } from '@/src/context/EventContext'
 import Validator from 'validatorjs'
 import { useTournamentContext } from '@/src/context/TournamentContext'
+import { DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
+
+export const formats = [
+    {
+        key: 'single-elimination',
+        value: 0,
+        name: 'Single Elimination'
+    },
+    {
+        key: 'double-elimination',
+        value: 1,
+        name: 'Double Elimination'
+    },
+    {
+        key: 'ladder-elimination',
+        value: 2,
+        name: 'Ladder Elimination'
+    },
+    {
+        key: 'pyramid-elimination',
+        value: 3,
+        name: 'Pyramid Elimination'
+    },
+    {
+        key: 'straight-round-robin',
+        value: 4,
+        name: 'Straight Round Robin'
+    },
+    {
+        key: 'round-robin-double-split',
+        value: 5,
+        name: 'Round Robin Double Split'
+    },
+    {
+        key: 'round-robin-triple-split',
+        value: 6,
+        name: 'Round Robin Triple Split'
+    },
+    {
+        key: 'round-robin-quadruple-split',
+        value: 7,
+        name: 'Round Robin Quadruple split'
+    },
+    {
+        key: 'round-robin-semi-split',
+        value: 8,
+        name: 'Semi Round Robin'
+    },
+]
 
 const initialInputs = {
+    logo: DEFAULT_CONTENTBLOCK_IMAGE,
     name: '',
     oid: '',
     format: 0,
@@ -40,6 +93,7 @@ const initialInputs = {
     terms: '',
     privacy: '',
     checkin: 15,
+    description: '',
     participantsCount: 2,
     deleted: false
 }
@@ -62,6 +116,7 @@ const Page = (props) => {
     const [rulebook, setRulebook] = useState(null);
     const [terms, setTerms] = useState(null);
     const [privacy, setPrivacy] = useState(null);
+    const [logo, setLogo] = useState(null);
     const [inputs, setInputs] = useState({ ...initialInputs });
     const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
@@ -118,6 +173,14 @@ const Page = (props) => {
                 let uploaded = true;
                 newEvent = {};
 
+                if (logo) {
+                    uploaded = false;
+                    const res = await event.upload(rulebook, data.id, 'logo');
+                    if (res.code === 'succeed') {
+                        newEvent.logo = res.url;
+                        uploaded = true;
+                    }
+                }
                 if (rulebook) {
                     uploaded = false;
                     const res = await event.upload(rulebook, data.id, 'rulebook');
@@ -159,10 +222,17 @@ const Page = (props) => {
             })
         },
         upload: (e, name) => {
-            const file = e.target?.files[0]
-            if (name === 'rulebook') setRulebook(file)
-            if (name === 'terms') setTerms(file)
-            if (name === 'privacy') setPrivacy(file)
+            const file = e.target?.files[0];
+            if (name === 'logo') {
+                setLogo(file);
+                setInputs(prev => ({
+                    ...prev,
+                    logo: URL.createObjectURL(file)
+                }))
+            }
+            if (name === 'rulebook') setRulebook(file);
+            if (name === 'terms') setTerms(file);
+            if (name === 'privacy') setPrivacy(file);
             setInputs(prev => ({
                 ...prev,
                 [name]: file?.name
@@ -191,6 +261,32 @@ const Page = (props) => {
                             return <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
                         })}
                     </Select>
+                </Grid>
+                <Grid item xs={12}>
+                    <Box sx={{ textAlign: 'center', position: 'relative' }}>
+                        <IconButton sx={{ position: 'absolute', right: 0, bottom: 0 }} color='primary' component='label'>
+                            <Edit />
+                            <input type="file" accept="image/*" name="upload-image" id="upload-image" hidden onChange={(e) => handle.upload(e, 'logo')} />
+                        </IconButton>
+                        <img src={inputs?.logo || DEFAULT_CONTENTBLOCK_IMAGE} style={{ height: '200px', maxWidth: '600px', objectFit: 'contain' }} />
+                    </Box>
+
+                    <Box>
+                        <Typography variant='h6'>Event Name</Typography>
+                        <FormControl fullWidth error={errors.name !== undefined} sx={{ mt: 1 }}>
+                            <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
+                                onChange={handle.inputs} />
+                            {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
+                        </FormControl>
+                    </Box>
+
+                    <Box sx={{ mt: 3 }}>
+                        <Typography variant='h6'>Event Description</Typography>
+                        <FormControl fullWidth sx={{ mt: 1 }}>
+                            <TextField multiline id="event-description" name="description" aria-describedby="event-description-helper" value={inputs?.description} disabled={disabled}
+                                onChange={handle.inputs} />
+                        </FormControl>
+                    </Box>
                 </Grid>
                 <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Event Format</Typography>
@@ -239,11 +335,11 @@ const Page = (props) => {
                                 disabled={disabled}
                                 fullWidth
                             >
-                                <MenuItem key='straight-round-robin' value={0}>Straight Round Robin</MenuItem>
-                                <MenuItem key='round-robin-double-split' value={1}>Round Robin Double Split</MenuItem>
-                                <MenuItem key='round-robin-triple-split' value={2}>Round Robin Triple Split</MenuItem>
-                                <MenuItem key='round-robin-quadruple-split' value={3}>Round Robin Quadruple Split</MenuItem>
-                                <MenuItem key='semi-round-robin' value={4}>Semi Round Robin</MenuItem>
+                                <MenuItem key='straight-round-robin' value={4}>Straight Round Robin</MenuItem>
+                                <MenuItem key='round-robin-double-split' value={5}>Round Robin Double Split</MenuItem>
+                                <MenuItem key='round-robin-triple-split' value={6}>Round Robin Triple Split</MenuItem>
+                                <MenuItem key='round-robin-quadruple-split' value={7}>Round Robin Quadruple Split</MenuItem>
+                                <MenuItem key='semi-round-robin' value={8}>Semi Round Robin</MenuItem>
                             </Select>}
                     </Box>
                 </Grid>
@@ -264,21 +360,21 @@ const Page = (props) => {
                         <MenuItem key='random' value={1}>Random</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography variant='h6'>Event Name</Typography>
-                    <FormControl fullWidth error={errors.name !== undefined} sx={{ mt: 1 }}>
-                        <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
-                            onChange={handle.inputs} />
-                        {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6} lg={4}>
                     <Typography variant='h6'>Event Start Date</Typography>
                     <DateTimePicker value={inputs?.startAt} setValue={(newDate) => setDate('startAt', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6} lg={4}>
                     <Typography variant='h6'>Register Date</Typography>
                     <DateTimePicker value={inputs?.registerTo} setValue={(newDate) => setDate('registerTo', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                    <Typography variant='h6'>CheckIn</Typography>
+                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.checkin !== undefined}>
+                        <OutlinedInput id="check-in" name="checkin" aria-describedby="check-in-helper" value={inputs?.checkin} disabled={disabled}
+                            type='number' step={1} onChange={handle.inputs} />
+                        {errors.checkin !== undefined && <FormHelperText id="check-in-helper" sx={{ mt: 2 }}>{errors.checkin}</FormHelperText>}
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Game</Typography>

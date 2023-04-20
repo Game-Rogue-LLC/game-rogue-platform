@@ -105,7 +105,6 @@ const MyApp = (props) => {
                 component={'section'}
                 sx={{
                     position: 'relative',
-                    marginTop: '73px',
                     height: '57px',
                     backgroundColor: 'transparent'
                 }}

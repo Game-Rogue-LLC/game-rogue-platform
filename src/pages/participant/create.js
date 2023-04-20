@@ -81,15 +81,20 @@ const Page = (props) => {
     const handle = {
         create: async (e) => {
             if (event.events[event.current].participants?.length >= event.events[event.current].participantsCount) {
-                alert('You can\'t create more than ' + event.events[event.current].participantsCount + 'participants');
+                alert('You can\'t add more than ' + event.events[event.current].participantsCount + 'participants');
                 return;
             }
             if (validate(inputs, rules, customMessages) === false)
                 return;
+            if (event.events[event.current].participants?.findIndex(val => val.tid === inputs.tid) >= 0) {
+                alert('This team is already registered.');
+                setRegistering(false);
+                return;
+            }
             let newParticipants = event.events[event.current]?.participants;
             if (!newParticipants) newParticipants = [];
             newParticipants = [
-                ...newParticipants.filter(val => val.tid !== inputs.tid),
+                ...newParticipants,
                 {
                     tid: inputs.tid,
                     deleted: false,
