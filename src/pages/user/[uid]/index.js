@@ -13,8 +13,8 @@ import { useRouter } from 'next/router';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import TeamTable from '@/src/pages/components/TeamTable';
-import UserInfo from '../components/UserInfo';
+import TeamTable from '@/src/components/TeamTable';
+import UserInfo from '@/src/components/UserInfo';
 
 const Page = (props) => {
     const router = useRouter();

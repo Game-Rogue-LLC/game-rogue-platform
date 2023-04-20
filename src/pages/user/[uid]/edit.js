@@ -20,12 +20,12 @@ import { LoadingButton } from '@mui/lab'
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import TeamTable from '@/src/pages/components/TeamTable';
+import TeamTable from '@/src/components/TeamTable';
 import { Edit } from '@mui/icons-material';
-import DatePicker from '@/src/pages/components/DatePicker';
-import CountrySelect from '@/src/pages/components/CountrySelect';
+import DatePicker from '@/src/components/DatePicker';
+import CountrySelect from '@/src/components/CountrySelect';
 import Validator from 'validatorjs';
-import UserInfo from '../components/UserInfo';
+import UserInfo from '@/src/components/UserInfo';
 
 const initialInputs = {
     name: '',

@@ -17,7 +17,7 @@ import { LoadingButton } from '@mui/lab'
 
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
-import DatePicker from '@/src/pages/components/DatePicker'
+import DatePicker from '@/src/components/DatePicker'
 import { useMatchContext } from '@/src/context/MatchContext'
 import { useTournamentContext } from '@/src/context/TournamentContext'
 

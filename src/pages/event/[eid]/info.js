@@ -19,7 +19,7 @@ import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from '@/src/config/global';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { games } from '@/src/pages/components/GameSelect';
+import { games } from '@/src/components/GameSelect';
 import { formats } from '@/src/pages/event/create';
 import { useAuthContext } from '@/src/context/AuthContext';
 

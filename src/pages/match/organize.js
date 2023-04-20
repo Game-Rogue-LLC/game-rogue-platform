@@ -33,12 +33,12 @@ import {
 } from '@mui/lab'
 import { nanoid } from 'nanoid'
 import dynamic from 'next/dynamic'
-import MatchItem from '../components/MatchItem'
-import TeamItem from '../components/TeamItem'
+import MatchItem from '@/src/components/MatchItem'
+import TeamItem from '@/src/components/TeamItem'
 
-import MatchComponent from '../components/match/MatchComponent'
+import MatchComponent from '@/src/components/match/MatchComponent'
 import { useTournamentContext } from '@/src/context/TournamentContext'
-import defaultTheme from '@/src/pages/components/match/themes/themes'
+import defaultTheme from '@/src/components/match/themes/themes'
 
 const SingleEliminationBracket = dynamic(() => import('@g-loot/react-tournament-brackets').then((mod) => mod.SingleEliminationBracket), {
     ssr: false, // This ensures the component is only rendered on the client-side

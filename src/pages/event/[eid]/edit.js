@@ -21,7 +21,7 @@ import Validator from 'validatorjs';
 import { Edit } from '@mui/icons-material';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
-import DateTimePicker from '@/src/pages/components/DateTimePicker';
+import DateTimePicker from '@/src/components/DateTimePicker';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { DEFAULT_LOGO, DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
 

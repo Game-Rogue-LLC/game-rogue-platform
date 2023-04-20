@@ -4,7 +4,7 @@ import { useAppContext } from '@/src/context/app'
 import { useRouter } from 'next/router'
 import { useTournamentContext } from '@/src/context/TournamentContext'
 import { useAuthContext } from '@/src/context/AuthContext'
-import TeamTable from '@/src/pages/components/TeamTable'
+import TeamTable from '@/src/components/TeamTable'
 
 const Page = (props) => {
     const router = useRouter();

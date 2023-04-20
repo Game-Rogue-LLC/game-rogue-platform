@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import FirebaseAuth from '@/src/pages/components/auth/FirebaseAuth'
+import FirebaseAuth from '@/src/components/auth/FirebaseAuth'
 import { Container, Box, Card, Typography, TextField, Button } from '@mui/material'
 import { useRouter } from 'next/router'
 

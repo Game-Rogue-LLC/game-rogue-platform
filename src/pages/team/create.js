@@ -18,8 +18,8 @@ import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import CountrySelect from '@/src/pages/components/CountrySelect';
-import GameSelect from '@/src/pages/components/GameSelect';
+import CountrySelect from '@/src/components/CountrySelect';
+import GameSelect from '@/src/components/GameSelect';
 import { useAuthContext } from '@/src/context/AuthContext';
 import Validator from 'validatorjs';
 
