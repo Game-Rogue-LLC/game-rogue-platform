@@ -6,6 +6,12 @@ export default () => {
   return <>Style</>
 }
 
+const textColor = {
+  highlighted: '#000',
+  highlightedColor: '#000',
+  textColor: '#000',
+}
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,12 +21,12 @@ export const Wrapper = styled.div`
   font-family: ${({ theme }) => theme.fontFamily};
 `;
 export const TopText = styled.p`
-  color: ${({ theme }) => theme.textColor.dark};
+  color: ${({ theme }) => textColor.dark};
   margin-bottom: 0.2rem;
   min-height: 1.25rem;
 `;
 export const BottomText = styled.p`
-  color: ${({ theme }) => theme.textColor.dark};
+  color: ${({ theme }) => textColor.dark};
   flex: 0 0 none;
   text-align: center;
   margin-top: 0.2rem;
@@ -45,7 +51,7 @@ export const Score = styled.div`
   background: ${({ theme, won }) =>
     won ? theme.score.background.wonColor : theme.score.background.lostColor};
   color: ${({ theme, won }) =>
-    won ? theme.textColor.highlighted : theme.textColor.dark};
+    won ? textColor.highlighted : textColor.dark};
 `;
 export const Side = styled.div`
   display: flex;
@@ -72,18 +78,18 @@ export const Side = styled.div`
   transition: border-color 0.5s ${({ theme }) => theme.transitionTimingFunction};
   ${Team} {
     color: ${({ theme, won }) =>
-    won ? theme.textColor.highlighted : theme.textColor.dark};
+    won ? textColor.highlighted : textColor.dark};
   }
   ${Score} {
     color: ${({ theme, won }) =>
-    won ? theme.textColor.highlighted : theme.textColor.dark};
+    won ? textColor.highlighted : textColor.dark};
   }
   ${({ hovered, theme, won }) =>
     hovered &&
     css`
       border-color: ${theme.border.highlightedColor};
       ${Team} {
-        color: ${theme.textColor.highlighted};
+        color: ${textColor.highlighted};
       }
       ${Score} {
         color: ${won
@@ -106,7 +112,7 @@ export const Anchor = styled.a`
   font-family: ${(props) =>
     props.font ? props.font : props.theme.fontFamily};
   font-weight: ${(props) => (props.bold ? '700' : '400')};
-  color: ${(props) => props.theme.textColor.main};
+  color: ${(props) => props.textColor.main};
   font-size: ${(props) => (props.size ? props.size : '1rem')};
   line-height: 1.375rem;
   text-decoration: none;
