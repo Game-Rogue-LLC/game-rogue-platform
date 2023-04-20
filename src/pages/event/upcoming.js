@@ -32,7 +32,7 @@ const Page = (props) => {
                                     sx={{
                                         border: 'solid 1px rgba(255, 255, 255, 0.2)',
                                         borderRadius: '4px',
-                                        height: '250px',
+                                        height: '280px',
                                         background: 'rgba(25, 25, 25, 0.8)',
                                         ':hover': {
                                             cursor: 'pointer',
@@ -42,8 +42,8 @@ const Page = (props) => {
                                 >
                                     <Box
                                         sx={{
-                                            height: '50px',
-                                            background: 'url(' + (item?.logo || DEFAULT_CONTENTBLOCK_IMAGE) + ')',
+                                            height: '70px',
+                                            background: 'url(' + (item?.banner || DEFAULT_CONTENTBLOCK_IMAGE) + ')',
                                             backgroundSize: 'cover',
                                             backgroundPosition: 'center',
                                             borderBottom: 'solid 1px gray'
@@ -51,7 +51,7 @@ const Page = (props) => {
                                     >
                                     </Box>
                                     <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-                                        <img src={item?.darkLogo || DEFAULT_LOGO} style={{ height: '40px' }} />
+                                        <img src={item?.darkLogo || DEFAULT_LOGO} style={{ height: '40px', width: '40px', objectFit: 'cover' }} />
                                         <Typography variant='h4'>
                                             {item?.name}
                                         </Typography>

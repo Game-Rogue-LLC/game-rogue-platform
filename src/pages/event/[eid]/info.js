@@ -50,12 +50,12 @@ const Page = (props) => {
     }, [])
 
     useEffect(() => {
-        if (currentTime && item) {
+        if (currentTime) {
             if (dayjs(currentTime).isAfter(dayjs(endTime))) setStatus(2);
             else if (dayjs(currentTime).isBefore(dayjs(startTime))) setStatus(0);
             else setStatus(1);
         }
-    }, [currentTime, item])
+    }, [currentTime])
 
     useEffect(() => {
         if (team?.teams && Object.keys(team.teams).length > 0) {
@@ -66,7 +66,6 @@ const Page = (props) => {
     useEffect(() => {
         if (router?.query?.eid) {
             setEID(router.query.eid);
-            event.setCurrent(router.query.eid);
         }
     }, [router])
 
@@ -86,7 +85,7 @@ const Page = (props) => {
     const handleRegister = async (e) => {
         setRegistering(true);
         if (event.events[eid].participants?.length >= event.events[eid].participantsCount) {
-            alert('Only ' + event.events[event.current].participantsCount + ' participants are allowed.');
+            alert('Only ' + event.events[eid].participantsCount + ' participants are allowed.');
             setRegistering(false);
             return;
         }
@@ -110,7 +109,9 @@ const Page = (props) => {
 
         setRegistering(false);
         if (res.code === 'succeed') {
-            router.push('/participant?event=' + eid);
+            if (organization.organizations[event.events[eid].oid].uid == user.id)
+                router.push('/participant?event=' + eid);
+            else alert('Registered Successfully!');
         } else if (res.code === 'failed') {
             console.log(res.message)
         }
@@ -135,7 +136,17 @@ const Page = (props) => {
                     alignItems: 'center'
                 }}
             >
-                <img src={item?.darkLogo} width={200} height={200} style={{ borderRadius: '50%', outline: '1px solid rgba(245, 131, 31, 0.5)', outlineOffset: '2px' }} />
+                <img
+                    src={item?.darkLogo}
+                    width={200}
+                    height={200}
+                    style={{
+                        borderRadius: '50%',
+                        outline: '1px solid rgba(245, 131, 31, 0.5)',
+                        objectFit: 'cover',
+                        outlineOffset: '2px'
+                    }}
+                />
             </Box>
             <Container sx={{ mt: '100px' }}>
                 <Grid container spacing={2} rowSpacing={3} sx={{ mt: 2 }}>

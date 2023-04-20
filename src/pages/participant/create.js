@@ -26,6 +26,7 @@ import { useRouter } from 'next/router';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { useAuthContext } from '@/src/context/AuthContext';
 import Validator from 'validatorjs';
+import { LoadingButton } from '@mui/lab';
 
 const initialInputs = {
     tid: ''
@@ -47,6 +48,7 @@ const Page = (props) => {
     const { organization, team, event } = useTournamentContext();
     const [inputs, setInputs] = useState({ ...initialInputs });
     const [errors, setErrors] = useState({});
+    const [saving, setSaving] = useState(false);
     const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
@@ -62,7 +64,6 @@ const Page = (props) => {
     }, [])
 
     const validate = (data, rule, messages) => {
-        console.log(data, rule);
         let validator = new Validator(data, rule, messages);
         if (validator.fails()) {
             setErrors(validator.errors.errors);
@@ -81,16 +82,16 @@ const Page = (props) => {
     const handle = {
         create: async (e) => {
             if (event.events[event.current].participants?.length >= event.events[event.current].participantsCount) {
-                alert('You can\'t add more than ' + event.events[event.current].participantsCount + 'participants');
+                alert('You can\'t add more than ' + event.events[event.current].participantsCount + ' participants');
                 return;
             }
             if (validate(inputs, rules, customMessages) === false)
                 return;
             if (event.events[event.current].participants?.findIndex(val => val.tid === inputs.tid) >= 0) {
                 alert('This team is already registered.');
-                setRegistering(false);
                 return;
             }
+            setSaving(true);
             let newParticipants = event.events[event.current]?.participants;
             if (!newParticipants) newParticipants = [];
             newParticipants = [
@@ -102,13 +103,15 @@ const Page = (props) => {
                 }
             ]
 
-            const res = await event.update(event.current, { participants: newParticipants })
+            const res = await event.update(event.current, { participants: newParticipants });
 
             if (res.code === 'succeed') {
                 router.push('/participant?event=' + event.current);
             } else if (res.code === 'failed') {
                 console.log(res.message)
             }
+
+            setSaving(false);
         },
         inputs: (e) => {
             const { name, value } = e.target;
@@ -129,12 +132,13 @@ const Page = (props) => {
                 </FormControl>
             </Box>
             <Box sx={{ mt: 2 }}>
-                <Button
+                <LoadingButton
+                    loading={saving}
                     variant='contained'
                     onClick={handle.create}
                 >
-                    Create
-                </Button>
+                    ADD
+                </LoadingButton>
             </Box>
         </Paper>
     )

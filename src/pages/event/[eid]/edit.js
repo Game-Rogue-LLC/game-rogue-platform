@@ -240,16 +240,16 @@ const Page = (props) => {
             }
         },
         removeDarkLogo: (e) => {
-            setInputs(prev => ({
-                ...prev,
+            setInputs({
+                ...inputs,
                 darkLogo: DEFAULT_LOGO
-            }))
+            })
         },
         removeLightLogo: (e) => {
-            setInputs(prev => ({
-                ...prev,
+            setInputs({
+                ...inputs,
                 lightLogo: DEFAULT_LOGO
-            }))
+            })
         }
     }
 

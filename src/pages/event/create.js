@@ -25,7 +25,7 @@ import DateTimePicker from '@/src/components/DateTimePicker'
 import { useEventContext } from '@/src/context/EventContext'
 import Validator from 'validatorjs'
 import { useTournamentContext } from '@/src/context/TournamentContext'
-import { DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
+import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from '@/src/config/global';
 
 export const formats = [
     {
@@ -94,6 +94,7 @@ const initialInputs = {
     privacy: '',
     checkin: 15,
     description: '',
+    participants: [],
     participantsCount: 2,
     deleted: false
 }
@@ -116,10 +117,12 @@ const Page = (props) => {
     const [rulebook, setRulebook] = useState(null);
     const [terms, setTerms] = useState(null);
     const [privacy, setPrivacy] = useState(null);
-    const [logo, setLogo] = useState(null);
+    const [banner, setBanner] = useState(null);
     const [inputs, setInputs] = useState({ ...initialInputs });
     const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
+    const [darkLogo, setDarkLogo] = useState(null);
+    const [lightLogo, setLightLogo] = useState(null);
 
     useEffect(() => {
         setTitle('REGISTER AN EVENT');
@@ -173,11 +176,27 @@ const Page = (props) => {
                 let uploaded = true;
                 newEvent = {};
 
-                if (logo) {
+                if (banner) {
                     uploaded = false;
-                    const res = await event.upload(rulebook, data.id, 'logo');
+                    const res = await event.upload(banner, data.id, 'banner');
                     if (res.code === 'succeed') {
-                        newEvent.logo = res.url;
+                        newEvent.banner = res.url;
+                        uploaded = true;
+                    }
+                }
+                if (darkLogo) {
+                    uploaded = false;
+                    const res = await event.upload(darkLogo, data.id, 'darkLogo');
+                    if (res.code === 'succeed') {
+                        newEvent.darkLogo = res.url;
+                        uploaded = true;
+                    }
+                }
+                if (lightLogo) {
+                    uploaded = false;
+                    const res = await event.upload(lightLogo, data.id, 'lightLogo');
+                    if (res.code === 'succeed') {
+                        newEvent.lightLogo = res.url;
                         uploaded = true;
                     }
                 }
@@ -223,26 +242,102 @@ const Page = (props) => {
         },
         upload: (e, name) => {
             const file = e.target?.files[0];
-            if (name === 'logo') {
-                setLogo(file);
-                setInputs(prev => ({
-                    ...prev,
-                    logo: URL.createObjectURL(file)
-                }))
+            const url = URL.createObjectURL(file);
+            switch (name) {
+                case 'banner':
+                    console.log(1)
+                    setBanner(file);
+                    setInputs({
+                        ...inputs,
+                        banner: url
+                    })
+                    break;
+                case 'darkLogo':
+                    console.log(2)
+                    setDarkLogo(file);
+                    setInputs({
+                        ...inputs,
+                        darkLogo: url
+                    })
+                    break;
+                case 'lightLogo':
+                    console.log(3)
+                    setLightLogo(file);
+                    setInputs({
+                        ...inputs,
+                        lightLogo: url
+                    })
+                    break;
+                case 'rulebook':
+                    setRulebook(file);
+                    break;
+                case 'terms':
+                    setTerms(file);
+                    break;
+                case 'privacy':
+                    setPrivacy(file);
+                    break;
             }
-            if (name === 'rulebook') setRulebook(file);
-            if (name === 'terms') setTerms(file);
-            if (name === 'privacy') setPrivacy(file);
-            setInputs(prev => ({
-                ...prev,
-                [name]: file?.name
-            }))
+        },
+        removeDarkLogo: (e) => {
+            setInputs({
+                ...inputs,
+                darkLogo: DEFAULT_LOGO
+            })
+        },
+        removeLightLogo: (e) => {
+            setInputs({
+                ...inputs,
+                lightLogo: DEFAULT_LOGO
+            })
         }
     }
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
             <Grid container spacing={2} rowSpacing={4}>
+                <Grid item xs={12}>
+
+                    <Box display={'flex'} justifyContent={'center'} gap={4} alignItems={'center'} mt={2}>
+                        <Box display={'flex'} justifyContent={'center'} gap={2}>
+                            <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'baseline'}>
+                                <Button variant='contained' color='primary' component='label'>
+                                    UPLOAD DARK LOGO
+                                    <input type="file" accept="image/*" name="upload-dark-logo" id="upload-dark-logo" hidden onChange={(e) => handle.upload(e, 'darkLogo')} />
+                                </Button>
+                                <Button variant='contained' color='primary' component='label' onClick={handle.removeDarkLogo}>
+                                    REMOVE DARK LOGO
+                                </Button>
+                            </Box>
+                            <Box width={'200px'} height={'200px'} textAlign={'center'}>
+                                <img src={inputs.darkLogo || DEFAULT_LOGO} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                            </Box>
+                        </Box>
+                        <Box display={'flex'} justifyContent={'center'} gap={2}>
+                            <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'baseline'}>
+                                <Button variant='contained' color='primary' component='label'>
+                                    UPLOAD LIGHT LOGO
+                                    <input type="file" accept="image/*" name="upload-light-logo" id="upload-light-logo" hidden onChange={(e) => handle.upload(e, 'lightLogo')} />
+                                </Button>
+                                <Button variant='contained' color='primary' component='label' onClick={handle.removeLightLogo}>
+                                    REMOVE LIGHT LOGO
+                                </Button>
+                            </Box>
+                            <Box width={'200px'} height={'200px'} textAlign={'center'}>
+                                <img src={inputs.lightLogo || DEFAULT_LOGO} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                            </Box>
+                        </Box>
+                    </Box>
+
+                    <Box sx={{ textAlign: 'center', position: 'relative', mt: 3 }}>
+                        <IconButton sx={{ position: 'absolute', right: 0, bottom: 0 }} color='primary' component='label'>
+                            <Edit />
+                            <input type="file" accept="image/*" name="upload-banner" id="upload-banner" hidden onChange={(e) => handle.upload(e, 'banner')} />
+                        </IconButton>
+                        <img src={inputs?.banner || DEFAULT_CONTENTBLOCK_IMAGE} style={{ height: '200px', maxWidth: '600px', objectFit: 'cover', border: 'solid 1px rgba(255, 255, 255, 0.2)', borderRadius: '4px' }} />
+                    </Box>
+
+                </Grid>
                 <Grid item xs={12}>
                     <Typography variant='h6'>Organization</Typography>
                     <Select
@@ -263,23 +358,14 @@ const Page = (props) => {
                     </Select>
                 </Grid>
                 <Grid item xs={12}>
-                    <Box sx={{ textAlign: 'center', position: 'relative' }}>
-                        <IconButton sx={{ position: 'absolute', right: 0, bottom: 0 }} color='primary' component='label'>
-                            <Edit />
-                            <input type="file" accept="image/*" name="upload-image" id="upload-image" hidden onChange={(e) => handle.upload(e, 'logo')} />
-                        </IconButton>
-                        <img src={inputs?.logo || DEFAULT_CONTENTBLOCK_IMAGE} style={{ height: '200px', maxWidth: '600px', objectFit: 'contain' }} />
-                    </Box>
-
                     <Box>
                         <Typography variant='h6'>Event Name</Typography>
-                        <FormControl fullWidth error={errors.name !== undefined} sx={{ mt: 1 }}>
+                        <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
                             <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs?.name} disabled={disabled}
                                 onChange={handle.inputs} />
                             {errors.name !== undefined && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
                         </FormControl>
                     </Box>
-
                     <Box sx={{ mt: 3 }}>
                         <Typography variant='h6'>Event Description</Typography>
                         <FormControl fullWidth sx={{ mt: 1 }}>
@@ -305,45 +391,46 @@ const Page = (props) => {
                         <MenuItem key='league' value={1}>League</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12} lg={4}>
+                <Grid item xs={12} lg={6}>
                     <Typography variant='h6'>Game Type</Typography>
                     <Box sx={{ mt: 1 }}>
-                        {inputs?.format == 0 ?
-                            <Select
-                                labelId="tournament-select-label"
-                                id="tournament-select"
-                                value={inputs?.tournament}
-                                name="tournament"
-                                onChange={handle.inputs}
-                                variant="outlined"
-                                disabled={disabled}
-                                fullWidth
-                            >
-                                <MenuItem key='single-elimination' value={0}>Single Elimination</MenuItem>
-                                <MenuItem key='double-elimination' value={1}>Double Elimination</MenuItem>
-                                <MenuItem key='ladder-elimination' value={2}>Ladder Elimination</MenuItem>
-                                <MenuItem key='pyramid-elimination' value={3}>Pyramid Elimination</MenuItem>
-                            </Select>
-                            :
-                            <Select
-                                labelId="league-select"
-                                id="league-select-temp"
-                                value={inputs?.league}
-                                name="league"
-                                onChange={handle.inputs}
-                                variant="outlined"
-                                disabled={disabled}
-                                fullWidth
-                            >
-                                <MenuItem key='straight-round-robin' value={4}>Straight Round Robin</MenuItem>
-                                <MenuItem key='round-robin-double-split' value={5}>Round Robin Double Split</MenuItem>
-                                <MenuItem key='round-robin-triple-split' value={6}>Round Robin Triple Split</MenuItem>
-                                <MenuItem key='round-robin-quadruple-split' value={7}>Round Robin Quadruple Split</MenuItem>
-                                <MenuItem key='semi-round-robin' value={8}>Semi Round Robin</MenuItem>
-                            </Select>}
+                        {
+                            inputs?.format == 0
+                                ? <Select
+                                    labelId="tournament-select-label"
+                                    id="tournament-select"
+                                    value={inputs?.tournament}
+                                    name="tournament"
+                                    onChange={handle.inputs}
+                                    variant="outlined"
+                                    disabled={disabled}
+                                    fullWidth
+                                >
+                                    <MenuItem key='single-elimination' value={0}>Single Elimination</MenuItem>
+                                    <MenuItem key='double-elimination' value={1}>Double Elimination</MenuItem>
+                                    <MenuItem key='ladder-elimination' value={2}>Ladder Elimination</MenuItem>
+                                    <MenuItem key='pyramid-elimination' value={3}>Pyramid Elimination</MenuItem>
+                                </Select>
+                                : <Select
+                                    labelId="league-select"
+                                    id="league-select-temp"
+                                    value={inputs?.league}
+                                    name="league"
+                                    onChange={handle.inputs}
+                                    variant="outlined"
+                                    disabled={disabled}
+                                    fullWidth
+                                >
+                                    <MenuItem key='straight-round-robin' value={0}>Straight Round Robin</MenuItem>
+                                    <MenuItem key='round-robin-double-split' value={1}>Round Robin Double Split</MenuItem>
+                                    <MenuItem key='round-robin-triple-split' value={2}>Round Robin Triple Split</MenuItem>
+                                    <MenuItem key='round-robin-quadruple-split' value={3}>Round Robin Quadruple Split</MenuItem>
+                                    <MenuItem key='semi-round-robin' value={4}>Semi Round Robin</MenuItem>
+                                </Select>
+                        }
                     </Box>
                 </Grid>
-                <Grid item xs={12} lg={4}>
+                <Grid item xs={12} lg={6}>
                     <Typography variant='h6'>Event Seed</Typography>
                     <Select
                         labelId="seed-select-label"
@@ -360,15 +447,23 @@ const Page = (props) => {
                         <MenuItem key='random' value={1}>Random</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12} md={6} lg={4}>
-                    <Typography variant='h6'>Event Start Date</Typography>
+                <Grid item xs={12} lg={6}>
+                    <Typography variant='h6'>Participants</Typography>
+                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+                        <OutlinedInput id="participants-count" name="participantsCount" aria-describedby="participants-count-helper" value={inputs?.participantsCount} disabled={disabled}
+                            type='number' step={2} onChange={handle.inputs} />
+                        {errors.participantsCount !== undefined && <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>{errors.participantsCount}</FormHelperText>}
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                    <Typography variant='h6'>Start Date</Typography>
                     <DateTimePicker value={inputs?.startAt} setValue={(newDate) => setDate('startAt', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
                 </Grid>
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Register Date</Typography>
                     <DateTimePicker value={inputs?.registerTo} setValue={(newDate) => setDate('registerTo', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
                 </Grid>
-                <Grid item xs={12} md={6} lg={4}>
+                <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>CheckIn</Typography>
                     <FormControl sx={{ mt: 1 }} fullWidth error={errors.checkin !== undefined}>
                         <OutlinedInput id="check-in" name="checkin" aria-describedby="check-in-helper" value={inputs?.checkin} disabled={disabled}

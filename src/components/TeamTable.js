@@ -16,7 +16,7 @@ const TeamTable = (props) => {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell align='center'>TEAM ID</TableCell>
+                        <TableCell align='center'>TEAM NAME</TableCell>
                         <TableCell align='center'>GAME</TableCell>
                     </TableRow>
                 </TableHead>
