@@ -589,4 +589,6 @@ MyApp.getLayout = (page) => {
     return <PublicLayout>{page}</PublicLayout>
 }
 
+MyApp.ignoreAuth = true
+
 export default MyApp;

@@ -38,6 +38,7 @@ import TeamItem from '../components/TeamItem'
 
 import MatchComponent from '../components/match/MatchComponent'
 import { useTournamentContext } from '@/src/context/TournamentContext'
+import defaultTheme from '@/src/pages/components/match/themes/themes'
 
 const SingleEliminationBracket = dynamic(() => import('@g-loot/react-tournament-brackets').then((mod) => mod.SingleEliminationBracket), {
     ssr: false, // This ensures the component is only rendered on the client-side
@@ -442,6 +443,7 @@ const Page = (props) => {
                                 },
                             }}
                             matches={games}
+                            theme={defaultTheme}
                             matchComponent={(props) => (
                                 <MatchComponent {...props}
                                     onPartyClick={(party, partyWon) => handlePartyClick(party, partyWon)}

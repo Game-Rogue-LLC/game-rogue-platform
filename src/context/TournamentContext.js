@@ -186,7 +186,7 @@ const TournamentProvider = (props) => {
     }, [organizationLoading, eventLoading, teamLoading, playerLoading])
 
     const loadTournament = useCallback(() => {
-        if (user.id) {
+        if (user && user.id) {
             organization.read(user.id);
             event.read(user.id);
             team.read(user.id);

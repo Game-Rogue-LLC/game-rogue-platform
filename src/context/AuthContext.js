@@ -1,9 +1,8 @@
-import { createContext, useEffect, useState, useContext } from 'react';
+import { createContext, useEffect, useState, useContext, useMemo } from 'react';
 import { useUser } from '@/lib/firebase/useUser';
 import nProgress from 'nprogress';
 import Splash from '@/src/content/Splash';
 import { useRouter } from 'next/router';
-import { Redirect } from 'next/dist/lib/load-custom-routes';
 
 const initialState = {
     loading: true,
@@ -25,9 +24,28 @@ export const AuthContextProvider = ({ children }) => {
     //     }
     // }
 
+    const ignoreAuthRouter = ['/', '/auth']
+
+    const ignoreAuth = useMemo(() => {
+        return ignoreAuthRouter.includes(router.pathname)
+    }, [router])
+
+    useEffect(() => {
+        console.log(!user.loading && !user.user && (!ignoreAuth))
+        if (!user.loading && !user.user && (!ignoreAuth)) {
+            router.push('/auth')
+        }
+    }, [user.loading, user.user, router])
+
     return (
         <AuthContext.Provider value={user}>
-            {children}
+            {(user.loading) ?
+                <Splash content='Signing in. Please wait...'></Splash>
+                : (user.user || ignoreAuth) ?
+                    children
+                    :
+                    <Splash content='Signing in. Please wait...'></Splash>
+            }
         </AuthContext.Provider>
     )
 }

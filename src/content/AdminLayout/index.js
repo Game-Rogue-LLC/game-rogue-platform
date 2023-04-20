@@ -18,11 +18,6 @@ const AdminLayout = (props) => {
 	const router = useRouter();
 	const { organization, event } = useTournamentContext();
 
-	if (!user) {
-		router.push('/auth')
-		return <></>
-	}
-
 	return (
 		<div style={{
 			display: 'flex',
