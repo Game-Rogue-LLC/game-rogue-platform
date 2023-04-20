@@ -199,7 +199,7 @@ const TournamentProvider = (props) => {
     }, [loadTournament])
 
     return (
-        <TournamentContext.Provider value={{ tournaments, matches, participants, organization, event, team, player, eventLoading }}>
+        <TournamentContext.Provider value={{ tournaments, matches, participants, organization, event, team, player }}>
             {isLoading ? <Splash content={'Loading data...'} /> : props.children}
         </TournamentContext.Provider>
     )

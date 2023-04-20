@@ -103,9 +103,11 @@ const Page = (props) => {
     }, [teams, generated0, group])
 
     const filteredMatches = useMemo(() => {
-        return matches.filter(val => val.round == 0)
-            .slice(group * 6, group * 6 + 6)
-            .filter((val, i) => team == "all" || val.team1 == team || val.team2 == team)
+        if (matches?.length > 0)
+            return matches.filter(val => val.round == 0)
+                .slice(group * 6, group * 6 + 6)
+                .filter((val, i) => team == "all" || val.team1 == team || val.team2 == team);
+        return [];
     }, [group, team, matches])
 
     const generateScore = () => {
