@@ -7,12 +7,15 @@ const Stepper = (props) => {
     return (
         <Box sx={sx}>
             <Carousel {...config}>
-                {data.map((val, i) => (
-                    <Box key={'step_' + i}>
-                        <img src={val.src} />
-                        {val.content}
-                    </Box>
-                ))}
+                {
+                    data?.length > 0 &&
+                    data.map((val, i) => (
+                        <Box key={'step_' + i}>
+                            <img src={val.src} />
+                            {val.content}
+                        </Box>
+                    ))
+                }
             </Carousel>
         </Box>
     )
