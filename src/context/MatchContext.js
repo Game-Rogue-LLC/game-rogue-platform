@@ -35,7 +35,7 @@ export default (props) => {
             setCurrent(id)
         },
         read: async () => {
-            await matchStore.read(user?.id, setMatch, () => setLoading(false))
+            await matchStore.read(user.id, setMatch, () => setLoading(false))
         },
         save: (data, id) => {
             return matchStore.save(data, id)
@@ -43,7 +43,7 @@ export default (props) => {
         add: async (match) => {
             match = {
                 ...match,
-                uid: user?.id,
+                uid: user.id,
                 deleted: false
             }
             return await matchStore.save(match, null)

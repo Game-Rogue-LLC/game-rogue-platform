@@ -82,7 +82,7 @@ const Page = (props) => {
                         ))
                         : <TableRow>
                             <TableCell align='center' colSpan={5}>
-                                <Typography variant='body2' textAlign={'center'}>No data.</Typography>
+                                <Typography variant='body2' textAlign={'center'}>NO STAFF</Typography>
                             </TableCell>
                         </TableRow>
                     }

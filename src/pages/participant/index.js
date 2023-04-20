@@ -20,7 +20,7 @@ const Page = (props) => {
     const theme = useTheme();
     const router = useRouter();
     const { setTitle } = useAppContext();
-    const { event, team } = useTournamentContext();
+    const { organization, event, team } = useTournamentContext();
     const [eid, setEID] = useState(null);
 
     useEffect(() => {
@@ -29,9 +29,10 @@ const Page = (props) => {
 
     useEffect(() => {
         if (router?.query.event) {
-            const newEID = router?.query.event;
+            const newEID = router.query.event;
             setEID(newEID);
             event.setCurrent(newEID);
+            organization.setCurrent(event.events[newEID].oid);
         }
     }, [router])
 

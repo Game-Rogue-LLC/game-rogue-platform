@@ -26,7 +26,7 @@ export default (props) => {
     const organization = {
         readOrganization: async () => {
             setLoading(true)
-            await organizationStore.read(user?.id, setOrganization, () => setLoading(false))
+            await organizationStore.read(user.id, setOrganization, () => setLoading(false))
         },
         saveOrganization: async (data, id) => {
             return await organizationStore.save(data, id)
@@ -34,7 +34,7 @@ export default (props) => {
         addOrganization: async (organization) => {
             organization = {
                 ...organization,
-                uid: user?.id,
+                uid: user.id,
                 deleted: false
             }
             return await organizationStore.save(organization, null)

@@ -25,7 +25,7 @@ import { Edit } from '@mui/icons-material';
 import DatePicker from '@/src/pages/components/DatePicker';
 import CountrySelect from '@/src/pages/components/CountrySelect';
 import Validator from 'validatorjs';
-import store from '@/lib/firestore/collections';
+import UserInfo from '../components/UserInfo';
 
 const initialInputs = {
     name: '',
@@ -59,6 +59,27 @@ const Page = (props) => {
     const [saving, setSaving] = useState(false);
     const { setTitle } = useAppContext();
     const { player, team } = useTournamentContext();
+
+    useEffect(() => {
+        setInputs(prev => ({
+            ...prev,
+            ...item
+        }))
+    }, [item])
+
+    useEffect(() => {
+        setItem(player.players[uid]);
+    }, [player.players, uid])
+
+    useEffect(() => {
+        console.log(router.query.uid);
+        if (router.query.uid)
+            setUID(router.query.uid);
+    }, [router])
+
+    useEffect(() => {
+        setTitle('EDIT USER PROFILE');
+    }, [])
 
     const validate = (data, rule, messages) => {
         let validator = new Validator(data, rule, messages);
@@ -121,116 +142,11 @@ const Page = (props) => {
         }
     }
 
-    useEffect(() => {
-        setInputs(prev => ({
-            ...prev,
-            ...item
-        }))
-    }, [item])
-
-    useEffect(() => {
-        setItem(player.players[uid]);
-    }, [player.players, uid])
-
-    useEffect(() => {
-        console.log(router.query.uid);
-        if (router.query.uid)
-            setUID(router.query.uid);
-    }, [router])
-
-    useEffect(() => {
-        setTitle('USER PROFILE');
-    }, [])
-
     return (
         <Paper sx={{ p: 4 }}>
             <Grid container spacing={2}>
                 <Grid item sx={{ width: 300 }}>
-                    <Box sx={{ textAlign: 'center', position: 'relative' }}>
-                        <Avatar alt={item?.name} src={inputs?.profilePic} sx={{ width: 150, height: 150, mx: 'auto' }} />
-                        <IconButton size='large' sx={{ position: 'absolute', right: 0, bottom: 0, color: theme.palette.primary.main }} component={'label'}>
-                            <Edit />
-                            <input type="file" accept="image/*" name="upload-image" id="upload-image" hidden onChange={(e) => handle.upload(e, 'profilePic')} />
-                        </IconButton>
-                    </Box>
-                    <Box sx={{ mt: 4 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    ACCOUNT ID
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='b1'>
-                                    {item?._id}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    NAME
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='b1'>
-                                    {item?.name}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    USER NAME
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='b1'>
-                                    {item?.userName}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    AGE
-                                </Typography>
-                            </Grid>
-                            <Grid>
-                                <Typography variant='b1'>
-                                    {item?.age}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    GENDER
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography variant='b1'>
-                                    {item?.gender == 0 ? 'Male' : 'Female'}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography variant='b1' sx={{ fontWeight: '900' }}>
-                                    RESIDENCY
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <img
-                                    loading="lazy"
-                                    width="20"
-                                    src={`https://flagcdn.com/w20/${inputs?.residency.code.toLowerCase()}.png`}
-                                    srcSet={`https://flagcdn.com/w40/${inputs?.residency.code.toLowerCase()}.png 2x`}
-                                    alt=""
-                                />
-                            </Grid>
-                        </Grid>
-                    </Box>
+                    <UserInfo avatar={inputs?.profilePic} item={item} editable={true} handle={(e) => handle.upload(e, 'profilePic')} />
                 </Grid>
                 <Grid item xs container spacing={2}>
                     <Grid item xs={12} lg={6}>

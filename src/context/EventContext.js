@@ -28,7 +28,7 @@ export default (props) => {
     const event = {
         readEvent: async () => {
             setLoading(true)
-            await eventStore.read(user?.id, setEvent, () => setLoading(false))
+            await eventStore.read(user.id, setEvent, () => setLoading(false))
         },
         saveEvent: (data, id) => {
             return eventStore.save(data, id)
@@ -36,7 +36,7 @@ export default (props) => {
         addEvent: async (event) => {
             event = {
                 ...event,
-                uid: user?.id,
+                uid: user.id,
                 deleted: false
             }
             return await eventStore.save(event, null)

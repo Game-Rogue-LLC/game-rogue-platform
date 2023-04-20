@@ -50,7 +50,7 @@ const FirePaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function OrganizationSidebar(props) {
-	const { organization } = useTournamentContext();
+	const { organization, player } = useTournamentContext();
 	const [showMenu, setShowMenu] = React.useState(false);
 	const { user } = useAuthContext();
 	const [anchorElMenu, setAnchorElMenu] = React.useState(null);
@@ -83,10 +83,10 @@ export default function OrganizationSidebar(props) {
 							p: 2,
 						}}>
 							<Box>
-								<Avatar alt={user?.name} src={user?.profilePic} sx={{ width: 100, height: 100 }} />
+								<Avatar alt={player.players[user.id]?.name} src={player.players[user.id]?.profilePic} sx={{ width: 100, height: 100 }} />
 							</Box>
 							<Box sx={{ mt: 2 }}>
-								<Typography variant="h6">{user?.name}</Typography>
+								<Typography variant="h6">{player.players[user.id]?.name}</Typography>
 							</Box>
 						</ListItem>
 						<Divider />
@@ -96,7 +96,7 @@ export default function OrganizationSidebar(props) {
 									<Home color="primary" />
 								</ListItemIcon>
 								<ListItemText
-									primary={`${user?.name.split(' ')[0]}' s Profile`}
+									primary={`${player.players[user.id]?.name.split(' ')[0]}' s Profile`}
 									primaryTypographyProps={{
 										color: 'primary',
 										fontWeight: 'medium',

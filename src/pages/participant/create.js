@@ -44,7 +44,7 @@ const Page = (props) => {
     const router = useRouter();
     const { user } = useAuthContext();
     const { setTitle } = useAppContext();
-    const { team, event } = useTournamentContext();
+    const { organization, team, event } = useTournamentContext();
     const [inputs, setInputs] = useState({ ...initialInputs });
     const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
@@ -53,6 +53,7 @@ const Page = (props) => {
         if (router?.query.event) {
             const newEID = router.query.event;
             event.setCurrent(newEID);
+            organization.setCurrent(event.events[newEID].oid);
         }
     }, [router])
 
@@ -79,7 +80,12 @@ const Page = (props) => {
 
     const handle = {
         create: async (e) => {
-            if (validate(inputs, rules, customMessages) === false) return;
+            if (event.events[event.current].participants?.length >= event.events[event.current].participantsCount) {
+                alert('You can\'t create more than ' + event.events[event.current].participantsCount + 'participants');
+                return;
+            }
+            if (validate(inputs, rules, customMessages) === false)
+                return;
             let newParticipants = event.events[event.current]?.participants;
             if (!newParticipants) newParticipants = [];
             newParticipants = [

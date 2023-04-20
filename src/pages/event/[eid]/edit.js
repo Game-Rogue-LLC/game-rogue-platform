@@ -18,7 +18,7 @@ import Validator from 'validatorjs';
 
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
-import DatePicker from '@/src/pages/components/DatePicker';
+import DateTimePicker from '@/src/pages/components/DateTimePicker';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 
 const initialInputs = {
@@ -29,6 +29,7 @@ const initialInputs = {
     league: 0,
     seed: 0,
     startAt: new Date(),
+    registerTo: new Date(),
     game: 0,
     platform: 0,
     region: 0,
@@ -36,17 +37,20 @@ const initialInputs = {
     rulebook: '',
     terms: '',
     privacy: '',
+    checkin: 15,
     participantsCount: 2,
     deleted: false
 }
 
 const rules = {
     name: 'required',
+    checkin: 'required',
     participantsCount: 'required'
 }
 
 const customMessages = {
     'required.name': 'Event Name is required.',
+    'required.checkin': 'CheckIn is required.',
     'required.participantsCount': 'Participant Count is required.'
 }
 
@@ -63,6 +67,27 @@ const Page = (props) => {
     const [inputs, setInputs] = useState({ ...initialInputs })
     const [errors, setErrors] = useState({});
     const [disabled, setDisabled] = useState(false);
+
+    useEffect(() => {
+        setTitle('EDIT EVENT');
+    }, [])
+
+    useEffect(() => {
+        if (router?.query.eid) {
+            setEID(router.query.eid);
+        }
+    }, [router])
+
+    useEffect(() => {
+        if (eid) {
+            event.setCurrent(eid);
+            organization.setCurrent(event.events[eid]?.oid);
+            console.log(event.events[eid]);
+            setInputs({
+                ...event.events[eid]
+            })
+        }
+    }, [eid, event.events])
 
     const validate = (data, rule, messages) => {
 
@@ -87,10 +112,10 @@ const Page = (props) => {
         return true;
     }
 
-    const setDate = (newDate) => {
+    const setDate = (name, newDate) => {
         setInputs(prev => ({
             ...prev,
-            startAt: new Date(newDate)
+            [name]: new Date(newDate)
         }))
     }
 
@@ -152,27 +177,6 @@ const Page = (props) => {
             }))
         }
     }
-
-    useEffect(() => {
-        setTitle('EDIT EVENT');
-    }, [])
-
-    useEffect(() => {
-        if (router.query.eid) {
-            setEID(router.query.eid);
-        }
-    }, [router])
-
-    useEffect(() => {
-        if (eid) {
-            event.setCurrent(eid);
-            organization.setCurrent(event.events[eid]?.oid);
-            setInputs(prev => ({
-                ...prev,
-                ...event.events[eid]
-            }))
-        }
-    }, [eid, event.events])
 
     return (
         <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
@@ -277,7 +281,7 @@ const Page = (props) => {
                         <MenuItem key='random' value={1}>Random</MenuItem>
                     </Select>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Participants</Typography>
                     <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
                         <OutlinedInput id="participants-count" name="participantsCount" aria-describedby="participants-count-helper" value={inputs?.participantsCount} disabled={disabled}
@@ -285,9 +289,21 @@ const Page = (props) => {
                         {errors.participantsCount !== undefined && <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>{errors.participantsCount}</FormHelperText>}
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid item xs={12} lg={4}>
                     <Typography variant='h6'>Event Date</Typography>
-                    <DatePicker value={inputs?.startAt} setValue={setDate} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
+                    <DateTimePicker value={inputs?.startAt} setValue={(newDate) => setDate('startAt', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant='h6'>Register Date</Typography>
+                    <DateTimePicker value={inputs?.registerTo} setValue={(newDate) => setDate('registerTo', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                    <Typography variant='h6'>CheckIn</Typography>
+                    <FormControl sx={{ mt: 1 }} fullWidth error={errors.checkin !== undefined}>
+                        <OutlinedInput id="check-in" name="checkin" aria-describedby="check-in-helper" value={inputs?.checkin} disabled={disabled}
+                            type='number' step={1} onChange={handle.inputs} />
+                        {errors.checkin !== undefined && <FormHelperText id="check-in-helper" sx={{ mt: 2 }}>{errors.checkin}</FormHelperText>}
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Game</Typography>

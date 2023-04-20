@@ -87,6 +87,11 @@ const Page = (props) => {
         join: async (e) => {
             joinTeam(inputs);
         },
+        reset: async (e) => {
+            setInputs({
+                ...initialInputs
+            })
+        },
         inputs: async (e) => {
             const { name, value } = e.target;
             setInputs({
@@ -131,9 +136,16 @@ const Page = (props) => {
                         loading={joining}
                         variant='contained'
                         onClick={handle.join}
+                        sx={{ mr: 2 }}
                     >
                         Join
                     </LoadingButton>
+                    <Button
+                        variant='contained'
+                        onClick={handle.reset}
+                    >
+                        Reset
+                    </Button>
                 </Grid>
             </Grid>
         </Paper>

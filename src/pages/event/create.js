@@ -18,6 +18,7 @@ import { LoadingButton } from '@mui/lab'
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import DatePicker from '@/src/pages/components/DatePicker'
+import DateTimePicker from '@/src/pages/components/DateTimePicker'
 import { useEventContext } from '@/src/context/EventContext'
 import Validator from 'validatorjs'
 import { useTournamentContext } from '@/src/context/TournamentContext'
@@ -29,7 +30,8 @@ const initialInputs = {
     tournament: 0,
     league: 0,
     seed: 0,
-    date: new Date(),
+    startAt: new Date(),
+    registerTo: new Date(),
     game: 0,
     platform: 0,
     region: 0,
@@ -37,6 +39,8 @@ const initialInputs = {
     rulebook: '',
     terms: '',
     privacy: '',
+    checkin: 15,
+    participantsCount: 2,
     deleted: false
 }
 
@@ -95,10 +99,10 @@ const Page = (props) => {
         return true;
     }
 
-    const setDate = (newDate) => {
+    const setDate = (name, newDate) => {
         setInputs(prev => ({
             ...prev,
-            date: new Date(newDate)
+            [name]: new Date(newDate)
         }))
     }
 
@@ -269,8 +273,12 @@ const Page = (props) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant='h6'>Event Date</Typography>
-                    <DatePicker value={inputs?.date} setValue={setDate} sx={{ mt: 1 }} disabled={disabled} />
+                    <Typography variant='h6'>Event Start Date</Typography>
+                    <DateTimePicker value={inputs?.startAt} setValue={(newDate) => setDate('startAt', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant='h6'>Register Date</Typography>
+                    <DateTimePicker value={inputs?.registerTo} setValue={(newDate) => setDate('registerTo', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant='h6'>Game</Typography>
