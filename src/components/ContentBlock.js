@@ -14,7 +14,7 @@ const ContentBlock = (props) => {
     const { contentBlock, handleChange, handleUpload, save, saving } = props;
 
     const handleInputs = (e) => {
-        const { name, value } = e.target;
+        let { name, type, value } = e.target;
         const content = {
             ...contentBlock,
             [name]: value

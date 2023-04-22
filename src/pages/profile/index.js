@@ -186,7 +186,7 @@ const Page = (props) => {
                     newOrganization.contentBlock.image = res.url;
                     uploaded = true;
                 } else {
-                    console.log(res.message);
+                    console.error(res.message);
                 }
             }
             if (uploaded) {
@@ -194,7 +194,7 @@ const Page = (props) => {
                 if (res.code === 'succeed') {
                     alert('Saved successfully!');
                 } else {
-                    console.log(res.message);
+                    console.error(res.message);
                 }
             }
 
@@ -249,7 +249,7 @@ const Page = (props) => {
             setOpen(false);
         },
         input: (e) => {
-            const { name, value } = e.target;
+            let { name, type, value } = e.target;
             setInputs(prev => ({
                 ...prev,
                 [name]: value

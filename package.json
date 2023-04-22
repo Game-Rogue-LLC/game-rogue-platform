@@ -12,6 +12,13 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@fullcalendar/core": "^6.1.5",
+    "@fullcalendar/daygrid": "^6.1.5",
+    "@fullcalendar/interaction": "^6.1.5",
+    "@fullcalendar/react": "^6.1.5",
+    "@fullcalendar/resource": "^6.1.5",
+    "@fullcalendar/resource-timeline": "^6.1.5",
+    "@fullcalendar/timegrid": "^6.1.5",
     "@g-loot/react-tournament-brackets": "^1.0.28",
     "@mui/icons-material": "^5.11.11",
     "@mui/lab": "^5.0.0-alpha.123",
@@ -22,6 +29,7 @@
     "dayjs": "^1.11.7",
     "firebase": "^9.18.0",
     "js-cookie": "^3.0.1",
+    "lodash": "^4.17.21",
     "next": "^13.2.4",
     "nprogress": "^0.2.0",
     "react": "18.2.0",
@@ -29,6 +37,7 @@
     "react-firebaseui": "^6.0.0",
     "react-loader-spinner": "^5.3.4",
     "react-responsive-carousel": "^3.2.23",
+    "tournament-pairings": "^1.5.2",
     "validatorjs": "^3.22.1"
   },
   "devDependencies": {

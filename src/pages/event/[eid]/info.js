@@ -20,7 +20,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { games } from '@/src/components/GameSelect';
-import { formats } from '@/src/pages/event/create';
+import { EVENT_FORMATS } from '@/src/config/global';
 import { useAuthContext } from '@/src/context/AuthContext';
 
 const Page = (props) => {
@@ -113,7 +113,7 @@ const Page = (props) => {
                 router.push('/participant?event=' + eid);
             else alert('Registered Successfully!');
         } else if (res.code === 'failed') {
-            console.log(res.message)
+            console.error(res.message)
         }
     }
 
@@ -206,7 +206,7 @@ const Page = (props) => {
                                     Format
                                 </Typography>
                                 <Typography variant='body2' sx={{ mt: 1 }}>
-                                    {formats[item?.format]?.name || 'PC'}
+                                    {EVENT_FORMATS[item?.format]?.name}
                                 </Typography>
                             </Paper>
                         </Grid>
