@@ -32,7 +32,7 @@ const initialInputs = {
   darkLogo: DEFAULT_LOGO,
   lightLogo: DEFAULT_LOGO,
   oid: '',
-  type: 0, // league or tournament
+  category: 0, // league or tournament
   format: 0, // single, double, round robin ...
   seed: 0,
   startAt: new Date(),

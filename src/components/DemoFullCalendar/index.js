@@ -9,14 +9,14 @@ import { nanoid } from 'nanoid';
 import _ from 'lodash';
 
 const colors = [
-  "#B01EAD",
-  "#EF7720",
-  "#81C031",
-  "#5D65A6"
+  "#B65A0C",
+  "#880167",
+  "#014984",
+  "#5E8F1C"
 ]
 
 const DemoApp = (props) => {
-  const { events, setEvents } = props;
+  const { events, setEvents, sx } = props;
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
   const handleWeekendsToggle = () => {
@@ -54,7 +54,7 @@ const DemoApp = (props) => {
   }
 
   return (
-    <div className='demo-app'>
+    <div className='demo-app' style={sx}>
       <div className='demo-app-main'>
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}

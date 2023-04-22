@@ -27,30 +27,7 @@ import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
 import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
 import DemoFullCalendar from '@/src/components/DemoFullCalendar/index.js';
-
-// a custom render function
-function renderEventContent(eventInfo) {
-  return (
-    <>
-      <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
-  )
-}
-
-const initialInputs = {
-  eid: '',
-  status: 0,
-  admin: 0,
-  category: 0,
-  schedule: 0,
-  deleted: false
-}
 
 const Page = (props) => {
   const theme = useTheme();
@@ -86,11 +63,12 @@ const Page = (props) => {
       let newGames = [], gameIDs = []
       const matches = SingleElimination(randomized);
       matches.forEach((val, i) => {
-        const newParticipants = [];
+        let newParticipants = [];
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
             id: participants[val.player1 - 1].tid,
+            round: val.round,
             resultText: '',
             isWinner: false,
             status: null,
@@ -101,6 +79,7 @@ const Page = (props) => {
         if (val.player2 && participants[val.player2 - 1]) {
           newParticipants.push({
             id: participants[val.player2 - 1].tid,
+            round: val.round,
             resultText: '',
             isWinner: false,
             status: null,
@@ -137,11 +116,12 @@ const Page = (props) => {
       let gameIDs = []
       const matches = DoubleElimination(randomized);
       matches.forEach((val, i) => {
-        const newParticipants = [];
+        let newParticipants = [];
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
             id: participants[val.player1 - 1].tid,
+            round: val.round,
             resultText: '',
             isWinner: false,
             status: null,
@@ -152,6 +132,7 @@ const Page = (props) => {
         if (val.player2 && participants[val.player2 - 1]) {
           newParticipants.push({
             id: participants[val.player2 - 1].tid,
+            round: val.round,
             resultText: '',
             isWinner: false,
             status: null,
@@ -199,7 +180,7 @@ const Page = (props) => {
       let newGames = [], gameIDs = []
       const matches = Stepladder(randomized);
       matches.forEach((val, i) => {
-        const newParticipants = [];
+        let newParticipants = [];
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
@@ -254,116 +235,296 @@ const Page = (props) => {
       console.info('matches:', matches);
       setGames(matches);
     },
-    organize: (e) => { }
+    organize: (e) => { },
+    singlePartyClick: (party, partyWon) => {
+      if (party.status == 'DONE') return;
+
+      const ind = _.findLastIndex(games, (val) => (
+        (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
+        || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
+      ))
+
+      if (ind < 0 || games[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+
+      let newGames = [...games], participant = 0;
+
+      if (party.id === games[ind]?.participants[0]?.id) participant = 0;
+      else if (party.id === games[ind]?.participants[1]?.id) participant = 1;
+
+      if (ind >= 0) {
+        newGames[ind].participants[participant].isWinner = true;
+        newGames[ind].participants[participant].resultText = 'WON';
+        newGames[ind].participants[participant].status = 'DONE';
+        newGames[ind].participants[1 - participant].isWinner = false;
+        newGames[ind].participants[1 - participant].resultText = 'LOST';
+        newGames[ind].participants[1 - participant].status = 'DONE';
+
+        let nextIndex = -1;
+        if (newGames[ind].nextMatchId) {
+          nextIndex = _.findIndex(games, (val) => val?.id === newGames[ind].nextMatchId, ind);
+        }
+
+        if (nextIndex >= 0) {
+          if (newGames[nextIndex]?.participants.length == 0) newGames[nextIndex].participants = [{}, {}];
+
+          const newParticipant = {
+            ...newGames[ind].participants[participant],
+            round: newGames[ind].participants[participant].round + 1,
+            isWinner: false,
+            resultText: '',
+            status: null
+          }
+
+          if (newGames[ind - 1]?.nextMatchId === newGames[nextIndex]?.id) {
+            newGames[nextIndex].participants[1] = newParticipant;
+          } else if (newGames[ind + 1]?.nextMatchId === newGames[nextIndex]?.id) {
+            newGames[nextIndex].participants[0] = newParticipant;
+          }
+
+          console.warn(newGames[nextIndex].participants)
+        }
+        setGames(newGames);
+      }
+    },
+    doublePartyClick: (party, partyWon) => {
+      if (party.status === 'DONE') return;
+
+      const indexInUpper = _.findLastIndex(games.upper, (val) => (
+        (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
+        || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
+      ))
+      const indexInLower = _.findLastIndex(games.lower, (val) => (
+        (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
+        || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
+      ))
+
+      if (games.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      if (games.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+
+      let newGames = { ...games }, participant = 0;
+      if (party.id === games.upper[indexInUpper]?.participants[0]?.id || party.id === games.lower[indexInLower]?.participants[0]?.id) participant = 0;
+      else if (party.id === games.upper[indexInUpper]?.participants[1]?.id || party.id === games.lower[indexInLower]?.participants[1]?.id) participant = 1;
+
+      if (indexInUpper >= 0) {
+        newGames.upper[indexInUpper].participants[participant].isWinner = true;
+        newGames.upper[indexInUpper].participants[participant].resultText = 'WON';
+        newGames.upper[indexInUpper].participants[participant].status = 'DONE';
+        newGames.upper[indexInUpper].participants[1 - participant].isWinner = false;
+        newGames.upper[indexInUpper].participants[1 - participant].resultText = 'LOST';
+        newGames.upper[indexInUpper].participants[1 - participant].status = 'DONE';
+
+        let nextIndex = -1, nextLooserIndex = -1;
+
+        if (games.upper[indexInUpper].nextMatchId) {
+          nextIndex = _.findIndex(games.upper, (val) => val?.id === newGames.upper[indexInUpper].nextMatchId, indexInUpper);
+          if (nextIndex < 0) nextIndex = _.findIndex(games.lower, (val) => val?.id === newGames.upper[indexInUpper].nextMatchId);
+        }
+        if (games.upper[indexInUpper].nextLooserMatchId) {
+          nextLooserIndex = _.findIndex(games.lower, (val) => val?.id === newGames.upper[indexInUpper].nextLooserMatchId);
+        }
+
+        if (nextIndex >= 0) {
+          const newParticipant = {
+            ...newGames.upper[indexInUpper].participants[participant],
+            round: newGames.upper[indexInUpper].participants[participant].round + 1,
+            isWinner: false,
+            resultText: '',
+            status: null
+          }
+          if (newGames.upper[nextIndex]?.id == newGames.upper[indexInUpper].nextMatchId) {
+            if (newGames.upper[nextIndex]?.participants.length == 0) newGames.upper[nextIndex].participants = [{}, {}];
+
+            if (newGames.upper[indexInUpper - 1]?.nextMatchId === newGames.upper[nextIndex]?.id) {
+              newGames.upper[nextIndex].participants[1] = newParticipant;
+            } else if (newGames.upper[indexInUpper + 1]?.nextMatchId === newGames.upper[nextIndex]?.id) {
+              newGames.upper[nextIndex].participants[0] = newParticipant;
+            }
+          }
+          if (newGames.lower[nextIndex]?.id == newGames.upper[indexInUpper].nextMatchId) {
+            if (newGames.lower[nextIndex]?.participants.length == 0) newGames.lower[nextIndex].participants = [{}, {}];
+            newGames.lower[nextIndex].participants[0] = newParticipant;
+          }
+        }
+
+        if (nextLooserIndex >= 0) {
+          const newParticipant = {
+            ...newGames.upper[indexInUpper].participants[1 - participant],
+            round: newGames.upper[indexInUpper].participants[1 - participant].round + 1,
+            isWinner: false,
+            resultText: '',
+            status: null
+          }
+
+          if (newGames.lower[nextLooserIndex].participants.length == 0) newGames.lower[nextLooserIndex].participants = [{}, {}];
+
+          if (newGames.upper[indexInUpper - 1]?.nextLooserMatchId == newGames.lower[nextLooserIndex].id)
+            newGames.lower[nextLooserIndex].participants[1] = newParticipant;
+          else newGames.lower[nextLooserIndex].participants[0] = newParticipant;
+        }
+      }
+
+      if (indexInLower >= 0) {
+        newGames.lower[indexInLower].participants[participant].isWinner = true;
+        newGames.lower[indexInLower].participants[participant].resultText = 'WON';
+        newGames.lower[indexInLower].participants[participant].status = 'DONE';
+        newGames.lower[indexInLower].participants[1 - participant].isWinner = false;
+        newGames.lower[indexInLower].participants[1 - participant].resultText = 'LOST';
+        newGames.lower[indexInLower].participants[1 - participant].status = 'DONE';
+
+        let nextIndex = -1;
+
+        if (games.lower[indexInLower].nextMatchId) {
+          nextIndex = _.findIndex(games.lower, (val) => val?.id === newGames.lower[indexInLower].nextMatchId);
+        }
+
+        if (nextIndex >= 0) {
+          const newParticipant = {
+            ...newGames.lower[indexInLower].participants[participant],
+            round: newGames.lower[indexInLower].participants[participant].round + 1,
+            isWinner: false,
+            resultText: '',
+            status: null
+          }
+
+          if (newGames.lower[nextIndex].participants.length == 0) newGames.lower[nextIndex].participants = [{}, {}];
+          if (newGames.lower[nextIndex].nextMatchId) {
+            if (newGames.lower[indexInLower + 1]?.nextMatchId == newGames.lower[nextIndex].id)
+              newGames.lower[nextIndex].participants[0] = newParticipant;
+            else
+              newGames.lower[nextIndex].participants[1] = newParticipant;
+          } else {
+            newGames.lower[nextIndex].participants[1] = newParticipant;
+          }
+        }
+      }
+
+      setGames(newGames);
+    }
   }
 
   return (
     <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
       <Box sx={{ border: `solid 1px rgba(255, 255, 255, 0.2)`, borderRadius: '4px', padding: 3 }}>
-        <Grid container spacing={2} rowSpacing={3}>
-          <Grid item xs={12}>
-            <Typography variant='h5'>
-              Event Details
-            </Typography>
-          </Grid>
-          <Grid item xs={12} lg={6} container sx={{ alignItems: 'center' }}>
-            <Grid item sx={{ width: '150px' }}>
-              <Typography variant='h6'>
-                Name:
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant='body1'>
-                {event?.events[eid]?.name}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} lg={6} container sx={{ alignItems: 'center' }}>
-            <Grid item sx={{ width: '150px' }}>
-              <Typography variant='h6'>
-                Format:
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant='body1'>
-                {EVENT_FORMATS[event?.events[eid]?.format].name}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} lg={6} container sx={{ alignItems: 'center' }}>
-            <Grid item sx={{ width: '150px' }}>
-              <Typography variant='h6'>
-                Seeding:
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant='body1'>
-                {event?.events[eid]?.seeding ? 'Random' : 'Manual'}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} lg={6} container sx={{ alignItems: 'center' }}>
-            <Grid item sx={{ width: '150px' }}>
-              <Typography variant='h6'>
-                Participants:
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant='body1'>
-                {event?.events[eid]?.participantsCount}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Box>
-      <Box sx={{ mt: 3 }}>
-        {
-          event?.events[eid] &&
-          (event.events[eid].format == 2
-            ?
+        <Grid container spacing={2} padding={2}>
+          <Grid item container sx={{ width: '300px' }}>
             <Box>
-              <DemoFullCalendar
-                events={events}
-                setEvents={setEvents}
-              />
+              <Box>
+                <Typography variant='h5'>
+                  Event Details
+                </Typography>
+              </Box>
+              <Grid container sx={{ alignItems: 'center', mt: 3 }}>
+                <Grid item sx={{ width: '130px' }}>
+                  <Typography variant='h6'>
+                    Name:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant='body1'>
+                    {event?.events[eid]?.name}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container sx={{ alignItems: 'center' }}>
+                <Grid item sx={{ width: '130px' }}>
+                  <Typography variant='h6'>
+                    Format:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant='body1'>
+                    {EVENT_FORMATS[event?.events[eid]?.format].name}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container sx={{ alignItems: 'center' }}>
+                <Grid item sx={{ width: '130px' }}>
+                  <Typography variant='h6'>
+                    Seeding:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant='body1'>
+                    {event?.events[eid]?.seeding ? 'Random' : 'Manual'}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container sx={{ alignItems: 'center' }}>
+                <Grid item sx={{ width: '130px' }}>
+                  <Typography variant='h6'>
+                    Participants:
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant='body1'>
+                    {event?.events[eid]?.participantsCount}
+                  </Typography>
+                </Grid>
+              </Grid>
             </Box>
-            :
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Button
-                  variant='contained'
-                  onClick={handle.buildTemplate}
-                  disabled={disabled}
-                >
-                  Build Template
-                </Button>
-                <Button
-                  variant='contained'
-                  onClick={handle.organize}
-                  disabled={disabled}
-                  sx={{ ml: 2 }}
-                >
-                  Organize
-                </Button>
-              </Grid>
-              <Grid item xs={12} sx={{ overflow: 'auto', border: 'solid 1px rgba(255, 255, 255, 0.2)', minHeight: '300px', borderRadius: '4px', mt: 3 }}>
-                {
-                  games && event?.events[eid]?.format == 0
-                    ?
-                    <SingleEliminationBracket matches={games} handlePartyClick={() => { }} />
-                    :
-                    event?.events[eid]?.format == 1
-                      ?
-                      <DoubleEliminationBracket matches={games} handlePartyClick={() => { }} />
-                      :
-                      <></>
-                }
-              </Grid>
-            </Grid>
-          )
-        }
-      </Box>
-    </Paper>
+          </Grid>
+          <Grid item xs>
+            {
+              event?.events[eid] &&
+              (event.events[eid].format == 2
+                ?
+                <Box>
+                  <Button
+                    variant='contained'
+                    onClick={handle.organize}
+                    disabled={disabled}
+                  >
+                    Organize
+                  </Button>
+                  <DemoFullCalendar
+                    sx={{
+                      marginTop: '24px'
+                    }}
+                    events={events}
+                    setEvents={setEvents}
+                  />
+                </Box>
+                :
+                <Grid container spacing={2} rowSpacing={3}>
+                  <Grid item xs={12}>
+                    <Button
+                      variant='contained'
+                      onClick={handle.buildTemplate}
+                      disabled={disabled}
+                    >
+                      Build Template
+                    </Button>
+                    <Button
+                      variant='contained'
+                      onClick={handle.organize}
+                      disabled={disabled}
+                      sx={{ ml: 2 }}
+                    >
+                      Organize
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Box sx={{ overflow: 'auto', border: 'solid 1px rgba(255, 255, 255, 0.2)', minHeight: '300px', borderRadius: '4px' }}>
+                      {
+                        games && event?.events[eid]?.format == 0
+                          ?
+                          <SingleEliminationBracket matches={games} handlePartyClick={handle.singlePartyClick} />
+                          :
+                          event?.events[eid]?.format == 1
+                            ?
+                            <DoubleEliminationBracket matches={games} handlePartyClick={handle.doublePartyClick} />
+                            :
+                            <></>
+                      }
+                    </Box>
+                  </Grid>
+                </Grid>
+              )
+            }
+          </Grid>
+        </Grid >
+      </Box >
+    </Paper >
   )
 }
 

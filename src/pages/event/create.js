@@ -30,9 +30,9 @@ const initialInputs = {
   logo: DEFAULT_CONTENTBLOCK_IMAGE,
   name: '',
   oid: '',
-  type: 0, // league or tournament
+  category: 0, // league or tournament
   format: 0, // single, double, round robin ...
-  seed: 0,
+  seed: 0,  // Manual
   startAt: new Date(),
   registerTo: new Date(),
   game: 0,
