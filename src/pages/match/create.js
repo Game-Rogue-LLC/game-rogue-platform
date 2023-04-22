@@ -322,14 +322,6 @@ const Page = (props) => {
           (event.events[eid].format == 2
             ?
             <Box>
-              <Button
-                variant='contained'
-                onClick={handle.organize}
-                disabled={disabled}
-                sx={{ ml: 2 }}
-              >
-                Organize
-              </Button>
               <DemoFullCalendar
                 events={events}
                 setEvents={setEvents}
@@ -354,7 +346,7 @@ const Page = (props) => {
                   Organize
                 </Button>
               </Grid>
-              <Grid item xs={12} sx={{ overflow: 'auto', border: 'solid 1px rgba(255, 255, 255, 0.2)', minHeight: '300px', borderRadius: '4px' }}>
+              <Grid item xs={12} sx={{ overflow: 'auto', border: 'solid 1px rgba(255, 255, 255, 0.2)', minHeight: '300px', borderRadius: '4px', mt: 3 }}>
                 {
                   games && event?.events[eid]?.format == 0
                     ?
