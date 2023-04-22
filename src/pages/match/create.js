@@ -84,7 +84,7 @@ const Page = (props) => {
   const createMatches = (type, teams, participants, participantsCount, randomized) => {
     if (type === 0) {   //! Single Elimination Bracket
       let newGames = [], gameIDs = []
-      const matches = SingleEliminationBracket(randomized);
+      const matches = SingleElimination(randomized);
       matches.forEach((val, i) => {
         const newParticipants = [];
 
@@ -322,6 +322,14 @@ const Page = (props) => {
           (event.events[eid].format == 2
             ?
             <Box>
+              <Button
+                variant='contained'
+                onClick={handle.organize}
+                disabled={disabled}
+                sx={{ ml: 2 }}
+              >
+                Organize
+              </Button>
               <DemoFullCalendar
                 events={events}
                 setEvents={setEvents}
