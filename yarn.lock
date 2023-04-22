@@ -668,6 +668,71 @@
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.9.0.tgz#9340bce56560a8bdba1d25d6281d4bfc397450dc"
   integrity sha512-BpiZLBWdLFw+qFel9p3Zs1jD6QmH7Ii4aTDu6+vx8ShdidChZUXqDhYJly4ZjSgQh54miXbBgBrk0S+jTIh/Qg==
 
+"@fullcalendar/core@^6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-6.1.5.tgz#b2ec855f3144ca995af8e5b783a15002d73870fb"
+  integrity sha512-U3ZJy1JGAgvyXG4iLWvTW4osbkt5Fj9gmbU1B+RyRhiqwXGE0F329sX7kqLTzj3QI1IPzyq6xnJfWUIsAe7+qw==
+  dependencies:
+    preact "~10.12.1"
+
+"@fullcalendar/daygrid@^6.1.5", "@fullcalendar/daygrid@~6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-6.1.5.tgz#fa5df2ec926a0a2367a91f43981518643d3d63c7"
+  integrity sha512-wXQUNPOyEQ1FEHVdtxP/tLcAAGwY4zeFejujhcznhKC751X8voInF+7kFmI7GDTVgX9cd72Muku3c+gHi8ygEQ==
+
+"@fullcalendar/interaction@^6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-6.1.5.tgz#548bee3f21046f30ad64c2596cbd94689db509f0"
+  integrity sha512-7U+WsysSlgVSkWqyjLnE6dVKUk2I7sGZN0zcadSfvL2e3KzD30BKgz78p6LRayW2Trtyf/7rZEe1k064ELd0+Q==
+
+"@fullcalendar/premium-common@~6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/premium-common/-/premium-common-6.1.5.tgz#d12503aadb350ce5e4578317f9b85e6cc7d6bfe3"
+  integrity sha512-uPIA+eK66+C89/WAqlhEdtY042iFDsbLuY5/vaSWoxSx2hNXHvjf3pGWSj7knmgCInfJYho8/zp76IFyBlGjAQ==
+
+"@fullcalendar/react@^6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-6.1.5.tgz#75f9f705be7297ee0ee700dfab3e6997153b54f3"
+  integrity sha512-OVQJQhtDAwxHbFk84bm5Y6iGLjGDrrBgr3491JbfnqHUjSaO+T1rNHUvtnot0X4/ZdnoxWr2nKqxPxpmCCL/lw==
+
+"@fullcalendar/resource-timeline@^6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource-timeline/-/resource-timeline-6.1.5.tgz#0a4993a7728b23641b50f8acb54432c48d127c36"
+  integrity sha512-sJsLFE1FsuzV/83f2qtVw3JPXgWKM4pfIU9wEGaOoO8YbRPwPxIPK7JZfC2rHxNbfYY+0BrUAhu+9FZ7O7rZmA==
+  dependencies:
+    "@fullcalendar/premium-common" "~6.1.5"
+    "@fullcalendar/scrollgrid" "~6.1.5"
+    "@fullcalendar/timeline" "~6.1.5"
+
+"@fullcalendar/resource@^6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource/-/resource-6.1.5.tgz#0c46a54c4be252d73a65ae8665616a94518df9b2"
+  integrity sha512-LqIE6vNl3jtyQH9GCtCRTo7BYAL4zisTPe7eA+RDNkKSqq8DtzCi0UtrdQIDnaSRE6TuZuHGBov5A7k7cBEpQw==
+  dependencies:
+    "@fullcalendar/premium-common" "~6.1.5"
+
+"@fullcalendar/scrollgrid@~6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/scrollgrid/-/scrollgrid-6.1.5.tgz#400c4eeeae1dff821d1e0fbabddb4f10387de4d8"
+  integrity sha512-j3bx2bU+eoAWtNZmtLzkTbKZ2Hl+8EUyNWigZtXwUwVskfiNY6MdKdnfxpGsfcGbDJwDN9OoyYev+iEiMjITpw==
+  dependencies:
+    "@fullcalendar/premium-common" "~6.1.5"
+
+"@fullcalendar/timegrid@^6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-6.1.5.tgz#cf76716e279a383e17d624b36e4befd1d1558368"
+  integrity sha512-phofe7XQ+JbejQB9zGqtZOGmPr/vMkfkK5dwPY4rOjxZOG/wspL3aXoSurmXaVP5CIiRWBvX9QPq0UgVJt0j5A==
+  dependencies:
+    "@fullcalendar/daygrid" "~6.1.5"
+
+"@fullcalendar/timeline@~6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timeline/-/timeline-6.1.5.tgz#19673e170514c215b9c2ba308d3c0f7a66735bb0"
+  integrity sha512-YK6drg9p8oLvpGgom8PxHsQdFeSuEsvP4tnvaMzmMC7eWzJAbh+PDK7wseJX5crHygQC1NvSdbActPOToX9opA==
+  dependencies:
+    "@fullcalendar/premium-common" "~6.1.5"
+    "@fullcalendar/scrollgrid" "~6.1.5"
+
 "@g-loot/react-tournament-brackets@^1.0.28":
   version "1.0.28"
   resolved "https://registry.yarnpkg.com/@g-loot/react-tournament-brackets/-/react-tournament-brackets-1.0.28.tgz#0d1d5e31129b25f9c117926fb65d7afea3d11f81"
@@ -1547,6 +1612,11 @@ domutils@^1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
+edmonds-blossom-fixed@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/edmonds-blossom-fixed/-/edmonds-blossom-fixed-1.0.1.tgz#152faacb1e9cd4d2e20c5d227a3e2802eea1f86c"
+  integrity sha512-wtpraSt4yJeUpNU8RGC4q2JBxsJbHFxI7/htm/mS4FgxSN90WBwmgE7QZwpcY70KJRqmfLCNxU49UIc+DfzLKQ==
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -2081,7 +2151,7 @@ lodash.camelcase@^4.3.0:
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==
 
-lodash@^4.15.0, lodash@^4.17.11:
+lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -2385,6 +2455,11 @@ postcss@8.4.14:
     nanoid "^3.3.4"
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
+
+preact@~10.12.1:
+  version "10.12.1"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.12.1.tgz#8f9cb5442f560e532729b7d23d42fd1161354a21"
+  integrity sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -2809,6 +2884,13 @@ to-fast-properties@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/to-fast-properties/-/to-fast-properties-2.0.0.tgz"
   integrity sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==
+
+tournament-pairings@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/tournament-pairings/-/tournament-pairings-1.5.2.tgz#170f0b7abea3fc2685d88170c63e23db7f1c131f"
+  integrity sha512-M6iBqvyRaT8N2TGQZDNp/nBcNrDtDJFbXUCmp5jrJKwbs5nC58PlAmBu+ARcUXgiW7x86yN3zF6YAiZhVwyi+g==
+  dependencies:
+    edmonds-blossom-fixed "^1.0.1"
 
 tr46@~0.0.3:
   version "0.0.3"

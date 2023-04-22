@@ -42,7 +42,7 @@ const TournamentProvider = (props) => {
             const res = await store.organization.read(uid, async (data, active) => {
                 await setOrganizations(data);
                 setActiveOrganizationCount(active);
-                console.log('organizations: ', data, active);
+                console.info('organizations: ', data, active);
             }, () => setOrganizationLoading(false));
         },
         update: async (id, newOrganization) => {
@@ -78,7 +78,7 @@ const TournamentProvider = (props) => {
             const res = await store.event.read(uid, async (data, active) => {
                 await setEvents(data);
                 setActiveEventCount(active);
-                console.log('events: ', data, active);
+                console.info('events: ', data, active);
             }, () => setEventLoading(false));
         },
         update: async (id, newEvent) => {
@@ -107,7 +107,7 @@ const TournamentProvider = (props) => {
             setTeamLoading(true);
             const res = await store.team.read(uid, async (data) => {
                 await setTeams(data);
-                console.log('teams: ', data)
+                console.info('teams: ', data)
             }, () => setTeamLoading(false));
         },
         update: async (id, newTeam) => {
@@ -119,7 +119,6 @@ const TournamentProvider = (props) => {
             return res;
         },
         check: async ({ id, accessCode }) => {
-            console.log(id, accessCode)
             const res = await store.team.getById(id);
             if (res.code === 'succeed') {
                 if (res.data.accessCode === accessCode) {
@@ -166,7 +165,7 @@ const TournamentProvider = (props) => {
             setPlayerLoading(true);
             const res = await store.player.readAll(async (data) => {
                 await setPlayers(data);
-                console.log('players: ', data)
+                console.info('players: ', data)
             }, () => setPlayerLoading(false));
         },
         update: async (id, newTeam) => {

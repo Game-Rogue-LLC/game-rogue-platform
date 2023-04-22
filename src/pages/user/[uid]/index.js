@@ -38,9 +38,14 @@ const Page = (props) => {
     }, [player.players, uid])
 
     useEffect(() => {
-        console.log(router.query.uid);
-        if (router.query.uid)
-            setUID(router.query.uid);
+        if (router?.query?.uid) {
+            const newUID = router.query.uid;
+            if (player.players[newUID]) {
+                setUID(router.query.uid);
+            } else {
+                console.error('Invalid User ID');
+            }
+        }
     }, [router])
 
     useEffect(() => {

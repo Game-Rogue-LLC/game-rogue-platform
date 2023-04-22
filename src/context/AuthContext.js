@@ -31,7 +31,6 @@ export const AuthContextProvider = ({ children }) => {
     }, [router])
 
     useEffect(() => {
-        console.log(!user.loading && !user.user && (!ignoreAuth))
         if (!user.loading && !user.user && (!ignoreAuth)) {
             router.push('/auth')
         }

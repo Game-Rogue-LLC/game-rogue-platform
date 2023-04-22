@@ -53,7 +53,7 @@ const Page = (props) => {
     }
 
     const handleInputs = (e) => {
-        const { name, value } = e.target;
+        let { name, type, value } = e.target;
         setInputs({
             ...inputs,
             [name]: value
