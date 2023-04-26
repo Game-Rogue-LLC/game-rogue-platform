@@ -255,11 +255,11 @@ const Page = (props) => {
       setGames(matches);
     },
     save: async (e) => {
-      if (!games) return;
       setSaving(true);
       let saved = true;
 
       if (event.events[eid].format == 0) {
+        if (!games) return;
         for (let i = 0; i < games.length; i++) {
           const val = games[i];
           const res = await match.update(val.id, val);
@@ -269,6 +269,7 @@ const Page = (props) => {
           }
         }
       } else if (event.events[eid].format == 1) {
+        if (!games) return;
         for (let i = 0; i < games.upper.length; i++) {
           const val = games.upper[i];
           const res = await match.update(val.id, val);
@@ -283,6 +284,29 @@ const Page = (props) => {
           if (res.code == 'failed') {
             saved = false;
             console.warn('Match save error:', val);
+          }
+        }
+      } else if (event.events[eid].format == 2) {
+        console.log(events);
+        // const newSchedule = events.sort((a, b) => a.start.getTime() - b.start.getTime());
+        // console.log(newSchedule);
+        for (let i = 0; i < events.length; i++) {
+          const item = events[i];
+          const res = await match.update(item.id, {
+            id: item.id,
+            eid: eid,
+            type: 0,
+            title: item.title,
+            backgroundColor: item.backgroundColor,
+            borderColor: item.borderColor,
+            end: item.end,
+            endStr: item.endStr,
+            start: item.start,
+            startStr: item.startStr
+          })
+          if (res.code == 'failed') {
+            saved = false;
+            console.warn('Schedule save error:', res.message);
           }
         }
       }
