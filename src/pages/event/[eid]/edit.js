@@ -47,6 +47,7 @@ const initialInputs = {
   checkin: 15,
   description: '',
   participantsCount: 2,
+  status: 0,
   deleted: false
 }
 

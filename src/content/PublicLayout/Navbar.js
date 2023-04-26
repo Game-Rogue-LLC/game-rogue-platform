@@ -21,7 +21,12 @@ import {
   Search,
   Logout,
   Login,
-  Person
+  Person,
+  ArrowRight,
+  ArrowRightAlt,
+  ArrowRightOutlined,
+  ArrowRightSharp,
+  ChevronRight
 } from '@mui/icons-material';
 import { useAuthContext } from '@/src/context/AuthContext';
 import { useRouter } from 'next/router';
@@ -72,6 +77,23 @@ const Navbar = (props) => {
   const openTools = Boolean(anchorElTools);
   const openUser = Boolean(anchorElUser);
 
+  const navItemStyle = {
+    background: 'transparent',
+    color: 'white',
+    ':hover': {
+      color: theme.palette.primary.main,
+      background: 'transparent'
+    }
+  }
+
+  const navItemTextStyle = {
+    color: 'white',
+    fontSize: '1rem',
+    ':hover': {
+      color: theme.palette.primary.main
+    }
+  }
+
   const handle = {
     switchLogoNav: (e) => {
       setLogoNav(prev => !prev);
@@ -84,36 +106,48 @@ const Navbar = (props) => {
     }
   }
 
-  const handleClickUser = (event) => {
-    setAnchorElUser(event.currentTarget);
+  const handleClickHome = (e) => {
+    router.push('/');
+  }
+
+  const handleClickUser = (e) => {
+    if (user?.user)
+      router.push('/user/' + user.user.id)
+  }
+  const handleOpenUser = (e) => {
+    setAnchorElUser(e.currentTarget);
   }
   const handleCloseUser = () => {
     setAnchorElUser(null);
   }
 
-  const handleClickOrganize = (event) => {
-    setAnchorElOrganize(event.currentTarget);
+  const handleClickOrganize = (e) => { }
+  const handleOpenOrganize = (e) => {
+    setAnchorElOrganize(e.currentTarget);
   }
   const handleCloseOrganize = () => {
     setAnchorElOrganize(null);
   }
 
-  const handleClickRogueSocial = (event) => {
-    setAnchorElRogueSocial(event.currentTarget);
+  const handleClickRogueSocial = (e) => { }
+  const handleOpenRogueSocial = (e) => {
+    setAnchorElRogueSocial(e.currentTarget);
   }
   const handleCloseRogueSocial = () => {
     setAnchorElRogueSocial(null);
   }
 
-  const handleClickSupport = (event) => {
-    setAnchorElSupport(event.currentTarget);
+  const handleClickSupport = (e) => { }
+  const handleOpenSupport = (e) => {
+    setAnchorElSupport(e.currentTarget);
   }
   const handleCloseSupport = () => {
     setAnchorElSupport(null);
   }
 
-  const handleClickTools = (event) => {
-    setAnchorElTools(event.currentTarget);
+  const handleClickTools = (e) => { }
+  const handleOpenTools = (e) => {
+    setAnchorElTools(e.currentTarget);
   }
   const handleCloseTools = () => {
     setAnchorElTools(null);
@@ -146,14 +180,21 @@ const Navbar = (props) => {
               />
             </FormControl>
             <Button
-              sx={{
-                background: 'transparent',
-                color: 'white',
-                ':hover': {
-                  color: theme.palette.primary.main,
-                  background: 'transparent'
-                }
-              }}
+              sx={navItemStyle}
+              disableRipple
+              id='rogue-social-button'
+              disableElevation
+              onClick={handleClickHome}
+            >
+              <Typography
+                variant='h4'
+                sx={navItemTextStyle}
+              >
+                HOME
+              </Typography>
+            </Button>
+            <Button
+              sx={navItemStyle}
               disableRipple
               id='rogue-social-button'
               aria-controls={openRogueSocial ? 'rogue-social-menu' : undefined}
@@ -165,85 +206,40 @@ const Navbar = (props) => {
             >
               <Typography
                 variant='h4'
-                sx={{
-                  color: 'white',
-                  fontSize: '1rem',
-                  ':hover': {
-                    color: theme.palette.primary.main
-                  }
-                }}
+                sx={navItemTextStyle}
               >
                 ROGUE SOCIAL
               </Typography>
             </Button>
             <Button
-              sx={{
-                background: 'transparent',
-                color: 'white',
-                ':hover': {
-                  color: theme.palette.primary.main,
-                  background: 'transparent'
-                }
-              }}
+              sx={navItemStyle}
               disableRipple
             >
               <Typography
                 variant='h4'
-                sx={{
-                  color: 'white',
-                  fontSize: '1rem',
-                  ':hover': {
-                    color: theme.palette.primary.main
-                  }
-                }}
+                sx={navItemTextStyle}
               >
                 LIVE
               </Typography>
             </Button>
             <Button
-              sx={{
-                background: 'transparent',
-                color: 'white',
-                ':hover': {
-                  color: theme.palette.primary.main,
-                  background: 'transparent'
-                }
-              }}
+              sx={navItemStyle}
               disableRipple
             >
               <Typography
                 variant='h4'
-                sx={{
-                  color: 'white',
-                  fontSize: '1rem',
-                  ':hover': {
-                    color: theme.palette.primary.main
-                  }
-                }}
+                sx={navItemTextStyle}
               >
                 ARTICLES
               </Typography>
             </Button>
             <Button
-              sx={{
-                background: 'transparent',
-                color: 'white',
-                ':hover': {
-                  color: theme.palette.primary.main,
-                  background: 'transparent'
-                }
-              }}
+              sx={navItemStyle}
               disableRipple
             >
               <Typography
                 variant='h4'
-                sx={{
-                  color: 'white',
-                  fontSize: '1rem',
-                  ':hover': {
-                    color: theme.palette.primary.main
-                  }
-                }}
+                sx={navItemTextStyle}
               >
                 SHOP
               </Typography>
@@ -252,14 +248,7 @@ const Navbar = (props) => {
           <Box sx={{ display: 'flex', gap: 4 }}>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 8, alignItems: 'center' }}>
               <Button
-                sx={{
-                  background: 'transparent',
-                  color: 'white',
-                  ':hover': {
-                    color: theme.palette.primary.main,
-                    background: 'transparent'
-                  }
-                }}
+                sx={navItemStyle}
                 disableRipple
                 id={'organize-button'}
                 aria-controls={openOrganize ? 'organize-menu' : undefined}
@@ -271,26 +260,13 @@ const Navbar = (props) => {
               >
                 <Typography
                   variant='h4'
-                  sx={{
-                    color: 'white',
-                    fontSize: '1rem',
-                    ':hover': {
-                      color: theme.palette.primary.main
-                    }
-                  }}
+                  sx={navItemTextStyle}
                 >
                   ORGANIZE
                 </Typography>
               </Button>
               <Button
-                sx={{
-                  background: 'transparent',
-                  color: 'white',
-                  ':hover': {
-                    color: theme.palette.primary.main,
-                    background: 'transparent'
-                  }
-                }}
+                sx={navItemStyle}
                 disableRipple
                 id={'tools-button'}
                 aria-controls={openTools ? 'tools-menu' : undefined}
@@ -302,18 +278,12 @@ const Navbar = (props) => {
               >
                 <Typography
                   variant='h4'
-                  sx={{
-                    color: 'white',
-                    fontSize: '1rem',
-                    ':hover': {
-                      color: theme.palette.primary.main
-                    }
-                  }}
+                  sx={navItemTextStyle}
                 >
                   TOOLS
                 </Typography>
               </Button>
-              <Button
+              {/* <Button
                 sx={{
                   background: 'transparent',
                   color: 'white',
@@ -367,7 +337,7 @@ const Navbar = (props) => {
                 >
                   PLUS PLANS
                 </Typography>
-              </Button>
+              </Button> */}
             </Box>
             {
               user.user
@@ -384,18 +354,29 @@ const Navbar = (props) => {
                       height: '40px'
                     }}
                   />
-                  <IconButton
-                    id='user-button'
-                    aria-controls={openUser ? 'user-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openUser ? 'true' : undefined}
-                    onClick={handleClickUser}
-                  >
-                    <Avatar alt={user.user?.name} src={user.user?.profilePic} />
-                  </IconButton>
-                  <IconButton onClick={user?.logout} sx={{ h: 'auto' }}>
-                    <Logout />
-                  </IconButton>
+                  <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    <IconButton
+                      id='user-button'
+                      aria-controls={openUser ? 'user-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={openUser ? 'true' : undefined}
+                      onClick={handleClickUser}
+                    // onMouseOver={handleOpenUser}
+                    // onMouseOut={handleCloseUser}
+                    >
+                      <Avatar alt={user.user?.name} src={user.user?.profilePic} />
+                    </IconButton>
+                    <ChevronRight
+                      sx={{
+                        color: theme.palette.primary.main,
+                        transform: openUser ? 'rotate(90deg)' : '',
+                        transition: 'all 0.2s'
+                      }}
+                    />
+                  </Box>
                 </Box>
                 :
                 <Box
@@ -519,7 +500,7 @@ const Navbar = (props) => {
             </Link>
           </MenuItem>
         </StyledMenu>
-        <StyledMenu
+        {/* <StyledMenu
           id="support-menu"
           MenuListProps={{
             'aria-labelledby': 'support-button',
@@ -554,7 +535,7 @@ const Navbar = (props) => {
               FAQ
             </Link>
           </MenuItem>
-        </StyledMenu>
+        </StyledMenu> */}
         <StyledMenu
           id="user-menu"
           MenuListProps={{
@@ -584,6 +565,16 @@ const Navbar = (props) => {
             <Link href={"/user/" + user.user?.id + "/edit"}>
               EDIT
             </Link>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleCloseUser();
+              user.logout();
+            }}
+            key='logout'
+            disableRipple
+          >
+            LOG OUT
           </MenuItem>
         </StyledMenu>
         {/** End Menus */}

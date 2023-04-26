@@ -56,6 +56,11 @@ const Page = (props) => {
       } else if (event.events[eid].participants?.length === event.events[eid].participantsCount) {
         router.push('/match/create?event=' + eid);
       }
+    },
+    show: (e) => {
+      if (event.events[eid].status == 1) {
+        router.push('/match/show?event=' + eid);
+      }
     }
   }
 
@@ -106,19 +111,28 @@ const Page = (props) => {
               </TableRow>
           }
           <TableRow>
-            <TableCell sx={{ border: 'none' }}>
+            <TableCell sx={{ border: 'none' }} colSpan={9}>
+              {event?.events[eid]?.status
+                ?
+                <Button
+                  variant='contained'
+                  onClick={handle.show}
+                  sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
+                >
+                  VIEW MATCHES
+                </Button>
+                :
+                <Button
+                  variant='contained'
+                  onClick={handle.create}
+                  sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
+                >
+                  CREATE MATCHES
+                </Button>
+              }
               <Button
                 variant='contained'
-                onClick={handle.create}
-                sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
-              >
-                CREATE MATCH
-              </Button>
-            </TableCell>
-            <TableCell sx={{ border: 'none' }}>
-              <Button
-                variant='contained'
-                sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
+                sx={{ borderRadius: 0, color: 'white', ml: 2, background: 'black', ':hover': { background: theme.palette.primary.main } }}
               >
                 PAST MATCHES
               </Button>

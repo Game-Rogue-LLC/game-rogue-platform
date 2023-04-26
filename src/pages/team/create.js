@@ -23,6 +23,7 @@ import CountrySelect from '@/src/components/CountrySelect';
 import GameSelect from '@/src/components/GameSelect';
 import { useAuthContext } from '@/src/context/AuthContext';
 import Validator from 'validatorjs';
+import { DEFAULT_LOGO } from '@/src/config/global';
 
 const initialInputs = {
   name: '',
@@ -30,6 +31,8 @@ const initialInputs = {
   accessCode: '',
   residency: '',
   game: '',
+  darkLogo: DEFAULT_LOGO,
+  lightLogo: DEFAULT_LOGO,
   players: [],
   deleted: false
 }

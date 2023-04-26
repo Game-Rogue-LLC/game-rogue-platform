@@ -46,6 +46,7 @@ const initialInputs = {
   description: '',
   participants: [],
   participantsCount: 2,
+  status: 0,
   deleted: false
 }
 
