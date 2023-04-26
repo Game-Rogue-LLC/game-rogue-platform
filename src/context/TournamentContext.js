@@ -12,7 +12,6 @@ export const useTournamentContext = () => useContext(TournamentContext);
 const TournamentProvider = (props) => {
     const { user } = useAuthContext();
     const [tournaments, setTournaments] = useState([]);
-    const [matches, setMatches] = useState([])
     const [participants, setParticipants] = useState([])
 
     // useEffect(() => {
@@ -178,7 +177,36 @@ const TournamentProvider = (props) => {
         },
         upload: store.player.uploadFile
     }
-    /** End Team Data / Functions */
+    /** End Player Data / Functions */
+
+    /** Begin Match Data / Functions */
+    const [matches, setMatches] = useState({});
+    const [matchLoading, setMatchLoading] = useState(true);
+    const match = {
+        matches,
+        setMatches,
+        create: async (newMatch) => {
+            const res = await store.match.save(nanoid(5), newMatch);
+            return res;
+        },
+        read: async (eid) => {
+            setMatchLoading(true);
+            const res = await store.match.read(eid, async (data) => {
+                await setMatches(data);
+                console.info('matches: ', data)
+            }, () => setMatchLoading(false));
+        },
+        update: async (id, newTeam) => {
+            const res = await store.match.save(id, newTeam);
+            return res;
+        },
+        delete: async (id) => {
+            await store.match.save(id, { deleted: true });
+            // router.push('/');
+        },
+        upload: store.match.uploadFile
+    }
+    /** End Match Data / Functions */
 
     const isLoading = useMemo(() => {
         return organizationLoading || eventLoading || teamLoading || playerLoading;
@@ -198,7 +226,7 @@ const TournamentProvider = (props) => {
     }, [loadTournament])
 
     return (
-        <TournamentContext.Provider value={{ tournaments, matches, participants, organization, event, team, player }}>
+        <TournamentContext.Provider value={{ tournaments, matches, participants, organization, event, team, player, match, matchLoading }}>
             {isLoading ? <Splash content={'Loading data...'} /> : props.children}
         </TournamentContext.Provider>
     )
