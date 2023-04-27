@@ -100,7 +100,7 @@ a {
   0% {
     background-image: url('/static/images/navigation/0.png');
     display: block;
-    z-index: 9999;
+    z-index: 9000;
   }
 
   17% {

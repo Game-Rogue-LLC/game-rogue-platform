@@ -17,7 +17,7 @@ export default function Splash(props) {
           position: 'fixed',
           top: '50%',
           left: '50%',
-          zIndex: 90,
+          zIndex: 9999,
           transform: 'translate(-50%, -50%)'
         }}>
           <div>
