@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState, useContext, useMemo } from 'react';
 import { useUser } from '@/lib/firebase/useUser';
-import nProgress from 'nprogress';
 import Splash from '@/src/content/Splash';
 import { useRouter } from 'next/router';
 

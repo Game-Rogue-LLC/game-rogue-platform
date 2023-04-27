@@ -90,6 +90,45 @@ const Page = (props) => {
   const handle = {
     edit: (e) => {
       router.push('/match/edit?event=' + eid);
+    },
+    singleMatchClick: (match) => {
+      const ind = _.findLastIndex(games, (val) => val.id == match.id);
+
+      // if (ind < 0 || games[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+
+      if (ind >= 0) {
+        setSelectedGame(ind);
+        setOpen(true);
+      }
+    },
+    doubleMatchClick: (match) => {
+      const indexInUpper = _.findLastIndex(games.upper, (val) => val.id == match.id)
+      const indexInLower = _.findLastIndex(games.lower, (val) => val.id == match.id)
+
+      // if (games.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      // if (games.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+
+      // let newGames = { ...games }, participant = 0;
+      // if (party.id === games.upper[indexInUpper]?.participants[0]?.id || party.id === games.lower[indexInLower]?.participants[0]?.id) participant = 0;
+      // else if (party.id === games.upper[indexInUpper]?.participants[1]?.id || party.id === games.lower[indexInLower]?.participants[1]?.id) participant = 1;
+
+      if (indexInUpper >= 0) {
+        setSelectedGame(indexInUpper);
+        setUpper(true);
+        setStart(games.upper[indexInUpper].start || new Date());
+        setEnd(games.upper[indexInUpper].end || new Date());
+        setOpen(true);
+        return;
+      }
+
+      if (indexInLower >= 0) {
+        setSelectedGame(indexInLower);
+        setUpper(false);
+        setStart(games.lower[indexInLower].start || new Date());
+        setEnd(games.lower[indexInLower].end || new Date());
+        setOpen(true);
+        return;
+      }
     }
   }
 
@@ -172,11 +211,11 @@ const Page = (props) => {
                 :
                 (games && event?.events[eid]?.format == 0
                   ?
-                  <SingleEliminationBracket matches={games} handlePartyClick={() => { }} />
+                  <SingleEliminationBracket matches={games} />
                   :
                   event?.events[eid]?.format == 1
                     ?
-                    <DoubleEliminationBracket matches={games} handlePartyClick={() => { }} />
+                    <DoubleEliminationBracket matches={games} />
                     :
                     <></>)
             }

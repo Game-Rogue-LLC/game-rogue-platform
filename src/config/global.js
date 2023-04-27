@@ -79,11 +79,60 @@ export const EVENT_FORMATS = [
     },
 ]
 
+export const EVENT_STATES = {
+    'CREATING': {
+        value: 0,
+        name: 'CREATING',
+    },
+    'SCHEDULING': {
+        value: 1,
+        name: 'SCHEDULING'
+    },
+    'SCHEDULED': {
+        value: 2,
+        name: 'SCHEDULED'
+    },
+    'STARTED': {
+        value: 3,
+        name: 'STARTED'
+    },
+    'FINISHED': {
+        value: 4,
+        name: 'FINISHED'
+    }
+}
 
+export const MATCH_STATES = {
+    'NOT_STARTED_SCHEDULING': {
+        value: 0,
+        name: 'NOT_STARTED_SCHEDULING'
+    },
+    'SCHEDULING': {
+        value: 1,
+        name: 'SCHEDULING'
+    },
+    'SCHEDULED': {
+        value: 2,
+        name: 'SCHEDULED'
+    },
+    'STARTED': {
+        value: 3,
+        name: 'STARTED'
+    },
+    'FINISHED': {
+        value: 4,
+        name: 'FINISHED'
+    }
+}
+
+export const NULL_FUNCTION = () => {
+}
 
 export default {
     DEFAULT_CONTENTBLOCK_IMAGE,
     DEFAULT_LOGO,
     STAFF_ROLES,
-    EVENT_FORMATS
+    EVENT_FORMATS,
+    EVENT_STATES,
+    NULL_FUNCTION
 }

@@ -364,8 +364,8 @@ const Navbar = (props) => {
                       aria-haspopup="true"
                       aria-expanded={openUser ? 'true' : undefined}
                       onClick={handleClickUser}
-                    // onMouseOver={handleOpenUser}
-                    // onMouseOut={handleCloseUser}
+                    // onMouseEnter={handleOpenUser}
+                    // onMouseLeave={handleCloseUser}
                     >
                       <Avatar alt={user.user?.name} src={user.user?.profilePic} />
                     </IconButton>

@@ -1,0 +1,24 @@
+{
+  "name": "Game Rogue",
+  "short_name": "GR",
+  "png_sequence": [
+    {
+      "src": "/static/images/navigation/0.png"
+    },
+    {
+      "src": "/static/images/navigation/1.png"
+    },
+    {
+      "src": "/static/images/navigation/2.png"
+    },
+    {
+      "src": "/static/images/navigation/3.png"
+    },
+    {
+      "src": "/static/images/navigation/4.png"
+    },
+    {
+      "src": "/static/images/navigation/5.png"
+    }
+  ]
+}

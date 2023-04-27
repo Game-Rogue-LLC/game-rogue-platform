@@ -19,7 +19,7 @@ import _ from 'lodash';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import { EVENT_FORMATS } from '@/src/config/global';
+import { EVENT_FORMATS, EVENT_STATES, MATCH_STATES } from '@/src/config/global';
 import { DoubleElimination, SingleElimination, Stepladder } from 'tournament-pairings';
 import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
@@ -46,18 +46,27 @@ const Page = (props) => {
     if (router?.query?.event) {
       const newEID = router.query.event;
       if (event?.events && event.events[newEID]) {
+        // * Redirect to match/index page if the matches are created.
+        if (event.events[newEID].status) {
+          router.push('/match?event=' + newEID);
+        }
+
         setEID(newEID);
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
       } else {
         console.error('Invalid Event ID');
-        // Redirect to 404 page.
+        // TODO: Redirect to 404 page.
       }
     }
   }, [router])
 
+  useEffect(() => {
+    console.log('games changed:', games);
+  }, [games])
+
   const createMatches = (type, teams, participants, participantsCount, randomized) => {
-    if (type === 0) {   //* Single Elimination Bracket
+    if (type === 0) {   // * Single Elimination Bracket
       let newGames = []//, gameIDs = []
       const matches = SingleElimination(randomized);
       matches.forEach((val, i) => {
@@ -111,7 +120,7 @@ const Page = (props) => {
         }
       })
       return newGames;
-    } else if (type === 1) {  //* Double Elimination Bracket
+    } else if (type === 1) {  // * Double Elimination Bracket
       let newGames = {
         'upper': [],
         'lower': []
@@ -194,7 +203,7 @@ const Page = (props) => {
         }
       })
       return newGames;
-    } else if (type === 2) {  //* Ladder Elimination
+    } else if (type === 2) {  // * Ladder Elimination
       let newGames = [], gameIDs = []
       const matches = Stepladder(randomized);
       matches.forEach((val, i) => {
@@ -245,6 +254,11 @@ const Page = (props) => {
     }
   }
 
+  const initializeDates = () => {
+    setStart(new Date());
+    setEnd(new Date());
+  }
+
   const handle = {
     buildTemplate: (e) => {
       const { participants, participantsCount, format } = event.events[eid];
@@ -259,9 +273,18 @@ const Page = (props) => {
       let saved = true;
 
       if (event.events[eid].format == 0) {
-        if (!games) return;
+        if (!games) {
+          setSaving(false);
+          return;
+        }
+
         for (let i = 0; i < games.length; i++) {
-          const val = games[i];
+          const val = {
+            ...games[i],
+            createdAt: new Date(),
+            status: MATCH_STATES.SCHEDULING.value,
+            deleted: false
+          };
           const res = await match.update(val.id, val);
           if (res.code == 'failed') {
             saved = false;
@@ -269,9 +292,17 @@ const Page = (props) => {
           }
         }
       } else if (event.events[eid].format == 1) {
-        if (!games) return;
+        if (!games) {
+          setSaving(false);
+          return;
+        }
         for (let i = 0; i < games.upper.length; i++) {
-          const val = games.upper[i];
+          const val = {
+            ...games.upper[i],
+            createdAt: new Date(),
+            status: MATCH_STATES.SCHEDULING.value,
+            deleted: false
+          };
           const res = await match.update(val.id, val);
           if (res.code == 'failed') {
             saved = false;
@@ -279,7 +310,12 @@ const Page = (props) => {
           }
         }
         for (let i = 0; i < games.lower.length; i++) {
-          const val = games.lower[i];
+          const val = {
+            ...games.lower[i],
+            createdAt: new Date(),
+            status: MATCH_STATES.SCHEDULING.value,
+            deleted: false
+          };
           const res = await match.update(val.id, val);
           if (res.code == 'failed') {
             saved = false;
@@ -287,7 +323,6 @@ const Page = (props) => {
           }
         }
       } else if (event.events[eid].format == 2) {
-        console.log(events);
         // const newSchedule = events.sort((a, b) => a.start.getTime() - b.start.getTime());
         // console.log(newSchedule);
         for (let i = 0; i < events.length; i++) {
@@ -297,12 +332,14 @@ const Page = (props) => {
             eid: eid,
             type: 0,
             title: item.title,
-            backgroundColor: item.backgroundColor,
-            borderColor: item.borderColor,
+            color: item.color,
             end: item.end,
             endStr: item.endStr,
             start: item.start,
-            startStr: item.startStr
+            startStr: item.startStr,
+            createdAt: new Date(),
+            status: MATCH_STATES.SCHEDULING.value,
+            deleted: false,
           })
           if (res.code == 'failed') {
             saved = false;
@@ -312,9 +349,10 @@ const Page = (props) => {
       }
 
       if (saved) {
-        const res = await event.update(eid, { status: 1 });
+        const res = await event.update(eid, { status: EVENT_STATES.SCHEDULING.value });   // Set the status of the event as CREATED/SCHEDULING.
         if (res.code === 'succeed') {
-          alert('Saved successfully!')
+          alert('Saved successfully!');
+          router.push('/match?event=' + eid);
         }
       }
       setSaving(false);
@@ -408,11 +446,11 @@ const Page = (props) => {
                 :
                 (games && event?.events[eid]?.format == 0
                   ?
-                  <SingleEliminationBracket matches={games} handlePartyClick={() => { }} />
+                  <SingleEliminationBracket matches={games} />
                   :
                   event?.events[eid]?.format == 1
                     ?
-                    <DoubleEliminationBracket matches={games} handlePartyClick={() => { }} />
+                    <DoubleEliminationBracket matches={games} />
                     :
                     <></>)
             }

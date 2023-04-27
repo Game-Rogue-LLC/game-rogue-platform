@@ -1,4 +1,5 @@
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
+import dayjs from 'dayjs';
 
 const SingleElimination = dynamic(() => import('@g-loot/react-tournament-brackets').then((mod) => mod.SingleEliminationBracket), {
   ssr: false, // This ensures the component is only rendered on the client-side
@@ -11,9 +12,7 @@ const Match = dynamic(() => import('@g-loot/react-tournament-brackets').then((mo
 });
 
 const SingleEliminationBracket = (props) => {
-  const { options, matches, handlePartyClick } = props;
-
-  console.log(matches)
+  const { options, matches, handlePartyClick, handleMatchClick } = props;
 
   return (
     matches && matches.length > 0 &&
@@ -31,11 +30,26 @@ const SingleEliminationBracket = (props) => {
         ...options
       }}
       matches={matches}
-      matchComponent={((props) => (
-        <Match {...props}
-          onPartyClick={(party, partyWon) => handlePartyClick(party, partyWon)}
-        />
-      ))}
+      matchComponent={((props) => {
+        if (handleMatchClick) {
+          props = {
+            ...props,
+            onMatchClick: (props) => handleMatchClick(props.match)
+          }
+        }
+        if (handlePartyClick) {
+          props = {
+            ...props,
+            onPartyClick: (party, partyWon) => handlePartyClick(party, partyWon)
+          }
+        }
+
+        return (
+          <Match {...props}
+            topText={dayjs(props.match.start).format("MMM. DD") + ' - ' + dayjs(props.match.end).format("MMM. DD")}
+          />
+        )
+      })}
     />
   )
 }

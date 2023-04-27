@@ -18,6 +18,7 @@ import '@/src/styles/globals.css'
 import '@/src/styles/fullCalendar.css'
 import { AuthContextProvider } from '@/src/context/AuthContext';
 import AppProvider from '@/src/context/app.js';
+import Splash from '../content/Splash';
 
 const Noop = ({ children }) => <>{children}</>;
 
@@ -25,21 +26,33 @@ export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const ContextProvider = Component.provider || Noop;
   const router = useRouter();
-  Router.events.on('routeChangeStart', nProgress.start);
-  Router.events.on('routeChangeError', nProgress.done);
-  Router.events.on('routeChangeComplete', nProgress.done);
+  const [navigating, setNavigating] = React.useState(false);
+  Router.events.on('routeChangeStart', () => {
+    // nProgress.start();
+    setNavigating(true);
+  });
+  Router.events.on('routeChangeError', () => {
+    // nProgress.done();
+    setNavigating(false);
+  });
+  Router.events.on('routeChangeComplete', () => {
+    // nProgress.done();
+    setNavigating(false);
+  });
 
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  console.log('app render');
   return (
     <CacheProvider value={emotionCache}>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <link rel='manifest' href='/manifest.json' />
       </Head>
       <ThemeProvider>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
+        <div className={`${!navigating ? 'navigating' : ''} transition-container`} id="navigating"></div>
+        {navigating ? <Splash content={'Loading...'} /> : <></>}
         <AppProvider>
           <AuthContextProvider>
             {getLayout(

@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useContext } from 'react';
 import matchStore from '@/lib/firestore/collections/match';
-import nProgress from 'nprogress';
 import Splash from '@/src/content/Splash';
 import { useOrganizationContext } from './OrganizationContext';
 import { useEventContext } from './EventContext';

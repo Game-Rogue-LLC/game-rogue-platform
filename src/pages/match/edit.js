@@ -21,7 +21,7 @@ import { useAppContext } from '@/src/context/app';
 import DatePicker from '@/src/components/DatePicker';
 import { useMatchContext } from '@/src/context/MatchContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import { EVENT_FORMATS } from '@/src/config/global';
+import { EVENT_FORMATS, EVENT_STATES, MATCH_STATES } from '@/src/config/global';
 import { DoubleElimination, SingleElimination, Stepladder } from 'tournament-pairings';
 import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
@@ -29,6 +29,8 @@ import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBr
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
 import DemoFullCalendar from '@/src/components/DemoFullCalendar/index.js';
 import ScoresDialog from '@/src/components/match/ScoresDialog';
+import DatePickDialog from '@/src/components/match/DatePickDialog';
+import { NULL_FUNCTION } from '@/src/config/global';
 
 const Page = (props) => {
   const theme = useTheme();
@@ -39,12 +41,18 @@ const Page = (props) => {
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
   const [events, setEvents] = useState([]);
-  const [saving, setSaving] = useState(false);
   const [selectedGame, setSelectedGame] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [openDatePick, setOpenDatePick] = useState(false);
+  const [openScores, setOpenScores] = useState(false);
+  const [team1, setTeam1] = useState(null);
+  const [team2, setTeam2] = useState(null);
   const [score1, setScore1] = useState(0);
   const [score2, setScore2] = useState(0);
   const [isUpper, setUpper] = useState(true);
+  const [start, setStart] = useState(new Date());
+  const [end, setEnd] = useState(new Date());
+  const [saving, setSaving] = useState(false);
+  const [changingStatus, setChangingStatus] = useState(false);
 
   useEffect(() => {
     setTitle('EDIT MATCHES');
@@ -80,18 +88,84 @@ const Page = (props) => {
     }
   }, [match.matches, matchLoading])
 
+  const initializeDates = () => {
+    setStart(new Date());
+    setEnd(new Date());
+  }
+
+  const initializeScores = () => {
+    setScore1(0);
+    setScore2(0);
+  }
+
   const handle = {
-    close: (e) => {
-      setOpen(false);
+    finishScheduling: async (e) => {
+      setChangingStatus(true);
+      if (confirm('Do you really want to finish scheduling this event?')) {
+        for (let i = 0; i < match.matches.length; i++) {
+          const res = await match.update(match.matches[i].id, { status: MATCH_STATES.SCHEDULED });
+        }
+        const res = await event.update(eid, { status: EVENT_STATES.SCHEDULED.value });
+        if (res.code === 'succeed') {
+          alert('Scheduled successfully!');
+        }
+      }
+      setChangingStatus(false);
+    },
+    startEvent: async (e) => {
+      setChangingStatus(true);
+      if (confirm('Do you really want to start this event?')) {
+        const res = await event.update(eid, { status: EVENT_STATES.STARTED.value });
+        if (res.code === 'succeed') {
+          alert('Event started!');
+        }
+      }
+      setChangingStatus(false);
+    },
+    finishEvent: async (e) => {
+      setChangingStatus(true);
+      if (confirm('Do you really want to finish this event?')) {
+        const res = await event.update(eid, { status: EVENT_STATES.FINISHED.value });
+        if (res.code === 'succeed') {
+          alert('Event finished!');
+        }
+      }
+      setChangingStatus(false);
     },
     save: async (e) => {
-      if (!games) return;
+      const { format } = event.events[eid];
       setSaving(true);
       let saved = true;
 
-      if (event.events[eid].format == 0) {
+      if (format == 0) {
+        if (!games) {
+          setSaving(false);
+          return;
+        }
         for (let i = 0; i < games.length; i++) {
           const val = games[i];
+          const res = await match.update(val.id, val);
+          console.log(i);
+          if (res.code == 'failed') {
+            saved = false;
+            console.warn('Match save error:', val);
+          }
+        }
+      } else if (format == 1) {
+        if (!games) {
+          setSaving(false);
+          return;
+        }
+        for (let i = 0; i < games.upper.length; i++) {
+          const val = games.upper[i];
+          const res = await match.update(val.id, val);
+          if (res.code == 'failed') {
+            saved = false;
+            console.warn('Match save error:', val);
+          }
+        }
+        for (let i = 0; i < games.lower.length; i++) {
+          const val = games.lower[i];
           const res = await match.update(val.id, val);
           if (res.code == 'failed') {
             saved = false;
@@ -101,13 +175,93 @@ const Page = (props) => {
       }
 
       if (saved) {
-        const res = await event.update(eid, { status: 1 });
-        if (res.code === 'succeed') {
-          match.read(eid);
-          alert('Saved successfully!');
-        }
+        // const res = await event.update(eid, { status: 1 });
+        // if (res.code === 'succeed') {
+        match.read(eid);
+        alert('Saved successfully!');
+        // }
       }
       setSaving(false);
+    },
+    singleMatchClick: (match) => {
+      const ind = _.findLastIndex(games, (val) => val.id == match.id);
+
+      // if (ind < 0 || games[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+
+      if (ind >= 0) {
+        setSelectedGame(ind);
+        setOpenDatePick(true);
+      }
+    },
+    doubleMatchClick: (match) => {
+      const indexInUpper = _.findLastIndex(games.upper, (val) => val.id == match.id)
+      const indexInLower = _.findLastIndex(games.lower, (val) => val.id == match.id)
+
+      // if (games.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      // if (games.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+
+      // let newGames = { ...games }, participant = 0;
+      // if (party.id === games.upper[indexInUpper]?.participants[0]?.id || party.id === games.lower[indexInLower]?.participants[0]?.id) participant = 0;
+      // else if (party.id === games.upper[indexInUpper]?.participants[1]?.id || party.id === games.lower[indexInLower]?.participants[1]?.id) participant = 1;
+
+      if (indexInUpper >= 0) {
+        setSelectedGame(indexInUpper);
+        setUpper(true);
+        setStart(games.upper[indexInUpper].start || new Date());
+        setEnd(games.upper[indexInUpper].end || new Date());
+        setOpenDatePick(true);
+        return;
+      }
+
+      if (indexInLower >= 0) {
+        setSelectedGame(indexInLower);
+        setUpper(false);
+        setStart(games.lower[indexInLower].start || new Date());
+        setEnd(games.lower[indexInLower].end || new Date());
+        setOpenDatePick(true);
+        return;
+      }
+    },
+    startChange: (newValue) => {
+      const newDate = new Date(newValue);
+      setStart(newDate);
+    },
+    endChange: (newValue) => {
+      const newDate = new Date(newValue);
+      setEnd(newDate);
+    },
+    closeDatePick: (e) => {
+      setOpenDatePick(false);
+    },
+    saveDates: (e) => {
+      const { format } = event.events[eid];
+      let newGames;
+      if (format == 0) {
+        newGames = [...games];
+        newGames[selectedGame] = {
+          ...newGames[selectedGame],
+          start,
+          end
+        }
+      } else if (format == 1) {
+        newGames = { ...games }
+        if (isUpper)
+          newGames.upper[selectedGame] = {
+            ...newGames.upper[selectedGame],
+            start,
+            end
+          }
+        else
+          newGames.lower[selectedGame] = {
+            ...newGames.lower[selectedGame],
+            start,
+            end
+          }
+      } else if (format == 2) {
+      }
+      setGames(newGames);
+      setOpenDatePick(false);
+      initializeDates();
     },
     singlePartyClick: (party, partyWon) => {
       if (party.status == 'DONE') return;
@@ -120,8 +274,10 @@ const Page = (props) => {
       if (ind < 0 || games[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
 
       if (ind >= 0) {
+        setTeam1(team?.teams[games[ind].participants[0]?.id]);
+        setTeam2(team?.teams[games[ind].participants[1]?.id]);
         setSelectedGame(ind);
-        setOpen(true);
+        setOpenScores(true);
       }
     },
     doublePartyClick: (party, partyWon) => {
@@ -144,15 +300,19 @@ const Page = (props) => {
       // else if (party.id === games.upper[indexInUpper]?.participants[1]?.id || party.id === games.lower[indexInLower]?.participants[1]?.id) participant = 1;
 
       if (indexInUpper >= 0) {
+        setTeam1(team?.teams[games.upper[indexInUpper]?.participants[0]?.id]);
+        setTeam2(team?.teams[games.upper[indexInUpper]?.participants[1]?.id]);
         setSelectedGame(indexInUpper);
         setUpper(true);
-        setOpen(true);
+        setOpenScores(true);
       }
 
       if (indexInLower >= 0) {
+        setTeam1(team?.teams[games.lower[indexInLower]?.participants[0]?.id]);
+        setTeam2(team?.teams[games.lower[indexInLower]?.participants[1]?.id]);
         setSelectedGame(indexInLower);
         setUpper(false);
-        setOpen(true);
+        setOpenScores(true);
       }
     },
     score1Change: (e) => {
@@ -161,11 +321,16 @@ const Page = (props) => {
     score2Change: (e) => {
       setScore2(e.target.value);
     },
+    closeScores: (e) => {
+      setOpenScores(false);
+      initializeScores();
+    },
     saveScore: (e) => {
       const winner = score1 < score2 ? 1 : 0;
+      let newGames;
 
       if (event.events[eid].format == 0) {
-        let newGames = [...games];
+        newGames = [...games];
         newGames[selectedGame].participants[0].score = score1;
         newGames[selectedGame].participants[0].resultText = '' + score1;
         newGames[selectedGame].participants[0].status = 'DONE';
@@ -199,9 +364,8 @@ const Page = (props) => {
 
           console.warn(newGames[nextIndex].participants)
         }
-        setGames(newGames);
       } else if (event.events[eid].format == 1) {
-        let newGames = { ...games };
+        newGames = { ...games };
         if (isUpper) {
           newGames.upper[selectedGame].participants[winner].isWinner = true;
           newGames.upper[selectedGame].participants[1 - winner].isWinner = false;
@@ -299,9 +463,9 @@ const Page = (props) => {
             }
           }
         }
-        setOpen(false);
-        setGames(newGames);
       }
+      setOpenScores(false);
+      setGames(newGames);
     }
   }
 
@@ -310,16 +474,26 @@ const Page = (props) => {
       <Box sx={{ border: `solid 1px rgba(255, 255, 255, 0.2)`, borderRadius: '4px', padding: 3 }}>
         {games && selectedGame >= 0 && <ScoresDialog
           title={'Team scores'}
-          onClose={handle.close}
-          open={open}
-          team1={team?.teams[games[selectedGame]?.participants[0]?.id]}
-          team2={team?.teams[games[selectedGame]?.participants[1]?.id]}
+          onClose={handle.closeScores}
+          open={openScores}
+          team1={team1}
+          team2={team2}
           score1={score1}
           score2={score2}
           onScore1Change={handle.score1Change}
           onScore2Change={handle.score2Change}
           onSave={handle.saveScore}
         />}
+        <DatePickDialog
+          title={'Select Date/Time'}
+          start={start}
+          end={end}
+          onStartChange={handle.startChange}
+          onEndChange={handle.endChange}
+          onClose={handle.closeDatePick}
+          onSave={handle.saveDates}
+          open={openDatePick}
+        />
         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 4 }}>
           <Box sx={{ width: '300px', display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Typography variant='h5'>
@@ -381,6 +555,33 @@ const Page = (props) => {
             >
               Save
             </LoadingButton>
+            {event?.events[eid]?.status == 1 &&
+              <LoadingButton
+                loading={changingStatus}
+                variant='contained'
+                onClick={handle.finishScheduling}
+                disabled={disabled}
+              >
+                Finish Scheduling
+              </LoadingButton>}
+            {event?.events[eid]?.status == 2 &&
+              <LoadingButton
+                loading={changingStatus}
+                variant='contained'
+                onClick={handle.startEvent}
+                disabled={disabled}
+              >
+                Start Event
+              </LoadingButton>}
+            {event?.events[eid]?.status == 3 &&
+              <LoadingButton
+                loading={changingStatus}
+                variant='contained'
+                onClick={handle.finishEvent}
+                disabled={disabled}
+              >
+                Finish Event
+              </LoadingButton>}
           </Box>
           <Box sx={{ overflow: 'auto', flex: 1, border: 'solid 1px rgba(255, 255, 255, 0.2)', minHeight: '300px', borderRadius: '4px' }}>
             {
@@ -396,11 +597,19 @@ const Page = (props) => {
                 :
                 (games && event?.events[eid]?.format == 0
                   ?
-                  <SingleEliminationBracket matches={games} handlePartyClick={handle.singlePartyClick} />
+                  <SingleEliminationBracket
+                    matches={games}
+                    handleMatchClick={event.events[eid].status == 1 ? handle.singleMatchClick : null}
+                    handlePartyClick={event.events[eid].status == 3 ? handle.singlePartyClick : null}
+                  />
                   :
                   event?.events[eid]?.format == 1
                     ?
-                    <DoubleEliminationBracket matches={games} handlePartyClick={handle.doublePartyClick} />
+                    <DoubleEliminationBracket
+                      matches={games}
+                      handleMatchClick={event.events[eid].status == 1 ? handle.doubleMatchClick : null}
+                      handlePartyClick={event.events[eid].status == 3 ? handle.doublePartyClick : null}
+                    />
                     :
                     <></>)
             }

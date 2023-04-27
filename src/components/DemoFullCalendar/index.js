@@ -30,16 +30,31 @@ const DemoApp = (props) => {
     calendarApi.unselect() // clear date selection
 
     if (title) {
-      calendarApi.addEvent({
-        id: nanoid(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-        color: colors[_.random(0, 12) % 4],
-        resourceId: (selectInfo.resource ? selectInfo.resource.id : undefined)
-        // color: `rgb(${_.random(0, 255)},${_.random(0, 255)},${_.random(0, 255)})`
-      })
+      // calendarApi.addEvent({
+      //   id: nanoid(),
+      //   title,
+      //   start: selectInfo.startStr,
+      //   end: selectInfo.endStr,
+      //   allDay: selectInfo.allDay,
+      //   color: colors[_.random(0, 13) % 4],
+      //   resourceId: (selectInfo.resource ? selectInfo.resource.id : undefined)
+      //   // color: `rgb(${_.random(0, 255)},${_.random(0, 255)},${_.random(0, 255)})`
+      // })
+      console.log(selectInfo);
+      setEvents([
+        ...events,
+        {
+          id: nanoid(),
+          title,
+          start: selectInfo.start,
+          end: selectInfo.end,
+          startStr: selectInfo.startStr,
+          endStr: selectInfo.endStr,
+          allDay: selectInfo.allDay,
+          color: colors[_.random(0, 13) % 4],
+          resourceId: (selectInfo.reseource ? selectInfo.resource.id : undefined)
+        }
+      ])
     }
   }
 
@@ -49,9 +64,9 @@ const DemoApp = (props) => {
     }
   }
 
-  const handleEvents = (evts) => {
-    setEvents(evts);
-  }
+  // const handleEvents = (evts) => {
+  //   setEvents(evts);
+  // }
 
   return (
     <div className='demo-app' style={sx}>
@@ -74,7 +89,7 @@ const DemoApp = (props) => {
           select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
-          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+          // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
           resources={[
             { id: 'a', title: 'Resource A' },
             { id: 'b', title: 'Resource B' },
@@ -87,6 +102,7 @@ const DemoApp = (props) => {
               buttonText: 'resource day'
             }
           }}
+          events={events}
 
         /* you can update a remote database when these fire:
         eventAdd={function(){}}

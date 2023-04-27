@@ -23,7 +23,7 @@ import { useAppContext } from '@/src/context/app'
 import DateTimePicker from '@/src/components/DateTimePicker'
 import Validator from 'validatorjs'
 import { useTournamentContext } from '@/src/context/TournamentContext'
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from '@/src/config/global';
+import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO, EVENT_STATES } from '@/src/config/global';
 import EventInput from '@/src/components/event/EventInput';
 
 const initialInputs = {
@@ -46,7 +46,7 @@ const initialInputs = {
   description: '',
   participants: [],
   participantsCount: 2,
-  status: 0,
+  status: EVENT_STATES.CREATING.value,
   deleted: false
 }
 

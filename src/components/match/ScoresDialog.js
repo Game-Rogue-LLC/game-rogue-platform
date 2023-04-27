@@ -12,6 +12,7 @@ import {
 
 const ScoresDialog = (props) => {
   const { onClose, title, open, team1, team2, score1, score2, onScore1Change, onScore2Change, onSave } = props;
+  console.warn(team1, team2);
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>{title}</DialogTitle>
@@ -28,18 +29,27 @@ const ScoresDialog = (props) => {
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
+              gap: 2
             }}
           >
-            <Box
-              component={'img'}
-              sx={{
-                height: '150px',
-                width: '150px',
-                borderRadius: '50%'
-              }}
-              src={team1?.darkLogo || DEFAULT_LOGO}
-            ></Box>
+            <Box>
+              <Typography variant="h5" textAlign={'center'}>
+                {team1?.name}
+              </Typography>
+              <Box
+                component={'img'}
+                sx={{
+                  mt: 2,
+                  height: '150px',
+                  width: '150px',
+                  borderRadius: '50%',
+                  outline: 'solid 2px rgba(255, 255, 255, 0.2)',
+                  outlineOffset: '2px'
+                }}
+                src={team1?.darkLogo || DEFAULT_LOGO}
+              ></Box>
+            </Box>
             <OutlinedInput value={score1} onChange={onScore1Change} />
           </Box>
           <Box>
@@ -49,19 +59,29 @@ const ScoresDialog = (props) => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'right'
+              justifyContent: 'right',
+              gap: 2
             }}
           >
             <OutlinedInput value={score2} onChange={onScore2Change} />
-            <Box
-              component={'img'}
-              sx={{
-                height: '150px',
-                width: '150px',
-                borderRadius: '50%'
-              }}
-              src={team2?.darkLogo || DEFAULT_LOGO}
-            ></Box>
+
+            <Box>
+              <Typography variant="h5" textAlign={'center'}>
+                {team2?.name}
+              </Typography>
+              <Box
+                component={'img'}
+                sx={{
+                  mt: 2,
+                  height: '150px',
+                  width: '150px',
+                  borderRadius: '50%',
+                  outline: 'solid 2px rgba(255, 255, 255, 0.2)',
+                  outlineOffset: '2px'
+                }}
+                src={team2?.darkLogo || DEFAULT_LOGO}
+              ></Box>
+            </Box>
           </Box>
         </Box>
       </DialogContent>
