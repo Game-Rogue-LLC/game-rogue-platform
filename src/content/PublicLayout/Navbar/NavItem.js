@@ -1,7 +1,7 @@
 import { useState } from "react";
+import Link from "next/link";
 import {
   Button,
-  Link,
   Menu,
   MenuItem,
   Typography,
