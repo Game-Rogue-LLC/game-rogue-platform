@@ -19,7 +19,7 @@ import UserInfo from '@/src/components/UserInfo';
 const Page = (props) => {
     const router = useRouter();
     const theme = useTheme();
-    const [uid, setUID] = useState(null);
+    const [uid, setUID] = useState(props.uid);
     const [item, setItem] = useState(null);
     const { setTitle } = useAppContext();
     const { player, team } = useTournamentContext();
@@ -70,6 +70,15 @@ const Page = (props) => {
 
 Page.getLayout = (page) => {
     return <AdminLayout>{page}</AdminLayout>
+}
+
+export async function getServerSideProps(context) {
+    const { params } = context;
+    return {
+        props: {
+            uid: params.uid
+        }
+    }
 }
 
 export default Page;
