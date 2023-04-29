@@ -27,7 +27,7 @@ const Page = (props) => {
           const item = event.events[eid];
           return (
             <Grid item xs={12} sm={6} lg={4} key={'event_' + eid}>
-              <Link href={'/event/' + eid + '/info'}>
+              <Link href={`/event/${eid}/info`}>
                 <Box
                   sx={{
                     border: 'solid 1px rgba(255, 255, 255, 0.2)',
