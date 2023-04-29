@@ -72,7 +72,14 @@ Page.getLayout = (page) => {
     return <AdminLayout>{page}</AdminLayout>
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticPaths() {
+    return {
+        paths: [],
+        fallback: 'blocking'
+    }
+}
+
+export async function getStaticProps(context) {
     const { params } = context;
     return {
         props: {
