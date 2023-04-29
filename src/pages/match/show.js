@@ -27,7 +27,7 @@ import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
 import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
-import DemoFullCalendar from '@/src/components/DemoFullCalendar/index.js';
+import FullCalendar from '@/src/components/FullCalendar/index.js';
 import ScoresDialog from '@/src/components/match/ScoresDialog';
 
 const Page = (props) => {
@@ -71,13 +71,20 @@ const Page = (props) => {
           upper: [...newMatches.filter(val => val.group == 0)],
           lower: [...newMatches.filter(val => val.group == 1)]
         })
-      } else if (format == 2) {
-        const schedules = match.matches.filter(val => val.type == 0);
+      }
+    }
+  }, [match.matches, matchLoading, event])
+
+  useEffect(() => {
+    if (event?.events[eid]?.rounds) {
+      if (event.events[eid].format == 2) {
+        const schedules = [...event.events[eid].rounds];
         console.log(schedules.map(val => ({
           ...val,
           start: val.start.toDate(),
           end: val.end.toDate()
         })));
+        console.log('schedules:', schedules)
         setEvents(schedules.map(val => ({
           ...val,
           start: val.start.toDate(),
@@ -85,7 +92,7 @@ const Page = (props) => {
         })));
       }
     }
-  }, [match.matches, matchLoading])
+  }, [eid, event])
 
   const handle = {
     edit: (e) => {
@@ -201,7 +208,7 @@ const Page = (props) => {
             {
               event?.events[eid] && event.events[eid].format == 2
                 ?
-                <DemoFullCalendar
+                <FullCalendar
                   sx={{
                     marginTop: '24px'
                   }}

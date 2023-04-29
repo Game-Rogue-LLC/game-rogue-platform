@@ -27,11 +27,11 @@ const EventInput = (props) => {
         <Box display={'flex'} justifyContent={'center'} gap={4} alignItems={'center'} mt={2}>
           <Box display={'flex'} justifyContent={'center'} gap={2}>
             <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'baseline'}>
-              <Button variant='contained' color='primary' component='label' disabled={disabled}>
+              <Button variant='contained' component='label' disabled={disabled}>
                 UPLOAD DARK LOGO
                 <input type="file" accept="image/*" name="upload-dark-logo" id="upload-dark-logo" hidden onChange={(e) => handle.upload(e, 'darkLogo')} />
               </Button>
-              <Button variant='contained' color='primary' component='label' disabled={disabled} onClick={handle.removeDarkLogo}>
+              <Button variant='contained' component='label' disabled={disabled} onClick={handle.removeDarkLogo}>
                 REMOVE DARK LOGO
               </Button>
             </Box>
@@ -41,11 +41,11 @@ const EventInput = (props) => {
           </Box>
           <Box display={'flex'} justifyContent={'center'} gap={2}>
             <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'baseline'}>
-              <Button variant='contained' color='primary' component='label' disabled={disabled}>
+              <Button variant='contained' component='label' disabled={disabled}>
                 UPLOAD LIGHT LOGO
                 <input type="file" accept="image/*" name="upload-light-logo" id="upload-light-logo" hidden onChange={(e) => handle.upload(e, 'lightLogo')} />
               </Button>
-              <Button variant='contained' color='primary' component='label' disabled={disabled} onClick={handle.removeLightLogo}>
+              <Button variant='contained' component='label' disabled={disabled} onClick={handle.removeLightLogo}>
                 REMOVE LIGHT LOGO
               </Button>
             </Box>
@@ -56,7 +56,7 @@ const EventInput = (props) => {
         </Box>
 
         <Box sx={{ textAlign: 'center', position: 'relative', mt: 3 }}>
-          <IconButton sx={{ position: 'absolute', right: 0, bottom: 0 }} color='primary' component='label' disabled={disabled}>
+          <IconButton sx={{ position: 'absolute', right: 0, bottom: 0 }} component='label' disabled={disabled}>
             <Edit />
             <input type="file" accept="image/*" name="upload-banner" id="upload-banner" hidden onChange={(e) => handle.upload(e, 'banner')} />
           </IconButton>

@@ -25,41 +25,12 @@ import DateTimePicker from '@/src/components/DateTimePicker';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { DEFAULT_LOGO, DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
 import EventInput from '@/src/components/event/EventInput';
+import { model, rules, customMessages } from '@/lib/firestore/collections/event';
 
 const initialInputs = {
-  name: '',
-  banner: DEFAULT_CONTENTBLOCK_IMAGE,
-  darkLogo: DEFAULT_LOGO,
-  lightLogo: DEFAULT_LOGO,
-  oid: '',
-  category: 0, // league or tournament
-  format: 0, // single, double, round robin ...
-  seed: 0,
-  startAt: new Date(),
-  registerTo: new Date(),
-  game: 0,
-  platform: 0,
-  region: 0,
-  timezone: 0,
-  rulebook: '',
-  terms: '',
-  privacy: '',
-  checkin: 15,
-  description: '',
-  participantsCount: 2,
-  status: 0,
-  deleted: false
+  ...model
 }
 
-const rules = {
-  name: 'required',
-  checkin: 'required'
-}
-
-const customMessages = {
-  'required.name': 'Event Name is required.',
-  'required.checkin': 'CheckIn is required.'
-}
 
 const Page = (props) => {
   const theme = useTheme();

@@ -60,7 +60,7 @@ const Page = (props) => {
                 </Grid>
                 <Grid item xs container>
                     <Box sx={{ border: 'solid 1px rgb(52, 43, 35)', width: '100%', borderRadius: '5px' }}>
-                        <TeamTable teams={team.teams} uid={uid} handle={handle.show} />
+                        <TeamTable teams={team.teams} uid={uid} handle={handle.show} showCreate={true} />
                     </Box>
                 </Grid>
             </Grid>

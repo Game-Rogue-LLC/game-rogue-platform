@@ -73,7 +73,7 @@ const Page = (props) => {
         <Box>
             <Paper sx={{ p: 4 }}>
                 <Typography variant='h6'>Disband/Delete Profile</Typography>
-                <Button variant='contained' sx={{ borderRadius: 0, mt: 2 }} onClick={handleOpen}>Disband</Button>
+                <Button variant='contained' onClick={handleOpen}>Disband</Button>
                 <Dialog
                     open={open}
                     onClose={handleClose}

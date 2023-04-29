@@ -137,7 +137,7 @@ const Page = (props) => {
                 <Button
                   variant='contained'
                   onClick={handle.show}
-                  sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
+                // sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
                 >
                   VIEW MATCHES
                 </Button>
@@ -145,14 +145,13 @@ const Page = (props) => {
                 <Button
                   variant='contained'
                   onClick={handle.create}
-                  sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
                 >
                   CREATE MATCHES
                 </Button>
               }
               <Button
                 variant='contained'
-                sx={{ borderRadius: 0, color: 'white', ml: 2, background: 'black', ':hover': { background: theme.palette.primary.main } }}
+                sx={{ ml: 2 }}
               >
                 PAST MATCHES
               </Button>

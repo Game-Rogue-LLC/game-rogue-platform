@@ -27,7 +27,7 @@ import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
 import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
-import DemoFullCalendar from '@/src/components/DemoFullCalendar/index.js';
+import FullCalendar from '@/src/components/FullCalendar/index.js';
 import ScoresDialog from '@/src/components/match/ScoresDialog';
 
 const Page = (props) => {
@@ -289,7 +289,7 @@ const Page = (props) => {
       if (saved) {
         const res = await event.update(eid, { status: 1 });
         if (res.code === 'succeed') {
-          match.read(eid);
+          // match.read(eid);
           alert('Saved successfully!');
         }
       }
@@ -592,7 +592,7 @@ const Page = (props) => {
                   >
                     Save
                   </Button>
-                  <DemoFullCalendar
+                  <FullCalendar
                     sx={{
                       marginTop: '24px'
                     }}

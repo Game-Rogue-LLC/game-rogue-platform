@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
+import TeamItem from '@/src/components/match/TeamItem';
 
 const Page = (props) => {
   const theme = useTheme();
@@ -51,7 +52,7 @@ const Page = (props) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell align='center'>TEAM ID</TableCell>
+            <TableCell align='center' width={'40%'}>TEAM ID</TableCell>
             <TableCell align='center'>TEAM NAME</TableCell>
           </TableRow>
         </TableHead>
@@ -63,7 +64,9 @@ const Page = (props) => {
                 return (
                   <TableRow key={'participant_' + participant.tid}>
                     <TableCell align='center'>{participant.tid}</TableCell>
-                    <TableCell align='center'>{team.teams[participant.tid]?.name}</TableCell>
+                    <TableCell align='center'>
+                      <TeamItem team={team.teams[participant.tid]} />
+                    </TableCell>
                   </TableRow>
                 )
               })
@@ -78,7 +81,6 @@ const Page = (props) => {
             <TableCell sx={{ border: 'none' }}>
               <Button
                 variant='contained'
-                sx={{ borderRadius: 0, color: 'white', bgcolor: 'black' }}
                 onClick={handle.addParticipant}
               >
                 ADD PARTICIPANT

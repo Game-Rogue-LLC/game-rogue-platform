@@ -1,5 +1,5 @@
 export const DEFAULT_CONTENTBLOCK_IMAGE = '/Game_Rogue_Text_2_copy.png';
-export const DEFAULT_LOGO = '/GR_Letters.png';
+export const DEFAULT_LOGO = '/LOGO.png';
 export const STAFF_ROLES = [
     {
         id: 0,

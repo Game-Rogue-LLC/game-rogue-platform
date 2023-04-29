@@ -25,39 +25,10 @@ import Validator from 'validatorjs'
 import { useTournamentContext } from '@/src/context/TournamentContext'
 import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO, EVENT_STATES } from '@/src/config/global';
 import EventInput from '@/src/components/event/EventInput';
+import { model, rules, customMessages } from '@/lib/firestore/collections/event';
 
 const initialInputs = {
-  logo: DEFAULT_CONTENTBLOCK_IMAGE,
-  name: '',
-  oid: '',
-  category: 0, // league or tournament
-  format: 0, // single, double, round robin ...
-  seed: 0,  // Manual
-  startAt: new Date(),
-  registerTo: new Date(),
-  game: 0,
-  platform: 0,
-  region: 0,
-  timezone: 0,
-  rulebook: '',
-  terms: '',
-  privacy: '',
-  checkin: 15,
-  description: '',
-  participants: [],
-  participantsCount: 2,
-  status: EVENT_STATES.CREATING.value,
-  deleted: false
-}
-
-const rules = {
-  name: 'required',
-  checkin: 'required'
-}
-
-const customMessages = {
-  'required.name': 'Event Name is required.',
-  'required.checkin': 'CheckIn is required.'
+  ...model
 }
 
 const Page = (props) => {

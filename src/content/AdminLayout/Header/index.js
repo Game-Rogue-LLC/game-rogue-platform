@@ -16,49 +16,50 @@ import { useEffect, useState } from 'react'
 import { Logout } from '@mui/icons-material';
 import { useAuthContext } from '@/src/context/AuthContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
+import { StyledMenu } from '@/src/content/PublicLayout/Navbar/NavItem';
 
-const StyledMenu = styled((props) => (
-	<Menu
-		elevation={0}
-		anchorOrigin={{
-			vertical: 'bottom',
-			horizontal: 'right',
-		}}
-		transformOrigin={{
-			vertical: 'top',
-			horizontal: 'right',
-		}}
-		{...props}
-	/>
-))(({ theme }) => ({
-	'& .MuiPaper-root': {
-		borderRadius: 0,
-		// backgroundColor: '#000',
-		marginTop: theme.spacing(1),
-		padding: theme.spacing(2),
-		minWidth: 180,
-		color:
-			theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
-		boxShadow:
-			'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-		'& .MuiMenu-list': {
-			padding: '0 10px',
-		},
-		'& .MuiMenuItem-root': {
-			fontSize: 10,
-			color: theme.palette.primary.main,
-			// marginRight: theme.spacing(1.5),
-			justifyContent: 'center',
-			textAlign: 'center',
-			'&:active': {
-				backgroundColor: alpha(
-					theme.palette.primary.main,
-					theme.palette.action.selectedOpacity,
-				),
-			},
-		},
-	},
-}));
+// const StyledMenu = styled((props) => (
+// 	<Menu
+// 		elevation={0}
+// 		anchorOrigin={{
+// 			vertical: 'bottom',
+// 			horizontal: 'right',
+// 		}}
+// 		transformOrigin={{
+// 			vertical: 'top',
+// 			horizontal: 'right',
+// 		}}
+// 		{...props}
+// 	/>
+// ))(({ theme }) => ({
+// 	'& .MuiPaper-root': {
+// 		borderRadius: 0,
+// 		// backgroundColor: '#000',
+// 		marginTop: theme.spacing(1),
+// 		padding: theme.spacing(2),
+// 		minWidth: 180,
+// 		color:
+// 			theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+// 		boxShadow:
+// 			'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+// 		'& .MuiMenu-list': {
+// 			padding: '0 10px',
+// 		},
+// 		'& .MuiMenuItem-root': {
+// 			fontSize: 10,
+// 			color: theme.palette.primary.main,
+// 			// marginRight: theme.spacing(1.5),
+// 			justifyContent: 'center',
+// 			textAlign: 'center',
+// 			'&:active': {
+// 				backgroundColor: alpha(
+// 					theme.palette.primary.main,
+// 					theme.palette.action.selectedOpacity,
+// 				),
+// 			},
+// 		},
+// 	},
+// }));
 
 const Header = () => {
 	const [anchorElOrganization, setAnchorElOrganization] = useState(null);
@@ -74,6 +75,10 @@ const Header = () => {
 	const handleClickUser = (event) => {
 		setAnchorElUser(event.currentTarget);
 	};
+	const handleOpenUser = (e) => {
+		if (anchorElUser !== e.currentTarget)
+			setAnchorElUser(e.currentTarget);
+	}
 	const handleCloseUser = () => {
 		setAnchorElUser(null);
 	};
@@ -151,20 +156,19 @@ const Header = () => {
 					aria-controls={openUser ? 'user-menu' : undefined}
 					aria-haspopup="true"
 					aria-expanded={openUser ? 'true' : undefined}
+					sx={{
+					}}
 					onClick={handleClickUser}
+					onMouseOver={handleOpenUser}
 				>
 					<Avatar alt={player.players[user.user.id]?.name} src={player.players[user.user.id]?.profilePic} />
 				</IconButton>
-				<Box sx={{ display: 'flex', alignItems: 'center' }}>
-					<IconButton onClick={user.logout} sx={{ h: 'auto' }}>
-						<Logout />
-					</IconButton>
-				</Box>
 			</Box>
 			<StyledMenu
 				id="user-menu"
 				MenuListProps={{
 					'aria-labelledby': 'user-button',
+					onMouseLeave: handleCloseUser
 				}}
 				anchorEl={anchorElUser}
 				open={openUser}
@@ -175,11 +179,20 @@ const Header = () => {
 						PROFILE
 					</Link>
 				</MenuItem>
-				<Divider sx={{ my: 0.5 }} />
 				<MenuItem onClick={handleCloseUser} key='edit-user' disableRipple>
 					<Link href={"/user/" + user.user.id + "/edit"}>
 						EDIT
 					</Link>
+				</MenuItem>
+				<MenuItem
+					onClick={() => {
+						handleCloseUser();
+						user.logout();
+					}}
+					key='logout'
+					disableRipple
+				>
+					LOG OUT
 				</MenuItem>
 			</StyledMenu>
 			<StyledMenu

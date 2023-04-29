@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
-import Header from './Header'
-import Footer from './Footer'
-import Navbar from './Navbar'
-import PageHeader from './PageHeader'
-import PageContainer from './PageContainer'
+import { useEffect } from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import Navbar from './Navbar';
+import PageHeader from './PageHeader';
+import PageContainer from './PageContainer';
+import PublicNavbar from '@/src/content/PublicLayout/Navbar';
 
 import OrganizationSidebar from '@/src/content/OrganizationSidebar'
 import MatchProvider, { useMatchContext } from '@/src/context/MatchContext'
@@ -26,13 +27,12 @@ const AdminLayout = (props) => {
 			width: '100vw',
 			justifyContent: 'space-between'
 		}}>
-			<div>
-				<Header />
-			</div>
+			{/* <Header /> */}
+			<PublicNavbar />
 			<div style={{
 				display: 'flex',
 				justifyContent: 'space-between',
-				flex: 1
+				flex: 1,
 			}}>
 				{organization.activeCount > 0 ?
 					<OrganizationSidebar />

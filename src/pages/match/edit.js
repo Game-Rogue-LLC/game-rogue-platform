@@ -27,7 +27,7 @@ import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
 import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
-import DemoFullCalendar from '@/src/components/DemoFullCalendar/index.js';
+import FullCalendar from '@/src/components/FullCalendar/index.js';
 import ScoresDialog from '@/src/components/match/ScoresDialog';
 import DatePickDialog from '@/src/components/match/DatePickDialog';
 import { NULL_FUNCTION } from '@/src/config/global';
@@ -177,7 +177,6 @@ const Page = (props) => {
       if (saved) {
         // const res = await event.update(eid, { status: 1 });
         // if (res.code === 'succeed') {
-        match.read(eid);
         alert('Saved successfully!');
         // }
       }
@@ -587,7 +586,7 @@ const Page = (props) => {
             {
               event?.events[eid] && event.events[eid].format == 2
                 ?
-                <DemoFullCalendar
+                <FullCalendar
                   sx={{
                     marginTop: '24px'
                   }}

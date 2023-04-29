@@ -24,29 +24,10 @@ import GameSelect from '@/src/components/GameSelect';
 import { useAuthContext } from '@/src/context/AuthContext';
 import Validator from 'validatorjs';
 import { DEFAULT_LOGO } from '@/src/config/global';
+import { model, rules, customMessages } from '@/lib/firestore/collections/team';
 
 const initialInputs = {
-  name: '',
-  short: '',
-  accessCode: '',
-  residency: '',
-  game: '',
-  darkLogo: DEFAULT_LOGO,
-  lightLogo: DEFAULT_LOGO,
-  players: [],
-  deleted: false
-}
-
-const rules = {
-  name: 'required',
-  short: 'required',
-  accessCode: 'required|min:4'
-}
-
-const customMessages = {
-  'required.name': 'Team Name is required.',
-  'required.short': 'Short Name is required.',
-  'required.accessCode': 'Access Code is required.'
+  ...model
 }
 
 const Page = (props) => {

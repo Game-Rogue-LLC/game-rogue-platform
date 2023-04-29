@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
-import _ from 'lodash';
+import _, { template } from 'lodash';
 
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
@@ -25,7 +25,7 @@ import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
 import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
-import DemoFullCalendar from '@/src/components/DemoFullCalendar/index.js';
+import FullCalendar from '@/src/components/FullCalendar/index.js';
 
 const Page = (props) => {
   const theme = useTheme();
@@ -254,11 +254,6 @@ const Page = (props) => {
     }
   }
 
-  const initializeDates = () => {
-    setStart(new Date());
-    setEnd(new Date());
-  }
-
   const handle = {
     buildTemplate: (e) => {
       const { participants, participantsCount, format } = event.events[eid];
@@ -325,9 +320,24 @@ const Page = (props) => {
       } else if (event.events[eid].format == 2) {
         // const newSchedule = events.sort((a, b) => a.start.getTime() - b.start.getTime());
         // console.log(newSchedule);
+        let participants = []
+        event.events[eid].participants.forEach(item => {
+          participants.push({
+            ...team.teams[item.tid]
+          });
+        })
+        participants.sort((a, b) => a.level - b.level);
+        let ranks = {}
+        participants.forEach((item, i) => {
+          ranks[item.id] = i;
+        })
+        console.log('Participants:', participants);
+        console.log('Ranks:', ranks);
+        let temp = []
         for (let i = 0; i < events.length; i++) {
           const item = events[i];
-          const res = await match.update(item.id, {
+          // const res = await match.update(item.id, {
+          temp.push({
             id: item.id,
             eid: eid,
             type: 0,
@@ -340,11 +350,16 @@ const Page = (props) => {
             createdAt: new Date(),
             status: MATCH_STATES.SCHEDULING.value,
             deleted: false,
+            rank: ranks
           })
-          if (res.code == 'failed') {
-            saved = false;
-            console.warn('Schedule save error:', res.message);
-          }
+        }
+        const res = await event.update(eid, {
+          ...event.events[eid],
+          rounds: temp
+        })
+        if (res.code == 'failed') {
+          saved = false;
+          console.warn('Rounds save error:', res.message);
         }
       }
 
@@ -436,7 +451,7 @@ const Page = (props) => {
             {
               event?.events[eid] && event.events[eid].format == 2
                 ?
-                <DemoFullCalendar
+                <FullCalendar
                   sx={{
                     marginTop: '24px'
                   }}

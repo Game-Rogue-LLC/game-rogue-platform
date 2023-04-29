@@ -51,8 +51,7 @@ export default function MyApp(props) {
       <ThemeProvider>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <div className={`${!navigating ? 'navigating' : ''} transition-container`} id="navigating"></div>
-        {navigating ? <Splash content={'Loading...'} /> : <></>}
+        {navigating ? <Splash content={'Loading...'} /> : <div className={`navigating transition-container`} id="navigating"></div>}
         <AppProvider>
           <AuthContextProvider>
             {getLayout(

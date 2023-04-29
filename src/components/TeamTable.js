@@ -1,41 +1,52 @@
 import {
-    Box,
-    Paper,
-    Table,
-    TableHead,
-    TableBody,
-    TableRow,
-    TableCell,
-    TableContainer,
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
 } from '@mui/material'
+import TeamItem from './match/TeamItem';
+import { useRouter } from 'next/router';
 
-const TeamTable = (props) => {
-    const { teams, uid, handle } = props;
-    return (
-        <TableContainer component={Paper} variant='elevation'>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell align='center'>TEAM NAME</TableCell>
-                        <TableCell align='center'>GAME</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {teams && Object.keys(teams).filter((key, i) => teams[key].players.findIndex(val => val.id == uid) >= 0).map((id, i) => (
-                        <TableRow hover key={id} onClick={() => handle(id)} sx={{ cursor: 'pointer' }}>
-                            <TableCell align='center'>
-                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                                    <img src={teams[id].darkLogo ?? '/GR_Letters.png'} style={{ height: '20px' }} />
-                                    {teams[id].name}
-                                </Box>
-                            </TableCell>
-                            <TableCell align='center'>{teams[id].game}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    )
+const TeamTable = ({ teams, uid, handleClick, showCreate }) => {
+  const router = useRouter();
+
+  const handleCreate = (e) => {
+    router.push('/team/create');
+  }
+  return (
+    <TableContainer component={Paper} variant='elevation'>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell align='center'>TEAM NAME</TableCell>
+            <TableCell align='center'>GAME</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {teams && Object.keys(teams).filter((key, i) => teams[key].players.findIndex(val => val.id == uid) >= 0).map((id, i) => (
+            <TableRow hover key={id} onClick={() => handleClick(id)} sx={{ cursor: 'pointer' }}>
+              <TableCell align='center'>
+                <TeamItem team={teams[id]} />
+              </TableCell>
+              <TableCell align='center'>{teams[id].game}</TableCell>
+            </TableRow>
+          ))}
+          {showCreate && <TableRow>
+            <TableCell colSpan={2}>
+              <Button variant='contained' onClick={handleCreate}>
+                Create
+              </Button>
+            </TableCell>
+          </TableRow>}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )
 }
 
 export default TeamTable;

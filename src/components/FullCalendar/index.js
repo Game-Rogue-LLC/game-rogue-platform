@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { formatDate } from '@fullcalendar/core';
-import FullCalendar from '@fullcalendar/react';
+import ReactFullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -15,8 +15,8 @@ const colors = [
   "#5E8F1C"
 ]
 
-const DemoApp = (props) => {
-  const { events, setEvents, sx } = props;
+const FullCalendar = (props) => {
+  const { events, setEvents, limit, sx } = props;
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
   const handleWeekendsToggle = () => {
@@ -24,6 +24,7 @@ const DemoApp = (props) => {
   }
 
   const handleDateSelect = (selectInfo) => {
+    if (limit && events.length >= limit) return;
     let title = prompt('Please enter a new title for your event')
     let calendarApi = selectInfo.view.calendar
 
@@ -40,7 +41,6 @@ const DemoApp = (props) => {
       //   resourceId: (selectInfo.resource ? selectInfo.resource.id : undefined)
       //   // color: `rgb(${_.random(0, 255)},${_.random(0, 255)},${_.random(0, 255)})`
       // })
-      console.log(selectInfo);
       setEvents([
         ...events,
         {
@@ -60,7 +60,8 @@ const DemoApp = (props) => {
 
   const handleEventClick = (clickInfo) => {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
+      clickInfo.event.remove();
+      setEvents(events.filter((val, i) => val.id != clickInfo.event.id));
     }
   }
 
@@ -71,12 +72,12 @@ const DemoApp = (props) => {
   return (
     <div className='demo-app' style={sx}>
       <div className='demo-app-main'>
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
+        <ReactFullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin/*, resourceTimelinePlugin*/]}
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,resourceTimelineDay'
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'//,resourceTimelineDay'
           }}
           initialView='dayGridMonth'
           editable={true}
@@ -133,4 +134,4 @@ function renderSidebarEvent(event) {
   )
 }
 
-export default DemoApp;
+export default FullCalendar;

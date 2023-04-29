@@ -20,8 +20,6 @@ import { LoadingButton } from '@mui/lab'
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import TeamTable from '@/src/components/TeamTable';
-import { Edit } from '@mui/icons-material';
 import DatePicker from '@/src/components/DatePicker';
 import CountrySelect from '@/src/components/CountrySelect';
 import Validator from 'validatorjs';

@@ -85,7 +85,7 @@ const Page = (props) => {
             <Grid container rowSpacing={3} spacing={2}>
                 <Grid item xs={4} sx={{ minWidth: '200px' }}>
                     <Box textAlign={'center'}>
-                        <img src={item.darkLogo ?? '/GR_Letters.png'} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                        <img src={item.darkLogo ?? DEFAULT_LOGO} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
                     </Box>
                     <Box mt={1}>
                         <Grid container rowSpacing={2} spacing={2}>
