@@ -75,7 +75,7 @@ Page.getLayout = (page) => {
 export async function getStaticPaths() {
     return {
         paths: [
-            { params: { uid: 'FmUXaMwNu3NGoP8G19fXubvG1PD2' } }
+            // { params: { uid: 'FmUXaMwNu3NGoP8G19fXubvG1PD2' } }
         ],
         fallback: true
     }
