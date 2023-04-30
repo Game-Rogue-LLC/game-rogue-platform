@@ -77,7 +77,7 @@ export async function getStaticPaths() {
         paths: [
             // { params: { uid: 'FmUXaMwNu3NGoP8G19fXubvG1PD2' } }
         ],
-        fallback: true
+        fallback: 'blocking'
     }
 }
 
