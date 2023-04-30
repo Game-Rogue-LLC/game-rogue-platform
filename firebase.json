@@ -12,10 +12,6 @@
     "cleanUrls": true,
     "rewrites": [
       {
-        "source": "/**",
-        "dynamicLinks": true
-      },
-      {
         "destination": "/event/[eid]/edit.html",
         "regex": "^/event/([^/]+?)/edit(?:/)?$"
       },
