@@ -14,6 +14,34 @@
       {
         "source": "/**",
         "dynamicLinks": true
+      },
+      {
+        "destination": "/event/[eid]/edit.html",
+        "regex": "^/event/([^/]+?)/edit(?:/)?$"
+      },
+      {
+        "destination": "/event/[eid]/info.html",
+        "regex": "^/event/([^/]+?)/info(?:/)?$"
+      },
+      {
+        "destination": "/match/[mid]/index.html",
+        "regex": "^/match/([^/]+?)(?:/)?$"
+      },
+      {
+        "destination": "/team/[tid]/index.html",
+        "regex": "^/team/([^/]+?)(?:/)?$"
+      },
+      {
+        "destination": "/team/[tid]/edit.html",
+        "regex": "^/team/([^/]+?)/edit(?:/)?$"
+      },
+      {
+        "destination": "/user/[uid]/index.html",
+        "regex": "^/user/([^/]+?)(?:/)?$"
+      },
+      {
+        "destination": "/user/[uid]/edit.html",
+        "regex": "^/user/([^/]+?)/edit(?:/)?$"
       }
     ]
   }
