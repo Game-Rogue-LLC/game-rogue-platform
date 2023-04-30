@@ -72,22 +72,22 @@ Page.getLayout = (page) => {
     return <AdminLayout>{page}</AdminLayout>
 }
 
-export async function getStaticPaths() {
-    return {
-        paths: [
-            // { params: { uid: 'FmUXaMwNu3NGoP8G19fXubvG1PD2' } }
-        ],
-        fallback: 'blocking'
-    }
-}
+// export async function getStaticPaths() {
+//     return {
+//         paths: [
+//             // { params: { uid: 'FmUXaMwNu3NGoP8G19fXubvG1PD2' } }
+//         ],
+//         fallback: 'blocking'
+//     }
+// }
 
-export async function getStaticProps(context) {
-    const { params } = context;
-    return {
-        props: {
-            uid: params.uid
-        }
-    }
-}
+// export async function getStaticProps(context) {
+//     const { params } = context;
+//     return {
+//         props: {
+//             uid: params.uid
+//         }
+//     }
+// }
 
 export default Page;
