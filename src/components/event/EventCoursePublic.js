@@ -29,9 +29,11 @@ import SingleEliminationBracket from '@/src/components/match/SingleEliminationBr
 import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
 import ScoresDialog from '@/src/components/match/ScoresDialog';
-import LadderPublicPage from '@/src/components/LadderPublicPage';
 import PublicLayout from '@/src/content/PublicLayout';
 import { useAuthContext } from '@/src/context/AuthContext';
+import FullCalendar, { colors } from '@/src/components/FullCalendar';
+import dayjs from 'dayjs';
+import EventTableView from './EventTableView';
 
 const EventCoursePublic = ({ eid }) => {
   const theme = useTheme();
@@ -43,15 +45,64 @@ const EventCoursePublic = ({ eid }) => {
   const [disabled, setDisabled] = useState(false);
   const [tab, setTab] = useState("1");
   const [myTeam, setMyTeam] = useState(null);
+  const [format, setFormat] = useState(0);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     if (event?.events[eid]) {
+      if (event.events[eid].format !== format) setFormat(event.events[eid].format);
       const { participants } = event.events[eid];
       participants.forEach(item => {
         if (team.teams[item.tid].uid == user.id) setMyTeam(item.tid);
       })
     }
   }, [eid, team?.teams, event?.events])
+
+  useEffect(() => {
+    if (match?.matches) {
+      let newEvents = [];
+      if (format == 0) {
+        const matches = [...match.matches];
+        matches.forEach((val, i) => {
+          newEvents.push({
+            id: val.id,
+            title: '',
+            color: colors[0],
+            start: val.start,
+            end: val.end,
+            startStr: dayjs(val.start).format("YYYY-MM-DD hh:mm"),
+            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm")
+          })
+        })
+      } else if (format == 1) {
+        match.matches.forEach((val, i) => {
+          newEvents.push({
+            id: val.id,
+            title: '',
+            color: colors[0],
+            start: val.start,
+            end: val.end,
+            startStr: dayjs(val.start).format("YYYY-MM-DD hh:mm"),
+            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm")
+          })
+        })
+      } else if (format == 2) {
+        const matches = [...match.matches];
+        matches.forEach((val, i) => {
+          newEvents.push({
+            id: val.id,
+            title: '',
+            color: colors[0],
+            start: val.start,
+            end: val.end,
+            startStr: dayjs(val.start).format("YYYY-MM-DD hh:mm"),
+            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm")
+          })
+        })
+      }
+      setEvents(newEvents);
+    }
+  }, [format, match?.matches])
 
   useEffect(() => {
     if (matchLoading == false && match.matches && match.matches.length > 0) {
@@ -81,31 +132,36 @@ const EventCoursePublic = ({ eid }) => {
     <Box sx={{ overflow: 'auto', flex: 1, minHeight: '300px' }}>
       <TabContext value={tab}>
         <TabList onChange={handle.changeTab} aria-label="Tabs for games">
-          <Tab label="Qualifications" value="1" />
-          <Tab label="Divisions" value="2" />
+          <Tab label="Calendar View" value="1" />
+          <Tab label="Table View" value="2" />
+          {format != 2 && <Tab label="Graphic View" value="3" />}
         </TabList>
         <TabPanel value="1">
-          {
-            event?.events[eid] &&
-              games && event?.events[eid]?.format == 0
-              ?
-              <SingleEliminationBracket matches={games} />
-              :
-              event?.events[eid]?.format == 1
-                ?
-                <DoubleEliminationBracket matches={games} />
-                :
-                event?.events[eid]?.format == 2
-                  ?
-                  <LadderPublicPage myTeam={myTeam} />
-                  : <></>
-          }
+          <FullCalendar
+            events={events}
+            selectable={false}
+            editable={false}
+          />
         </TabPanel>
         <TabPanel value="2">
-          <Box sx={{ width: '100%' }}>
-            123
-          </Box>
+          {
+            event?.events[eid] && match?.matches &&
+            <EventTableView format={format} myTeam={myTeam} eid={eid} matches={match.matches} />
+          }
         </TabPanel>
+        {
+          format != 2 &&
+          <TabPanel value="3">
+            {
+              event?.events[eid] && games &&
+              (format == 0
+                ? <SingleEliminationBracket matches={games} />
+                : format == 1
+                  ? <DoubleEliminationBracket matches={games} />
+                  : <></>)
+            }
+          </TabPanel>
+        }
       </TabContext>
     </Box>
   )

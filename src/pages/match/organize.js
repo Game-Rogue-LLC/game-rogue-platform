@@ -33,7 +33,7 @@ import {
 } from '@mui/lab'
 import { nanoid } from 'nanoid'
 import MatchItem from '@/src/components/match/MatchItem'
-import TeamItem from '@/src/components/match/TeamItem'
+import TeamItem from '@/src/components/TeamItem'
 
 import MatchComponent from '@/src/components/match/MatchComponent'
 import { useTournamentContext } from '@/src/context/TournamentContext'

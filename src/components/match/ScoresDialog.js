@@ -42,10 +42,7 @@ const ScoresDialog = (props) => {
                 sx={{
                   mt: 2,
                   height: '150px',
-                  width: '150px',
-                  borderRadius: '50%',
-                  outline: 'solid 2px rgba(255, 255, 255, 0.2)',
-                  outlineOffset: '2px'
+                  width: '150px'
                 }}
                 src={team1?.darkLogo || DEFAULT_LOGO}
               ></Box>
@@ -74,10 +71,7 @@ const ScoresDialog = (props) => {
                 sx={{
                   mt: 2,
                   height: '150px',
-                  width: '150px',
-                  borderRadius: '50%',
-                  outline: 'solid 2px rgba(255, 255, 255, 0.2)',
-                  outlineOffset: '2px'
+                  width: '150px'
                 }}
                 src={team2?.darkLogo || DEFAULT_LOGO}
               ></Box>

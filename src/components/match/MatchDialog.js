@@ -9,9 +9,9 @@ import {
   Typography
 } from "@mui/material";
 import CustomDateTimePicker from "../DateTimePicker";
+import { DEFAULT_LOGO } from "@/src/config/global";
 
-const MatchDialog = (props) => {
-  const { onClose, title, open, onSave, status } = props;
+const MatchDialog = ({ title, open, onSave, status, onClose, ...props }) => {
   if (status == 0) {
     const { start, end, onStartChange, onEndChange } = props;
     return (

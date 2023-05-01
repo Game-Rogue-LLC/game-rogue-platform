@@ -8,7 +8,7 @@ import {
   OutlinedInput,
   Typography
 } from "@mui/material";
-import CustomDateTimePicker from "../DateTimePicker";
+import CustomDateTimePicker from "./DateTimePicker";
 
 const DatePickDialog = (props) => {
   const { onClose, title, open, start, end, onStartChange, onEndChange, onSave } = props;

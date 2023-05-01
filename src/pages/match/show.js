@@ -27,7 +27,7 @@ import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
 import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
-import FullCalendar from '@/src/components/FullCalendar/index.js';
+import FullCalendar from '@/src/components/FullCalendar.js';
 import ScoresDialog from '@/src/components/match/ScoresDialog';
 
 const Page = (props) => {
@@ -79,11 +79,6 @@ const Page = (props) => {
     if (event?.events[eid]?.rounds) {
       if (event.events[eid].format == 2) {
         const schedules = [...event.events[eid].rounds];
-        console.log(schedules.map(val => ({
-          ...val,
-          start: val.start.toDate(),
-          end: val.end.toDate()
-        })));
         console.log('schedules:', schedules)
         setEvents(schedules.map(val => ({
           ...val,
@@ -214,6 +209,8 @@ const Page = (props) => {
                   }}
                   events={events}
                   setEvents={setEvents}
+                  selectable={true}
+                  editable={true}
                 />
                 :
                 (games && event?.events[eid]?.format == 0

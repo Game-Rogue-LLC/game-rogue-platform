@@ -1,7 +1,7 @@
 import {
     Card
 } from '@mui/material'
-import TeamItem from './TeamItem'
+import TeamItem from '../TeamItem'
 
 export default function (props) {
     const { match, team1, team2 } = props

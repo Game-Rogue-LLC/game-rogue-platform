@@ -9,7 +9,7 @@ import {
   TableCell,
   TableContainer,
 } from '@mui/material'
-import TeamItem from './match/TeamItem';
+import TeamItem from './TeamItem';
 import { useRouter } from 'next/router';
 
 const TeamTable = ({ teams, uid, handleClick, showCreate }) => {

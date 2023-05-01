@@ -27,9 +27,9 @@ import { nanoid } from 'nanoid';
 import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
 import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
 import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
-import FullCalendar from '@/src/components/FullCalendar/index.js';
+import FullCalendar from '@/src/components/FullCalendar.js';
 import ScoresDialog from '@/src/components/match/ScoresDialog';
-import DatePickDialog from '@/src/components/match/DatePickDialog';
+import DatePickDialog from '@/src/components/DatePickDialog';
 import { NULL_FUNCTION } from '@/src/config/global';
 
 const Page = (props) => {
@@ -103,7 +103,7 @@ const Page = (props) => {
       setChangingStatus(true);
       if (confirm('Do you really want to finish scheduling this event?')) {
         for (let i = 0; i < match.matches.length; i++) {
-          const res = await match.update(match.matches[i].id, { status: MATCH_STATES.SCHEDULED });
+          const res = await match.update(match.matches[i].id, { status: MATCH_STATES.SCHEDULED.value });
         }
         const res = await event.update(eid, { status: EVENT_STATES.SCHEDULED.value });
         if (res.code === 'succeed') {
@@ -115,6 +115,9 @@ const Page = (props) => {
     startEvent: async (e) => {
       setChangingStatus(true);
       if (confirm('Do you really want to start this event?')) {
+        for (let i = 0; i < match.matches.length; i++) {
+          const res = await match.update(match.matches[i].id, { status: MATCH_STATES.STARTED.value });
+        }
         const res = await event.update(eid, { status: EVENT_STATES.STARTED.value });
         if (res.code === 'succeed') {
           alert('Event started!');
@@ -125,6 +128,9 @@ const Page = (props) => {
     finishEvent: async (e) => {
       setChangingStatus(true);
       if (confirm('Do you really want to finish this event?')) {
+        for (let i = 0; i < match.matches.length; i++) {
+          const res = await match.update(match.matches[i].id, { status: MATCH_STATES.FINISHED.value });
+        }
         const res = await event.update(eid, { status: EVENT_STATES.FINISHED.value });
         if (res.code === 'succeed') {
           alert('Event finished!');
@@ -338,6 +344,7 @@ const Page = (props) => {
         newGames[selectedGame].participants[1].status = 'DONE';
         newGames[selectedGame].participants[winner].isWinner = true;
         newGames[selectedGame].participants[1 - winner].isWinner = false;
+        newGames[selectedGame].status = MATCH_STATES.FINISHED.value;
 
         let nextIndex = -1;
         if (newGames[selectedGame].nextMatchId) {
@@ -360,8 +367,6 @@ const Page = (props) => {
           if (newGames[selectedGame].id == newGames[nextIndex].up)
             newGames[nextIndex].participants[0] = newParticipant;
           else newGames[nextIndex].participants[1] = newParticipant;
-
-          console.warn(newGames[nextIndex].participants)
         }
       } else if (event.events[eid].format == 1) {
         newGames = { ...games };
@@ -372,6 +377,7 @@ const Page = (props) => {
           newGames.upper[selectedGame].participants[0].status = 'DONE';
           newGames.upper[selectedGame].participants[1].resultText = '' + score2;
           newGames.upper[selectedGame].participants[1].status = 'DONE';
+          newGames.upper[selectedGame].status = MATCH_STATES.FINISHED.value;
 
           let nextIndex = -1, nextLooserIndex = -1;
 
@@ -429,6 +435,7 @@ const Page = (props) => {
           newGames.lower[selectedGame].participants[0].status = 'DONE';
           newGames.lower[selectedGame].participants[1].resultText = '' + score2;
           newGames.lower[selectedGame].participants[1].status = 'DONE';
+          newGames.lower[selectedGame].status = MATCH_STATES.FINISHED.value;
 
           let nextIndex = -1;
 
@@ -592,13 +599,15 @@ const Page = (props) => {
                   }}
                   events={events}
                   setEvents={setEvents}
+                  selectable={true}
+                  editable={true}
                 />
                 :
                 (games && event?.events[eid]?.format == 0
                   ?
                   <SingleEliminationBracket
                     matches={games}
-                    handleMatchClick={event.events[eid].status == 1 ? handle.singleMatchClick : null}
+                    handleMatchClick={event.events[eid].status == 3 ? handle.singleMatchClick : null}
                     handlePartyClick={event.events[eid].status == 3 ? handle.singlePartyClick : null}
                   />
                   :
@@ -606,7 +615,7 @@ const Page = (props) => {
                     ?
                     <DoubleEliminationBracket
                       matches={games}
-                      handleMatchClick={event.events[eid].status == 1 ? handle.doubleMatchClick : null}
+                      handleMatchClick={event.events[eid].status == 3 ? handle.doubleMatchClick : null}
                       handlePartyClick={event.events[eid].status == 3 ? handle.doublePartyClick : null}
                     />
                     :

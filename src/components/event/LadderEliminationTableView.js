@@ -16,15 +16,15 @@ import { LoadingButton } from '@mui/lab';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import FullCalendar from '@/src/components/FullCalendar';
 import MatchTable from '@/src/components/match/MatchTable';
-import { MATCH_STATES } from '../config/global';
+import { MATCH_STATES } from '@/src/config/global';
+import TeamItem from '@/src/components/TeamItem';
+import FullCalendar from '@/src/components/FullCalendar';
 
-const LadderPublicPage = ({ myTeam }) => {
+const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
   const theme = useTheme();
   const { organization, event, team, match } = useTournamentContext();
-  const [eid, setEID] = useState(router?.query?.event);
   const [teams, setTeams] = useState([]);
   const [rank, setRank] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -42,18 +42,6 @@ const LadderPublicPage = ({ myTeam }) => {
       setCurrentRound(_.last(event.events[eid].rounds));
     }
   }, [event?.events, eid])
-
-  useEffect(() => {
-    if (router?.query?.eid) {
-      const newEID = router.query.eid;
-      if (event?.events[newEID]) {
-        setEID(newEID);
-        event.setCurrent(newEID);
-        organization.setCurrent(event.events[newEID].oid);
-        match.read(newEID);
-      }
-    }
-  }, [router, event?.events])
 
   useEffect(() => {
     if (event?.events[eid]) {
@@ -141,7 +129,7 @@ const LadderPublicPage = ({ myTeam }) => {
       <Dialog maxWidth={'xl'} onClose={handle.closeCalendar} open={showCalendar} sx={{ zIndex: 9999 }}>
         <DialogTitle>Schedule the challenge</DialogTitle>
         <DialogContent>
-          <FullCalendar events={events} setEvents={setEvents} limit={1} />
+          <FullCalendar events={events} setEvents={setEvents} selectable={true} editable={true} limit={1} />
         </DialogContent>
         <DialogActions sx={{ px: 3, mb: 3 }}>
           <Button
@@ -175,8 +163,8 @@ const LadderPublicPage = ({ myTeam }) => {
                     }
                   }}
                 >
-                  <Typography variant='h6' style={{ color: (item.id == myTeam || item.id == opponent ? theme.palette.primary.main : 'white') }}>
-                    {item.name}
+                  <TeamItem team={item} sx={{ color: ((item.id == myTeam || item.id == opponent) ? theme.palette.primary.main : 'white') }} />&nbsp;
+                  <Typography variant='b1' style={{ color: (item.id == myTeam || item.id == opponent ? theme.palette.primary.main : 'white') }}>
                     {item.id == myTeam ? ' ( My Team ) ' : ''}
                     {item.id == opponent ? ' ( Opponent ) ' : ''}
                   </Typography>
@@ -197,10 +185,10 @@ const LadderPublicPage = ({ myTeam }) => {
         </LoadingButton>
       </Box>
       <Box sx={{ flex: 1, zIndex: 100 }}>
-        <MatchTable matches={match?.matches} eid={eid} />
+        <MatchTable matches={matches} eid={eid} myTeam={myTeam} />
       </Box>
     </Box>
   )
 }
 
-export default LadderPublicPage;
+export default LadderEliminationTableView;

@@ -17,7 +17,7 @@ import { useTournamentContext } from '@/src/context/TournamentContext';
 import { games } from '@/src/components/GameSelect';
 import { EVENT_FORMATS } from '@/src/config/global';
 import { DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
-import TeamItem from '../match/TeamItem';
+import TeamItem from '../TeamItem';
 import { useRouter } from 'next/router';
 
 const TeamSelectInput = styled(InputBase)(({ theme }) => ({

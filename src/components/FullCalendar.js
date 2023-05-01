@@ -7,16 +7,16 @@ import interactionPlugin from '@fullcalendar/interaction';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import { nanoid } from 'nanoid';
 import _ from 'lodash';
+import MatchDialog from './match/MatchDialog';
 
-const colors = [
+export const colors = [
   "#B65A0C",
   "#880167",
   "#014984",
   "#5E8F1C"
 ]
 
-const FullCalendar = (props) => {
-  const { events, setEvents, limit, sx } = props;
+const FullCalendar = ({ events, setEvents, limit, sx, selectable, editable }) => {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
   const handleWeekendsToggle = () => {
@@ -24,7 +24,7 @@ const FullCalendar = (props) => {
   }
 
   const handleDateSelect = (selectInfo) => {
-    if (limit && events.length >= limit) return;
+    if (limit && events.length >= limit || !setEvents) return;
     let title = prompt('Please enter a new title for your event')
     let calendarApi = selectInfo.view.calendar
 
@@ -72,6 +72,7 @@ const FullCalendar = (props) => {
   return (
     <div className='demo-app' style={sx}>
       <div className='demo-app-main'>
+        <MatchDialog open={false} />
         <ReactFullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin/*, resourceTimelinePlugin*/]}
           headerToolbar={{
@@ -80,8 +81,8 @@ const FullCalendar = (props) => {
             right: 'dayGridMonth,timeGridWeek,timeGridDay'//,resourceTimelineDay'
           }}
           initialView='dayGridMonth'
-          editable={true}
-          selectable={true}
+          editable={editable == true ? true : false}
+          selectable={selectable == true ? true : false}
           selectMirror={true}
           dayMaxEvents={true}
           weekends={weekendsVisible}
@@ -91,18 +92,18 @@ const FullCalendar = (props) => {
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
           // eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-          resources={[
-            { id: 'a', title: 'Resource A' },
-            { id: 'b', title: 'Resource B' },
-            { id: 'c', title: 'Resource C' }
-          ]}
-          views={{
-            resourceTimelineDay: {
-              type: 'resourceTimeline',
-              duration: { days: 1 },
-              buttonText: 'resource day'
-            }
-          }}
+          // resources={[
+          //   { id: 'a', title: 'Resource A' },
+          //   { id: 'b', title: 'Resource B' },
+          //   { id: 'c', title: 'Resource C' }
+          // ]}
+          // views={{
+          //   resourceTimelineDay: {
+          //     type: 'resourceTimeline',
+          //     duration: { days: 1 },
+          //     buttonText: 'resource day'
+          //   }
+          // }}
           events={events}
 
         /* you can update a remote database when these fire:
