@@ -9,9 +9,8 @@ import {
 } from '@mui/material'
 import { Edit } from '@mui/icons-material';
 
-const UserInfo = (props) => {
+const UserInfo = ({ item, editable, handle, avatar }) => {
     const theme = useTheme();
-    const { item, editable, handle, avatar } = props;
     return (
         <Box>
             <Box sx={{ textAlign: 'center', position: 'relative' }}>

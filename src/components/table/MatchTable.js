@@ -12,12 +12,13 @@ import {
   useTheme,
   Typography
 } from "@mui/material"
-import TeamItem from "@/src/components/TeamItem";
+import TeamItem from "@/src/components/item/TeamItem";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { MATCH_STATES } from "@/src/config/global";
 import { useEffect, useMemo, useState } from "react";
 import { LoadingButton } from "@mui/lab";
+import MatchDialog from "@/src/components/dialog/MatchDialog";
 
 const MatchTable = ({ matches, eid, myTeam }) => {
   const theme = useTheme();
@@ -26,6 +27,8 @@ const MatchTable = ({ matches, eid, myTeam }) => {
   const [accepting, setAccepting] = useState(false);
   const [denying, setDenying] = useState(false);
   const [format, setFormat] = useState(0);
+  const [selectedMatch, setSelectedMatch] = useState(null);
+  const [isMatchDialogOpen, setMatchDialogOpen] = useState(false);
 
   useEffect(() => {
     if (event?.events[eid]) {
@@ -91,8 +94,26 @@ const MatchTable = ({ matches, eid, myTeam }) => {
     return false;
   }
 
+  const handleMatchClick = (id) => {
+    setSelectedMatch(matches[matches.findIndex(val => val.id == id)]);
+    setMatchDialogOpen(true);
+  }
+  const handleCloseMatchDialog = (id) => {
+    setMatchDialogOpen(false);
+  }
+
   return (
     <Box>
+      {selectedMatch && selectedMatch.participants?.length == 2 &&
+        <MatchDialog
+          open={isMatchDialogOpen}
+          title="Match Info"
+          team1={team.teams[selectedMatch.participants[0].id]}
+          team2={team.teams[selectedMatch.participants[1].id]}
+          score1={team.teams[selectedMatch.participants[0].id].score}
+          score2={team.teams[selectedMatch.participants[1].id].score}
+          onClose={handleCloseMatchDialog}
+        />}
       <Typography variant="h5">
         Current Matches
       </Typography>
@@ -113,7 +134,7 @@ const MatchTable = ({ matches, eid, myTeam }) => {
               ? currentMatches.map((item, i) => {
                 if (item.participants?.length == 2 || format == 2) {
                   return (
-                    <TableRow hover key={item.id} onClick={() => { }} sx={{ cursor: 'pointer' }}>
+                    <TableRow hover key={item.id} onClick={() => handleMatchClick(item.id)} sx={{ cursor: 'pointer' }}>
                       <TableCell align='center' sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }}>
                         {format == 0
                           ? <TeamItem team={team?.teams[item.participants[0].id]} sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }} />
@@ -215,7 +236,7 @@ const MatchTable = ({ matches, eid, myTeam }) => {
           <TableBody>
             {matches && pastMatches.length > 0
               ? pastMatches.map((item, i) => (
-                <TableRow hover key={item.id} onClick={() => { }} sx={{ cursor: 'pointer' }}>
+                <TableRow hover key={item.id} onClick={() => handleMatchClick(item.id)} sx={{ cursor: 'pointer' }}>
                   <TableCell align='center'>
                     <TeamItem team={team.teams[item.self]} />
                   </TableCell>

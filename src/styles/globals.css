@@ -160,3 +160,38 @@ a {
   z-index: 3;
   cursor: pointer;
 }
+
+.ql-editor {
+  min-height: 300px;
+}
+
+/* .ql-snow.ql-toolbar button:hover:not(.ql-active),
+.ql-snow .ql-toolbar button:hover:not(.ql-active) {
+  color: white;
+} */
+
+/* .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-fill,
+.ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-fill,
+.ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke.ql-fill {
+  color: white
+} */
+
+/* .ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke,
+.ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke,
+.ql-snow.ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter,
+.ql-snow .ql-toolbar button:hover:not(.ql-active) .ql-stroke-miter {
+  stroke: white;
+} */
+
+.ql-snow.ql-toolbar {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.html-wrapper {
+  position: relative;
+}
+
+.html-wrapper * {
+  max-width: 100%;
+}

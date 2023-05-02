@@ -13,13 +13,14 @@ import {
   TextField,
 } from '@mui/material'
 import { Edit } from '@mui/icons-material';
-import DateTimePicker from '@/src/components/DateTimePicker'
+import DateTimePicker from '@/src/components/datetime/DateTimePicker'
 import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from '@/src/config/global';
 import { useTournamentContext } from '@/src/context/TournamentContext';
+import ReactRichTextEdit from '@/src/components/textedit/ReactRichTextEdit';
+import { htmlToMarkdown } from '@/src/utils/html-markdown';
 
-const EventInput = (props) => {
+const EventInput = ({ handle, inputs, disabled, errors }) => {
   const { organization } = useTournamentContext();
-  const { handle, inputs, disabled, errors } = props;
   return (
     <Grid container spacing={2} rowSpacing={4}>
       <Grid item xs={12}>
@@ -95,8 +96,17 @@ const EventInput = (props) => {
         <Box sx={{ mt: 3 }}>
           <Typography variant='h6'>Event Description</Typography>
           <FormControl fullWidth sx={{ mt: 1 }}>
-            <TextField multiline id="event-description" name="description" aria-describedby="event-description-helper" value={inputs?.description} disabled={disabled}
-              onChange={handle.inputs} />
+            {/* <TextField multiline id="event-description" name="description" aria-describedby="event-description-helper" value={inputs?.description} disabled={disabled}
+              onChange={handle.inputs} /> */}
+            <ReactRichTextEdit content={inputs?.description}
+              handleContentChange={(newContent) => {
+                handle.inputs({
+                  target: {
+                    name: 'description',
+                    value: newContent,
+                  }
+                })
+              }} />
           </FormControl>
         </Box>
       </Grid>

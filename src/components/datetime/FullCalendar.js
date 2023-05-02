@@ -7,7 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import { nanoid } from 'nanoid';
 import _ from 'lodash';
-import MatchDialog from './match/MatchDialog';
+import MatchDialog from '@/src/components/dialog/MatchDialog';
 
 export const colors = [
   "#B65A0C",

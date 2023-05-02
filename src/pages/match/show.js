@@ -18,17 +18,17 @@ import _ from 'lodash';
 
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
-import DatePicker from '@/src/components/DatePicker';
+import DatePicker from '@/src/components/datetime/DatePicker';
 import { useMatchContext } from '@/src/context/MatchContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { EVENT_FORMATS } from '@/src/config/global';
 import { DoubleElimination, SingleElimination, Stepladder } from 'tournament-pairings';
 import { nanoid } from 'nanoid';
-import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
-import DoubleEliminationBracket from '@/src/components/match/DoubleEliminationBracket';
-import LadderEliminationBracket from '@/src/components/match/LadderEliminationBracket';
-import FullCalendar from '@/src/components/FullCalendar.js';
-import ScoresDialog from '@/src/components/match/ScoresDialog';
+import SingleEliminationBracket from '@/src/components/tournament-bracket/SingleEliminationBracket';
+import DoubleEliminationBracket from '@/src/components/tournament-bracket/DoubleEliminationBracket';
+import LadderEliminationBracket from '@/src/components/tournament-bracket/LadderEliminationBracket';
+import FullCalendar from '@/src/components/datetime/FullCalendar.js';
+import ScoresDialog from '@/src/components/dialog/ScoresDialog';
 
 const Page = (props) => {
   const theme = useTheme();

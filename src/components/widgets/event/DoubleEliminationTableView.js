@@ -16,12 +16,10 @@ import { LoadingButton } from '@mui/lab';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import FullCalendar from '@/src/components/FullCalendar';
-import MatchTable from '@/src/components/match/MatchTable';
-import TeamItem from '@/src/components/TeamItem';
-import { MATCH_STATES } from '@/src/config/global';
+import MatchTable from '@/src/components/table/MatchTable';
+import TeamItem from '@/src/components/item/TeamItem';
 
-const SingleEliminationTableView = ({ myTeam, eid, matches }) => {
+const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
   const theme = useTheme();
   const { organization, event, team, match } = useTournamentContext();
@@ -67,7 +65,7 @@ const SingleEliminationTableView = ({ myTeam, eid, matches }) => {
                 >
                   <TeamItem team={item} sx={{ color: (item.id == myTeam ? theme.palette.primary.main : 'white') }} />&nbsp;
                   {/* <Typography variant='b1' style={{ color: (item.id == myTeam ? theme.palette.primary.main : 'white') }}>
-                    {item.id == myTeam ? '( My Team )' : ''}
+                    {item.id == myTeam ? ' ( My Team ) ' : ''}
                   </Typography> */}
                 </MenuItem>
               )
@@ -82,4 +80,4 @@ const SingleEliminationTableView = ({ myTeam, eid, matches }) => {
   )
 }
 
-export default SingleEliminationTableView;
+export default DoubleEliminationTableView;

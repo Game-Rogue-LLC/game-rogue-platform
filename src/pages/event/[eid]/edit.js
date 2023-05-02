@@ -21,16 +21,16 @@ import Validator from 'validatorjs';
 import { Edit } from '@mui/icons-material';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
-import DateTimePicker from '@/src/components/DateTimePicker';
+import DateTimePicker from '@/src/components/datetime/DateTimePicker';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { DEFAULT_LOGO, DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
-import EventInput from '@/src/components/event/EventInput';
+import EventInput from '@/src/components/widgets/event/EventInput';
 import { model, rules, customMessages } from '@/lib/firestore/collections/event';
+import { htmlToMarkdown, markdownToHtml } from '@/src/utils/html-markdown';
 
 const initialInputs = {
   ...model
 }
-
 
 const Page = (props) => {
   const theme = useTheme();
@@ -57,17 +57,18 @@ const Page = (props) => {
     if (router?.query?.eid) {
       setEID(router.query.eid);
     }
-  }, [router])
+  }, [router?.query?.eid])
 
   useEffect(() => {
     if (event?.events[eid]) {
       event.setCurrent(eid);
       organization.setCurrent(event.events[eid]?.oid);
       setInputs({
-        ...event.events[eid]
+        ...event.events[eid],
+        description: markdownToHtml(event.events[eid]?.description)
       })
     }
-  }, [eid, event])
+  }, [eid, event?.events])
 
   const validate = (data, rule, messages) => {
 
@@ -98,6 +99,7 @@ const Page = (props) => {
         return;
       }
       let newEvent = { ...inputs };
+      newEvent.description = htmlToMarkdown(newEvent.description);
       let uploaded = true;
       setSaving(true)
 

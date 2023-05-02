@@ -18,7 +18,7 @@ import '@/src/styles/globals.css'
 import '@/src/styles/fullCalendar.css'
 import { AuthContextProvider } from '@/src/context/AuthContext';
 import AppProvider from '@/src/context/app.js';
-import Splash from '../content/Splash';
+import Splash from '@/src/content/Splash';
 
 const Noop = ({ children }) => <>{children}</>;
 

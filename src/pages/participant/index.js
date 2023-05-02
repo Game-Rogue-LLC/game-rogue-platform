@@ -15,7 +15,7 @@ import { useRouter } from 'next/router';
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import TeamItem from '@/src/components/TeamItem';
+import TeamItem from '@/src/components/item/TeamItem';
 
 const Page = (props) => {
   const theme = useTheme();

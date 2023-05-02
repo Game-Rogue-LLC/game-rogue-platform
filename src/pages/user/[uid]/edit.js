@@ -20,10 +20,10 @@ import { LoadingButton } from '@mui/lab'
 import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import DatePicker from '@/src/components/DatePicker';
-import CountrySelect from '@/src/components/CountrySelect';
+import DatePicker from '@/src/components/datetime/DatePicker';
+import CountrySelect from '@/src/components/dropdown/CountrySelect';
 import Validator from 'validatorjs';
-import UserInfo from '@/src/components/UserInfo';
+import UserInfo from '@/src/components/widgets/user/UserInfo';
 
 const initialInputs = {
   name: '',

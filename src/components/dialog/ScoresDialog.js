@@ -10,9 +10,7 @@ import {
   Typography
 } from "@mui/material";
 
-const ScoresDialog = (props) => {
-  const { onClose, title, open, team1, team2, score1, score2, onScore1Change, onScore2Change, onSave } = props;
-  console.warn(team1, team2);
+const ScoresDialog = ({ open, title, team1, team2, score1, score2, onScore1Change, onScore2Change, onSave, onClose, editable }) => {
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>{title}</DialogTitle>
@@ -33,10 +31,7 @@ const ScoresDialog = (props) => {
               gap: 2
             }}
           >
-            <Box>
-              <Typography variant="h5" textAlign={'center'}>
-                {team1?.name}
-              </Typography>
+            <Box textAlign={"center"}>
               <Box
                 component={'img'}
                 sx={{
@@ -46,8 +41,13 @@ const ScoresDialog = (props) => {
                 }}
                 src={team1?.darkLogo || DEFAULT_LOGO}
               ></Box>
+              <Typography variant="h6" textAlign={'center'}>
+                {team1?.name}
+              </Typography>
+              {editable == true
+                ? <OutlinedInput value={score1} onChange={onScore1Change} />
+                : <Typography variant="h5">{!score1 ? 0 : score1}</Typography>}
             </Box>
-            <OutlinedInput value={score1} onChange={onScore1Change} />
           </Box>
           <Box>
             <Typography variant="h2">V.S.</Typography>
@@ -60,12 +60,7 @@ const ScoresDialog = (props) => {
               gap: 2
             }}
           >
-            <OutlinedInput value={score2} onChange={onScore2Change} />
-
-            <Box>
-              <Typography variant="h5" textAlign={'center'}>
-                {team2?.name}
-              </Typography>
+            <Box textAlign={"center"}>
               <Box
                 component={'img'}
                 sx={{
@@ -75,15 +70,22 @@ const ScoresDialog = (props) => {
                 }}
                 src={team2?.darkLogo || DEFAULT_LOGO}
               ></Box>
+              <Typography variant="h6" textAlign={'center'}>
+                {team2?.name}
+              </Typography>
+              {editable == true
+                ? <OutlinedInput value={score2} onChange={onScore2Change} />
+                : <Typography variant="h5">{!score2 ? 0 : score2}</Typography>}
             </Box>
           </Box>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button variant="contained" onClick={onSave}>
-          Save
-        </Button>
-      </DialogActions>
+      {editable == true &&
+        <DialogActions>
+          <Button variant="contained" onClick={onSave}>
+            Save
+          </Button>
+        </DialogActions>}
     </Dialog>
   )
 }

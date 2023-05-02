@@ -16,12 +16,11 @@ import { LoadingButton } from '@mui/lab';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import FullCalendar from '@/src/components/FullCalendar';
-import MatchTable from '@/src/components/match/MatchTable';
+import MatchTable from '@/src/components/table/MatchTable';
+import TeamItem from '@/src/components/item/TeamItem';
 import { MATCH_STATES } from '@/src/config/global';
-import TeamItem from '../TeamItem';
 
-const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
+const SingleEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
   const theme = useTheme();
   const { organization, event, team, match } = useTournamentContext();
@@ -61,10 +60,13 @@ const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
                 <MenuItem
                   key={'team_' + i}
                   disableRipple
+                  onClick={(e) => {
+                    router.push('/team/' + item.id);
+                  }}
                 >
                   <TeamItem team={item} sx={{ color: (item.id == myTeam ? theme.palette.primary.main : 'white') }} />&nbsp;
                   {/* <Typography variant='b1' style={{ color: (item.id == myTeam ? theme.palette.primary.main : 'white') }}>
-                    {item.id == myTeam ? ' ( My Team ) ' : ''}
+                    {item.id == myTeam ? '( My Team )' : ''}
                   </Typography> */}
                 </MenuItem>
               )
@@ -73,10 +75,10 @@ const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
         </MenuList>
       </Box>
       <Box sx={{ flex: 1, zIndex: 100 }}>
-        <MatchTable matches={matches} eid={eid} myTeam={myTeam} />
+        <MatchTable matches={matches} eid={eid} myTeam={myTeam} status={1} />
       </Box>
     </Box>
   )
 }
 
-export default DoubleEliminationTableView;
+export default SingleEliminationTableView;

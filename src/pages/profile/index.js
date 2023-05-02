@@ -30,11 +30,12 @@ import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
 import { useRouter } from 'next/router'
 import { CreditCard, Instagram, Twitter, YouTube } from '@mui/icons-material'
-import ContentBlock from '@/src/components/ContentBlock'
+import ContentBlock from '@/src/components/widgets/ContentBlock'
 import { useEventContext } from '@/src/context/EventContext'
 import { useTournamentContext } from '@/src/context/TournamentContext'
 import Validator from 'validatorjs'
 import { model, rules, customMessages } from '@/lib/firestore/collections/organization';
+import { htmlToMarkdown } from '@/src/utils/html-markdown';
 
 const initialInputs = {
   ...model
@@ -142,7 +143,8 @@ const Page = (props) => {
 
       let newOrganization = {
         contentBlock: {
-          ...inputs?.contentBlock
+          ...inputs?.contentBlock,
+          // text: htmlToMarkdown(inputs?.contentBlock.text)
         }
       }
 
@@ -234,7 +236,7 @@ const Page = (props) => {
       setInputs(prev => ({
         ...prev,
         contentBlock: {
-          ...inputs?.contentBlock,
+          ...prev.contentBlock,
           ...data,
         }
       }))

@@ -11,9 +11,7 @@ const Match = dynamic(() => import('@g-loot/react-tournament-brackets').then((mo
   loading: () => <p>Loading...</p>
 });
 
-const DoubleEliminationBracket = (props) => {
-  const { options, matches, handlePartyClick, handleMatchClick } = props;
-
+const DoubleEliminationBracket = ({ matches, options, handlePartyClick, handleMatchClick }) => {
   return (
     matches &&
     <DoubleElimination

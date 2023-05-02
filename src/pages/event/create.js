@@ -20,12 +20,13 @@ import { LoadingButton } from '@mui/lab'
 import { Edit } from '@mui/icons-material';
 import AdminLayout from '@/src/content/AdminLayout'
 import { useAppContext } from '@/src/context/app'
-import DateTimePicker from '@/src/components/DateTimePicker'
+import DateTimePicker from '@/src/components/datetime/DateTimePicker'
 import Validator from 'validatorjs'
 import { useTournamentContext } from '@/src/context/TournamentContext'
 import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO, EVENT_STATES } from '@/src/config/global';
-import EventInput from '@/src/components/event/EventInput';
+import EventInput from '@/src/components/widgets/event/EventInput';
 import { model, rules, customMessages } from '@/lib/firestore/collections/event';
+import { htmlToMarkdown } from '@/src/utils/html-markdown';
 
 const initialInputs = {
   ...model
@@ -86,7 +87,8 @@ const Page = (props) => {
       if (validate(inputs, rules, customMessages) === false) {
         return;
       }
-      let newEvent = { ...inputs }
+      let newEvent = { ...inputs };
+      newEvent.description = htmlToMarkdown(newEvent.description);
       setSaving(true)
       const data = await event.create(newEvent);
       if (data.code === 'succeed') {

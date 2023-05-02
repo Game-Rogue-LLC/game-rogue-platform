@@ -16,10 +16,10 @@ import { LoadingButton } from '@mui/lab';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import MatchTable from '@/src/components/match/MatchTable';
+import MatchTable from '@/src/components/table/MatchTable';
 import { MATCH_STATES } from '@/src/config/global';
-import TeamItem from '@/src/components/TeamItem';
-import FullCalendar from '@/src/components/FullCalendar';
+import TeamItem from '@/src/components/item/TeamItem';
+import FullCalendar from '@/src/components/datetime/FullCalendar';
 
 const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
@@ -60,6 +60,13 @@ const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
       return currentRound.rank[myTeam];
     }
   }, [myTeam, currentRound])
+
+  const canChallenge = () => {
+    if (matches.findIndex(val => (val.self == myTeam || val.opponent == myTeam) && val.status != MATCH_STATES.SCHEDULING) >= 0) {
+      return false;
+    }
+    return true;
+  }
 
   const isDisabled = (id) => {
     if (currentRound) {
@@ -155,7 +162,7 @@ const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
                 <MenuItem
                   key={'team_' + i}
                   disableRipple
-                  disabled={isDisabled(item.id)}
+                  disabled={myTeam !== item.id && (isDisabled(item.id) || !canChallenge())}
                   onClick={(e) => {
                     if (item.id != myTeam) {
                       setOpponent(item.id);

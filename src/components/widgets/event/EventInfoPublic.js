@@ -14,11 +14,12 @@ import { LoadingButton } from '@mui/lab';
 import dayjs from 'dayjs';
 import { useAuthContext } from '@/src/context/AuthContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import { games } from '@/src/components/GameSelect';
+import { games } from '@/src/components/dropdown/GameSelect';
 import { EVENT_FORMATS } from '@/src/config/global';
 import { DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
-import TeamItem from '../TeamItem';
+import TeamItem from '@/src/components/item/TeamItem';
 import { useRouter } from 'next/router';
+import { markdownToHtml } from '@/src/utils/html-markdown';
 
 const TeamSelectInput = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
@@ -131,9 +132,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
           <Typography variant='h4' fontSize={24}>
             Description
           </Typography>
-          <Typography variant='body1' sx={{ mt: 1 }}>
-            {item?.description}
-          </Typography>
+          <div className="html-wrapper" style={{ marginTop: '16px' }} dangerouslySetInnerHTML={{ __html: markdownToHtml(item?.description) }}></div>
         </Paper>
       </Grid>
       <Grid item xs={12} lg={6} container spacing={2} rowSpacing={2}>

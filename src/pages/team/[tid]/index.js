@@ -86,6 +86,9 @@ const Page = (props) => {
                 <Grid item xs={4} sx={{ minWidth: '200px' }}>
                     <Box textAlign={'center'}>
                         <img src={item.darkLogo ?? DEFAULT_LOGO} style={{ height: '200px', maxWidth: '200px', objectFit: 'contain' }} />
+                        <Typography variant="h6">
+                            {item?.name}
+                        </Typography>
                     </Box>
                     <Box mt={1}>
                         <Grid container rowSpacing={2} spacing={2}>

@@ -7,7 +7,7 @@ import {
     Typography,
     useTheme
 } from '@mui/material';
-import Stepper from '@/src/components/Stepper';
+import Stepper from '@/src/components/carousel/Stepper';
 import {
     ArrowBackIos,
     ArrowForwardIos,

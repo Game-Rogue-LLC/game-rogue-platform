@@ -21,8 +21,8 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuthContext } from '@/src/context/AuthContext';
-import EventInfoPublic from '@/src/components/event/EventInfoPublic';
-import EventCoursePublic from '@/src/components/event/EventCoursePublic';
+import EventInfoPublic from '@/src/components/widgets/event/EventInfoPublic';
+import EventCoursePublic from '@/src/components/widgets/event/EventCoursePublic';
 
 const Page = (props) => {
   const router = useRouter();

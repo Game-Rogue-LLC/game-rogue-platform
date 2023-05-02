@@ -1,9 +1,9 @@
-import LadderEliminationTableView from "@/src/components/event/LadderEliminationTableView";
-import SingleEliminationTableView from "@/src/components/event/SingleEliminationTableView";
+import LadderEliminationTableView from "@/src/components/widgets/event/LadderEliminationTableView";
+import SingleEliminationTableView from "@/src/components/widgets/event/SingleEliminationTableView";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab, Tabs } from "@mui/material";
 import { useState } from "react";
-import DoubleEliminationTableView from "./DoubleEliminationTableView";
+import DoubleEliminationTableView from "@/src/components/widgets/event/DoubleEliminationTableView";
 
 const EventTableView = ({ format, myTeam, eid, matches }) => {
   const [tab, setTab] = useState("1");

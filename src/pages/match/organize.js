@@ -32,12 +32,12 @@ import {
   TabPanel
 } from '@mui/lab'
 import { nanoid } from 'nanoid'
-import MatchItem from '@/src/components/match/MatchItem'
-import TeamItem from '@/src/components/TeamItem'
+import MatchItem from '@/src/components/item/MatchItem'
+import TeamItem from '@/src/components/item/TeamItem'
 
-import MatchComponent from '@/src/components/match/MatchComponent'
+import MatchComponent from '@/src/components/tournament-bracket/MatchComponent'
 import { useTournamentContext } from '@/src/context/TournamentContext'
-import SingleEliminationBracket from '@/src/components/match/SingleEliminationBracket';
+import SingleEliminationBracket from '@/src/components/tournament-bracket/SingleEliminationBracket';
 
 const Page = (props) => {
   const theme = useTheme();
