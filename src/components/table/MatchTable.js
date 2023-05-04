@@ -110,8 +110,8 @@ const MatchTable = ({ matches, eid, myTeam }) => {
           title="Match Info"
           team1={team.teams[selectedMatch.participants[0].id]}
           team2={team.teams[selectedMatch.participants[1].id]}
-          score1={team.teams[selectedMatch.participants[0].id].score}
-          score2={team.teams[selectedMatch.participants[1].id].score}
+          score1={selectedMatch.participants[0].score}
+          score2={selectedMatch.participants[1].score}
           onClose={handleCloseMatchDialog}
         />}
       <Typography variant="h5">
@@ -121,8 +121,8 @@ const MatchTable = ({ matches, eid, myTeam }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align='center'>TEAM1</TableCell>
-              <TableCell align='center'>TEAM2</TableCell>
+              <TableCell>TEAM1</TableCell>
+              <TableCell>TEAM2</TableCell>
               <TableCell align='center'>START</TableCell>
               <TableCell align='center'>END</TableCell>
               <TableCell align='center'>STATUS</TableCell>
@@ -135,22 +135,58 @@ const MatchTable = ({ matches, eid, myTeam }) => {
                 if (item.participants?.length == 2 || format == 2) {
                   return (
                     <TableRow hover key={item.id} onClick={() => handleMatchClick(item.id)} sx={{ cursor: 'pointer' }}>
-                      <TableCell align='center' sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }}>
+                      <TableCell sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }}>
                         {format == 0
-                          ? <TeamItem team={team?.teams[item.participants[0].id]} sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }} />
+                          ? <TeamItem
+                            team={team?.teams[item.participants[0].id]}
+                            sx={{
+                              justifyContent: 'left',
+                              color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                            }}
+                          />
                           : format == 1
-                            ? <TeamItem team={team?.teams[item.participants[0].id]} sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }} />
+                            ? <TeamItem
+                              team={team?.teams[item.participants[0].id]}
+                              sx={{
+                                justifyContent: 'left',
+                                color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                              }}
+                            />
                             : format == 2
-                              ? <TeamItem team={team?.teams[item.self]} sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }} />
+                              ? <TeamItem
+                                team={team?.teams[item.self]}
+                                sx={{
+                                  justifyContent: 'left',
+                                  color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                                }}
+                              />
                               : <></>}
                       </TableCell>
-                      <TableCell align='center'>
+                      <TableCell>
                         {format == 0
-                          ? <TeamItem team={team?.teams[item.participants[1].id]} sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }} />
+                          ? <TeamItem
+                            team={team?.teams[item.participants[1].id]}
+                            sx={{
+                              justifyContent: 'left',
+                              color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                            }}
+                          />
                           : format == 1
-                            ? <TeamItem team={team?.teams[item.participants[1].id]} sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }} />
+                            ? <TeamItem
+                              team={team?.teams[item.participants[1].id]}
+                              sx={{
+                                justifyContent: 'left',
+                                color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                              }}
+                            />
                             : format == 2
-                              ? <TeamItem team={team?.teams[item.opponent]} sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }} />
+                              ? <TeamItem
+                                team={team?.teams[item.opponent]}
+                                sx={{
+                                  justifyContent: 'left',
+                                  color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                                }}
+                              />
                               : <></>}
                       </TableCell>
                       <TableCell align='center' sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }}>
@@ -226,8 +262,8 @@ const MatchTable = ({ matches, eid, myTeam }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align='center'>TEAM1</TableCell>
-              <TableCell align='center'>TEAM2</TableCell>
+              <TableCell>TEAM1</TableCell>
+              <TableCell>TEAM2</TableCell>
               <TableCell align='center'>START</TableCell>
               <TableCell align='center'>END</TableCell>
               <TableCell align='center'>STATUS</TableCell>
@@ -237,19 +273,67 @@ const MatchTable = ({ matches, eid, myTeam }) => {
             {matches && pastMatches.length > 0
               ? pastMatches.map((item, i) => (
                 <TableRow hover key={item.id} onClick={() => handleMatchClick(item.id)} sx={{ cursor: 'pointer' }}>
-                  <TableCell align='center'>
-                    <TeamItem team={team.teams[item.self]} />
+                  <TableCell sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }}>
+                    {format == 0
+                      ? <TeamItem
+                        team={team?.teams[item.participants[0].id]}
+                        sx={{
+                          justifyContent: 'left',
+                          color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                        }}
+                      />
+                      : format == 1
+                        ? <TeamItem
+                          team={team?.teams[item.participants[0].id]}
+                          sx={{
+                            justifyContent: 'left',
+                            color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                          }}
+                        />
+                        : format == 2
+                          ? <TeamItem
+                            team={team?.teams[item.self]}
+                            sx={{
+                              justifyContent: 'left',
+                              color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                            }}
+                          />
+                          : <></>}
                   </TableCell>
-                  <TableCell align='center'>
-                    <TeamItem team={team.teams[item.opponent]} />
+                  <TableCell>
+                    {format == 0
+                      ? <TeamItem
+                        team={team?.teams[item.participants[1].id]}
+                        sx={{
+                          justifyContent: 'left',
+                          color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                        }}
+                      />
+                      : format == 1
+                        ? <TeamItem
+                          team={team?.teams[item.participants[1].id]}
+                          sx={{
+                            justifyContent: 'left',
+                            color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                          }}
+                        />
+                        : format == 2
+                          ? <TeamItem
+                            team={team?.teams[item.opponent]}
+                            sx={{
+                              justifyContent: 'left',
+                              color: (isMyMatch(item) ? theme.palette.primary.main : 'white')
+                            }}
+                          />
+                          : <></>}
                   </TableCell>
-                  <TableCell align='center'>
+                  <TableCell align='center' sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }}>
                     {dayjs(item.start).format('YYYY.MM.DD')}
                   </TableCell>
-                  <TableCell align='center'>
+                  <TableCell align='center' sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }}>
                     {dayjs(item.end).format('YYYY.MM.DD')}
                   </TableCell>
-                  <TableCell align='center'>
+                  <TableCell align='center' sx={{ color: (isMyMatch(item) ? theme.palette.primary.main : 'white') }}>
                     {getStatus(item.status)}
                   </TableCell>
                 </TableRow>

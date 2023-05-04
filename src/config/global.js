@@ -128,6 +128,10 @@ export const MATCH_STATES = {
 export const NULL_FUNCTION = () => {
 }
 
+export const SCORE_WIN = 3;
+export const SCORE_LOSE = 0;
+export const SCORE_DRAW = 1;
+
 export default {
     DEFAULT_CONTENTBLOCK_IMAGE,
     DEFAULT_LOGO,

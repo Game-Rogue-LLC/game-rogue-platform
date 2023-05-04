@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import MatchTable from '@/src/components/table/MatchTable';
 import TeamItem from '@/src/components/item/TeamItem';
+import TeamList from '@/src/components/list/TeamList';
 
 const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
@@ -47,31 +48,7 @@ const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
       <Box
         sx={{ width: '300px' }}
       >
-        <MenuList
-          sx={{
-            border: 'solid 1px rgba(255, 255, 255, 0.2)',
-            padding: 0
-          }}
-        >
-          {
-            teams.map((item, i) => {
-              return (
-                <MenuItem
-                  key={'team_' + i}
-                  disableRipple
-                  onClick={(e) => {
-                    router.push('/team/' + item.id);
-                  }}
-                >
-                  <TeamItem team={item} sx={{ color: (item.id == myTeam ? theme.palette.primary.main : 'white') }} />&nbsp;
-                  {/* <Typography variant='b1' style={{ color: (item.id == myTeam ? theme.palette.primary.main : 'white') }}>
-                    {item.id == myTeam ? ' ( My Team ) ' : ''}
-                  </Typography> */}
-                </MenuItem>
-              )
-            })
-          }
-        </MenuList>
+        <TeamList teams={teams} myTeam={myTeam} />
       </Box>
       <Box sx={{ flex: 1, zIndex: 100 }}>
         <MatchTable matches={matches} eid={eid} myTeam={myTeam} />

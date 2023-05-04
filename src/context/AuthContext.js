@@ -23,10 +23,15 @@ export const AuthContextProvider = ({ children }) => {
     //     }
     // }
 
-    const ignoreAuthRouter = ['/', '/auth']
+    const ignoreAuthRouter = ['/', '/auth', '/event/upcoming', '/event/[eid]/info', '/team/[tid]']
+    const ignoreAuthRegex = ['/event/[A-Za-z0-9_-]{21}/info']
 
     const ignoreAuth = useMemo(() => {
-        return ignoreAuthRouter.includes(router.pathname)
+        if (ignoreAuthRouter.includes(router.pathname)) return true;
+        for (let i = 0; i < ignoreAuthRegex.length; i++) {
+            if (router.pathname.match(ignoreAuthRegex[i]) != null) return true;
+        }
+        return false;
     }, [router])
 
     useEffect(() => {

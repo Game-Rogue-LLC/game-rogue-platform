@@ -79,6 +79,10 @@ const Page = (props) => {
             resultText: '',
             isWinner: false,
             status: null,
+            score: 0,
+            wins: 0,
+            loses: 0,
+            draws: 0,
             name: teams[participants[val.player1 - 1].tid].name
           })
         }
@@ -90,6 +94,10 @@ const Page = (props) => {
             resultText: '',
             isWinner: false,
             status: null,
+            score: 0,
+            wins: 0,
+            loses: 0,
+            draws: 0,
             name: teams[participants[val.player2 - 1].tid].name
           })
         }
@@ -137,6 +145,10 @@ const Page = (props) => {
             resultText: '',
             isWinner: false,
             status: null,
+            score: 0,
+            wins: 0,
+            loses: 0,
+            draws: 0,
             name: teams[participants[val.player1 - 1].tid].name
           })
         }
@@ -148,6 +160,10 @@ const Page = (props) => {
             resultText: '',
             isWinner: false,
             status: null,
+            score: 0,
+            wins: 0,
+            loses: 0,
+            draws: 0,
             name: teams[participants[val.player2 - 1].tid].name
           })
         }
@@ -215,6 +231,10 @@ const Page = (props) => {
             resultText: '',
             isWinner: false,
             status: null,
+            score: 0,
+            wins: 0,
+            loses: 0,
+            draws: 0,
             name: teams[participants[val.player1 - 1].tid].name
           })
         }
@@ -225,6 +245,10 @@ const Page = (props) => {
             resultText: '',
             isWinner: false,
             status: null,
+            score: 0,
+            wins: 0,
+            loses: 0,
+            draws: 0,
             name: teams[participants[val.player2 - 1].tid].name
           })
         }

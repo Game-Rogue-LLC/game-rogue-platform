@@ -195,3 +195,17 @@ a {
 .html-wrapper * {
   max-width: 100%;
 }
+
+td.td-border::before {
+  content: '';
+  background-color: #f58515;
+  position: absolute;
+  left: 0;
+  top: 1px;
+  bottom: 1px;
+  width: 5px;
+}
+
+.team-link:hover {
+  color: rgba(245, 131, 31, 0.8);
+}

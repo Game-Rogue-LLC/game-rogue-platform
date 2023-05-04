@@ -59,9 +59,9 @@ const AdminLayout = (props) => {
 const ContextProvider = (props) => {
 	return (
 		<TournamentProvider>
-			<MatchProvider>
-				<AdminLayout {...props} />
-			</MatchProvider>
+			{/* <MatchProvider> */}
+			<AdminLayout {...props} />
+			{/* </MatchProvider> */}
 		</TournamentProvider>
 	)
 }

@@ -4,8 +4,11 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import DoubleEliminationTableView from "@/src/components/widgets/event/DoubleEliminationTableView";
+import StandingTable from '@/src/components/widgets/event/StandingTable';
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const EventTableView = ({ format, myTeam, eid, matches }) => {
+  const { event } = useTournamentContext();
   const [tab, setTab] = useState("1");
 
   const handleChangeTabs = (e, newTab) => {
@@ -29,7 +32,7 @@ const EventTableView = ({ format, myTeam, eid, matches }) => {
         }
       </TabPanel>
       <TabPanel value="2">
-        Panel2
+        <StandingTable data={event?.events[eid]?.participants} sortBy={["score", "wins", "draws", "loses"]} />
       </TabPanel>
     </TabContext>
   )

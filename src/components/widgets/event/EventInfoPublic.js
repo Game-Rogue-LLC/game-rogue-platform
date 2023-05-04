@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import { useAuthContext } from '@/src/context/AuthContext';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import { games } from '@/src/components/dropdown/GameSelect';
-import { EVENT_FORMATS } from '@/src/config/global';
+import { EVENT_FORMATS, EVENT_STATES } from '@/src/config/global';
 import { DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global';
 import TeamItem from '@/src/components/item/TeamItem';
 import { useRouter } from 'next/router';
@@ -47,37 +47,25 @@ const TeamSelect = styled(Select)(({ theme }) => ({
 const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   const router = useRouter();
   const { user } = useAuthContext();
-  const { organization, event, team } = useTournamentContext();
+  const { organization, event, team, currentTime } = useTournamentContext();
   const [myTeam, setMyTeam] = useState('');
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [status, setStatus] = useState(0);
+  const [registrationStatus, setRegistrationStatus] = useState(0);
   const [registering, setRegistering] = useState(false);
-  const [timer, setTimer] = useState(null);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 10000)
-    setTimer(interval);
-    return () => {
-      clearInterval(interval);
-    }
-  }, [])
-
-  useEffect(() => {
-    if (currentTime) {
-      if (dayjs(currentTime).isAfter(dayjs(endTime))) setStatus(2);
-      else if (dayjs(currentTime).isBefore(dayjs(startTime))) setStatus(0);
-      else setStatus(1);
-    }
-  }, [currentTime])
 
   const myTeams = useMemo(() => {
     if (team?.teams) {
-      return Object.keys(team.teams).filter(key => team.teams[key].uid === user.id);
+      return Object.keys(team.teams).filter(key => team.teams[key].uid === user?.id);
     }
     return [];
-  }, [team?.teams])
+  }, [team?.teams, user])
+
+  useEffect(() => {
+    if (currentTime) {
+      if (dayjs(currentTime).isAfter(dayjs(endTime))) setRegistrationStatus(2);
+      else if (dayjs(currentTime).isBefore(dayjs(startTime))) setRegistrationStatus(0);
+      else setRegistrationStatus(1);
+    }
+  }, [currentTime])
 
   useEffect(() => {
     if (myTeams.length > 0) {
@@ -90,34 +78,16 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     setMyTeam(value);
   }
 
+  const handleLogin = (e) => {
+    router.push('/auth');
+  }
+
   const handleRegister = async (e) => {
     setRegistering(true);
-    if (event.events[eid].participants?.length >= event.events[eid].participantsCount) {
-      alert('Only ' + event.events[eid].participantsCount + ' participants are allowed.');
-      setRegistering(false);
-      return;
-    }
-    if (event.events[eid].participants?.findIndex(val => val.tid === myTeam) >= 0) {
-      alert('This team is already registered.');
-      setRegistering(false);
-      return;
-    }
-    let newParticipants = event.events[eid]?.participants;
-    if (!newParticipants) newParticipants = [];
-    newParticipants = [
-      ...newParticipants,
-      {
-        tid: myTeam,
-        deleted: false,
-        registeredAt: new Date()
-      }
-    ]
-
-    const res = await event.update(eid, { participants: newParticipants })
-
+    const res = await event.addParticipant(eid, myTeam);
     setRegistering(false);
     if (res.code === 'succeed') {
-      if (organization.organizations[event.events[eid].oid]?.uid == user.id)
+      if (organization.organizations[event.events[eid].oid]?.uid == user?.id)
         router.push('/participant?event=' + eid);
       else alert('Registered Successfully!');
     } else if (res.code === 'failed') {
@@ -147,7 +117,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               {endTime.toLocaleString()}
             </Typography>
             {
-              status == 0
+              registrationStatus == 0
                 ?
                 <Chip label='Register' sx={{ mt: 1 }} />
                 :
@@ -195,51 +165,54 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
         </Grid>
         <Grid item xs={12}>
           <Paper sx={{ p: 3 }}>
-            <TeamSelect
-              labelId="team-select-label"
-              id="team-select"
-              value={myTeam}
-              name="team"
-              size='small'
-              onChange={handleSelectTeam}
-              variant="outlined"
-              sx={{
-                mt: 1
-              }}
-              fullWidth
-              input={<TeamSelectInput />}
-              inputProps={{
-                MenuProps: {
-                  disableScrollLock: true
-                }
-              }}
-            >
-              {myTeams?.map(tid => {
-                const item = team.teams[tid];
-                return (
-                  <MenuItem key={'team_' + item.id} value={item.id} sx={{ display: 'flex', alignItems: 'center' }}>
-                    <ListItemIcon>
-                      <img
-                        src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
-                        height={30}
-                        width={30}
-                        style={{
-                          objectFit: 'cover',
-                          objectPosition: 'center'
-                        }}
-                      />
-                    </ListItemIcon>
-                    {item.name}
-                  </MenuItem>
-                )
-              })}
-            </TeamSelect>
+            {
+              user &&
+              <TeamSelect
+                labelId="team-select-label"
+                id="team-select"
+                value={myTeam}
+                name="team"
+                size='small'
+                onChange={handleSelectTeam}
+                variant="outlined"
+                sx={{
+                  mt: 1
+                }}
+                fullWidth
+                input={<TeamSelectInput />}
+                inputProps={{
+                  MenuProps: {
+                    disableScrollLock: true
+                  }
+                }}
+              >
+                {myTeams?.map(tid => {
+                  const item = team.teams[tid];
+                  return (
+                    <MenuItem key={'team_' + tid} value={tid} sx={{ display: 'flex', alignItems: 'center' }}>
+                      <ListItemIcon>
+                        <img
+                          src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
+                          height={30}
+                          width={30}
+                          style={{
+                            objectFit: 'cover',
+                            objectPosition: 'center'
+                          }}
+                        />
+                      </ListItemIcon>
+                      {item.name}
+                    </MenuItem>
+                  )
+                })}
+              </TeamSelect>
+            }
             <LoadingButton
               loading={registering}
               variant='contained' sx={{ width: '100%', mt: 1 }}
-              onClick={handleRegister}
+              onClick={user ? handleRegister : handleLogin}
             >
-              Register to an event
+              {user ? "Register to an event" : "Login to Register"}
             </LoadingButton>
           </Paper>
         </Grid>

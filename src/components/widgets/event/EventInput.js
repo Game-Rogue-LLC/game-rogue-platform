@@ -63,8 +63,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           </IconButton>
           <img src={inputs?.banner || DEFAULT_CONTENTBLOCK_IMAGE} style={{ height: '200px', maxWidth: '600px', objectFit: 'cover', border: 'solid 1px rgba(255, 255, 255, 0.2)', borderRadius: '4px' }} />
         </Box>
-
       </Grid>
+
       <Grid item xs={12}>
         <Typography variant='h6'>Organization</Typography>
         <Select
@@ -84,6 +84,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           })}
         </Select>
       </Grid>
+
       <Grid item xs={12}>
         <Box>
           <Typography variant='h6'>Event Name</Typography>
@@ -110,6 +111,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           </FormControl>
         </Box>
       </Grid>
+
       <Grid item xs={12} lg={6}>
         <Typography variant='h6'>Event Format</Typography>
         <Select
@@ -127,6 +129,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           <MenuItem key='league' value={1}>League</MenuItem>
         </Select>
       </Grid>
+
       <Grid item xs={12} lg={6}>
         <Typography variant='h6'>Game Type</Typography>
         <Box sx={{ mt: 1 }}>
@@ -168,6 +171,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           }
         </Box>
       </Grid>
+
       <Grid item xs={12} lg={6}>
         <Typography variant='h6'>Event Seed</Typography>
         <Select
@@ -185,6 +189,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           <MenuItem key='random' value={1}>Random</MenuItem>
         </Select>
       </Grid>
+
       <Grid item xs={12} lg={6}>
         <Typography variant='h6'>Participants</Typography>
         <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
@@ -193,14 +198,17 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           {errors.participantsCount !== undefined && <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>{errors.participantsCount}</FormHelperText>}
         </FormControl>
       </Grid>
+
       <Grid item xs={12} lg={4}>
         <Typography variant='h6'>Start Date</Typography>
         <DateTimePicker value={inputs?.startAt} setValue={(newDate) => handle.setDate('startAt', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
       </Grid>
+
       <Grid item xs={12} lg={4}>
         <Typography variant='h6'>Register Date</Typography>
         <DateTimePicker value={inputs?.registerTo} setValue={(newDate) => handle.setDate('registerTo', newDate)} sx={{ mt: 1, width: '100%' }} disabled={disabled} />
       </Grid>
+
       <Grid item xs={12} lg={4}>
         <Typography variant='h6'>CheckIn</Typography>
         <FormControl sx={{ mt: 1 }} fullWidth error={errors.checkin !== undefined}>
@@ -209,6 +217,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           {errors.checkin !== undefined && <FormHelperText id="check-in-helper" sx={{ mt: 2 }}>{errors.checkin}</FormHelperText>}
         </FormControl>
       </Grid>
+
       <Grid item xs={12} md={6}>
         <Typography variant='h6'>Game</Typography>
         <Select
@@ -225,6 +234,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           <MenuItem key='rainbow-six-siege' value={0}>Rainbow Six Siege</MenuItem>
         </Select>
       </Grid>
+
       <Grid item xs={12} md={6}>
         <Typography variant='h6'>Platform</Typography>
         <Select
@@ -241,6 +251,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           <MenuItem key='pc' value={0}>PC</MenuItem>
         </Select>
       </Grid>
+
       <Grid item xs={12} md={6}>
         <Typography variant='h6'>Region</Typography>
         <Select
@@ -257,6 +268,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           <MenuItem key='north-american' value={0}>North American</MenuItem>
         </Select>
       </Grid>
+
       <Grid item xs={12} md={6}>
         <Typography variant='h6'>Time Zone</Typography>
         <Select
@@ -278,6 +290,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           <MenuItem key='akst' value={5}>Alaskan Standard Time (AKST)</MenuItem>
         </Select>
       </Grid>
+
       {/** PLACE SCHEDULE HERE */}
       <Grid item xs={12} md={6} lg={4} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Box>
@@ -292,6 +305,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           </Button>
         </Box>
       </Grid>
+
       <Grid item xs={12} md={6} lg={4} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Box>
           <Typography variant='h6'>Add Terms and Conditions</Typography>
@@ -305,6 +319,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           </Button>
         </Box>
       </Grid>
+
       <Grid item xs={12} md={6} lg={4} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <Box>
           <Typography variant='h6'>Add Privacy Policy</Typography>

@@ -82,6 +82,7 @@ const Navbar = ({ sx }) => {
   }
 
   const handleClickOrganize = (e) => { }
+  const handleClickEvent = (e) => { }
   const handleClickRogueSocial = (e) => { }
   const handleClickSupport = (e) => { }
   const handleClickTools = (e) => { }
@@ -117,6 +118,14 @@ const Navbar = ({ sx }) => {
             <NavItem
               name="HOME"
               handleClick={handleClickHome}
+            />
+            <NavItem
+              name="Events"
+              handleClick={handleClickEvent}
+              isDropdown={true}
+              items={[
+                // TODO: Event Submenu comes here
+              ]}
             />
             <NavItem
               name="Rogue Social"
@@ -241,105 +250,132 @@ const Navbar = ({ sx }) => {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 2
+                    cursor: "pointer"
                   }}
                 >
-                  <OutlinedInput id="fund" name="fund" placeholder='Add fund' value={fund} onChange={handle.changeFund}
+                  <IconButton
+                    id='user-button'
+                    aria-controls={anchorElUser ? 'user-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={Boolean(anchorElUser) ? 'true' : undefined}
+                    onClick={handleClickUser}
+                    onMouseOver={handleOpenUser}
+                    // onMouseOut={handleMouseOutUser}
                     sx={{
-                      height: '40px'
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center'
+                      zIndex: 8500,
+                      cursor: 'pointer'
                     }}
                   >
-                    <IconButton
-                      id='user-button'
-                      aria-controls={anchorElUser ? 'user-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={Boolean(anchorElUser) ? 'true' : undefined}
-                      onClick={handleClickUser}
-                      onMouseOver={handleOpenUser}
-                      // onMouseOut={handleMouseOutUser}
-                      sx={{
-                        zIndex: 8500,
-                        ':hover': {
-                          cursor: 'pointer'
-                        }
-                      }}
-                    >
-                      <Avatar alt={user.user?.name} src={user.user?.profilePic} />
-                    </IconButton>
-                    <ChevronRight
-                      sx={{
-                        color: theme.palette.primary.main,
-                        transform: Boolean(anchorElUser) ? 'rotate(90deg)' : '',
-                        transition: 'all 0.2s'
-                      }}
-                    />
-                  </Box>
+                    <Avatar alt={user.user?.name} src={user.user?.profilePic} />
+                  </IconButton>
+                  <ChevronRight
+                    sx={{
+                      color: theme.palette.primary.main,
+                      transform: Boolean(anchorElUser) ? 'rotate(90deg)' : '',
+                      transition: 'all 0.2s'
+                    }}
+                  />
                 </Box>
                 :
                 <Box
                   sx={{
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: 2
+                    alignItems: 'center'
                   }}
                 >
-                  <IconButton onClick={() => router.push('/auth')} sx={{ h: 'auto' }}>
+                  <IconButton
+                    id='user-button'
+                    aria-controls={anchorElUser ? 'user-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={Boolean(anchorElUser) ? 'true' : undefined}
+                    onClick={() => router.push('/auth')}
+                    onMouseOver={handleOpenUser}
+                    // onMouseOut={handleMouseOutUser}
+                    sx={{
+                      zIndex: 8500,
+                      cursor: 'pointer'
+                    }}
+                  >
                     <img src='/static/images/Profile_Picture.png' style={{ width: '50px', height: '50px' }} />
                   </IconButton>
-                  <IconButton onClick={() => router.push('/auth')} sx={{ h: 'auto' }}>
-                    <Login />
-                  </IconButton>
+                  <ChevronRight
+                    sx={{
+                      color: theme.palette.primary.main,
+                      transform: Boolean(anchorElUser) ? 'rotate(90deg)' : '',
+                      transition: 'all 0.2s'
+                    }}
+                  />
                 </Box>
             }
-            <StyledMenu
-              id="user-menu"
-              MenuListProps={{
-                'aria-labelledby': 'user-button',
-                onMouseLeave: handleCloseUser,
-                onMouseOver: handleMouseOverUser
-              }}
-              disablePortal={true}
-              disableScrollLock={true}
-              keepMounted
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUser}
-            >
-              <MenuItem onClick={handleCloseUser} key='user-profile' disableRipple>
-                <Link href={"/user/" + user.user?.id}>
-                  PROFILE
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleCloseUser} key='edit-user' disableRipple>
-                <Link href={"/user/" + user.user?.id + "/edit"}>
-                  EDIT
-                </Link>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleCloseUser();
-                  user.logout();
+            {/* Begin User Submenu */}
+            {!user.user
+              ? <StyledMenu
+                id="user-menu"
+                MenuListProps={{
+                  'aria-labelledby': 'user-button',
+                  onMouseLeave: handleCloseUser,
+                  onMouseOver: handleMouseOverUser
                 }}
-                key='logout'
-                disableRipple
+                disablePortal={true}
+                disableScrollLock={true}
+                keepMounted
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUser}
               >
-                LOG OUT
-              </MenuItem>
-            </StyledMenu>
+                <MenuItem onClick={handleCloseUser} key='signup' disableRipple>
+                  <Link href={"/auth"}>
+                    Sign Up
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUser} key='login' disableRipple>
+                  <Link href={"/auth"}>
+                    Log In
+                  </Link>
+                </MenuItem>
+              </StyledMenu>
+              : <StyledMenu
+                id="user-menu"
+                MenuListProps={{
+                  'aria-labelledby': 'user-button',
+                  onMouseLeave: handleCloseUser,
+                  onMouseOver: handleMouseOverUser
+                }}
+                disablePortal={true}
+                disableScrollLock={true}
+                keepMounted
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUser}
+              >
+                <MenuItem onClick={handleCloseUser} key='user-profile' disableRipple>
+                  <Link href={"/user/" + user.user?.id}>
+                    PROFILE
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUser} key='edit-user' disableRipple>
+                  <Link href={"/user/" + user.user?.id + "/edit"}>
+                    EDIT
+                  </Link>
+                </MenuItem>
+              </StyledMenu>}
+            {/* End User Submenu */}
           </Box>
         </Toolbar>
       </Container>

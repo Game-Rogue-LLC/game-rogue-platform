@@ -16,7 +16,10 @@ const Auth = () => {
     }, [user])
 
     return (
-        <Box pt={20} sx={{ backgroundColor: "#363740", width: "100vw", height: "100vh", position: "fixed", top: 0, color: "#fff", textAlign: "center" }}>
+        <Box pt={20} sx={{
+            "backgroundImage": "linear-gradient(to top,#28160c,rgb(var(--background-end-rgb)))",
+            width: "100vw", height: "100vh", position: "fixed", top: 0, color: "#fff", textAlign: "center"
+        }}>
             <Container maxWidth="sm">
                 <Card>
                     <Box p={4}>

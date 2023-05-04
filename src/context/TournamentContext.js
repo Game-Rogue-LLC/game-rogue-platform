@@ -12,7 +12,8 @@ export const useTournamentContext = () => useContext(TournamentContext);
 const TournamentProvider = (props) => {
   const { user } = useAuthContext();
   const [tournaments, setTournaments] = useState([]);
-  const [participants, setParticipants] = useState([])
+  const [participants, setParticipants] = useState([]);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   // useEffect(() => {
   //     axios.get('/api/tournament').then(res => {
@@ -23,7 +24,7 @@ const TournamentProvider = (props) => {
   /** Begin Organization Data / Functions */
   const [organizations, setOrganizations] = useState({});
   const [currentOrganization, setCurrentOrganization] = useState(null);
-  const [organizationLoading, setOrganizationLoading] = useState(true);
+  const [organizationLoading, setOrganizationLoading] = useState(false);
   const [activeOrganizationCount, setActiveOrganizationCount] = useState(0);
   const organization = {
     organizations,
@@ -58,6 +59,7 @@ const TournamentProvider = (props) => {
 
   /** Begin Event Data / Functions */
   const [events, setEvents] = useState({});
+  const [allEvents, setAllEvents] = useState({});
   const [currentEvent, setCurrentEvent] = useState(null);
   const [eventLoading, setEventLoading] = useState(true);
   const [activeEventCount, setActiveEventCount] = useState({});
@@ -74,11 +76,18 @@ const TournamentProvider = (props) => {
     },
     read: async (uid) => {
       setEventLoading(true);
-      const res = await store.event.read(uid, async (data, active) => {
+      const res = await store.event.read("", async (data, active) => {
         await setEvents(data);
         setActiveEventCount(active);
         console.info('events:', data, active);
-      }, () => setEventLoading(false));
+      }, () => setEventLoading(false))
+    },
+    readAll: async () => {
+      setEventLoading(true);
+      const res = await store.event.read("", async (data) => {
+        setAllEvents(data);
+        console.info('all events:', data);
+      }, () => setEventLoading(false))
     },
     update: async (id, newEvent) => {
       const res = await store.event.save(id, newEvent);
@@ -88,7 +97,40 @@ const TournamentProvider = (props) => {
       res = await store.event.save(id, { deleted: true });
       return res;
     },
-    upload: store.event.uploadFile
+    upload: store.event.uploadFile,
+    addParticipant: async (id, tid) => {
+      if (events[id].participants?.length >= events[id].participantsCount) {
+        alert('Only ' + events[id].participantsCount + ' participants are allowed.');
+        return {
+          code: 'failed',
+          message: 'Only ' + events[id].participantsCount + ' participants are allowed.'
+        }
+      }
+      if (events[id].participants?.findIndex(val => val.tid === tid) >= 0) {
+        alert('This team is already registered.');
+        return {
+          code: 'failed',
+          message: 'This team is already registered.'
+        }
+      }
+      let newParticipants = events[id]?.participants;
+      if (!newParticipants) newParticipants = [];
+      newParticipants = [
+        ...newParticipants,
+        {
+          tid,
+          score: 0,
+          wins: 0,
+          loses: 0,
+          draws: 0,
+          deleted: false,
+          registeredAt: new Date()
+        }
+      ]
+
+      const res = await event.update(id, { participants: newParticipants })
+      return res;
+    }
   }
   /** End Event Data / Functions */
 
@@ -219,9 +261,7 @@ const TournamentProvider = (props) => {
   const loadTournament = useCallback(() => {
     if (user && user.id) {
       organization.read(user.id);
-      event.read(user.id);
       team.read(user.id);
-      player.read();
     }
   }, [user])
 
@@ -229,8 +269,26 @@ const TournamentProvider = (props) => {
     loadTournament();
   }, [loadTournament])
 
+  useEffect(() => {
+    event.read("");
+    player.read();
+    team.read("");
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000)
+    return () => {
+      clearInterval(intervalId);
+    }
+  }, [])
+
   return (
-    <TournamentContext.Provider value={{ tournaments, matches, participants, organization, event, team, player, match, matchLoading }}>
+    <TournamentContext.Provider
+      value={{
+        tournaments, matches, participants, organization, event, team, player, match,
+        organizationLoading, eventLoading, matchLoading, playerLoading, teamLoading,
+        currentTime
+      }}
+    >
       {isLoading ? <Splash content={'Loading data...'} /> : props.children}
     </TournamentContext.Provider>
   )

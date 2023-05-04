@@ -17,7 +17,7 @@ import { useTournamentContext } from '@/src/context/TournamentContext';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import MatchTable from '@/src/components/table/MatchTable';
-import { MATCH_STATES } from '@/src/config/global';
+import { EVENT_STATES, MATCH_STATES } from '@/src/config/global';
 import TeamItem from '@/src/components/item/TeamItem';
 import FullCalendar from '@/src/components/datetime/FullCalendar';
 
@@ -56,7 +56,7 @@ const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
   }, [eid, event?.events, team.teams])
 
   const myRank = useMemo(() => {
-    if (currentRound) {
+    if (currentRound != null) {
       return currentRound.rank[myTeam];
     }
   }, [myTeam, currentRound])
@@ -116,8 +116,13 @@ const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
       setSavingMatch(false);
       setOpponent(null);
     },
-    openCalendar: (e) => {
-      setShowCalendar(true);
+    openCalendar: (id) => {
+      if (event.events[eid].status >= EVENT_STATES.STARTED.value) {
+        alert("Can not schedule the match. Check if the event is started.");
+      } else {
+        setOpponent(id);
+        setShowCalendar(true);
+      }
     },
     closeCalendar: (e) => {
       setShowCalendar(false);
@@ -133,7 +138,7 @@ const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
         gap: 2
       }}
     >
-      <Dialog maxWidth={'xl'} onClose={handle.closeCalendar} open={showCalendar} sx={{ zIndex: 9999 }}>
+      <Dialog maxWidth={'xl'} onClose={handle.closeCalendar} open={showCalendar}>
         <DialogTitle>Schedule the challenge</DialogTitle>
         <DialogContent>
           <FullCalendar events={events} setEvents={setEvents} selectable={true} editable={true} limit={1} />
@@ -160,13 +165,12 @@ const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
             teams.map((item, i) => {
               return (
                 <MenuItem
-                  key={'team_' + i}
+                  key={'team_' + item.id}
                   disableRipple
                   disabled={myTeam !== item.id && (isDisabled(item.id) || !canChallenge())}
                   onClick={(e) => {
                     if (item.id != myTeam) {
-                      setOpponent(item.id);
-                      handle.openCalendar(i);
+                      handle.openCalendar(item.id);
                     }
                   }}
                 >

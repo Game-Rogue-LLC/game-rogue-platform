@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Container,
@@ -14,16 +14,24 @@ import Link from 'next/link';
 
 const Page = (props) => {
   const { setTitle } = useAppContext();
-  const { event } = useTournamentContext();
+  const { event, currentTime } = useTournamentContext();
 
   useEffect(() => {
     setTitle('UPCOMING EVENTS');
   }, [])
 
+  const upcomingEventIds = useMemo(() => {
+    console.log('currentTime', currentTime);
+    if (event?.events) {
+      return Object.keys(event.events).filter(key => dayjs(event.events[key].startAt).isAfter(currentTime));
+    }
+    return [];
+  }, [event?.events, currentTime])
+
   return (
     <Container>
       <Grid container spacing={2} rowSpacing={3} sx={{ mt: 2 }}>
-        {event?.events && Object.keys(event.events).filter(key => dayjs(event.events[key].startAt).isAfter(new Date())).map(eid => {
+        {upcomingEventIds.map(eid => {
           const item = event.events[eid];
           return (
             <Grid item xs={12} sm={6} lg={4} key={'event_' + eid}>
