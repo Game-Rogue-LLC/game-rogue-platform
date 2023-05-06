@@ -26,8 +26,6 @@ const ContentBlock = (props) => {
   }
   const handleContentBlockTextChange = (newEditorState) => {
     if (contentBlock.text != newEditorState) {
-
-      // console.log(markdownToHtml(htmlToMarkdown(newEditorState)));
       handleChange({
         ...contentBlock,
         text: newEditorState

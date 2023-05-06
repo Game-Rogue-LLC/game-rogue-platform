@@ -4,9 +4,15 @@ import { useAppContext } from '@/src/context/app';
 import {
   Box,
   Container,
+  Grid,
   Typography,
   useTheme
 } from '@mui/material';
+import Stepper from '@/src/components/carousel/Stepper';
+import {
+  ArrowBackIos,
+  ArrowForwardIos,
+} from '@mui/icons-material';
 import PublicLayout from '@/src/content/PublicLayout';
 import dayjs from 'dayjs';
 import EventContainer from '@/src/components/widgets/event/EventContainer';
@@ -20,15 +26,15 @@ const Page = (props) => {
   const { setTitle } = useAppContext();
   const { event, match, currentTime, setCurrentTime } = useTournamentContext();
 
-  const upcomingEventIds = useMemo(() => {
+  const finishedEventIds = useMemo(() => {
     if (event?.events) {
-      return Object.keys(event.events).filter(key => dayjs(event.events[key].startAt).isAfter(currentTime));
+      return Object.keys(event.events).filter(key => dayjs(event.events[key].endAt).isBefore(currentTime));
     }
     return [];
   }, [event?.events, currentTime])
 
   useEffect(() => {
-    setTitle("Upcoming Events");
+    setTitle("Completed Events");
     setCurrentTime(new Date());
   }, [])
 
@@ -90,14 +96,14 @@ const Page = (props) => {
         <Container sx={{ margin: 'auto', pb: 5 }}>
           <Box sx={{ mt: 8 }}>
             <Box
-              sx={{ display: 'flex', gap: 1, alignItems: 'center', backgroundColor: '#140300', padding: 2, border: 'solid 1px rgba(255, 255, 255, 0.2)' }}
+              sx={{ display: 'flex', gap: 1, alignItems: 'center', backgroundColor: '#140013', padding: 2, border: 'solid 1px rgba(255, 255, 255, 0.2)' }}
             >
               <Box
                 component={'img'}
                 src="/static/images/games/r6s.webp"
               ></Box>
               <Typography variant="body1" fontWeight={700} fontSize={25} color={theme.palette.primary.main} textTransform='uppercase'>
-                UPCOMING EVENTS
+                COMPLETED EVENTS
               </Typography>
             </Box>
             <Box
@@ -105,9 +111,10 @@ const Page = (props) => {
                 mt: 2
               }}
             >
-              <EventContainer events={upcomingEventIds?.map(eid => event?.events[eid])} />
+              <EventContainer events={finishedEventIds?.map(eid => event?.events[eid])} />
             </Box>
           </Box>
+
         </Container>
       </Box>
     </>

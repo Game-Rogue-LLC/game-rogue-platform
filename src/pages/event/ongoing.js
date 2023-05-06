@@ -20,15 +20,15 @@ const Page = (props) => {
   const { setTitle } = useAppContext();
   const { event, match, currentTime, setCurrentTime } = useTournamentContext();
 
-  const upcomingEventIds = useMemo(() => {
-    if (event?.events) {
-      return Object.keys(event.events).filter(key => dayjs(event.events[key].startAt).isAfter(currentTime));
+  const ongoingEventIds = useMemo(() => {
+    if (event?.events && currentTime) {
+      return Object.keys(event.events).filter(key => dayjs(event.events[key].startAt).isBefore(currentTime) && dayjs(event.events[key].endAt).isAfter(currentTime));
     }
     return [];
   }, [event?.events, currentTime])
 
   useEffect(() => {
-    setTitle("Upcoming Events");
+    setTitle("Ongoing Events");
     setCurrentTime(new Date());
   }, [])
 
@@ -90,14 +90,14 @@ const Page = (props) => {
         <Container sx={{ margin: 'auto', pb: 5 }}>
           <Box sx={{ mt: 8 }}>
             <Box
-              sx={{ display: 'flex', gap: 1, alignItems: 'center', backgroundColor: '#140300', padding: 2, border: 'solid 1px rgba(255, 255, 255, 0.2)' }}
+              sx={{ display: 'flex', gap: 1, alignItems: 'center', backgroundColor: '#000a14', padding: 2, border: 'solid 1px rgba(255, 255, 255, 0.2)' }}
             >
               <Box
                 component={'img'}
                 src="/static/images/games/r6s.webp"
               ></Box>
               <Typography variant="body1" fontWeight={700} fontSize={25} color={theme.palette.primary.main} textTransform='uppercase'>
-                UPCOMING EVENTS
+                ONGOING EVENTS
               </Typography>
             </Box>
             <Box
@@ -105,7 +105,7 @@ const Page = (props) => {
                 mt: 2
               }}
             >
-              <EventContainer events={upcomingEventIds?.map(eid => event?.events[eid])} />
+              <EventContainer events={ongoingEventIds?.map(eid => event?.events[eid])} />
             </Box>
           </Box>
         </Container>

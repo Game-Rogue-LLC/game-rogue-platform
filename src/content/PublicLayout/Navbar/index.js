@@ -82,7 +82,9 @@ const Navbar = ({ sx }) => {
   }
 
   const handleClickOrganize = (e) => { }
-  const handleClickEvent = (e) => { }
+  const handleClickEvent = (e) => {
+    router.push('/event');
+  }
   const handleClickRogueSocial = (e) => { }
   const handleClickSupport = (e) => { }
   const handleClickTools = (e) => { }
@@ -125,6 +127,30 @@ const Navbar = ({ sx }) => {
               isDropdown={true}
               items={[
                 // TODO: Event Submenu comes here
+                {
+                  name: 'Upcoming Matches',
+                  key: 'upcoming-matches',
+                  isLink: true,
+                  to: '/match/upcoming'
+                },
+                {
+                  name: 'Upcoming Events',
+                  key: 'upcoming-events',
+                  isLink: true,
+                  to: '/event/upcoming'
+                },
+                {
+                  name: 'Ongoing Events',
+                  key: 'ongoing-events',
+                  isLink: true,
+                  to: '/event/ongoing'
+                },
+                {
+                  name: 'Completed Events',
+                  key: 'completed-events',
+                  isLink: true,
+                  to: '/event/completed'
+                }
               ]}
             />
             <NavItem

@@ -85,7 +85,7 @@ const ScoresDialog = ({ open, title, team1, team2, score1, score2, onScore1Chang
               </Typography>
               {editable == true
                 ? <OutlinedInput value={score1} onChange={onScore1Change} inputProps={{ style: { textAlign: 'center' } }} />
-                : <Typography variant="h4" fontSize={"3rem"} sx={style1}>{!score1 ? 0 : score1}</Typography>}
+                : <Typography variant="h3" fontSize={"3rem"} sx={style1}>{!score1 ? 0 : score1}</Typography>}
             </Box>
           </Box>
           <Box
@@ -121,7 +121,7 @@ const ScoresDialog = ({ open, title, team1, team2, score1, score2, onScore1Chang
               </Typography>
               {editable == true
                 ? <OutlinedInput value={score2} onChange={onScore2Change} inputProps={{ style: { textAlign: 'center' } }} />
-                : <Typography variant="h4" fontSize={"3rem"} sx={style2}>{!score2 ? 0 : score2}</Typography>}
+                : <Typography variant="h3" fontSize={"3rem"} sx={style2}>{!score2 ? 0 : score2}</Typography>}
             </Box>
           </Box>
         </Box>

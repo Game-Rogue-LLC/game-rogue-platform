@@ -26,6 +26,7 @@ const Page = (props) => {
   const { organization, event, player, match } = useTournamentContext();
   // const { match } = useMatchContext();
   const [eid, setEID] = useState(router?.query?.event);
+  const [matches, setMatches] = useState([]);
 
   useEffect(() => {
     setTitle('MATCHES')
@@ -38,13 +39,18 @@ const Page = (props) => {
         setEID(newEID);
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
-        match.read(newEID);
       } else {
         console.error('Invalid Event ID');
         // Redirect to 404 page.
       }
     }
   }, [router])
+
+  useEffect(() => {
+    if (match?.matches) {
+      setMatches(match.matches.filter(val => val.eid === eid));
+    }
+  }, [eid, match?.matches])
 
   const getStatus = (item) => {
     const current = new Date(),
@@ -96,9 +102,9 @@ const Page = (props) => {
         </TableHead>
         <TableBody>
           {
-            match.matches && match.matches.length > 0
+            matches && matches.length > 0
               ?
-              match.matches.map((item, i) => (
+              matches.map((item, i) => (
                 <TableRow key={item.id}>
                   <TableCell align='center'>{item.id}</TableCell>
                   <TableCell align='center'>

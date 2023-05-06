@@ -23,7 +23,7 @@ export const AuthContextProvider = ({ children }) => {
     //     }
     // }
 
-    const ignoreAuthRouter = ['/', '/auth', '/event/upcoming', '/event/[eid]/info', '/team/[tid]']
+    const ignoreAuthRouter = ['/', '/auth', '/event', '/event/upcoming', '/event/[eid]/info', '/team/[tid]']
     const ignoreAuthRegex = ['/event/[A-Za-z0-9_-]{21}/info']
 
     const ignoreAuth = useMemo(() => {

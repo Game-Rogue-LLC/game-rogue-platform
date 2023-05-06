@@ -9,8 +9,6 @@ const Match = dynamic(() => import('@g-loot/react-tournament-brackets').then((mo
 const LadderEliminationBracket = (props) => {
   const { options, matches, handlePartyClick } = props;
 
-  console.log(matches)
-
   return (
     matches && matches.length > 0 &&
     <LadderElimination

@@ -6,10 +6,10 @@ import {
   Container,
   Typography,
   useTheme
-} from '@mui/material';
+} from '@mui/material'
 import PublicLayout from '@/src/content/PublicLayout';
 import dayjs from 'dayjs';
-import EventContainer from '@/src/components/widgets/event/EventContainer';
+import MatchContainer from '@/src/components/widgets/match/MatchContainer';
 import TournamentProvider, { useTournamentContext } from '@/src/context/TournamentContext';
 import { useRouter } from 'next/router';
 import FeaturedTournaments from '@/src/components/widgets/FeaturedTournaments';
@@ -20,15 +20,15 @@ const Page = (props) => {
   const { setTitle } = useAppContext();
   const { event, match, currentTime, setCurrentTime } = useTournamentContext();
 
-  const upcomingEventIds = useMemo(() => {
-    if (event?.events) {
-      return Object.keys(event.events).filter(key => dayjs(event.events[key].startAt).isAfter(currentTime));
+  const upcomingMatches = useMemo(() => {
+    if (match?.matches) {
+      return match.matches.filter(item => dayjs(item.start).isAfter(currentTime));
     }
     return [];
-  }, [event?.events, currentTime])
+  }, [match?.matches, currentTime])
 
   useEffect(() => {
-    setTitle("Upcoming Events");
+    setTitle("Upcoming Matches");
     setCurrentTime(new Date());
   }, [])
 
@@ -78,7 +78,6 @@ const Page = (props) => {
           </Box>
         </Container>
       </Box>
-
       <Box
         component={'section'}
         sx={{
@@ -97,7 +96,7 @@ const Page = (props) => {
                 src="/static/images/games/r6s.webp"
               ></Box>
               <Typography variant="body1" fontWeight={700} fontSize={25} color={theme.palette.primary.main} textTransform='uppercase'>
-                UPCOMING EVENTS
+                UPCOMING MATCHES
               </Typography>
             </Box>
             <Box
@@ -105,7 +104,7 @@ const Page = (props) => {
                 mt: 2
               }}
             >
-              <EventContainer events={upcomingEventIds?.map(eid => event?.events[eid])} />
+              <MatchContainer matches={upcomingMatches} />
             </Box>
           </Box>
         </Container>

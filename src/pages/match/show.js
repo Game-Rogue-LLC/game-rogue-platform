@@ -35,10 +35,12 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { organization, event, team, match, matchLoading } = useTournamentContext();
-  const [games, setGames] = useState(null);
+  const [matches, setMatches] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
   const [events, setEvents] = useState([]);
+  const [start, setStart] = useState(new Date());
+  const [end, setEnd] = useState(new Date());
 
   useEffect(() => {
     setTitle('MATCHES');
@@ -51,7 +53,6 @@ const Page = (props) => {
         setEID(newEID);
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
-        match.read(newEID);
       } else {
         console.error('Invalid Event ID');
         // Redirect to 404 page.
@@ -61,25 +62,23 @@ const Page = (props) => {
 
   useEffect(() => {
     if (matchLoading == false && match.matches && match.matches.length > 0) {
-      console.log('match matches', match.matches);
-      const newMatches = _.sortBy(match.matches, ['round', 'match']);
+      const newMatches = _.sortBy(match.matches.filter(val => val.eid === eid), ['round', 'match']);
       const { format } = event.events[eid];
       if (format == 0) {
-        setGames(newMatches);
+        setMatches(newMatches);
       } else if (format === 1) {
-        setGames({
+        setMatches({
           upper: [...newMatches.filter(val => val.group == 0)],
           lower: [...newMatches.filter(val => val.group == 1)]
         })
       }
     }
-  }, [match.matches, matchLoading, event])
+  }, [eid, match.matches, matchLoading, event])
 
   useEffect(() => {
     if (event?.events[eid]?.rounds) {
       if (event.events[eid].format == 2) {
         const schedules = [...event.events[eid].rounds];
-        console.log('schedules:', schedules)
         setEvents(schedules.map(val => ({
           ...val,
           start: val.start.toDate(),
@@ -94,40 +93,40 @@ const Page = (props) => {
       router.push('/match/edit?event=' + eid);
     },
     singleMatchClick: (match) => {
-      const ind = _.findLastIndex(games, (val) => val.id == match.id);
+      const ind = _.findLastIndex(matches, (val) => val.id == match.id);
 
-      // if (ind < 0 || games[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      // if (ind < 0 || matches[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
 
       if (ind >= 0) {
-        setSelectedGame(ind);
+        setSelectedMatch(ind);
         setOpen(true);
       }
     },
     doubleMatchClick: (match) => {
-      const indexInUpper = _.findLastIndex(games.upper, (val) => val.id == match.id)
-      const indexInLower = _.findLastIndex(games.lower, (val) => val.id == match.id)
+      const indexInUpper = _.findLastIndex(matches.upper, (val) => val.id == match.id)
+      const indexInLower = _.findLastIndex(matches.lower, (val) => val.id == match.id)
 
-      // if (games.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
-      // if (games.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      // if (matches.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      // if (matches.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
 
-      // let newGames = { ...games }, participant = 0;
-      // if (party.id === games.upper[indexInUpper]?.participants[0]?.id || party.id === games.lower[indexInLower]?.participants[0]?.id) participant = 0;
-      // else if (party.id === games.upper[indexInUpper]?.participants[1]?.id || party.id === games.lower[indexInLower]?.participants[1]?.id) participant = 1;
+      // let newGames = { ...matches }, participant = 0;
+      // if (party.id === matches.upper[indexInUpper]?.participants[0]?.id || party.id === matches.lower[indexInLower]?.participants[0]?.id) participant = 0;
+      // else if (party.id === matches.upper[indexInUpper]?.participants[1]?.id || party.id === matches.lower[indexInLower]?.participants[1]?.id) participant = 1;
 
       if (indexInUpper >= 0) {
-        setSelectedGame(indexInUpper);
+        setSelectedMatch(indexInUpper);
         setUpper(true);
-        setStart(games.upper[indexInUpper].start || new Date());
-        setEnd(games.upper[indexInUpper].end || new Date());
+        setStart(matches.upper[indexInUpper].start || new Date());
+        setEnd(matches.upper[indexInUpper].end || new Date());
         setOpen(true);
         return;
       }
 
       if (indexInLower >= 0) {
-        setSelectedGame(indexInLower);
+        setSelectedMatch(indexInLower);
         setUpper(false);
-        setStart(games.lower[indexInLower].start || new Date());
-        setEnd(games.lower[indexInLower].end || new Date());
+        setStart(matches.lower[indexInLower].start || new Date());
+        setEnd(matches.lower[indexInLower].end || new Date());
         setOpen(true);
         return;
       }
@@ -213,13 +212,13 @@ const Page = (props) => {
                   editable={true}
                 />
                 :
-                (games && event?.events[eid]?.format == 0
+                (matches && event?.events[eid]?.format == 0
                   ?
-                  <SingleEliminationBracket matches={games} />
+                  <SingleEliminationBracket matches={matches} />
                   :
                   event?.events[eid]?.format == 1
                     ?
-                    <DoubleEliminationBracket matches={games} />
+                    <DoubleEliminationBracket matches={matches} />
                     :
                     <></>)
             }

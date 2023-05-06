@@ -41,7 +41,6 @@ const Page = (props) => {
         setEID(newEID);
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
-        match.read(newEID);
       } else {
         console.error('Invalid Event ID');
         // Redirect to 404 page.

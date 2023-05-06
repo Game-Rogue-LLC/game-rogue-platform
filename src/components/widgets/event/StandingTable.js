@@ -41,7 +41,7 @@ const StandingTable = ({ data, sortBy }) => {
       <TableBody>
         {team?.teams && sortedArray.map((item, index) => {
           return (
-            <TableRow key={"team_" + item.id} hover sx={{ position: 'relative', cursor: 'pointer' }}>
+            <TableRow key={"team_" + item.tid} hover sx={{ position: 'relative', cursor: 'pointer' }}>
               <TableCell className={index < 3 ? "td-border" : ""}>
                 {index + 1}
               </TableCell>

@@ -231,9 +231,9 @@ const TournamentProvider = (props) => {
       const res = await store.match.save(nanoid(5), newMatch);
       return res;
     },
-    read: async (eid) => {
+    read: async () => {
       setMatchLoading(true);
-      const res = await store.match.read(eid, async (data) => {
+      const res = await store.match.read(async (data) => {
         setMatches(data);
         console.info('matches:', data);
       }, () => setMatchLoading(false));
@@ -273,6 +273,7 @@ const TournamentProvider = (props) => {
     event.read("");
     player.read();
     team.read("");
+    match.read();
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000)
@@ -286,7 +287,7 @@ const TournamentProvider = (props) => {
       value={{
         tournaments, matches, participants, organization, event, team, player, match,
         organizationLoading, eventLoading, matchLoading, playerLoading, teamLoading,
-        currentTime
+        currentTime, setCurrentTime
       }}
     >
       {isLoading ? <Splash content={'Loading data...'} /> : props.children}

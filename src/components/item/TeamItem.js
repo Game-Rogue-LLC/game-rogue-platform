@@ -4,7 +4,7 @@ import {
 } from '@mui/material'
 import Link from 'next/link';
 
-export default function ({ team, win, sx }) {
+export default function ({ team, win, sx, disableLink }) {
     if (!sx) sx = {};
     let color = 'white';
     if (win == 2) color = '#00c106';
@@ -13,9 +13,11 @@ export default function ({ team, win, sx }) {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', color, gap: '5px', justifyContent: 'center', ...sx }}>
             <img src={team?.darkLogo ?? DEFAULT_LOGO} style={{ height: '30px' }} />&nbsp;
-            <Link href={'/team/' + team?.id} className='team-link'>
-                {team?.name}
-            </Link>
+            {disableLink === true
+                ? team?.name
+                : <Link href={'/team/' + team?.id} className='team-link'>
+                    {team?.name}
+                </Link>}
         </Box>
     )
 }

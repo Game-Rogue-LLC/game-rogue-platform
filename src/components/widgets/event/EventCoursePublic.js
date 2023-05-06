@@ -42,7 +42,6 @@ const EventCoursePublic = ({ eid }) => {
   const { user } = useAuthContext();
   const { setTitle } = useAppContext();
   const { organization, event, team, match, matchLoading } = useTournamentContext();
-  const [games, setGames] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [tab, setTab] = useState("1");
   const [myTeam, setMyTeam] = useState(null);
@@ -50,6 +49,7 @@ const EventCoursePublic = ({ eid }) => {
   const [events, setEvents] = useState([]);
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [isMatchDialogOpen, setMatchDialogOpen] = useState(false);
+  const [matches, setMatches] = useState([]);
 
   useEffect(() => {
     if (event?.events[eid]) {
@@ -63,9 +63,11 @@ const EventCoursePublic = ({ eid }) => {
 
   useEffect(() => {
     if (match?.matches) {
-      let newEvents = [];
+      let newEvents = [],
+        thisEventMatches = match.matches.filter(val => val.eid == eid)
       if (format == 0) {
-        match.matches.forEach((val, i) => {
+        thisEventMatches.forEach((val, i) => {
+          if (val.eid != eid) return;
           newEvents.push({
             id: val.id,
             title: '',
@@ -77,7 +79,8 @@ const EventCoursePublic = ({ eid }) => {
           })
         })
       } else if (format == 1) {
-        match.matches.forEach((val, i) => {
+        thisEventMatches.forEach((val, i) => {
+          if (val.eid != eid) return;
           newEvents.push({
             id: val.id,
             title: '',
@@ -89,7 +92,8 @@ const EventCoursePublic = ({ eid }) => {
           })
         })
       } else if (format == 2) {
-        match.matches.forEach((val, i) => {
+        thisEventMatches.forEach((val, i) => {
+          if (val.eid != eid) return;
           newEvents.push({
             id: val.id,
             title: '',
@@ -107,25 +111,24 @@ const EventCoursePublic = ({ eid }) => {
 
   useEffect(() => {
     if (matchLoading == false && match.matches && match.matches.length > 0) {
-      console.log('match matches', match.matches);
-      const newMatches = _.sortBy(match.matches, ['round', 'match']);
+      const newMatches = _.sortBy(match.matches.filter(val => val.eid == eid), ['round', 'match']);
       // if (event.events[eid].format == 0) {
-      setGames(newMatches);
+      setMatches(newMatches);
       // } else if (event.events[eid].format === 1) {
-      //   setGames({
+      //   setMatches({
       //     upper: [...newMatches.filter(val => val.group == 0)],
       //     lower: [...newMatches.filter(val => val.group == 1)]
       //   })
       // }
     }
-  }, [match.matches, matchLoading])
+  }, [match.matches, matchLoading, eid])
 
   const doubleEliminationMatches = useMemo(() => {
     return {
-      upper: [...match?.matches.filter(val => val.group == 0)],
-      lower: [...match?.matches.filter(val => val.group == 1)]
+      upper: [...matches.filter(val => val.group == 0)],
+      lower: [...matches.filter(val => val.group == 1)]
     }
-  }, [match?.matches])
+  }, [matches])
 
   const handle = {
     changeTab: (e, newTab) => {
@@ -134,82 +137,30 @@ const EventCoursePublic = ({ eid }) => {
     edit: (e) => {
       router.push('/match/edit?event=' + eid);
     },
-    singlePartyClick: (party, partyWon) => {
-      if (party.status == 'DONE') return;
-
-      const ind = _.findIndex(games, (val) => (
+    partyClick: (party, partyWon) => {
+      const ind = _.findIndex(matches, (val) => (
         (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
         || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
       ))
 
-      if (ind < 0 || games[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      if (ind < 0 || matches[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
 
       if (ind >= 0) {
-        setSelectedMatch(games[ind]);
+        setSelectedMatch(matches[ind]);
         setMatchDialogOpen(true);
       }
     },
-    doublePartyClick: (party, partyWon) => {
-      if (party.status === 'DONE') return;
+    matchClick: (match) => {
+      const ind = _.findLastIndex(matches, (val) => val.id == match.id);
 
-      const indexInUpper = _.findIndex(games.upper, (val) => (
-        (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
-        || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
-      ))
-      const indexInLower = _.findIndex(games.lower, (val) => (
-        (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
-        || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
-      ))
-
-      if (games.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
-      if (games.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
-
-      // let newGames = { ...games }, participant = 0;
-      // if (party.id === games.upper[indexInUpper]?.participants[0]?.id || party.id === games.lower[indexInLower]?.participants[0]?.id) participant = 0;
-      // else if (party.id === games.upper[indexInUpper]?.participants[1]?.id || party.id === games.lower[indexInLower]?.participants[1]?.id) participant = 1;
-
-      if (indexInUpper >= 0) {
-        setSelectedMatch(games.upper[indexInUpper]);
-        setMatchDialogOpen(true);
-      }
-
-      if (indexInLower >= 0) {
-        setSelectedMatch(games.lower[indexInLower]);
-        setMatchDialogOpen(true);
-      }
-    },
-    singleMatchClick: (match) => {
-      const ind = _.findLastIndex(games, (val) => val.id == match.id);
-
-      // if (ind < 0 || games[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      // if (ind < 0 || matches[ind]?.participants?.filter(val => val.id ? true : false).length < 2) return;
 
       if (ind >= 0) {
-        setSelectedMatch(games[ind]);
+        setSelectedMatch(matches[ind]);
         setMatchDialogOpen(true);
       }
     },
-    doubleMatchClick: (match) => {
-      const indexInUpper = _.findLastIndex(games.upper, (val) => val.id == match.id)
-      const indexInLower = _.findLastIndex(games.lower, (val) => val.id == match.id)
-
-      // if (games.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
-      // if (games.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
-
-      // let newGames = { ...games }, participant = 0;
-      // if (party.id === games.upper[indexInUpper]?.participants[0]?.id || party.id === games.lower[indexInLower]?.participants[0]?.id) participant = 0;
-      // else if (party.id === games.upper[indexInUpper]?.participants[1]?.id || party.id === games.lower[indexInLower]?.participants[1]?.id) participant = 1;
-
-      if (indexInUpper >= 0) {
-        setSelectedMatch(games.upper[indexInUpper]);
-        setMatchDialogOpen(true);
-      }
-
-      if (indexInLower >= 0) {
-        setSelectedMatch(games.lower[indexInLower]);
-        setMatchDialogOpen(true);
-      }
-    },
-    closeMatchDialog: (e) => {
+    closeMatchDialog: () => {
       setMatchDialogOpen(false);
     }
   }
@@ -231,8 +182,8 @@ const EventCoursePublic = ({ eid }) => {
         </TabPanel>
         <TabPanel value="2">
           {
-            event?.events[eid] && match?.matches &&
-            <EventTableView format={format} myTeam={myTeam} eid={eid} matches={match.matches} />
+            event?.events[eid] && matches &&
+            <EventTableView format={format} myTeam={myTeam} eid={eid} matches={matches} />
           }
         </TabPanel>
         {
@@ -249,18 +200,18 @@ const EventCoursePublic = ({ eid }) => {
                 onClose={handle.closeMatchDialog}
               />}
             {
-              event?.events[eid] && games &&
+              event?.events[eid] && matches &&
               (format == 0
                 ? <SingleEliminationBracket
-                  matches={games}
-                  handlePartyClick={handle.singlePartyClick}
-                  handleMatchClick={handle.singleMatchClick}
+                  matches={matches}
+                  handlePartyClick={handle.partyClick}
+                  handleMatchClick={handle.matchClick}
                 />
                 : format == 1
                   ? <DoubleEliminationBracket
                     matches={doubleEliminationMatches}
-                    handlePartyClick={handle.singlePartyClick}
-                    handleMatchClick={handle.singleMatchClick}
+                    handlePartyClick={handle.partyClick}
+                    handleMatchClick={handle.matchClick}
                   />
                   : <></>)
             }

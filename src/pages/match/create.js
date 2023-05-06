@@ -61,10 +61,6 @@ const Page = (props) => {
     }
   }, [router])
 
-  useEffect(() => {
-    console.log('games changed:', games);
-  }, [games])
-
   const createMatches = (type, teams, participants, participantsCount, randomized) => {
     if (type === 0) {   // * Single Elimination Bracket
       let newGames = []//, gameIDs = []

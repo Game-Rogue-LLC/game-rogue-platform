@@ -14,9 +14,13 @@ import {
 const Footer = (props) => {
     const theme = useTheme();
     return (
-        <Box component={'footer'} sx={{ mt: 5, zIndex: 100 }}>
+        <Box component={'footer'} sx={{ zIndex: 100 }}>
             <Box
                 component={'section'}
+                sx={{
+                    borderTop: "solid 3px #f5831f",
+                    paddingTop: 5
+                }}
             >
                 <Box
                     sx={{
