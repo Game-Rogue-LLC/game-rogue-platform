@@ -250,7 +250,8 @@ const Page = (props) => {
                         <TableCell align='center'>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center' }}>
                             <Avatar variant='circular' src={player.players[val.id].profilePic} />
-                            <Link href={'/user/' + val.id}>{player.players[val.id].name}</Link>
+                            {/* <Link href={'/user/' + val.id}>{player.players[val.id].name}</Link> */}
+                            {player.players[val.id].name}
                           </Box>
                         </TableCell>
                         <TableCell align='center'>
