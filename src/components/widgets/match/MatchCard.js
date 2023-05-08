@@ -45,7 +45,8 @@ const MatchCard = ({ item }) => {
             borderBottom: 'solid 1px gray',
             p: 1,
             alignItems: 'center',
-            display: 'flex'
+            display: 'flex',
+            gap: 1
           }}
         >
           <GameChip />
@@ -54,7 +55,7 @@ const MatchCard = ({ item }) => {
         </Box>
         <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
           <img src={event?.events[item?.eid]?.darkLogo || DEFAULT_LOGO} style={{ height: '40px', width: '40px', objectFit: 'cover' }} />
-          <Typography variant='h4'>
+          <Typography variant='h4' fontSize={24} textOverflow="ellipsis" whiteSpace="nowrap" overflow="hidden">
             {event?.events[item?.eid]?.name}
           </Typography>
         </Box>

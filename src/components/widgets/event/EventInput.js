@@ -205,7 +205,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
 
       <Grid item xs={12} lg={4}>
         <Typography variant="h6">End Date</Typography>
-        <DateTimePicker value={inputs?.endAt} setValue={(newDate) => handle.setDate("endtAt", newDate)} sx={{ mt: 1, width: "100%" }} disabled={disabled} />
+        <DateTimePicker value={inputs?.endAt} setValue={(newDate) => handle.setDate("endAt", newDate)} sx={{ mt: 1, width: "100%" }} disabled={disabled} />
       </Grid>
 
       <Grid item xs={12} lg={4}>

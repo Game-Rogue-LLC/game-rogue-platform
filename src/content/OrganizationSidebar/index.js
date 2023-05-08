@@ -99,7 +99,7 @@ export default function OrganizationSidebar(props) {
 									<Home color="primary" />
 								</ListItemIcon>
 								<ListItemText
-									primary={`${player.players[user.id]?.name.split(' ')[0]}' s Profile`}
+									primary={`${player.players[user.id]?.name?.split(' ')[0]}' s Profile`}
 									primaryTypographyProps={{
 										color: 'primary',
 										fontWeight: 'medium',

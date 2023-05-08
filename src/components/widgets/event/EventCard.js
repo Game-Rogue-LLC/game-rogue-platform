@@ -32,7 +32,7 @@ const EventCard = ({ item }) => {
       <Box
         sx={{
           border: "solid 1px rgba(255, 255, 255, 0.2)",
-          minHeight: "280px",
+          // minHeight: "280px",
           background: "black",
           ":hover": {
             cursor: "pointer",
@@ -57,9 +57,9 @@ const EventCard = ({ item }) => {
           <PlatformChip type={item?.platform} />
           <RegionChip type={item?.region} />
         </Box>
-        <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 2 }}>
+        <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 2, overflow: "hidden" }}>
           <img src={item?.darkLogo || DEFAULT_LOGO} style={{ height: "40px", width: "40px", objectFit: "cover" }} />
-          <Typography variant="h4" fontSize={24} color="white">
+          <Typography variant="h4" fontSize={24} color="white" textOverflow="ellipsis" whiteSpace="nowrap" overflow="hidden">
             {item?.name}
           </Typography>
         </Box>

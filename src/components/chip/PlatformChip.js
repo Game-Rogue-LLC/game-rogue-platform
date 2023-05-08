@@ -5,7 +5,10 @@ import * as config from "@/src/config/global";
 
 const PlatformChip = ({ type, sx }) => {
   return (
-    <Chip label={config.PLATFORMS[type].name} sx={{ backgroundColor: "#404040", color: "white", fontSize: "1rem", ...sx }} />
+    <Chip
+      label={config.PLATFORMS[type].name}
+      sx={{ backgroundColor: "#00000096", color: "white", fontSize: "1rem", backdropFilter: "blur(2px)", ...sx }}
+    />
   )
 }
 
