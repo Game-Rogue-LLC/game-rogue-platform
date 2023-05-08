@@ -54,116 +54,139 @@ const Auth = () => {
   }
 
   return (
-    <Box pt={20} sx={{
-      "backgroundImage": "linear-gradient(to top,#28160c,rgb(var(--background-end-rgb)))",
-      width: "100vw", height: "100vh", position: "fixed", top: 0, color: "#fff", textAlign: "center"
-    }}>
-      <Button
-        variant="text" sx={{ position: 'fixed', alignItems: "center", left: '20px', top: '20px' }}
-        onClick={() => {
-          router.push('/');
+    <>
+      <Box
+        sx={{
+          backgroundImage: "/static/images/event-banner.png",
+          position: 'fixed',
+          zIndex: -1,
+          top: 0,
+          left: 0
         }}
       >
-        <Home />&nbsp;
-        <Typography variant="body1">Home</Typography>
-      </Button>
-      <Container maxWidth="sm">
-        <Card>
-          <Box p={4}>
-            <Box>
-              <Typography variant="h2" sx={{ mb: 1 }}>Log In</Typography>
+        <video
+          autoPlay
+          loop
+          muted
+          poster="/static/images/event_banner.png"
+        >
+          <source
+            src="/static/images/event_banner.mp4"
+            type="video/mp4"
+          />
+        </video>
+      </Box>
+      <Box pt={20} sx={{
+        // "backgroundImage": "linear-gradient(to top,#28160c,rgb(var(--background-end-rgb)))",
+        width: "100vw", height: "100vh", position: "fixed", top: 0, color: "#fff", textAlign: "center"
+      }}>
+        <Button
+          variant="text" sx={{ position: 'fixed', alignItems: "center", left: '20px', top: '20px' }}
+          onClick={() => {
+            router.push('/');
+          }}
+        >
+          <Home />&nbsp;
+          <Typography variant="body1">Home</Typography>
+        </Button>
+        <Container maxWidth="sm">
+          <Card>
+            <Box p={4}>
+              <Box>
+                <Typography variant="h2" sx={{ mb: 1 }}>Log In</Typography>
+              </Box>
+              <Box sx={{ mt: 4, px: 4 }}>
+              </Box>
+              <Box sx={{ mt: 2 }}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Button
+                      variant='contained'
+                      className='btn-signup'
+                      startIcon={<PersonAddAlt fontSize='small' />}
+                      onClick={async (e) => {
+                        // let res = await verifyEmail({
+                        //   emailAddress: email,
+                        //   verifyMx: true,
+                        //   verifySmtp: true,
+                        //   timeout: 3000
+                        // })
+                        // if (!(res.validFormat && res.validSmtp && res.validMx)) {
+                        //   alert('Email is not valid.');
+                        //   return;
+                        // }
+                        handleOpenSignup(e);
+                      }}
+                    >
+                      Sign up with email
+                    </Button>
+                  </Grid>
+                </Grid>
+                <FirebaseAuth />
+              </Box>
             </Box>
-            <Box sx={{ mt: 4, px: 4 }}>
-            </Box>
-            <Box sx={{ mt: 2 }}>
-              <Grid container>
+          </Card>
+        </Container>
+        {/* Modal for Sign up */}
+        <Dialog
+          open={openSignup}
+          onClose={handleCloseSignup}
+          PaperProps={{
+            style: {
+              padding: '20px'
+            }
+          }}
+        >
+          <DialogTitle variant="h2" fontSize={"3rem"} textAlign={"center"} textTransform={"uppercase"}>
+            Sign up
+          </DialogTitle>
+          <DialogContent>
+            <Box sx={{ width: '100%' }}>
+              <Grid container spacing={2} >
                 <Grid item xs={12}>
-                  <Button
-                    variant='contained'
-                    className='btn-signup'
-                    startIcon={<PersonAddAlt fontSize='small' />}
-                    onClick={async (e) => {
-                      // let res = await verifyEmail({
-                      //   emailAddress: email,
-                      //   verifyMx: true,
-                      //   verifySmtp: true,
-                      //   timeout: 3000
-                      // })
-                      // if (!(res.validFormat && res.validSmtp && res.validMx)) {
-                      //   alert('Email is not valid.');
-                      //   return;
-                      // }
-                      handleOpenSignup(e);
+                  <InputLabel>Email</InputLabel>
+                  <OutlinedInput
+                    name="email"
+                    placeholder='Enter your Email'
+                    size='small'
+                    value={email}
+                    onChange={handleEmailChange}
+                    sx={{
+                      mt: 1
                     }}
-                  >
-                    Sign up with email
-                  </Button>
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <InputLabel>Password</InputLabel>
+                  <OutlinedInput
+                    name="password"
+                    placeholder='Enter your Password'
+                    size='small'
+                    type='password'
+                    value={password}
+                    onChange={handlePasswordChange}
+                    sx={{
+                      mt: 1
+                    }}
+                    fullWidth
+                  />
                 </Grid>
               </Grid>
-              <FirebaseAuth />
             </Box>
-          </Box>
-        </Card>
-      </Container>
-      {/* Modal for Sign up */}
-      <Dialog
-        open={openSignup}
-        onClose={handleCloseSignup}
-        PaperProps={{
-          style: {
-            padding: '20px'
-          }
-        }}
-      >
-        <DialogTitle variant="h2" fontSize={"3rem"} textAlign={"center"} textTransform={"uppercase"}>
-          Sign up
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ width: '100%' }}>
-            <Grid container spacing={2} >
-              <Grid item xs={12}>
-                <InputLabel>Email</InputLabel>
-                <OutlinedInput
-                  name="email"
-                  placeholder='Enter your Email'
-                  size='small'
-                  value={email}
-                  onChange={handleEmailChange}
-                  sx={{
-                    mt: 1
-                  }}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <InputLabel>Password</InputLabel>
-                <OutlinedInput
-                  name="password"
-                  placeholder='Enter your Password'
-                  size='small'
-                  type='password'
-                  value={password}
-                  onChange={handlePasswordChange}
-                  sx={{
-                    mt: 1
-                  }}
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            startIcon={<PersonAddAlt fontSize="small" />}
-            onClick={handleSignupBtnClick}
-          >
-            Sign Up
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="contained"
+              startIcon={<PersonAddAlt fontSize="small" />}
+              onClick={handleSignupBtnClick}
+            >
+              Sign Up
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
+    </>
   )
 }
 
