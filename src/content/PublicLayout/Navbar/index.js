@@ -31,6 +31,7 @@ import {
 import { useAuthContext } from '@/src/context/AuthContext';
 import { useRouter } from 'next/router';
 import NavItem, { StyledMenu } from '@/src/content/PublicLayout/Navbar/NavItem';
+import { useAppContext } from '@/src/context/app';
 
 const Navbar = ({ sx }) => {
   const user = useAuthContext();
@@ -85,7 +86,9 @@ const Navbar = ({ sx }) => {
   const handleClickEvent = (e) => {
     router.push('/event');
   }
-  const handleClickRogueSocial = (e) => { }
+  const handleClickRogueSocial = (e) => {
+    router.push('/rogue-social');
+  }
   const handleClickSupport = (e) => { }
   const handleClickTools = (e) => { }
 
@@ -399,6 +402,16 @@ const Navbar = ({ sx }) => {
                   <Link href={"/user/" + user.user?.id + "/edit"}>
                     EDIT
                   </Link>
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => {
+                    handleCloseUser(e);
+                    user.logout();
+                  }}
+                  key='logout-user'
+                  disableRipple
+                >
+                  LOGOUT
                 </MenuItem>
               </StyledMenu>}
             {/* End User Submenu */}

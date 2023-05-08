@@ -69,7 +69,7 @@ const Page = (props) => {
           background: 'url(' + item?.banner + ')',
           backgroundPosition: 'center',
           backgroundSize: 'cover',
-          height: '500px'
+          height: '300px'
         }}
       >
       </Box>

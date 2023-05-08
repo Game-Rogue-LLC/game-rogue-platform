@@ -10,6 +10,9 @@ import dayjs from 'dayjs';
 import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from '@/src/config/global';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 import TeamItem from '@/src/components/item/TeamItem';
+import GameChip from '@/src/components/chip/GameChip';
+import PlatformChip from '@/src/components/chip/PlatformChip';
+import RegionChip from '@/src/components/chip/RegionChip';
 
 const MatchCard = ({ item }) => {
   const { event, team, currentTime } = useTournamentContext();
@@ -25,7 +28,7 @@ const MatchCard = ({ item }) => {
       <Box
         sx={{
           border: 'solid 1px rgba(255, 255, 255, 0.2)',
-          height: '280px',
+          minHeight: '280px',
           background: 'black',
           ':hover': {
             cursor: 'pointer',
@@ -45,7 +48,9 @@ const MatchCard = ({ item }) => {
             display: 'flex'
           }}
         >
-          <Chip icon={<img src="/static/images/games/r6s.webp" width="30px" height="30px" />} label="R6" sx={{ backgroundColor: '#404040', color: 'white', fontSize: '1rem' }} />
+          <GameChip />
+          <PlatformChip type={event?.events[item?.eid]?.platform} />
+          <RegionChip type={event?.events[item?.eid]?.region} />
         </Box>
         <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
           <img src={event?.events[item?.eid]?.darkLogo || DEFAULT_LOGO} style={{ height: '40px', width: '40px', objectFit: 'cover' }} />

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
-import { styled, ThemeProvider, createTheme } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import {
 	Avatar,
 	Box,
@@ -26,6 +26,7 @@ import {
 import OrganizationMenu from './Menu'
 import { useAuthContext } from '@/src/context/AuthContext'
 import { useTournamentContext } from '@/src/context/TournamentContext';
+import { useRouter } from 'next/router';
 
 const FireNav = styled(List)(({ theme }) => ({
 	'& .MuiPaper-root': {
@@ -50,6 +51,8 @@ const FirePaper = styled(Paper)(({ theme }) => ({
 }));
 
 export default function OrganizationSidebar(props) {
+	const theme = useTheme();
+	const router = useRouter();
 	const { organization, player } = useTournamentContext();
 	const [showMenu, setShowMenu] = React.useState(false);
 	const { user } = useAuthContext();
@@ -104,7 +107,7 @@ export default function OrganizationSidebar(props) {
 									}}
 								/>
 							</ListItemButton>
-							<Tooltip title="Events Settings">
+							{/* <Tooltip title="Events Settings">
 								<IconButton
 									size="large"
 									sx={{
@@ -138,7 +141,7 @@ export default function OrganizationSidebar(props) {
 									<Settings />
 									<ArrowRight sx={{ position: 'absolute', right: 4, opacity: 0 }} />
 								</IconButton>
-							</Tooltip>
+							</Tooltip> */}
 							<Menu
 								sx={{ mt: '45px' }}
 								id="menu-appbar"
@@ -169,6 +172,23 @@ export default function OrganizationSidebar(props) {
 								<OrganizationMenu key={"organization_menu_" + id} organization={item} />
 							)
 						})}
+
+						{organization?.organizations && Object.keys(organization.organizations).length < 3 &&
+							<>
+								<ListItem component="div" disablePadding>
+									<ListItemButton
+										sx={{ height: 56 }}
+										onClick={() => {
+											router.push('/organization/create');
+										}}
+									>
+										<ListItemText sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
+											Create Organization
+										</ListItemText>
+									</ListItemButton>
+								</ListItem>
+								<Divider />
+							</>}
 					</FireNav>
 				</FirePaper>
 			</Box>

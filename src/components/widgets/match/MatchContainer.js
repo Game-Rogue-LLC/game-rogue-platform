@@ -15,7 +15,7 @@ const MatchContainer = ({ matches, limit }) => {
               <MatchCard item={item} />
             </Grid>
           ))
-          : <Grid item xs={12}>
+          : <Grid item xs={12} textAlign="center">
             <Typography variant="h6">No Matches</Typography>
           </Grid>
       }

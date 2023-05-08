@@ -14,7 +14,7 @@ const EventContainer = ({ events, limit }) => {
               <EventCard item={item} />
             </Grid>
           ))
-          : <Grid item xs={12}>
+          : <Grid item xs={12} textAlign="center" color="rgba(255, 255, 255, 0.6)">
             <Typography variant="h6">No Events</Typography>
           </Grid>
       }

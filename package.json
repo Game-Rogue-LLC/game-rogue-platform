@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@devmehq/email-validator-js": "^1.0.16",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fullcalendar/core": "^6.1.5",
@@ -52,5 +53,8 @@
   },
   "devDependencies": {
     "react-snap": "^1.23.0"
+  },
+  "browser": {
+    "@devmehq/email-validator-js": false
   }
 }

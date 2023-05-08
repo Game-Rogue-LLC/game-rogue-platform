@@ -9,6 +9,7 @@ import {
     useTheme,
     Divider,
     IconButton,
+    Tooltip,
 } from '@mui/material'
 import { alpha } from '@mui/material/styles';
 import { useRouter } from 'next/router';
@@ -109,22 +110,24 @@ const Menu = (props) => {
                                 }}
                                 size='small'
                             >
-                                Organizer Profile
+                                Edit Organization
                             </Button>
-                            <Button
-                                variant='contained'
-                                onClick={() => router.push('/event/create?organization=' + item.id)}
-                                sx={{
-                                    flexGrow: 0,
-                                    my: 1,
-                                    mr: 1,
-                                    color: 'white',
-                                    border: '1px solid rgba(255, 255, 255, .5)',
-                                    display: event.activeCount[item.id] >= 5 ? 'none' : 'block'
-                                }}
-                                color='secondary'
-                                size='small'
-                            > + </Button>
+                            <Tooltip title="Create Event">
+                                <Button
+                                    variant='contained'
+                                    onClick={() => router.push('/event/create?organization=' + item.id)}
+                                    sx={{
+                                        flexGrow: 0,
+                                        my: 1,
+                                        mr: 1,
+                                        color: 'white',
+                                        border: '1px solid rgba(255, 255, 255, .5)',
+                                        display: event.activeCount[item.id] >= 5 ? 'none' : 'block'
+                                    }}
+                                    color='secondary'
+                                    size='small'
+                                > + </Button>
+                            </Tooltip>
                         </Box>
                     </>}
             </Box>

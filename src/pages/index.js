@@ -179,14 +179,30 @@ const MyApp = (props) => {
             <Box
                 component={'section'}
                 sx={{
+                    position: "relative",
                     backgroundImage: 'url(/static/images/back1.png)',
                     height: '910px',
                     backgroundPosition: 'center',
                     display: 'flex',
                     justifyContent: 'center',
+                    overflow: "hidden",
                     alignItems: 'center'
                 }}
             >
+                <video
+                    style={{
+                        position: 'absolute'
+                    }}
+                    autoPlay
+                    loop
+                    muted
+                    poster="/static/images/back1.png"
+                >
+                    <source
+                        src="/intro.mp4"
+                        type="video/mp4"
+                    />
+                </video>
                 <Typography variant='h1' align='center' fontSize={'72px'} fontStyle={'italic'} color={'black'} lineHeight={'100.8px'}>
                     PLUS PLANS
                     <br />

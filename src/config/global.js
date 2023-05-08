@@ -1,5 +1,5 @@
-export const DEFAULT_CONTENTBLOCK_IMAGE = '/Game_Rogue_Text_2_copy.png';
-export const DEFAULT_LOGO = '/LOGO.png';
+export const DEFAULT_CONTENTBLOCK_IMAGE = "/Game_Rogue_Text_2_copy.png";
+export const DEFAULT_LOGO = "/LOGO.png";
 export const STAFF_ROLES = [
     {
         id: 0,
@@ -31,99 +31,151 @@ export const STAFF_ROLES = [
     }
 ]
 
+export const EVENT_CATEGORIES = {
+    "tournament": {
+        value: 0,
+        name: "Tournament"
+    },
+    "league": {
+        value: 1,
+        name: "League"
+    }
+}
+
 export const EVENT_FORMATS = [
     {
-        key: 'single-elimination',
+        key: "single-elimination",
         value: 0,
-        name: 'Single Elimination'
+        name: "Single Elimination"
     },
     {
-        key: 'double-elimination',
+        key: "double-elimination",
         value: 1,
-        name: 'Double Elimination'
+        name: "Double Elimination"
     },
     {
-        key: 'ladder-elimination',
+        key: "ladder-elimination",
         value: 2,
-        name: 'Ladder Elimination'
+        name: "Ladder Elimination"
     },
     {
-        key: 'pyramid-elimination',
+        key: "pyramid-elimination",
         value: 3,
-        name: 'Pyramid Elimination'
+        name: "Pyramid Elimination"
     },
     {
-        key: 'straight-round-robin',
+        key: "straight-round-robin",
         value: 4,
-        name: 'Straight Round Robin'
+        name: "Straight Round Robin"
     },
     {
-        key: 'round-robin-double-split',
+        key: "round-robin-double-split",
         value: 5,
-        name: 'Round Robin Double Split'
+        name: "Round Robin Double Split"
     },
     {
-        key: 'round-robin-triple-split',
+        key: "round-robin-triple-split",
         value: 6,
-        name: 'Round Robin Triple Split'
+        name: "Round Robin Triple Split"
     },
     {
-        key: 'round-robin-quadruple-split',
+        key: "round-robin-quadruple-split",
         value: 7,
-        name: 'Round Robin Quadruple split'
+        name: "Round Robin Quadruple split"
     },
     {
-        key: 'round-robin-semi-split',
+        key: "round-robin-semi-split",
         value: 8,
-        name: 'Semi Round Robin'
+        name: "Semi Round Robin"
     },
 ]
 
-export const EVENT_STATES = {
-    'CREATING': {
+export const EVENT_SEED_TYPES = {
+    "manual": {
         value: 0,
-        name: 'CREATING',
+        name: "Manual"
     },
-    'SCHEDULING': {
+    "random": {
         value: 1,
-        name: 'SCHEDULING'
+        name: "Random"
+    }
+}
+
+export const EVENT_REGIONS = [
+    {
+        value: 0,
+        name: "North America"
     },
-    'SCHEDULED': {
+    {
+        value: 1,
+        name: "Europe"
+    }
+]
+
+export const EVENT_STATES = {
+    "CREATING": {
+        value: 0,
+        name: "CREATING",
+    },
+    "SCHEDULING": {
+        value: 1,
+        name: "SCHEDULING"
+    },
+    "SCHEDULED": {
         value: 2,
-        name: 'SCHEDULED'
+        name: "SCHEDULED"
     },
-    'STARTED': {
+    "STARTED": {
         value: 3,
-        name: 'STARTED'
+        name: "STARTED"
     },
-    'FINISHED': {
+    "FINISHED": {
         value: 4,
-        name: 'FINISHED'
+        name: "FINISHED"
     }
 }
 
 export const MATCH_STATES = {
-    'NOT_STARTED_SCHEDULING': {
+    "NOT_STARTED_SCHEDULING": {
         value: 0,
-        name: 'NOT_STARTED_SCHEDULING'
+        name: "NOT STARTED SCHEDULING"
     },
-    'SCHEDULING': {
+    "SCHEDULING": {
         value: 1,
-        name: 'SCHEDULING'
+        name: "SCHEDULING"
     },
-    'SCHEDULED': {
+    "SCHEDULED": {
         value: 2,
-        name: 'SCHEDULED'
+        name: "SCHEDULED"
     },
-    'STARTED': {
+    "STARTED": {
         value: 3,
-        name: 'STARTED'
+        name: "STARTED"
     },
-    'FINISHED': {
+    "FINISHED": {
         value: 4,
-        name: 'FINISHED'
+        name: "FINISHED"
     }
 }
+
+export const PLATFORMS = [
+    {
+        value: 0,
+        name: "XBox"
+    },
+    {
+        value: 1,
+        name: "PC"
+    },
+    {
+        value: 2,
+        name: "PS4"
+    },
+    {
+        value: 3,
+        name: "Cross-Platform"
+    }
+]
 
 export const NULL_FUNCTION = () => {
 }
@@ -132,11 +184,13 @@ export const SCORE_WIN = 3;
 export const SCORE_LOSE = 0;
 export const SCORE_DRAW = 1;
 
-export default {
-    DEFAULT_CONTENTBLOCK_IMAGE,
-    DEFAULT_LOGO,
-    STAFF_ROLES,
-    EVENT_FORMATS,
-    EVENT_STATES,
-    NULL_FUNCTION
-}
+// export default {
+//     DEFAULT_CONTENTBLOCK_IMAGE,
+//     DEFAULT_LOGO,
+//     STAFF_ROLES,
+//     EVENT_FORMATS,
+//     EVENT_STATES,
+//     EVENT_CATEGORIES,
+//     EVENT_SEED_TYPES,
+//     NULL_FUNCTION
+// }

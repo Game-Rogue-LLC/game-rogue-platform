@@ -97,6 +97,33 @@ a {
   }
 }
 
+@keyframes rogue-social-splash {
+  0% {
+    display: block;
+    z-index: 9000;
+  }
+
+  95% {
+    opacity: 1;
+  }
+
+  99% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+    z-index: -1;
+  }
+
+}
+
+.rogue-social-splash {
+  animation-name: rogue-social-splash;
+  animation-duration: 10s;
+  animation-fill-mode: forwards;
+}
+
 @keyframes navigating {
   0% {
     background-image: url('/static/images/navigation/0.png');
@@ -208,4 +235,24 @@ td.td-border::before {
 
 .team-link:hover {
   color: rgba(245, 131, 31, 0.8);
+}
+
+.btn-signup {
+  width: 220px;
+  min-height: 40px;
+  text-transform: none;
+  border-radius: 2px;
+  background-color: #2196f3;
+  color: white;
+  justify-content: left;
+  padding-left: 20px;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+
+.btn-signup:hover {
+  background-color: #42a5f5;
+}
+
+.btn-signup .MuiButton-startIcon {
+  margin-right: 14px;
 }

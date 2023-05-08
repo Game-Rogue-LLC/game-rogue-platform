@@ -18,7 +18,8 @@ const UserInfo = ({ item, editable, handle, avatar }) => {
       <Box sx={{ textAlign: 'center', position: 'relative' }}>
         <Avatar alt={item?.name} src={avatar} sx={{ width: 150, height: 150, mx: 'auto' }} />
         {
-          editable
+          user?.user && item?.id === user.user.id &&
+          (editable
             ?
             <IconButton size='large' sx={{ position: 'absolute', right: 0, bottom: 0, color: theme.palette.primary.main }} component={'label'}>
               <Edit />
@@ -29,7 +30,7 @@ const UserInfo = ({ item, editable, handle, avatar }) => {
               <Button variant='contained' sx={{ mt: 2, mx: 'auto' }} onClick={handle}>
                 EDIT PROFILE
               </Button>
-            </Box>
+            </Box>)
         }
       </Box>
 

@@ -27,20 +27,21 @@ export default function MyApp(props) {
   const ContextProvider = Component.provider || Noop;
   const router = useRouter();
   const [navigating, setNavigating] = React.useState(false);
-  Router.events.on('routeChangeStart', () => {
+  Router.events.on('routeChangeStart', (url) => {
     // nProgress.start();
     setNavigating(true);
   });
-  Router.events.on('routeChangeError', () => {
+  Router.events.on('routeChangeError', (url) => {
     // nProgress.done();
     setNavigating(false);
   });
-  Router.events.on('routeChangeComplete', () => {
+  Router.events.on('routeChangeComplete', (url) => {
     // nProgress.done();
     setNavigating(false);
   });
 
   const getLayout = Component.getLayout ?? ((page) => page);
+  const transition = Component.transition;
 
   return (
     <CacheProvider value={emotionCache}>
@@ -51,7 +52,13 @@ export default function MyApp(props) {
       <ThemeProvider>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        {navigating ? <Splash content={'Loading...'} /> : <div className={`navigating transition-container`} id="navigating"></div>}
+        {
+          !navigating
+            ? <div className={`navigating transition-container`} id="navigating"></div>
+            : (transition
+              ? transition()
+              : <Splash content={'Loading...'} />)
+        }
         <AppProvider>
           <AuthContextProvider>
             {getLayout(

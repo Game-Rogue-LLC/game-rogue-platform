@@ -11,7 +11,7 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
 import { useEffect } from "react";
-import ReactRichTextEdit from "@/src/components/textedit/ReactRichTextEdit";
+import RichTextInput from "@/src/components/input/RichTextInput";
 
 const ContentBlock = (props) => {
   const { contentBlock, handleChange, handleUpload, save, saving } = props;
@@ -54,7 +54,7 @@ const ContentBlock = (props) => {
       <Box>
         <InputLabel htmlFor="content-text" sx={{ mt: 2 }}>Text</InputLabel>
         {/* <OutlinedInput id="content-text" name="text" value={contentBlock?.text || ''} onChange={handleInputs} aria-describedby="content-text-helper" sx={{ mt: 1 }} inputProps={{ maxLength: 50 }} fullWidth /> */}
-        <ReactRichTextEdit content={contentBlock?.text} handleContentChange={handleContentBlockTextChange} />
+        <RichTextInput content={contentBlock?.text} handleContentChange={handleContentBlockTextChange} />
       </Box>
       <LoadingButton
         loading={saving}
