@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
+  Box,
   Button,
   Menu,
   MenuItem,
@@ -39,20 +40,28 @@ export const StyledMenu = styled((props) => <Menu {...props} />)(
   })
 );
 
-const NavItem = ({ name, items, isDropdown, handleClick }) => {
+const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   let currentHover = false;
 
-  const itemStyle = {
-    background: "transparent",
-    color: "white",
-    zIndex: 8500,
-    ":hover": {
-      // color: theme.palette.primary.main,
+  const itemStyle = useMemo(() => {
+    let style = {
       background: "transparent",
-    },
-  };
+      color: "white",
+      zIndex: 8500,
+      ":hover": {
+        // color: theme.palette.primary.main,
+        backgroundSize: "cover",
+        // background: "url(/static/images/bg_anim.gif)",
+        // backgroundSize: "contain",
+      },
+    };
+    if (active === true) {
+      style.background = "url(/static/images/navitem_bg/16.png) !important";
+    }
+    return style;
+  }, [active]);
 
   const itemTextStyle = {
     color: "white",
@@ -95,6 +104,7 @@ const NavItem = ({ name, items, isDropdown, handleClick }) => {
           onClick={handleClick}
           onMouseOver={handleOpen}
           onMouseOut={handleMouseOut}
+          className="gif-once"
         >
           <Typography variant="h4" sx={itemTextStyle}>
             {name}
@@ -160,6 +170,7 @@ const NavItem = ({ name, items, isDropdown, handleClick }) => {
       id={`${name}-menu`}
       disableElevation
       onClick={handleClick}
+      className="gif-once"
     >
       <Typography variant="h4" sx={itemTextStyle}>
         {name}

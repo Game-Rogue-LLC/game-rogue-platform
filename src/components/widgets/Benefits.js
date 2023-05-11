@@ -94,6 +94,7 @@ const Benefits = () => {
       clearInterval(contentIntervalId6);
     };
   }, []);
+
   return (
     <Box sx={{ position: "relative", py: 8 }}>
       <Box id="title" sx={{ textAlign: "center", height: "200px" }}>

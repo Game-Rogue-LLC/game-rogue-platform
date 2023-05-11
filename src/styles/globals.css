@@ -257,3 +257,80 @@ td.td-border::before {
 .btn-signup .MuiButton-startIcon {
   margin-right: 14px;
 }
+
+@keyframes play {
+  0% {
+    background: url(/static/images/navitem_bg/01.png);
+    background-size: cover;
+  }
+  7% {
+    background: url(/static/images/navitem_bg/02.png);
+    background-size: cover;
+  }
+  14% {
+    background: url(/static/images/navitem_bg/03.png);
+    background-size: cover;
+  }
+  21% {
+    background: url(/static/images/navitem_bg/04.png);
+    background-size: cover;
+  }
+  28% {
+    background: url(/static/images/navitem_bg/05.png);
+    background-size: cover;
+  }
+  35% {
+    background: url(/static/images/navitem_bg/06.png);
+    background-size: cover;
+  }
+  42% {
+    background: url(/static/images/navitem_bg/07.png);
+    background-size: cover;
+  }
+  49% {
+    background: url(/static/images/navitem_bg/08.png);
+    background-size: cover;
+  }
+  55% {
+    background: url(/static/images/navitem_bg/09.png);
+    background-size: cover;
+  }
+  61% {
+    background: url(/static/images/navitem_bg/10.png);
+    background-size: cover;
+  }
+  67% {
+    background: url(/static/images/navitem_bg/11.png);
+    background-size: cover;
+  }
+  73% {
+    background: url(/static/images/navitem_bg/12.png);
+    background-size: cover;
+  }
+  80% {
+    background: url(/static/images/navitem_bg/13.png);
+    background-size: cover;
+  }
+  87% {
+    background: url(/static/images/navitem_bg/14.png);
+    background-size: cover;
+  }
+  94% {
+    background: url(/static/images/navitem_bg/15.png);
+    background-size: cover;
+  }
+  100% {
+    background: url(/static/images/navitem_bg/16.png);
+    background-size: cover;
+  }
+}
+
+.gif-once {
+  border-radius: 0;
+  background: transparent;
+}
+
+.gif-once:hover {
+  /* background: url(/static/images/ezgif.com-gif-maker.gif); */
+  animation: play 2s forwards;
+}

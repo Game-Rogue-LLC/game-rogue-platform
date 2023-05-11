@@ -41,7 +41,21 @@ const Navbar = ({ sx }) => {
   const [search, setSearch] = useState("");
   const [fund, setFund] = useState("");
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(router?.pathname);
   let currentHoverUser = false;
+
+  useEffect(() => {
+    if (router?.pathname) {
+      const pathname = router.pathname;
+      if (pathname === "/") setCurrentPage("home");
+      else if (pathname.substring(1, 6) === "event") setCurrentPage("event");
+      else if (pathname.substring(1, 6) === "rogue")
+        setCurrentPage("rogue-social");
+      else if (pathname.substring(1, 13) === "organization")
+        setCurrentPage("organization");
+      else if (pathname.substring(1, 5) === "tool") setCurrentPage("tool");
+    }
+  }, [router]);
   const handle = {
     switchLogoNav: (e) => {
       setLogoNav((prev) => !prev);
@@ -133,9 +147,14 @@ const Navbar = ({ sx }) => {
                 }
               />
             </FormControl>
-            <NavItem name="HOME" handleClick={handleClickHome} />
+            <NavItem
+              name="HOME"
+              active={currentPage === "home"}
+              handleClick={handleClickHome}
+            />
             <NavItem
               name="Events"
+              active={currentPage === "event"}
               handleClick={handleClickEvent}
               isDropdown={true}
               items={[
@@ -168,6 +187,7 @@ const Navbar = ({ sx }) => {
             />
             <NavItem
               name="Rogue Social"
+              active={currentPage === "rogue-social"}
               handleClick={handleClickRogueSocial}
               isDropdown={true}
               items={[
@@ -199,6 +219,7 @@ const Navbar = ({ sx }) => {
             >
               <NavItem
                 name="Organize"
+                active={currentPage === "organization"}
                 handleClick={handleClickOrganize}
                 isDropdown={true}
                 items={[
@@ -216,8 +237,9 @@ const Navbar = ({ sx }) => {
                   },
                 ]}
               />
-              <NavItem
+              {/* <NavItem
                 name="Play"
+                active={currentPage === "event"}
                 handleClick={handleClickTools}
                 isDropdown={true}
                 items={[
@@ -246,9 +268,10 @@ const Navbar = ({ sx }) => {
                     to: "/event/completed",
                   },
                 ]}
-              />
+              /> */}
               <NavItem
                 name="Tools"
+                active={currentPage === "tool"}
                 handleClick={handleClickTools}
                 isDropdown={true}
                 items={[
