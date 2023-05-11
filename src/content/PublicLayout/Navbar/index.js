@@ -105,6 +105,7 @@ const Navbar = ({ sx }) => {
   };
   const handleClickSupport = (e) => {};
   const handleClickTools = (e) => {};
+  const handleClickPlusPlans = (e) => {};
 
   return (
     <AppBar
@@ -130,6 +131,7 @@ const Navbar = ({ sx }) => {
               alignItems: "center",
             }}
           >
+            <img src="/GR_Letters.png" height={40} />
             <FormControl>
               <OutlinedInput
                 id="search"
@@ -205,7 +207,7 @@ const Navbar = ({ sx }) => {
                 },
               ]}
             />
-            <NavItem name="LIVE" handleClick={() => {}} />
+            <NavItem name="ROGUE TV" handleClick={() => {}} />
             <NavItem name="ARTICLES" handleClick={() => {}} />
             <NavItem name="SHOP" handleClick={() => {}} />
           </Box>
@@ -301,6 +303,11 @@ const Navbar = ({ sx }) => {
                   },
                 ]}
               />
+              <NavItem
+                name="Plus Plans"
+                active={currentPage === "plus-plans"}
+                handleClick={handleClickPlusPlans}
+              />
             </Box>
             {user.user ? (
               <Box
@@ -324,14 +331,14 @@ const Navbar = ({ sx }) => {
                   }}
                 >
                   <Avatar alt={user.user?.name} src={user.user?.profilePic} />
+                  <ChevronRight
+                    sx={{
+                      color: theme.palette.primary.main,
+                      transform: Boolean(anchorElUser) ? "rotate(90deg)" : "",
+                      transition: "all 0.2s",
+                    }}
+                  />
                 </IconButton>
-                <ChevronRight
-                  sx={{
-                    color: theme.palette.primary.main,
-                    transform: Boolean(anchorElUser) ? "rotate(90deg)" : "",
-                    transition: "all 0.2s",
-                  }}
-                />
               </Box>
             ) : (
               <Box
@@ -357,14 +364,14 @@ const Navbar = ({ sx }) => {
                     src="/static/images/Profile_Picture.png"
                     style={{ width: "50px", height: "50px" }}
                   />
+                  <ChevronRight
+                    sx={{
+                      color: theme.palette.primary.main,
+                      transform: Boolean(anchorElUser) ? "rotate(90deg)" : "",
+                      transition: "all 0.2s",
+                    }}
+                  />
                 </IconButton>
-                <ChevronRight
-                  sx={{
-                    color: theme.palette.primary.main,
-                    transform: Boolean(anchorElUser) ? "rotate(90deg)" : "",
-                    transition: "all 0.2s",
-                  }}
-                />
               </Box>
             )}
             {/* Begin User Submenu */}

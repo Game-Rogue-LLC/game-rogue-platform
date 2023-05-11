@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
+import { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
 import {
   Box,
   FormControl,
@@ -11,31 +11,41 @@ import {
   Typography,
   TextField,
   Alert,
-  OutlinedInput
-} from '@mui/material';
+  OutlinedInput,
+} from "@mui/material";
 
-import AdminLayout from '@/src/content/AdminLayout';
-import { useAppContext } from '@/src/context/app';
-import { useRouter } from 'next/router';
-import Validator from 'validatorjs';
-import { useTournamentContext } from '@/src/context/TournamentContext';
-import { useAuthContext } from '@/src/context/AuthContext';
+import AdminLayout from "@/src/content/AdminLayout";
+import { useAppContext } from "@/src/context/app";
+import { useRouter } from "next/router";
+import Validator from "validatorjs";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+import { useAuthContext } from "@/src/context/AuthContext";
+// import ColorPicker from "@mapbox/react-colorpickr";
+import {
+  GooglePicker,
+  SketchPicker,
+  ChromePicker,
+} from "@hello-pangea/color-picker";
+import ColorSelect from "@/src/components/dropdown/ColorSelect";
 
 const initialInputs = {
-  name: '',
-  tagline: '',
-  deleted: false
-}
+  name: "",
+  tagline: "",
+  primary: "#000",
+  secondary: "#000",
+  tertiary: "#000",
+  deleted: false,
+};
 
 const rules = {
-  name: 'required',
-  tagline: 'required'
-}
+  name: "required",
+  tagline: "required",
+};
 
 const customMessages = {
-  'required.name': 'Organization Name is required.',
-  'required.tagline': 'Tagline is required.'
-}
+  "required.name": "Organization Name is required.",
+  "required.tagline": "Tagline is required.",
+};
 
 const Page = (props) => {
   const theme = useTheme();
@@ -45,19 +55,18 @@ const Page = (props) => {
   const { organization, event } = useTournamentContext();
   const [inputs, setInputs] = useState({ ...initialInputs });
   const [errors, setErrors] = useState({});
-  const [disabled, setDisabled] = useState(false)
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    setTitle('REGISTER AN ORGANIZATION');
+    setTitle("REGISTER AN ORGANIZATION");
     organization.setCurrent(null);
     event.setCurrent(null);
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (organization.activeCount >= 3)
-      setDisabled(true)
-    else setDisabled(false)
-  }, [organization.activeCount])
+    if (organization.activeCount >= 3) setDisabled(true);
+    else setDisabled(false);
+  }, [organization.activeCount]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -67,66 +76,118 @@ const Page = (props) => {
     }
     setErrors({});
     return true;
-  }
+  };
 
   const handle = {
     create: async (e) => {
       if (!validate(inputs, rules, customMessages)) return;
       const newOrg = {
         ...inputs,
-        uid: user.id
+        uid: user.id,
       };
 
-      organization.create(newOrg)
-        .then(res => {
-          if (res.code === 'succeed') {
-            router.push('/profile?organization=' + res.id)
-          } else if (res.code === 'failed') {
-            console.error(res.message)
+      organization
+        .create(newOrg)
+        .then((res) => {
+          if (res.code === "succeed") {
+            router.push("/profile?organization=" + res.id);
+          } else if (res.code === "failed") {
+            console.error(res.message);
           }
         })
-        .catch(err => {
-          console.error(err)
-        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
     inputs: (e) => {
       let { name, type, value } = e.target;
-      if (type === 'number') value = Number(value);
+      if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
-        [name]: value
-      })
-    }
-  }
+        [name]: value,
+      });
+    },
+  };
+
+  const onColorChange = (name, value) => {
+    setInputs({
+      ...inputs,
+      [name]: value?.hex,
+    });
+  };
 
   return (
     <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
       <Grid container rowSpacing={3}>
         <Grid item xs={12}>
-          <Typography variant='h6'>
-            Register Organization
-          </Typography>
+          <Typography variant="h6">Register Organization</Typography>
         </Grid>
         <Grid item xs={12}>
           <InputLabel htmlFor="org-name">Organization Name</InputLabel>
-          <FormHelperText sx={{ mt: 2 }}>Controls the publically visible name of this organization.</FormHelperText>
+          <FormHelperText sx={{ mt: 2 }}>
+            Controls the publically visible name of this organization.
+          </FormHelperText>
           <FormControl fullWidth error={errors.name !== undefined}>
-            <OutlinedInput id="org-name" name="name" aria-describedby="org-name-helper" value={inputs.name} onChange={handle.inputs} disabled={disabled}
-              sx={{ mt: 1 }} fullWidth required />
-            {errors.name !== undefined && <FormHelperText id="org-name-helper" sx={{ mt: 2 }}>{errors.name}</FormHelperText>}
+            <OutlinedInput
+              id="org-name"
+              name="name"
+              aria-describedby="org-name-helper"
+              value={inputs.name}
+              onChange={handle.inputs}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              required
+            />
+            {errors.name !== undefined && (
+              <FormHelperText id="org-name-helper" sx={{ mt: 2 }}>
+                {errors.name}
+              </FormHelperText>
+            )}
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <InputLabel htmlFor="org-tag">Tagline</InputLabel>
-          <FormControl fullWidth sx={{ mt: 1 }} error={errors.tagline !== undefined}>
-            <OutlinedInput id="org-tag" name="tagline" aria-describedby="org-tag-helper" value={inputs.tagline} inputProps={{ maxLength: 50 }}
-              onChange={handle.inputs} disabled={disabled} fullWidth required />
-            {errors.tagline !== undefined && <FormHelperText id="org-tag-helper" sx={{ mt: 2 }}>{errors.tagline}</FormHelperText>}
+          <FormControl
+            fullWidth
+            sx={{ mt: 1 }}
+            error={errors.tagline !== undefined}
+          >
+            <OutlinedInput
+              id="org-tag"
+              name="tagline"
+              aria-describedby="org-tag-helper"
+              value={inputs.tagline}
+              inputProps={{ maxLength: 50 }}
+              onChange={handle.inputs}
+              disabled={disabled}
+              fullWidth
+              required
+            />
+            {errors.tagline !== undefined && (
+              <FormHelperText id="org-tag-helper" sx={{ mt: 2 }}>
+                {errors.tagline}
+              </FormHelperText>
+            )}
           </FormControl>
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <ColorSelect
+            name="primary"
+            label="Primary"
+            value={inputs?.primary}
+            onChange={(val) => onColorChange("primary", val)}
+          />
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <ColorSelect name="secondary" label="Secondary" />
+        </Grid>
+        <Grid item xs={12} lg={4}>
+          <ColorSelect name="tertiary" label="Tertiary" />
         </Grid>
         <Grid item>
           <Button
-            variant='contained'
+            variant="contained"
             onClick={handle.create}
             disabled={disabled}
           >
@@ -135,11 +196,11 @@ const Page = (props) => {
         </Grid>
       </Grid>
     </Paper>
-  )
-}
+  );
+};
 
 Page.getLayout = (page) => {
-  return <AdminLayout>{page}</AdminLayout>
-}
+  return <AdminLayout>{page}</AdminLayout>;
+};
 
 export default Page;
