@@ -234,7 +234,8 @@ td.td-border::before {
 }
 
 .team-link:hover {
-  color: rgba(245, 131, 31, 0.8);
+  /* color: rgba(245, 131, 31, 0.8); */
+  color: white;
 }
 
 .btn-signup {
