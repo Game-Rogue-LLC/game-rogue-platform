@@ -8,6 +8,7 @@ import {
   Typography,
   useTheme,
   styled,
+  Divider,
 } from "@mui/material";
 
 export const StyledMenu = styled((props) => <Menu {...props} />)(
@@ -131,32 +132,38 @@ const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          {items.map((item, i) => (
-            <MenuItem
-              key={item.key}
-              onClick={(e) => {
-                handleClose(e);
-                if (!item.isLink && item.handleClick) item.handleClick(e);
-              }}
-              disableRipple
-            >
-              {item.isLink ? (
-                <Link
-                  href={item.to}
-                  sx={{
-                    color: "white",
-                    ":hover": {
-                      // color: theme.palette.primary.main,
-                    },
+          {items.map((item, i) => {
+            if (item.name === "_divider") {
+              return <Divider />;
+            } else {
+              return (
+                <MenuItem
+                  key={item.key}
+                  onClick={(e) => {
+                    handleClose(e);
+                    if (!item.isLink && item.handleClick) item.handleClick(e);
                   }}
+                  disableRipple
                 >
-                  {item.name}
-                </Link>
-              ) : (
-                item.name
-              )}
-            </MenuItem>
-          ))}
+                  {item.isLink ? (
+                    <Link
+                      href={item.to}
+                      sx={{
+                        color: "white",
+                        ":hover": {
+                          // color: theme.palette.primary.main,
+                        },
+                      }}
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    item.name
+                  )}
+                </MenuItem>
+              );
+            }
+          })}
         </StyledMenu>
       </>
     );

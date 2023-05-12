@@ -76,22 +76,10 @@ const Navbar = ({ sx }) => {
     if (user?.user) router.push("/user/" + user.user.id);
   };
   const handleOpenUser = (e) => {
-    currentHoverUser = true;
     if (anchorElUser !== e.currentTarget) setAnchorElUser(e.currentTarget);
   };
   const handleCloseUser = (e) => {
     setAnchorElUser(null);
-  };
-  const handleMouseOverUser = (e) => {
-    currentHoverUser = true;
-  };
-  const handleMouseOutUser = (e) => {
-    currentHoverUser = false;
-    setTimeout(() => {
-      if (currentHoverUser === false) {
-        handleCloseUser();
-      }
-    }, 500);
   };
 
   const handleClickOrganize = (e) => {
@@ -127,7 +115,7 @@ const Navbar = ({ sx }) => {
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
-              gap: 4,
+              gap: 3,
               alignItems: "center",
             }}
           >
@@ -162,25 +150,25 @@ const Navbar = ({ sx }) => {
               items={[
                 // TODO: Event Submenu comes here
                 {
-                  name: "Upcoming Matches",
+                  name: "Matches",
                   key: "upcoming-matches",
                   isLink: true,
                   to: "/match/upcoming",
                 },
                 {
-                  name: "Upcoming Events",
+                  name: "Events",
                   key: "upcoming-events",
                   isLink: true,
                   to: "/event/upcoming",
                 },
                 {
-                  name: "Ongoing Events",
+                  name: "Live Events",
                   key: "ongoing-events",
                   isLink: true,
                   to: "/event/ongoing",
                 },
                 {
-                  name: "Completed Events",
+                  name: "Past Events",
                   key: "completed-events",
                   isLink: true,
                   to: "/event/completed",
@@ -194,13 +182,13 @@ const Navbar = ({ sx }) => {
               isDropdown={true}
               items={[
                 {
-                  name: "Teams",
+                  name: "My Team",
                   key: "teams",
                   isLink: true,
                   to: "/team",
                 },
                 {
-                  name: "Scouting",
+                  name: "Scout Opponent",
                   key: "scouting",
                   isLink: true,
                   to: "/team",
@@ -211,11 +199,11 @@ const Navbar = ({ sx }) => {
             <NavItem name="ARTICLES" handleClick={() => {}} />
             <NavItem name="SHOP" handleClick={() => {}} />
           </Box>
-          <Box sx={{ display: "flex", gap: 4 }}>
+          <Box sx={{ display: "flex", gap: 3 }}>
             <Box
               sx={{
                 display: { xs: "none", md: "flex" },
-                gap: 4,
+                gap: 3,
                 alignItems: "center",
               }}
             >
@@ -226,13 +214,12 @@ const Navbar = ({ sx }) => {
                 isDropdown={true}
                 items={[
                   {
-                    name: "Create",
-                    key: "organization-create",
+                    name: "My Organizer",
                     isLink: true,
                     to: "/organization/create",
                   },
                   {
-                    name: "Production Settings",
+                    name: "Producer Dashboard",
                     key: "production-settings",
                     isLink: true,
                     to: "/",
@@ -278,26 +265,35 @@ const Navbar = ({ sx }) => {
                 isDropdown={true}
                 items={[
                   {
-                    name: "Instant Video",
-                    key: "instant-video",
+                    name: "Video Editor",
+                    key: "video-editor",
                     isLink: true,
                     to: "/",
                   },
                   {
-                    name: "Instant Media",
-                    key: "instant-media",
+                    name: "Customize",
+                    key: "customize",
                     isLink: true,
                     to: "/",
                   },
                   {
-                    name: "Instant Articles",
-                    key: "instant-articles",
+                    name: "Create Article",
+                    key: "create-article",
                     isLink: true,
                     to: "/",
                   },
                   {
-                    name: "Start Production",
-                    key: "start-production",
+                    name: "_divider",
+                  },
+                  {
+                    name: "WIKI",
+                    key: "wiki",
+                    isLink: true,
+                    to: "/",
+                  },
+                  {
+                    name: "FAQS",
+                    key: "faqs",
                     isLink: true,
                     to: "/",
                   },
@@ -307,6 +303,27 @@ const Navbar = ({ sx }) => {
                 name="Plus Plans"
                 active={currentPage === "plus-plans"}
                 handleClick={handleClickPlusPlans}
+                isDropdown={true}
+                items={[
+                  {
+                    name: "Player +",
+                    key: "add-player",
+                    isLink: true,
+                    to: "/",
+                  },
+                  {
+                    name: "Team +",
+                    key: "add-team",
+                    isLink: true,
+                    to: "/",
+                  },
+                  {
+                    name: "Organizer +",
+                    key: "add-organizer",
+                    isLink: true,
+                    to: "/",
+                  },
+                ]}
               />
             </Box>
             {user.user ? (
@@ -317,17 +334,23 @@ const Navbar = ({ sx }) => {
                   cursor: "pointer",
                 }}
               >
-                <IconButton
+                <Button
                   id="user-button"
                   aria-controls={anchorElUser ? "user-menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={Boolean(anchorElUser) ? "true" : undefined}
-                  onClick={handleClickUser}
-                  onMouseOver={handleOpenUser}
+                  onClick={handleOpenUser}
+                  disableTouchRipple
                   // onMouseOut={handleMouseOutUser}
                   sx={{
                     zIndex: 8500,
                     cursor: "pointer",
+                    borderRadius: "25px",
+                    background: "transparent",
+                    cursor: "pointer",
+                    ":hover": {
+                      background: "rgba(255,255,255,0.08)",
+                    },
                   }}
                 >
                   <Avatar alt={user.user?.name} src={user.user?.profilePic} />
@@ -338,7 +361,7 @@ const Navbar = ({ sx }) => {
                       transition: "all 0.2s",
                     }}
                   />
-                </IconButton>
+                </Button>
               </Box>
             ) : (
               <Box
@@ -352,8 +375,7 @@ const Navbar = ({ sx }) => {
                   aria-controls={anchorElUser ? "user-menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={Boolean(anchorElUser) ? "true" : undefined}
-                  onClick={() => router.push("/auth")}
-                  onMouseOver={handleOpenUser}
+                  onClick={handleOpenUser}
                   // onMouseOut={handleMouseOutUser}
                   sx={{
                     zIndex: 8500,
@@ -380,8 +402,8 @@ const Navbar = ({ sx }) => {
                 id="user-menu"
                 MenuListProps={{
                   "aria-labelledby": "user-button",
-                  onMouseLeave: handleCloseUser,
-                  onMouseOver: handleMouseOverUser,
+                  // onMouseLeave: handleCloseUser,
+                  // onMouseOver: handleMouseOverUser,
                 }}
                 disablePortal={true}
                 disableScrollLock={true}
@@ -410,8 +432,8 @@ const Navbar = ({ sx }) => {
                 id="user-menu"
                 MenuListProps={{
                   "aria-labelledby": "user-button",
-                  onMouseLeave: handleCloseUser,
-                  onMouseOver: handleMouseOverUser,
+                  // onMouseLeave: handleCloseUser,
+                  // onMouseOver: handleMouseOverUser,
                 }}
                 disablePortal={true}
                 disableScrollLock={true}
@@ -430,17 +452,27 @@ const Navbar = ({ sx }) => {
               >
                 <MenuItem
                   onClick={handleCloseUser}
-                  key="user-profile"
+                  key="user-setting"
                   disableRipple
                 >
-                  <Link href={"/user/" + user.user?.id}>PROFILE</Link>
+                  <Link href={"/user/" + user.user?.id}>Settings</Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUser} key="my-team" disableRipple>
+                  <Link href={"/user/" + user.user?.id}>My Team</Link>
                 </MenuItem>
                 <MenuItem
                   onClick={handleCloseUser}
-                  key="edit-user"
+                  key="my-organizer"
                   disableRipple
                 >
-                  <Link href={"/user/" + user.user?.id + "/edit"}>EDIT</Link>
+                  <Link href={"/user/" + user.user?.id}>My Organizer</Link>
+                </MenuItem>
+                <MenuItem
+                  onClick={handleCloseUser}
+                  key="my-profile"
+                  disableRipple
+                >
+                  <Link href={"/user/" + user.user?.id}>My Profile</Link>
                 </MenuItem>
                 <MenuItem
                   onClick={(e) => {

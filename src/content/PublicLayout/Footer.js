@@ -18,7 +18,7 @@ const Footer = (props) => {
             position: "relative",
             display: "flex",
             justifyContent: "space-between",
-            maxWidth: "50%",
+            maxWidth: "75%",
             mx: "auto",
           }}
         >
@@ -211,7 +211,7 @@ const Footer = (props) => {
         </Box>
         <Box
           sx={{
-            width: "50%",
+            width: "85%",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",

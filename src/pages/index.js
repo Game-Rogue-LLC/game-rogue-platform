@@ -528,16 +528,22 @@ const MyApp = (props) => {
           ></Box>
         </Carousel>
       </Box>
-      <Box component={"section"}>
+      <Box
+        component={"section"}
+        sx={{
+          pt: "70px",
+          background: "url(/static/images/about_us_bg.gif)",
+        }}
+      >
         <Box
           sx={{
             maxWidth: "940px",
             mx: "auto",
-            padding: "10px",
+            px: "10px",
             textAlign: "center",
             border: "solid 3px rgba(227, 81, 6, 0.73)",
-            mt: "70px",
             borderRadius: "30px",
+            background: "black",
             py: "30px",
           }}
         >
@@ -590,20 +596,13 @@ const MyApp = (props) => {
             </Typography>
           </Button>
         </Box>
-      </Box>
-      <Box
-        component="section"
-        id="back-to-top"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          pt: "60px",
-          pb: "40px",
-        }}
-      >
         <Box
           sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pt: "60px",
+            pb: "40px",
             textAlign: "center",
           }}
         >
@@ -622,16 +621,39 @@ const MyApp = (props) => {
                 opacity: 0.7,
               },
               mx: "auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
             }}
           >
             <img
               src={"/static/images/back-to-top.svg"}
               style={{ width: "73px", height: "56px" }}
             />
+            <Typography variant="body1" color="white" fontSize="23px">
+              BACK TO TOP
+            </Typography>
           </Button>
-          <Typography variant="body1" color="white" fontSize="23px">
-            BACK TO TOP
-          </Typography>
+        </Box>
+      </Box>
+      <Box component="section" sx={{ maxWidth: "60%", mx: "auto", py: "40px" }}>
+        <Typography variant="h4" textTransform="upperase" textAlign="center">
+          SPONSORED BY
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          <img src="/static/images/sponsors/Tempr Esports Logo.webp" />
+          <img src="/static/images/sponsors/OSG Logo.webp" />
+          <img src="/static/images/sponsors/Krysos Logo White.webp" />
+          <img src="/static/images/sponsors/Chaos Nation II White.webp" />
+          <img src="/static/images/sponsors/Silent Sins White.webp" />
         </Box>
       </Box>
     </>
