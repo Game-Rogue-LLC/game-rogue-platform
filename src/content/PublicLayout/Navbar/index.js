@@ -48,7 +48,11 @@ const Navbar = ({ sx }) => {
     if (router?.pathname) {
       const pathname = router.pathname;
       if (pathname === "/") setCurrentPage("home");
-      else if (pathname.substring(1, 6) === "event") setCurrentPage("event");
+      else if (
+        pathname.substring(1, 6) === "event" ||
+        pathname.substring(1, 6) === "match"
+      )
+        setCurrentPage("event");
       else if (pathname.substring(1, 6) === "rogue")
         setCurrentPage("rogue-social");
       else if (pathname.substring(1, 13) === "organization")
@@ -183,13 +187,13 @@ const Navbar = ({ sx }) => {
               items={[
                 {
                   name: "My Team",
-                  key: "teams",
+                  key: "my-team",
                   isLink: true,
                   to: "/team",
                 },
                 {
                   name: "Scout Opponent",
-                  key: "scouting",
+                  key: "scout-opponent",
                   isLink: true,
                   to: "/team",
                 },
@@ -215,12 +219,13 @@ const Navbar = ({ sx }) => {
                 items={[
                   {
                     name: "My Organizer",
+                    key: "my-organizer",
                     isLink: true,
-                    to: "/organization/create",
+                    to: "/organization",
                   },
                   {
                     name: "Producer Dashboard",
-                    key: "production-settings",
+                    key: "producer-dashboard",
                     isLink: true,
                     to: "/",
                   },
@@ -284,6 +289,7 @@ const Navbar = ({ sx }) => {
                   },
                   {
                     name: "_divider",
+                    key: "divider",
                   },
                   {
                     name: "WIKI",
@@ -315,13 +321,13 @@ const Navbar = ({ sx }) => {
                     name: "Team +",
                     key: "add-team",
                     isLink: true,
-                    to: "/",
+                    to: "/team/create",
                   },
                   {
                     name: "Organizer +",
                     key: "add-organizer",
                     isLink: true,
-                    to: "/",
+                    to: "/organization/create",
                   },
                 ]}
               />

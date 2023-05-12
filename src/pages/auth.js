@@ -99,6 +99,7 @@ const Auth = () => {
             alignItems: "center",
             left: "20px",
             top: "20px",
+            color: "white",
           }}
           onClick={() => {
             router.push("/");

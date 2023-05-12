@@ -135,7 +135,7 @@ const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
         >
           {items.map((item, i) => {
             if (item.name === "_divider") {
-              return <Divider />;
+              return <Divider key={item.key} />;
             } else {
               return (
                 <MenuItem
