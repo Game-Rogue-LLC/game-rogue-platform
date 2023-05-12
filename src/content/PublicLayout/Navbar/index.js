@@ -16,6 +16,7 @@ import {
   FormControl,
   styled,
   useTheme,
+  Divider,
 } from "@mui/material";
 import {
   Search,
@@ -312,19 +313,19 @@ const Navbar = ({ sx }) => {
                 isDropdown={true}
                 items={[
                   {
-                    name: "Player +",
+                    name: "Player Plus",
                     key: "add-player",
                     isLink: true,
                     to: "/",
                   },
                   {
-                    name: "Team +",
+                    name: "Team Plus",
                     key: "add-team",
                     isLink: true,
                     to: "/team/create",
                   },
                   {
-                    name: "Organizer +",
+                    name: "Organizer Plus",
                     key: "add-organizer",
                     isLink: true,
                     to: "/organization/create",
@@ -463,6 +464,7 @@ const Navbar = ({ sx }) => {
                 >
                   <Link href={"/user/" + user.user?.id}>Settings</Link>
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-team" disableRipple>
                   <Link href={"/user/" + user.user?.id}>My Team</Link>
                 </MenuItem>
@@ -473,6 +475,7 @@ const Navbar = ({ sx }) => {
                 >
                   <Link href={"/user/" + user.user?.id}>My Organizer</Link>
                 </MenuItem>
+                <Divider />
                 <MenuItem
                   onClick={handleCloseUser}
                   key="my-profile"
