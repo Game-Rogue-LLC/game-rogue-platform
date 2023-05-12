@@ -14,7 +14,8 @@ import {
 export const StyledMenu = styled((props) => <Menu {...props} />)(
   ({ theme }) => ({
     "& .MuiPaper-root": {
-      background: "linear-gradient(to top,#f5851f,#000)",
+      // background: "linear-gradient(to top,#f5851f,#000)",
+      background: "linear-gradient(to top,#64370c,#2a0d00)",
       borderRadius: 0,
       // backgroundColor: '#000',
       padding: theme.spacing(1),

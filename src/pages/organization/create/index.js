@@ -171,7 +171,7 @@ const Page = (props) => {
             )}
           </FormControl>
         </Grid>
-        <Grid item xs={12} lg={4}>
+        {/* <Grid item xs={12} lg={4}>
           <ColorSelect
             name="primary"
             label="Primary"
@@ -184,7 +184,7 @@ const Page = (props) => {
         </Grid>
         <Grid item xs={12} lg={4}>
           <ColorSelect name="tertiary" label="Tertiary" />
-        </Grid>
+        </Grid> */}
         <Grid item>
           <Button
             variant="contained"
