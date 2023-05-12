@@ -29,6 +29,8 @@ const Page = (props) => {
 
   useEffect(() => {
     setTitle("ORGANIZATION");
+    if (Object.keys(organization.organizations).length === 0)
+      router.push("/organization/create");
     organization.setCurrent(null);
     event.setCurrent(null);
   }, []);
