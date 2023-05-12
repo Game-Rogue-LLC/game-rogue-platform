@@ -121,7 +121,10 @@ const Auth = () => {
           >
             <Box maxWidth="sm">
               <Box className="gr-login-banner" sx={{ py: 4 }}>
-                <img src="/GR_Letters.png" />
+                <img
+                  src="/GR_Letters.png"
+                  style={{ filter: "brightness(0)" }}
+                />
               </Box>
               <Box sx={{ mt: 4, px: 4 }}></Box>
               <Box sx={{ mt: 2, p: 4 }}>
