@@ -131,7 +131,9 @@ const Page = (props) => {
           down: null,
           tournamentRoundText: `${val.round}`,
           startTime: "",
-          state: "DONE",
+          state: "CREATED",
+          start: event.events[eid].startAt,
+          end: event.events[eid].endAt,
           participants: newParticipants,
           createdAt: new Date(),
         };
@@ -202,7 +204,9 @@ const Page = (props) => {
           down: null,
           tournamentRoundText: `${val.round}`,
           startTime: "",
-          state: "DONE",
+          state: "CREATED",
+          start: event.events[eid].startAt,
+          end: event.events[eid].endAt,
           participants: newParticipants,
         };
 
@@ -299,7 +303,9 @@ const Page = (props) => {
           nextMatchId: null,
           tournamentRoundText: `${val.round}`,
           startTime: "",
-          state: "DONE",
+          state: "CREATED",
+          start: event.events[eid].startAt,
+          end: event.events[eid].endAt,
           participants: newParticipants,
         };
 

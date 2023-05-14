@@ -8,6 +8,7 @@ import { Carousel } from "react-responsive-carousel";
 import { useAuthContext } from "@/src/context/AuthContext";
 import PublicLayout from "@/src/content/PublicLayout";
 import Benefits from "@/src/components/widgets/Benefits";
+import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
 
 const featuredTournaments = [
   {
@@ -250,152 +251,9 @@ const MyApp = (props) => {
           </Button>
         </Typography>
       </Box>
-      <Box
-        component={"section"}
-        sx={{
-          backgroundColor: "black",
-          paddingBottom: "50px",
-          borderBottom: "solid 3px #f5831f",
-        }}
-      >
-        <Box
-          sx={{
-            position: "relative",
-            width: "85%",
-            mt: 1,
-            mx: "auto",
-          }}
-        >
-          <Typography variant="h1" fontSize={"40px"} fontStyle={"italic"}>
-            FEATURED TOURNAMENTS
-          </Typography>
-          <Stepper
-            data={featuredTournaments}
-            sx={{
-              marginTop: "29px",
-              position: "relative",
-              boxShadow: "rgba(255,255,255,0.6) 0px 0px 50px 9px",
-            }}
-            config={{
-              swipeable: false,
-              showThumbs: false,
-              showStatus: false,
-              infiniteLoop: true,
-              // showIndicators: false,
-              animationHandler: (props, state) => {
-                const transitionTime = props.transitionTime + "ms";
-                const transitionTimingFunction = "ease-in-out";
 
-                let slideStyle = {
-                  position: "absolute",
-                  display: "block",
-                  zIndex: -2,
-                  minHeight: "100%",
-                  opacity: 0,
-                  top: 0,
-                  right: 0,
-                  left: 0,
-                  bottom: 0,
-                  transitionTimingFunction: transitionTimingFunction,
-                  msTransitionTimingFunction: transitionTimingFunction,
-                  MozTransitionTimingFunction: transitionTimingFunction,
-                  WebkitTransitionTimingFunction: transitionTimingFunction,
-                  OTransitionTimingFunction: transitionTimingFunction,
-                };
+      <FeaturedTournaments />
 
-                if (!state.swiping) {
-                  slideStyle = {
-                    ...slideStyle,
-                    WebkitTransitionDuration: transitionTime,
-                    MozTransitionDuration: transitionTime,
-                    OTransitionDuration: transitionTime,
-                    transitionDuration: transitionTime,
-                    msTransitionDuration: transitionTime,
-                  };
-                }
-
-                return {
-                  slideStyle,
-                  selectedStyle: {
-                    ...slideStyle,
-                    opacity: 1,
-                    position: "relative",
-                  },
-                  prevStyle: { ...slideStyle },
-                };
-              },
-              renderArrowPrev: (clickHandler) => (
-                <button
-                  onClick={clickHandler}
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    display: "flex",
-                    padding: 30,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    border: "none",
-                    zIndex: 20,
-                  }}
-                >
-                  <ArrowBackIos
-                    sx={{ fontSize: "60px", ":hover": { opacity: 0.7 } }}
-                  ></ArrowBackIos>
-                </button>
-              ),
-              renderArrowNext: (clickHandler) => (
-                <button
-                  onClick={clickHandler}
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    right: 0,
-                    display: "flex",
-                    padding: 30,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    border: "none",
-                    zIndex: 20,
-                  }}
-                >
-                  <ArrowForwardIos
-                    sx={{ fontSize: "60px", ":hover": { opacity: 0.7 } }}
-                  ></ArrowForwardIos>
-                </button>
-              ),
-              renderIndicator: (clickHandler, isSelected, index, label) => (
-                <button
-                  onClick={clickHandler}
-                  style={{
-                    width: "10px",
-                    height: "10px",
-                    marginInline: "10px",
-                    borderRadius: "50%",
-                    outline: "solid 2px white",
-                    outlineOffset: "1px",
-                    backgroundColor:
-                      isSelected === true ? "white" : "transparent",
-                    cursor: "pointer",
-                    border: "none",
-                    zIndex: 20,
-                    dropShadow: "0,0,5px,white",
-                    ":hover": {
-                      backgroundColor: "white",
-                    },
-                  }}
-                ></button>
-              ),
-            }}
-          />
-        </Box>
-      </Box>
       <Box
         component={"section"}
         sx={{

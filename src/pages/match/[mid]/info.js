@@ -239,7 +239,8 @@ const Page = (props) => {
                   {/* {event?.events[eid]?.name} */}
                   <Chip
                     label={
-                      "Round " + romanNumber(event?.events[eid]?.currentRound)
+                      // "Round " + romanNumber(event?.events[eid]?.currentRound)
+                      "Round " + romanNumber(item?.round)
                     }
                     sx={{
                       backgroundColor: "rgba(0,0,0,.5)", //"#393D40",

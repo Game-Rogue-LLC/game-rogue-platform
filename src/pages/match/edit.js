@@ -203,7 +203,8 @@ const Page = (props) => {
     save: async (e) => {
       const { format } = event.events[eid];
       setSaving(true);
-      let saved = true;
+      let saved = true,
+        currentRound = 1;
 
       if (format == 0 || format == 1) {
         if (!matches) {
@@ -212,6 +213,7 @@ const Page = (props) => {
         }
         for (let i = 0; i < matches.length; i++) {
           const val = matches[i];
+          if (val.state === "DONE") currentRound = val.round;
           const res = await match.update(val.id, val);
           if (res.code == "failed") {
             saved = false;
@@ -219,6 +221,8 @@ const Page = (props) => {
           }
         }
       }
+
+      event.update(eid, { currentRound });
 
       if (saved) {
         // const res = await event.update(eid, { status: 1 });
@@ -415,6 +419,7 @@ const Page = (props) => {
       const { format } = event.events[eid];
       let newGames = [...matches];
 
+      newGames[selectedMatch].participants[0].state = "DONE";
       newGames[selectedMatch].participants[0].score = score1;
       newGames[selectedMatch].participants[0].resultText = score1;
       newGames[selectedMatch].participants[0].status = "DONE";

@@ -219,14 +219,28 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                 })}
               </TeamSelect>
             )}
-            <LoadingButton
-              loading={registering}
-              variant="contained"
-              sx={{ width: "100%", mt: 1, ...buttonStyle }}
-              onClick={user ? handleRegister : handleLogin}
-            >
-              {user ? "Register to an event" : "Login to Register"}
-            </LoadingButton>
+            {!user ? (
+              <Button
+                variant="contained"
+                sx={{ width: "100%", mt: 1, ...buttonStyle }}
+                onClick={handleLogin}
+              >
+                Login to Register
+              </Button>
+            ) : (
+              <LoadingButton
+                loading={registering}
+                variant="contained"
+                sx={{ width: "100%", mt: 1, ...buttonStyle }}
+                onClick={handleRegister}
+                disabled={
+                  dayjs(currentTime).isBefore(startTime) ||
+                  dayjs(currentTime).isAfter(endTime)
+                }
+              >
+                Register to an event
+              </LoadingButton>
+            )}
           </Paper>
         </Grid>
       </Grid>

@@ -20,9 +20,11 @@ import RichTextInput from "@/src/components/input/RichTextInput";
 import SelectInput from "@/src/components/input/SelectInput";
 import * as config from "@/src/config/global";
 import Colors from "@/src/components/Colors";
+import { useStyleContext } from "@/src/context/StyleContext";
 // import DateRangePicker from "@/src/components/datetime/DateRangePicker";
 
 const EventInput = ({ handle, inputs, disabled, errors }) => {
+  const { buttonStyle } = useStyleContext();
   const { organization } = useTournamentContext();
   return (
     <>
@@ -46,6 +48,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   variant="contained"
                   component="label"
                   disabled={disabled}
+                  sx={{ ...buttonStyle }}
                 >
                   UPLOAD DARK LOGO
                   <input
@@ -62,6 +65,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   component="label"
                   disabled={disabled}
                   onClick={handle.removeDarkLogo}
+                  sx={{ ...buttonStyle }}
                 >
                   REMOVE DARK LOGO
                 </Button>
@@ -88,6 +92,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   variant="contained"
                   component="label"
                   disabled={disabled}
+                  sx={{ ...buttonStyle }}
                 >
                   UPLOAD LIGHT LOGO
                   <input
@@ -104,6 +109,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   component="label"
                   disabled={disabled}
                   onClick={handle.removeLightLogo}
+                  sx={{ ...buttonStyle }}
                 >
                   REMOVE LIGHT LOGO
                 </Button>
