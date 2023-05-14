@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from "react";
 import {
   Box,
   Button,
@@ -22,29 +22,37 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
-  Checkbox
-} from '@mui/material'
+  Checkbox,
+} from "@mui/material";
 
-import { LoadingButton } from '@mui/lab'
-import AdminLayout from '@/src/content/AdminLayout'
-import { useAppContext } from '@/src/context/app'
-import { useRouter } from 'next/router'
-import { CreditCard, Instagram, Twitter, YouTube } from '@mui/icons-material'
-import ContentBlock from '@/src/components/widgets/ContentBlock'
-import { useEventContext } from '@/src/context/EventContext'
-import { useTournamentContext } from '@/src/context/TournamentContext'
-import Validator from 'validatorjs'
-import { model, rules, customMessages } from '@/lib/firestore/collections/organization';
-import { htmlToMarkdown } from '@/src/utils/html-markdown';
+import { LoadingButton } from "@mui/lab";
+import AdminLayout from "@/src/content/AdminLayout";
+import { useAppContext } from "@/src/context/app";
+import { useRouter } from "next/router";
+import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
+import ContentBlock from "@/src/components/widgets/ContentBlock";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+import Validator from "validatorjs";
+import {
+  model,
+  rules,
+  customMessages,
+} from "@/lib/firestore/collections/organization";
+import ColorSelect from "@/src/components/dropdown/ColorSelect";
+import { htmlToMarkdown } from "@/src/utils/html-markdown";
+import Colors from "@/src/components/Colors";
+import { brighterColor, isBrightColor } from "@/src/utils/utils";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const initialInputs = {
-  ...model
-}
+  ...model,
+};
 
 const Page = (props) => {
-  const router = useRouter()
-  const theme = useTheme()
-  const { setTitle } = useAppContext()
+  const router = useRouter();
+  const theme = useTheme();
+  const { setTitle } = useAppContext();
+  const { colors, setColors, buttonStyle } = useStyleContext();
   const { organization, event } = useTournamentContext();
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -56,28 +64,48 @@ const Page = (props) => {
     name: false,
     social: false,
     contentBlock: false,
-    features: false
-  })
+    features: false,
+  });
   const [inputs, setInputs] = useState({ ...initialInputs });
 
-  useEffect(() => {
-    setTitle('ORGANIZER PROFILE');
-  }, [])
+  const onColorChange = (name, value) => {
+    setInputs({
+      ...inputs,
+      [name]: value?.hex,
+    });
+  };
 
   useEffect(() => {
-    if (router?.query.organization) {
+    setColors({
+      primary: inputs?.primary,
+      secondary: inputs?.secondary,
+      tertiary: inputs?.tertiary,
+    });
+  }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
+
+  useEffect(() => {
+    setTitle("ORGANIZER PROFILE");
+  }, []);
+
+  useEffect(() => {
+    if (router?.query?.organization) {
       setOID(router.query.organization);
       organization.setCurrent(oid);
-      event.setCurrent(null)
+      event.setCurrent(null);
     }
-  }, [router])
+  }, [router?.query?.organization]);
 
   useEffect(() => {
-    setInputs(prev => ({
+    setInputs((prev) => ({
       ...prev,
-      ...organization.organizations[oid]
-    }))
-  }, [organization.organizations, oid])
+      ...organization.organizations[oid],
+    }));
+    // setColors({
+    //   primary: organization.organizations[oid].primary,
+    //   secondary: organization.organizations[oid].secondary,
+    //   tertiary: organization.organizations[oid].tertiary,
+    // });
+  }, [organization.organizations, oid]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -87,72 +115,75 @@ const Page = (props) => {
     }
     setErrors({});
     return true;
-  }
+  };
 
   const handle = {
     saveName: async (e) => {
       if (validate(inputs, rules, customMessages) === false) return;
 
-      setSaving(prev => ({
+      setSaving((prev) => ({
         ...prev,
-        name: true
-      }))
+        name: true,
+      }));
 
       const res = await organization.update(oid, {
         name: inputs?.name,
-        tagline: inputs?.tagline
-      })
+        tagline: inputs?.tagline,
+        primary: inputs?.primary,
+        secondary: inputs?.secondary,
+        tertiary: inputs?.tertiary,
+      });
 
-      if (res.code == 'succeed') {
+      if (res.code == "succeed") {
         alert(res.message);
       }
 
-      setSaving(prev => ({
+      setSaving((prev) => ({
         ...prev,
-        name: false
-      }))
+        name: false,
+      }));
     },
     saveLink: async (e) => {
-      setSaving(prev => ({
+      setSaving((prev) => ({
         ...prev,
-        social: true
-      }))
+        social: true,
+      }));
 
       const res = await organization.update(oid, {
         twitterLink: inputs?.twitterLink,
         instagramLink: inputs?.instagramLink,
         youtubeLink: inputs?.youtubeLink,
         twitchLink: inputs?.twitchLink,
-        discordLink: inputs?.discordLink
-      })
+        discordLink: inputs?.discordLink,
+      });
 
-      if (res.code == 'succeed') {
+      if (res.code == "succeed") {
         alert(res.message);
       }
 
-      setSaving(prev => ({
+      setSaving((prev) => ({
         ...prev,
-        social: false
-      }))
+        social: false,
+      }));
     },
     saveContentBlock: async (e) => {
-      setSaving(prev => ({
+      setSaving((prev) => ({
         ...prev,
-        contentBlock: true
-      }))
+        contentBlock: true,
+      }));
 
       let newOrganization = {
         contentBlock: {
           ...inputs?.contentBlock,
           // text: htmlToMarkdown(inputs?.contentBlock.text)
-        }
-      }
+        },
+      };
 
       let uploaded = true;
       if (contentImage) {
         uploaded = false;
         const res = await organization.upload(contentImage, oid);
-        if (res.code === 'succeed') {
+        if (res.code === "succeed") {
           newOrganization.contentBlock.image = res.url;
           uploaded = true;
         } else {
@@ -161,54 +192,56 @@ const Page = (props) => {
       }
       if (uploaded) {
         const res = await organization.update(oid, newOrganization);
-        if (res.code === 'succeed') {
-          alert('Saved successfully!');
+        if (res.code === "succeed") {
+          alert("Saved successfully!");
         } else {
           console.error(res.message);
         }
       }
 
-      setSaving(prev => ({
+      setSaving((prev) => ({
         ...prev,
-        contentBlock: false
-      }))
+        contentBlock: false,
+      }));
     },
     saveFeatures: async (e) => {
-      setSaving(prev => ({
+      setSaving((prev) => ({
         ...prev,
-        features: true
-      }))
+        features: true,
+      }));
 
-      const res = await organization.update(oid, {
-        twitter: inputs?.twitter,
-        instagram: inputs?.instagram,
-        youtube: inputs?.youtube,
-        twitch: inputs?.twitch,
-        discord: inputs?.discord,
-        crowdFund: inputs?.crowdFund,
-        actualFund: inputs?.actualFund,
-        credit: inputs?.credit,
-        paypal: inputs?.paypal
-      }).then(res => {
-        if (res.code == 'succeed')
-          alert(res.message)
-        setSaving(prev => ({
-          ...prev,
-          features: false
-        }))
-      }).catch(err => {
-        setSaving(prev => ({
-          ...prev,
-          features: false
-        }))
-      })
+      const res = await organization
+        .update(oid, {
+          twitter: inputs?.twitter,
+          instagram: inputs?.instagram,
+          youtube: inputs?.youtube,
+          twitch: inputs?.twitch,
+          discord: inputs?.discord,
+          crowdFund: inputs?.crowdFund,
+          actualFund: inputs?.actualFund,
+          credit: inputs?.credit,
+          paypal: inputs?.paypal,
+        })
+        .then((res) => {
+          if (res.code == "succeed") alert(res.message);
+          setSaving((prev) => ({
+            ...prev,
+            features: false,
+          }));
+        })
+        .catch((err) => {
+          setSaving((prev) => ({
+            ...prev,
+            features: false,
+          }));
+        });
     },
     delete: (e) => {
       setOpen(false);
-      setSaving(prev => ({
+      setSaving((prev) => ({
         ...prev,
-        disband: true
-      }))
+        disband: true,
+      }));
       organization.delete(oid);
     },
     // Open/Close the Modal for delete confirm
@@ -220,47 +253,54 @@ const Page = (props) => {
     },
     input: (e) => {
       let { name, type, value } = e.target;
-      setInputs(prev => ({
+      setInputs((prev) => ({
         ...prev,
-        [name]: value
-      }))
+        [name]: value,
+      }));
     },
     switch: (e) => {
-      const { name, checked } = e.target
-      setInputs(prev => ({
+      const { name, checked } = e.target;
+      setInputs((prev) => ({
         ...prev,
-        [name]: checked
-      }))
+        [name]: checked,
+      }));
     },
     changeContentBlock: (data) => {
-      setInputs(prev => ({
+      setInputs((prev) => ({
         ...prev,
         contentBlock: {
           ...prev.contentBlock,
           ...data,
-        }
-      }))
+        },
+      }));
     },
     uploadContentImageAction: (e, name) => {
       const img = e.target?.files[0];
       if (img.size > 2048000) return;
       setContentImage(img);
       const path = URL.createObjectURL(img);
-      setInputs(prev => ({
+      setInputs((prev) => ({
         ...prev,
         contentBlock: {
           ...prev.contentBlock,
-          image: path
-        }
-      }))
-    }
-  }
+          image: path,
+        },
+      }));
+    },
+  };
 
   return (
     <Box>
       <Paper sx={{ p: 4 }}>
-        <Typography variant='h6'>Disband/Delete Profile</Typography>
-        <LoadingButton loading={saving?.disband} variant='contained' sx={{ mt: 2 }} onClick={handle.modalOpen}>Disband</LoadingButton>
+        <Typography variant="h6">Disband/Delete Profile</Typography>
+        <LoadingButton
+          loading={saving?.disband}
+          variant="contained"
+          sx={{ mt: 2, ...buttonStyle }}
+          onClick={handle.modalOpen}
+        >
+          Disband
+        </LoadingButton>
         <Dialog
           open={open}
           onClose={handle.modalClose}
@@ -276,8 +316,10 @@ const Page = (props) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handle.modalClose}>Cancel</Button>
-            <Button onClick={handle.delete} autoFocus>
+            <Button onClick={handle.modalClose} sx={{ ...buttonStyle }}>
+              Cancel
+            </Button>
+            <Button onClick={handle.delete} sx={{ ...buttonStyle }} autoFocus>
               OK
             </Button>
           </DialogActions>
@@ -285,97 +327,188 @@ const Page = (props) => {
       </Paper>
 
       <Paper sx={{ p: 4, mt: 4 }}>
-        <Typography variant='h6'>Organization Detail</Typography>
-        <InputLabel htmlFor="org-name" sx={{ mt: 2 }}>Organization Name</InputLabel>
-        <FormHelperText>Controls the publically visible name of this organization.</FormHelperText>
-        <FormControl fullWidth error={false}>
-          <OutlinedInput id="org-name" name="name" aria-describedby="org-name-helper" value={inputs?.name || ''} onChange={handle.input} disabled={disabled}
-            sx={{ mt: 1 }} fullWidth required />
-        </FormControl>
+        <Box>
+          <Typography variant="h6">Organization Detail</Typography>
+          <InputLabel htmlFor="org-name" sx={{ mt: 2 }}>
+            Organization Name
+          </InputLabel>
+          <FormHelperText>
+            Controls the publically visible name of this organization.
+          </FormHelperText>
+          <FormControl fullWidth error={false}>
+            <OutlinedInput
+              id="org-name"
+              name="name"
+              aria-describedby="org-name-helper"
+              value={inputs?.name || ""}
+              onChange={handle.input}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              required
+            />
+          </FormControl>
 
-        <InputLabel htmlFor="org-tag" sx={{ mt: 2 }}>Tagline</InputLabel>
-        <FormControl fullWidth sx={{ mt: 1 }}>
-          <OutlinedInput id="org-tag" name="tagline" aria-describedby="org-tag-helper" value={inputs?.tagline || ''} inputProps={{ maxLength: 50 }} required
-            onChange={handle.input} disabled={disabled} fullWidth />
-        </FormControl>
+          <InputLabel htmlFor="org-tag" sx={{ mt: 2 }}>
+            Tagline
+          </InputLabel>
+          <FormControl fullWidth sx={{ mt: 1 }}>
+            <OutlinedInput
+              id="org-tag"
+              name="tagline"
+              aria-describedby="org-tag-helper"
+              value={inputs?.tagline || ""}
+              inputProps={{ maxLength: 50 }}
+              required
+              onChange={handle.input}
+              disabled={disabled}
+              fullWidth
+            />
+          </FormControl>
+        </Box>
+
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="h6">Colors</Typography>
+          <Colors colors={inputs} onColorChange={onColorChange} />
+        </Box>
+
         <LoadingButton
           loading={saving?.name}
           variant="contained"
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, ...buttonStyle }}
           onClick={handle.saveName}
         >
           Save
         </LoadingButton>
       </Paper>
 
-      <ContentBlock contentBlock={inputs.contentBlock} handleChange={handle.changeContentBlock} save={handle.saveContentBlock}
-        handleUpload={handle.uploadContentImageAction} saving={saving?.contentBlock} />
+      <ContentBlock
+        contentBlock={inputs.contentBlock}
+        handleChange={handle.changeContentBlock}
+        save={handle.saveContentBlock}
+        handleUpload={handle.uploadContentImageAction}
+        saving={saving?.contentBlock}
+        buttonStyle={buttonStyle}
+      />
 
       <Paper sx={{ p: 4, mt: 4 }}>
-        <Typography variant='h6'>Social Accounts</Typography>
+        <Typography variant="h6">Social Accounts</Typography>
         <Box sx={{ mt: 2 }}>
           <InputLabel htmlFor="org-twitter">Twitter</InputLabel>
           <FormControl fullWidth>
-            <OutlinedInput id="org-twitter" name="twitterLink" aria-describedby="org-twitter-helper" value={inputs?.twitterLink || ''} onChange={handle.input}
-              disabled={disabled} sx={{ mt: 1 }} fullWidth startAdornment={
-                <InputAdornment position='start'>
-                  <Twitter fontSize='large' />
+            <OutlinedInput
+              id="org-twitter"
+              name="twitterLink"
+              aria-describedby="org-twitter-helper"
+              value={inputs?.twitterLink || ""}
+              onChange={handle.input}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              startAdornment={
+                <InputAdornment position="start">
+                  <Twitter fontSize="large" />
                 </InputAdornment>
-              } />
+              }
+            />
           </FormControl>
         </Box>
         <Box sx={{ mt: 2 }}>
           <InputLabel htmlFor="org-instagram">Instagram</InputLabel>
           <FormControl fullWidth>
-            <OutlinedInput id="org-instagram" name="instagramLink" aria-describedby="org-instagram-helper" value={inputs?.instagramLink || ''} onChange={handle.input}
-              disabled={disabled} sx={{ mt: 1 }} fullWidth startAdornment={
-                <InputAdornment position='start'>
-                  <Instagram fontSize='large' />
+            <OutlinedInput
+              id="org-instagram"
+              name="instagramLink"
+              aria-describedby="org-instagram-helper"
+              value={inputs?.instagramLink || ""}
+              onChange={handle.input}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              startAdornment={
+                <InputAdornment position="start">
+                  <Instagram fontSize="large" />
                 </InputAdornment>
-              } />
+              }
+            />
           </FormControl>
         </Box>
         <Box sx={{ mt: 2 }}>
           <InputLabel htmlFor="org-youtube">YouTube</InputLabel>
           <FormControl fullWidth>
-            <OutlinedInput id="org-youtube" name="youtubeLink" aria-describedby="org-youtube-helper" value={inputs?.youtubeLink || ''} onChange={handle.input}
-              disabled={disabled} sx={{ mt: 1 }} fullWidth startAdornment={
-                <InputAdornment position='start'>
-                  <YouTube fontSize='large' />
+            <OutlinedInput
+              id="org-youtube"
+              name="youtubeLink"
+              aria-describedby="org-youtube-helper"
+              value={inputs?.youtubeLink || ""}
+              onChange={handle.input}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              startAdornment={
+                <InputAdornment position="start">
+                  <YouTube fontSize="large" />
                 </InputAdornment>
-              } />
+              }
+            />
           </FormControl>
         </Box>
         <Box sx={{ mt: 2 }}>
           <InputLabel htmlFor="org-discord">Discord</InputLabel>
           <FormControl fullWidth>
-            <OutlinedInput id="org-discord" name="discordLink" aria-describedby="org-discord-helper" value={inputs?.discordLink || ''} onChange={handle.input}
-              disabled={disabled} sx={{ mt: 1 }} fullWidth startAdornment={
-                <InputAdornment position='start'>
-                  <img src='/static/images/discord.svg' height={'30px'} />
+            <OutlinedInput
+              id="org-discord"
+              name="discordLink"
+              aria-describedby="org-discord-helper"
+              value={inputs?.discordLink || ""}
+              onChange={handle.input}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              startAdornment={
+                <InputAdornment position="start">
+                  <img src="/static/images/discord.svg" height={"30px"} />
                 </InputAdornment>
-              } />
+              }
+            />
           </FormControl>
         </Box>
         <Box sx={{ mt: 2 }}>
           <InputLabel htmlFor="org-twitch">Twitch</InputLabel>
           <FormControl fullWidth>
-            <OutlinedInput id="org-twitch" name="twitchLink" aria-describedby="org-twitch-helper" value={inputs?.twitchLink || ''} onChange={handle.input}
-              disabled={disabled} sx={{ mt: 1 }} fullWidth startAdornment={
-                <InputAdornment position='start'>
-                  <SvgIcon fontSize='large'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                      <path fill="currentColor" d="M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29l-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43Z" />
+            <OutlinedInput
+              id="org-twitch"
+              name="twitchLink"
+              aria-describedby="org-twitch-helper"
+              value={inputs?.twitchLink || ""}
+              onChange={handle.input}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              startAdornment={
+                <InputAdornment position="start">
+                  <SvgIcon fontSize="large">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29l-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43Z"
+                      />
                     </svg>
                   </SvgIcon>
                 </InputAdornment>
-              } />
+              }
+            />
           </FormControl>
         </Box>
         <LoadingButton
           loading={saving?.social}
           variant="contained"
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, ...buttonStyle }}
           onClick={handle.saveLink}
         >
           Save
@@ -383,61 +516,140 @@ const Page = (props) => {
       </Paper>
 
       <Paper sx={{ p: 4, mt: 4 }}>
-        <Typography variant='h6'>Turn on/off features</Typography>
+        <Typography variant="h6">Turn on/off features</Typography>
         <FormGroup sx={{ mt: 2 }}>
-          <FormControlLabel control={<Switch checked={inputs?.signup} name='signup' onChange={handle.switch} />} label="Sign-up" />
-          <FormControlLabel control={<Switch checked={inputs?.discord} name='discord' onChange={handle.switch} />} label="Discord community preview" />
-          <FormControlLabel control={<Switch checked={inputs?.twitter} name='twitter' onChange={handle.switch} />} label="Show recent Twitter activity" />
-          <FormControlLabel control={<Switch checked={inputs?.instagram} name='instagram' onChange={handle.switch} />} label="Show recent Instagram activity" />
-          <FormControlLabel control={<Switch checked={inputs?.youtube} name='youtube' onChange={handle.switch} />} label="Show recent YouTube videos" />
-          <FormControlLabel control={<Switch checked={inputs?.twitch} name='twitch' onChange={handle.switch} />} label="Twitch streams" />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={inputs?.signup}
+                name="signup"
+                onChange={handle.switch}
+              />
+            }
+            label="Sign-up"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={inputs?.discord}
+                name="discord"
+                onChange={handle.switch}
+              />
+            }
+            label="Discord community preview"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={inputs?.twitter}
+                name="twitter"
+                onChange={handle.switch}
+              />
+            }
+            label="Show recent Twitter activity"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={inputs?.instagram}
+                name="instagram"
+                onChange={handle.switch}
+              />
+            }
+            label="Show recent Instagram activity"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={inputs?.youtube}
+                name="youtube"
+                onChange={handle.switch}
+              />
+            }
+            label="Show recent YouTube videos"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={inputs?.twitch}
+                name="twitch"
+                onChange={handle.switch}
+              />
+            }
+            label="Twitch streams"
+          />
         </FormGroup>
-        <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+        <Grid container spacing={2} sx={{ alignItems: "center" }}>
           <Grid item>
-            <FormControlLabel control={<Switch defaultChecked />} label="Crowdfund" />
+            <FormControlLabel
+              control={<Switch defaultChecked />}
+              label="Crowdfund"
+            />
           </Grid>
           <Grid item>
-            <OutlinedInput size='small' name='actualFund' value={Number(inputs?.actualFund).toFixed(2)} disabled />
+            <OutlinedInput
+              size="small"
+              name="actualFund"
+              value={Number(inputs?.actualFund).toFixed(2)}
+              disabled
+            />
           </Grid>
           <Grid item>
-            <span style={{ fontSize: '30px' }}>/</span>
+            <span style={{ fontSize: "30px" }}>/</span>
           </Grid>
           <Grid item>
-            <OutlinedInput size='small' name='crowdFund' value={inputs?.crowdFund} onChange={handle.input} />
+            <OutlinedInput
+              size="small"
+              name="crowdFund"
+              value={inputs?.crowdFund}
+              onChange={handle.input}
+            />
           </Grid>
         </Grid>
-        <Box display='flex' sx={{ pl: 5 }}>
+        <Box display="flex" sx={{ pl: 5 }}>
           <Box>
-            <Box display='flex' alignItems='center'>
-              <Checkbox name='credit' checked={inputs?.credit} onChange={handle.switch} />
+            <Box display="flex" alignItems="center">
+              <Checkbox
+                name="credit"
+                checked={inputs?.credit}
+                onChange={handle.switch}
+              />
               <CreditCard />
-              <Typography variant='body2' sx={{ ml: 2 }}>Credit/Debit Card</Typography>
+              <Typography variant="body2" sx={{ ml: 2 }}>
+                Credit/Debit Card
+              </Typography>
             </Box>
-            <Box>
-            </Box>
+            <Box></Box>
           </Box>
           <Box>
-            <Box display='flex' alignItems='center'>
-              <Checkbox name='paypal' checked={inputs?.paypal} onChange={handle.switch} />
-              <img src='/static/images/paypal-color.svg' style={{ height: '30px' }} />
+            <Box display="flex" alignItems="center">
+              <Checkbox
+                name="paypal"
+                checked={inputs?.paypal}
+                onChange={handle.switch}
+              />
+              <img
+                src="/static/images/paypal-color.svg"
+                style={{ height: "30px" }}
+              />
             </Box>
           </Box>
         </Box>
         <LoadingButton
           loading={saving?.features}
           variant="contained"
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, ...buttonStyle }}
           onClick={handle.saveFeatures}
         >
           Save
         </LoadingButton>
       </Paper>
     </Box>
-  )
-}
+  );
+};
 
 Page.getLayout = (page) => {
-  return <AdminLayout>{page}</AdminLayout>
-}
+  return <AdminLayout>{page}</AdminLayout>;
+};
 
 export default Page;

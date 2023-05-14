@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import {
   Box,
@@ -27,24 +27,17 @@ import {
   ChromePicker,
 } from "@hello-pangea/color-picker";
 import ColorSelect from "@/src/components/dropdown/ColorSelect";
+import {
+  model,
+  rules,
+  customMessages,
+} from "@/lib/firestore/collections/organization";
+import colorConvert from "color-convert";
+import { brighterColor, isBrightColor } from "@/src/utils/utils";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const initialInputs = {
-  name: "",
-  tagline: "",
-  primary: "#000",
-  secondary: "#000",
-  tertiary: "#000",
-  deleted: false,
-};
-
-const rules = {
-  name: "required",
-  tagline: "required",
-};
-
-const customMessages = {
-  "required.name": "Organization Name is required.",
-  "required.tagline": "Tagline is required.",
+  ...model,
 };
 
 const Page = (props) => {
@@ -52,6 +45,7 @@ const Page = (props) => {
   const { user } = useAuthContext();
   const router = useRouter();
   const { setTitle } = useAppContext();
+  const { colors, setColors, buttonStyle } = useStyleContext();
   const { organization, event } = useTournamentContext();
   const [inputs, setInputs] = useState({ ...initialInputs });
   const [errors, setErrors] = useState({});
@@ -67,6 +61,14 @@ const Page = (props) => {
     if (organization.activeCount >= 3) setDisabled(true);
     else setDisabled(false);
   }, [organization.activeCount]);
+
+  useEffect(() => {
+    setColors({
+      primary: inputs?.primary,
+      secondary: inputs?.secondary,
+      tertiary: inputs?.tertiary,
+    });
+  }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -171,25 +173,46 @@ const Page = (props) => {
             )}
           </FormControl>
         </Grid>
-        {/* <Grid item xs={12} lg={4}>
-          <ColorSelect
-            name="primary"
-            label="Primary"
-            value={inputs?.primary}
-            onChange={(val) => onColorChange("primary", val)}
-          />
+        <Grid item xs={12} container spacing={2}>
+          <Grid item xs={12} lg={4}>
+            <InputLabel>Primary</InputLabel>
+            <ColorSelect
+              name="primary"
+              label="Primary"
+              value={inputs?.primary}
+              onChange={(val) => onColorChange("primary", val)}
+              sx={{ mt: 1 }}
+            />
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <InputLabel>Secondary</InputLabel>
+            <ColorSelect
+              name="secondary"
+              label="Secondary"
+              value={inputs?.secondary}
+              onChange={(val) => onColorChange("secondary", val)}
+              sx={{ mt: 1 }}
+            />
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <InputLabel>Tertiary</InputLabel>
+            <ColorSelect
+              name="tertiary"
+              label="Tertiary"
+              value={inputs?.tertiary}
+              onChange={(val) => onColorChange("tertiary", val)}
+              sx={{ mt: 1 }}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={4}>
-          <ColorSelect name="secondary" label="Secondary" />
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <ColorSelect name="tertiary" label="Tertiary" />
-        </Grid> */}
         <Grid item>
           <Button
             variant="contained"
             onClick={handle.create}
             disabled={disabled}
+            sx={{
+              ...buttonStyle,
+            }}
           >
             Register
           </Button>

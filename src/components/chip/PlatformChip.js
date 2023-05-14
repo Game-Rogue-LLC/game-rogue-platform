@@ -1,15 +1,19 @@
-import {
-  Chip
-} from "@mui/material"
+import { Chip } from "@mui/material";
 import * as config from "@/src/config/global";
 
 const PlatformChip = ({ type, sx }) => {
   return (
     <Chip
       label={config.PLATFORMS[type].name}
-      sx={{ backgroundColor: "#00000096", color: "white", fontSize: "1rem", backdropFilter: "blur(2px)", ...sx }}
+      sx={{
+        backgroundColor: "#393D40",
+        color: "white",
+        fontSize: "1rem",
+        backdropFilter: "blur(2px)",
+        ...sx,
+      }}
     />
-  )
-}
+  );
+};
 
 export default PlatformChip;

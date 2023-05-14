@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from "react";
 import {
   Box,
   Button,
@@ -10,33 +10,47 @@ import {
   Paper,
   Select,
   Typography,
-  useTheme
-} from '@mui/material'
-import { useRouter } from 'next/router';
-import { LoadingButton } from '@mui/lab';
-import _ from 'lodash';
+  useTheme,
+} from "@mui/material";
+import { useRouter } from "next/router";
+import { LoadingButton } from "@mui/lab";
+import _ from "lodash";
 
-import AdminLayout from '@/src/content/AdminLayout';
-import { useAppContext } from '@/src/context/app';
-import DatePicker from '@/src/components/datetime/DatePicker';
-import { useMatchContext } from '@/src/context/MatchContext';
-import { useTournamentContext } from '@/src/context/TournamentContext';
-import { EVENT_FORMATS, EVENT_STATES, MATCH_STATES, SCORE_DRAW, SCORE_LOSE, SCORE_WIN } from '@/src/config/global';
-import { DoubleElimination, SingleElimination, Stepladder } from 'tournament-pairings';
-import { nanoid } from 'nanoid';
-import SingleEliminationBracket from '@/src/components/tournament-bracket/SingleEliminationBracket';
-import DoubleEliminationBracket from '@/src/components/tournament-bracket/DoubleEliminationBracket';
-import LadderEliminationBracket from '@/src/components/tournament-bracket/LadderEliminationBracket';
-import FullCalendar from '@/src/components/datetime/FullCalendar.js';
-import ScoresDialog from '@/src/components/dialog/ScoresDialog';
-import DatePickDialog from '@/src/components/dialog/DatePickDialog';
-import { NULL_FUNCTION } from '@/src/config/global';
+import AdminLayout from "@/src/content/AdminLayout";
+import { useAppContext } from "@/src/context/app";
+import DatePicker from "@/src/components/datetime/DatePicker";
+import { useMatchContext } from "@/src/context/MatchContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+import {
+  EVENT_FORMATS,
+  EVENT_STATES,
+  MATCH_STATES,
+  SCORE_DRAW,
+  SCORE_LOSE,
+  SCORE_WIN,
+} from "@/src/config/global";
+import {
+  DoubleElimination,
+  SingleElimination,
+  Stepladder,
+} from "tournament-pairings";
+import { nanoid } from "nanoid";
+import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
+import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
+import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
+import FullCalendar from "@/src/components/datetime/FullCalendar.js";
+import ScoresDialog from "@/src/components/dialog/ScoresDialog";
+import DatePickDialog from "@/src/components/dialog/DatePickDialog";
+import { NULL_FUNCTION } from "@/src/config/global";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { organization, event, team, match, matchLoading } = useTournamentContext();
+  const { setColors, buttonStyle } = useStyleContext();
+  const { organization, event, team, match, matchLoading } =
+    useTournamentContext();
   const [matches, setMatches] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
@@ -55,7 +69,7 @@ const Page = (props) => {
   const [changingStatus, setChangingStatus] = useState(false);
 
   useEffect(() => {
-    setTitle('EDIT MATCHES');
+    setTitle("EDIT MATCHES");
     // const timer = setInterval(() => {
     //   const currentTime = new Date().getTime();
     //   match?.matches.forEach(async val => {
@@ -71,7 +85,7 @@ const Page = (props) => {
     // return () => {
     //   clearInterval(timer);
     // }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (router?.query?.event) {
@@ -81,15 +95,18 @@ const Page = (props) => {
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
       } else {
-        console.error('Invalid Event ID');
+        console.error("Invalid Event ID");
         // TODO: Redirect to 404 page.
       }
     }
-  }, [router])
+  }, [router]);
 
   useEffect(() => {
     if (matchLoading == false && match.matches && match.matches.length > 0) {
-      const newMatches = _.sortBy(match.matches.filter(val => val.eid === eid), ['round', 'match']);
+      const newMatches = _.sortBy(
+        match.matches.filter((val) => val.eid === eid),
+        ["round", "match"]
+      );
       setMatches(newMatches);
       // if (event.events[eid].format == 0) {
       //   setMatches(newMatches);
@@ -100,63 +117,85 @@ const Page = (props) => {
       //   })
       // }
     }
-  }, [eid, match.matches, matchLoading])
+  }, [eid, match.matches, matchLoading]);
+
+  useEffect(() => {
+    if (event?.events[eid]) {
+      setColors({
+        primary: event.events[eid].primary,
+        secondary: event.events[eid].secondary,
+        tertiary: event.events[eid].tertiary,
+      });
+    }
+  }, [eid, event?.events]);
 
   const initializeDates = () => {
     setStart(new Date());
     setEnd(new Date());
-  }
+  };
 
   const initializeScores = () => {
     setScore1(0);
     setScore2(0);
-  }
+  };
 
   const doubleEliminationMatches = useMemo(() => {
     if (matches) {
       return {
-        upper: [...matches.filter(val => val.group == 0)],
-        lower: [...matches.filter(val => val.group == 1)]
-      }
+        upper: [...matches.filter((val) => val.group == 0)],
+        lower: [...matches.filter((val) => val.group == 1)],
+      };
     }
-  }, [matches])
+  }, [matches]);
 
   const handle = {
     finishScheduling: async (e) => {
       setChangingStatus(true);
-      if (confirm('Do you really want to finish scheduling this event?')) {
+      if (confirm("Do you really want to finish scheduling this event?")) {
         for (let i = 0; i < matches.length; i++) {
-          const res = await match.update(matches[i].id, { status: MATCH_STATES.SCHEDULED.value });
+          const res = await match.update(matches[i].id, {
+            status: MATCH_STATES.SCHEDULED.value,
+          });
         }
-        const res = await event.update(eid, { status: EVENT_STATES.SCHEDULED.value });
-        if (res.code === 'succeed') {
-          alert('Scheduled successfully!');
+        const res = await event.update(eid, {
+          status: EVENT_STATES.SCHEDULED.value,
+        });
+        if (res.code === "succeed") {
+          alert("Scheduled successfully!");
         }
       }
       setChangingStatus(false);
     },
     startEvent: async (e) => {
       setChangingStatus(true);
-      if (confirm('Do you really want to start this event?')) {
+      if (confirm("Do you really want to start this event?")) {
         for (let i = 0; i < matches.length; i++) {
-          const res = await match.update(matches[i].id, { status: MATCH_STATES.STARTED.value });
+          const res = await match.update(matches[i].id, {
+            status: MATCH_STATES.STARTED.value,
+          });
         }
-        const res = await event.update(eid, { status: EVENT_STATES.STARTED.value });
-        if (res.code === 'succeed') {
-          alert('Event started!');
+        const res = await event.update(eid, {
+          status: EVENT_STATES.STARTED.value,
+        });
+        if (res.code === "succeed") {
+          alert("Event started!");
         }
       }
       setChangingStatus(false);
     },
     finishEvent: async (e) => {
       setChangingStatus(true);
-      if (confirm('Do you really want to finish this event?')) {
+      if (confirm("Do you really want to finish this event?")) {
         for (let i = 0; i < matches.length; i++) {
-          const res = await match.update(matches[i].id, { status: MATCH_STATES.FINISHED.value });
+          const res = await match.update(matches[i].id, {
+            status: MATCH_STATES.FINISHED.value,
+          });
         }
-        const res = await event.update(eid, { status: EVENT_STATES.FINISHED.value });
-        if (res.code === 'succeed') {
-          alert('Event finished!');
+        const res = await event.update(eid, {
+          status: EVENT_STATES.FINISHED.value,
+        });
+        if (res.code === "succeed") {
+          alert("Event finished!");
         }
       }
       setChangingStatus(false);
@@ -174,9 +213,9 @@ const Page = (props) => {
         for (let i = 0; i < matches.length; i++) {
           const val = matches[i];
           const res = await match.update(val.id, val);
-          if (res.code == 'failed') {
+          if (res.code == "failed") {
             saved = false;
-            console.warn('Match save error:', val);
+            console.warn("Match save error:", val);
           }
         }
       }
@@ -184,7 +223,7 @@ const Page = (props) => {
       if (saved) {
         // const res = await event.update(eid, { status: 1 });
         // if (res.code === 'succeed') {
-        alert('Saved successfully!');
+        alert("Saved successfully!");
         // }
       }
       setSaving(false);
@@ -202,13 +241,18 @@ const Page = (props) => {
           setScore1(matches[index].participants[0].score || 0);
           setScore2(matches[index].participants[1].score || 0);
           setOpenScores(true);
-        }
-        else setOpenDatePick(true);
+        } else setOpenDatePick(true);
       }
     },
     doubleMatchClick: (match) => {
-      const indexInUpper = _.findIndex(matches.upper, (val) => val.id == match.id)
-      const indexInLower = _.findIndex(matches.lower, (val) => val.id == match.id)
+      const indexInUpper = _.findIndex(
+        matches.upper,
+        (val) => val.id == match.id
+      );
+      const indexInLower = _.findIndex(
+        matches.lower,
+        (val) => val.id == match.id
+      );
 
       // if (matches.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
       // if (matches.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
@@ -254,8 +298,8 @@ const Page = (props) => {
         newGames[selectedMatch] = {
           ...newGames[selectedMatch],
           start,
-          end
-        }
+          end,
+        };
       }
       // else if (format == 1) {
       //   newGames = { ...matches }
@@ -278,12 +322,21 @@ const Page = (props) => {
       initializeDates();
     },
     partyClick: (party, partyWon) => {
-      const index = _.findLastIndex(matches, (val) => (
-        (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
-        || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
-      ))
+      const index = _.findLastIndex(
+        matches,
+        (val) =>
+          (val.participants[0]?.id == party.id &&
+            val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id &&
+            val.participants[1]?.round == party.round)
+      );
 
-      if (index < 0 || matches[index]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      if (
+        index < 0 ||
+        matches[index]?.participants?.filter((val) => (val.id ? true : false))
+          .length < 2
+      )
+        return;
 
       if (index >= 0) {
         setTeam1(team?.teams[matches[index].participants[0]?.id]);
@@ -295,19 +348,37 @@ const Page = (props) => {
       }
     },
     doublePartyClick: (party, partyWon) => {
-      if (party.status === 'DONE') return;
+      if (party.status === "DONE") return;
 
-      const indexInUpper = _.findLastIndex(matches.upper, (val) => (
-        (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
-        || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
-      ))
-      const indexInLower = _.findLastIndex(matches.lower, (val) => (
-        (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round)
-        || (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
-      ))
+      const indexInUpper = _.findLastIndex(
+        matches.upper,
+        (val) =>
+          (val.participants[0]?.id == party.id &&
+            val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id &&
+            val.participants[1]?.round == party.round)
+      );
+      const indexInLower = _.findLastIndex(
+        matches.lower,
+        (val) =>
+          (val.participants[0]?.id == party.id &&
+            val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id &&
+            val.participants[1]?.round == party.round)
+      );
 
-      if (matches.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
-      if (matches.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
+      if (
+        matches.upper[indexInUpper]?.participants?.filter((val) =>
+          val.id ? true : false
+        ).length < 2
+      )
+        return;
+      if (
+        matches.lower[indexInLower]?.participants?.filter((val) =>
+          val.id ? true : false
+        ).length < 2
+      )
+        return;
 
       // let newGames = { ...matches }, participant = 0;
       // if (party.id === matches.upper[indexInUpper]?.participants[0]?.id || party.id === matches.lower[indexInLower]?.participants[0]?.id) participant = 0;
@@ -346,18 +417,22 @@ const Page = (props) => {
 
       newGames[selectedMatch].participants[0].score = score1;
       newGames[selectedMatch].participants[0].resultText = score1;
-      newGames[selectedMatch].participants[0].status = 'DONE';
+      newGames[selectedMatch].participants[0].status = "DONE";
       newGames[selectedMatch].participants[1].score = score2;
       newGames[selectedMatch].participants[1].resultText = score2;
-      newGames[selectedMatch].participants[1].status = 'DONE';
+      newGames[selectedMatch].participants[1].status = "DONE";
       newGames[selectedMatch].participants[winner].isWinner = true;
       newGames[selectedMatch].participants[1 - winner].isWinner = false;
       // * Let the match only finishes by the current time, not the scores or other factors.
       // newGames[selectedMatch].status = MATCH_STATES.FINISHED.value;
 
       const newEventParticipant = [...event.events[eid].participants],
-        player1 = newEventParticipant.findIndex(val => val.tid === newGames[selectedMatch].participants[0].id),
-        player2 = newEventParticipant.findIndex(val => val.tid === newGames[selectedMatch].participants[1].id)
+        player1 = newEventParticipant.findIndex(
+          (val) => val.tid === newGames[selectedMatch].participants[0].id
+        ),
+        player2 = newEventParticipant.findIndex(
+          (val) => val.tid === newGames[selectedMatch].participants[1].id
+        );
       if (score1 > score2) {
         newEventParticipant[player1].score += SCORE_WIN;
         newEventParticipant[player1].wins++;
@@ -379,20 +454,24 @@ const Page = (props) => {
       if (format == 0) {
         let nextIndex = -1;
         if (newGames[selectedMatch].nextMatchId) {
-          nextIndex = _.findIndex(newGames, (val) => val?.id === newGames[selectedMatch].nextMatchId);
+          nextIndex = _.findIndex(
+            newGames,
+            (val) => val?.id === newGames[selectedMatch].nextMatchId
+          );
         }
 
         if (nextIndex >= 0) {
-          if (newGames[nextIndex]?.participants.length == 0) newGames[nextIndex].participants = [{}, {}];
+          if (newGames[nextIndex]?.participants.length == 0)
+            newGames[nextIndex].participants = [{}, {}];
 
           const newParticipant = {
             ...newGames[selectedMatch].participants[winner],
             round: newGames[selectedMatch].participants[winner].round + 1,
             isWinner: false,
             score: 0,
-            resultText: '',
-            status: null
-          }
+            resultText: "",
+            status: null,
+          };
 
           if (newGames[selectedMatch].id == newGames[nextIndex].up)
             newGames[nextIndex].participants[0] = newParticipant;
@@ -400,13 +479,20 @@ const Page = (props) => {
         }
       } else if (format == 1) {
         // if (newGames[selectedMatch].group == 0) {
-        let nextIndex = -1, nextLooserIndex = -1;
+        let nextIndex = -1,
+          nextLooserIndex = -1;
 
         if (newGames[selectedMatch].nextMatchId) {
-          nextIndex = _.findIndex(newGames, (val) => val?.id === newGames[selectedMatch].nextMatchId);
+          nextIndex = _.findIndex(
+            newGames,
+            (val) => val?.id === newGames[selectedMatch].nextMatchId
+          );
         }
         if (newGames[selectedMatch].nextLooserMatchId) {
-          nextLooserIndex = _.findIndex(newGames, (val) => val?.id === newGames[selectedMatch].nextLooserMatchId);
+          nextLooserIndex = _.findIndex(
+            newGames,
+            (val) => val?.id === newGames[selectedMatch].nextLooserMatchId
+          );
         }
 
         if (nextIndex >= 0) {
@@ -414,11 +500,12 @@ const Page = (props) => {
             ...newGames[selectedMatch].participants[winner],
             round: newGames[selectedMatch].participants[winner].round + 1,
             isWinner: false,
-            resultText: '',
-            status: null
-          }
+            resultText: "",
+            status: null,
+          };
           if (newGames[nextIndex]?.id == newGames[selectedMatch].nextMatchId) {
-            if (newGames[nextIndex]?.participants.length == 0) newGames[nextIndex].participants = [{}, {}];
+            if (newGames[nextIndex]?.participants.length == 0)
+              newGames[nextIndex].participants = [{}, {}];
 
             if (newGames[selectedMatch]?.id === newGames[nextIndex]?.up) {
               newGames[nextIndex].participants[0] = newParticipant;
@@ -436,11 +523,12 @@ const Page = (props) => {
             ...newGames[selectedMatch].participants[1 - winner],
             round: newGames[selectedMatch].participants[1 - winner].round + 1,
             isWinner: false,
-            resultText: '',
-            status: null
-          }
+            resultText: "",
+            status: null,
+          };
 
-          if (newGames[nextLooserIndex].participants.length == 0) newGames[nextLooserIndex].participants = [{}, {}];
+          if (newGames[nextLooserIndex].participants.length == 0)
+            newGames[nextLooserIndex].participants = [{}, {}];
 
           if (newGames[selectedMatch]?.id == newGames[nextLooserIndex].up) {
             newGames[nextLooserIndex].participants[0] = newParticipant;
@@ -485,27 +573,37 @@ const Page = (props) => {
       }
       setOpenScores(false);
       setMatches(newGames);
-    }
-  }
+    },
+  };
 
   return (
     <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
-      <Box sx={{ border: `solid 1px rgba(255, 255, 255, 0.2)`, borderRadius: '4px', padding: 3 }}>
-        {matches && selectedMatch >= 0 && <ScoresDialog
-          title={'Team scores'}
-          onClose={handle.closeScores}
-          open={openScores}
-          team1={team1}
-          team2={team2}
-          score1={score1}
-          score2={score2}
-          onScore1Change={handle.score1Change}
-          onScore2Change={handle.score2Change}
-          onSave={handle.saveScore}
-          editable={matches[selectedMatch].status !== MATCH_STATES.FINISHED.value}
-        />}
+      <Box
+        sx={{
+          border: `solid 1px rgba(255, 255, 255, 0.2)`,
+          borderRadius: "4px",
+          padding: 3,
+        }}
+      >
+        {matches && selectedMatch >= 0 && (
+          <ScoresDialog
+            title={"Team scores"}
+            onClose={handle.closeScores}
+            open={openScores}
+            team1={team1}
+            team2={team2}
+            score1={score1}
+            score2={score2}
+            onScore1Change={handle.score1Change}
+            onScore2Change={handle.score2Change}
+            onSave={handle.saveScore}
+            editable={
+              matches[selectedMatch].status !== MATCH_STATES.FINISHED.value
+            }
+          />
+        )}
         <DatePickDialog
-          title={'Select Date/Time'}
+          title={"Select Date/Time"}
           start={start}
           end={end}
           onStartChange={handle.startChange}
@@ -514,133 +612,162 @@ const Page = (props) => {
           onSave={handle.saveDates}
           open={openDatePick}
         />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 4 }}>
-          <Box sx={{ width: '300px', display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <Typography variant='h5'>
-              Event Details
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ width: '130px' }}>
-                <Typography variant='h6'>
-                  Name:
-                </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
+          <Box
+            sx={{
+              width: "300px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+            }}
+          >
+            <Typography variant="h5">Event Details</Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ width: "130px" }}>
+                <Typography variant="h6">Name:</Typography>
               </Box>
               <Box>
-                <Typography variant='body1'>
+                <Typography variant="body1">
                   {event?.events[eid]?.name}
                 </Typography>
               </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ width: '130px' }}>
-                <Typography variant='h6'>
-                  Format:
-                </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ width: "130px" }}>
+                <Typography variant="h6">Format:</Typography>
               </Box>
               <Box>
-                <Typography variant='body1'>
+                <Typography variant="body1">
                   {EVENT_FORMATS[event?.events[eid]?.format].name}
                 </Typography>
               </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ width: '130px' }}>
-                <Typography variant='h6'>
-                  Seeding:
-                </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ width: "130px" }}>
+                <Typography variant="h6">Seeding:</Typography>
               </Box>
               <Box>
-                <Typography variant='body1'>
-                  {event?.events[eid]?.seeding ? 'Random' : 'Manual'}
+                <Typography variant="body1">
+                  {event?.events[eid]?.seeding ? "Random" : "Manual"}
                 </Typography>
               </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ width: '130px' }}>
-                <Typography variant='h6'>
-                  Participants:
-                </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ width: "130px" }}>
+                <Typography variant="h6">Participants:</Typography>
               </Box>
               <Box>
-                <Typography variant='body1'>
+                <Typography variant="body1">
                   {event?.events[eid]?.participantsCount}
                 </Typography>
               </Box>
             </Box>
-            {
-              (event?.events[eid]?.status != EVENT_STATES.SCHEDULED.value && event.events[eid]?.status != EVENT_STATES.FINISHED.value) &&
-              <LoadingButton
-                loading={saving}
-                variant='contained'
-                onClick={handle.save}
-                disabled={disabled}
-              >
-                Save
-              </LoadingButton>
-            }
-            {event?.events[eid]?.status == EVENT_STATES.SCHEDULING.value &&
+            {event?.events[eid]?.status != EVENT_STATES.SCHEDULED.value &&
+              event.events[eid]?.status != EVENT_STATES.FINISHED.value && (
+                <LoadingButton
+                  loading={saving}
+                  variant="contained"
+                  onClick={handle.save}
+                  disabled={disabled}
+                  sx={{ ...buttonStyle }}
+                >
+                  Save
+                </LoadingButton>
+              )}
+            {event?.events[eid]?.status == EVENT_STATES.SCHEDULING.value && (
               <LoadingButton
                 loading={changingStatus}
-                variant='contained'
+                variant="contained"
                 onClick={handle.finishScheduling}
                 disabled={disabled}
+                sx={{ ...buttonStyle }}
               >
                 Finish Scheduling
-              </LoadingButton>}
-            {event?.events[eid]?.status == EVENT_STATES.SCHEDULED.value &&
+              </LoadingButton>
+            )}
+            {event?.events[eid]?.status == EVENT_STATES.SCHEDULED.value && (
               <LoadingButton
                 loading={changingStatus}
-                variant='contained'
+                variant="contained"
                 onClick={handle.startEvent}
                 disabled={disabled}
+                sx={{ ...buttonStyle }}
               >
                 Start Event
-              </LoadingButton>}
-            {event?.events[eid]?.status == EVENT_STATES.STARTED.value &&
+              </LoadingButton>
+            )}
+            {event?.events[eid]?.status == EVENT_STATES.STARTED.value && (
               <LoadingButton
                 loading={changingStatus}
-                variant='contained'
+                variant="contained"
                 onClick={handle.finishEvent}
                 disabled={disabled}
+                sx={{ ...buttonStyle }}
               >
                 Finish Event
-              </LoadingButton>}
+              </LoadingButton>
+            )}
           </Box>
-          <Box sx={{ overflow: 'auto', flex: 1, border: 'solid 1px rgba(255, 255, 255, 0.2)', minHeight: '300px', borderRadius: '4px' }}>
-            {
-              event?.events[eid] && event.events[eid].format == 2
-                ? <FullCalendar
-                  sx={{
-                    marginTop: '24px'
-                  }}
-                  events={events}
-                  setEvents={setEvents}
-                  selectable={true}
-                  editable={true}
+          <Box
+            sx={{
+              overflow: "auto",
+              flex: 1,
+              border: "solid 1px rgba(255, 255, 255, 0.2)",
+              minHeight: "300px",
+              borderRadius: "4px",
+            }}
+          >
+            {event?.events[eid] && event.events[eid].format == 2 ? (
+              <FullCalendar
+                sx={{
+                  marginTop: "24px",
+                }}
+                events={events}
+                setEvents={setEvents}
+                selectable={true}
+                editable={true}
+              />
+            ) : (
+              matches &&
+              (event?.events[eid]?.format == 0 ? (
+                <SingleEliminationBracket
+                  matches={matches}
+                  handleMatchClick={
+                    event.events[eid].status == 1 ||
+                    event.events[eid].status == 3
+                      ? handle.matchClick
+                      : null
+                  }
+                  handlePartyClick={
+                    event.events[eid].status == 3 ? handle.partyClick : null
+                  }
                 />
-                : (matches && (event?.events[eid]?.format == 0
-                  ? <SingleEliminationBracket
-                    matches={matches}
-                    handleMatchClick={(event.events[eid].status == 1 || event.events[eid].status == 3) ? handle.matchClick : null}
-                    handlePartyClick={event.events[eid].status == 3 ? handle.partyClick : null}
-                  />
-                  : event?.events[eid]?.format == 1
-                    ? <DoubleEliminationBracket
-                      matches={doubleEliminationMatches}
-                      handleMatchClick={(event.events[eid].status == 1 || event.events[eid].status == 3) ? handle.matchClick : null}
-                      handlePartyClick={event.events[eid].status == 3 ? handle.partyClick : null}
-                    />
-                    : <></>))
-            }
+              ) : event?.events[eid]?.format == 1 ? (
+                <DoubleEliminationBracket
+                  matches={doubleEliminationMatches}
+                  handleMatchClick={
+                    event.events[eid].status == 1 ||
+                    event.events[eid].status == 3
+                      ? handle.matchClick
+                      : null
+                  }
+                  handlePartyClick={
+                    event.events[eid].status == 3 ? handle.partyClick : null
+                  }
+                />
+              ) : (
+                <></>
+              ))
+            )}
           </Box>
         </Box>
       </Box>
     </Paper>
-  )
-}
+  );
+};
 
 Page.getLayout = (page) => {
-  return <AdminLayout>{page}</AdminLayout>
-}
+  return <AdminLayout>{page}</AdminLayout>;
+};
 
 export default Page;

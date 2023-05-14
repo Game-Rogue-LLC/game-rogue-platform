@@ -20,6 +20,7 @@ import "@/src/styles/colorpicker.css";
 import { AuthContextProvider } from "@/src/context/AuthContext";
 import AppProvider from "@/src/context/app.js";
 import Splash from "@/src/content/Splash";
+import StyleProvider from "@/src/context/StyleContext";
 
 const Noop = ({ children }) => <>{children}</>;
 
@@ -65,11 +66,13 @@ export default function MyApp(props) {
         )}
         <AppProvider>
           <AuthContextProvider>
-            {getLayout(
-              <ContextProvider>
-                <Component {...pageProps} />
-              </ContextProvider>
-            )}
+            <StyleProvider>
+              {getLayout(
+                <ContextProvider>
+                  <Component {...pageProps} />
+                </ContextProvider>
+              )}
+            </StyleProvider>
           </AuthContextProvider>
         </AppProvider>
       </ThemeProvider>

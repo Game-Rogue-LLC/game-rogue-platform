@@ -1,5 +1,5 @@
-import { useEffect, useState, Fragment } from 'react';
-import Button from '@mui/material/Button';
+import { useEffect, useState, Fragment } from "react";
+import Button from "@mui/material/Button";
 import {
   Box,
   FormControl,
@@ -16,31 +16,31 @@ import {
   MenuItem,
   Stepper,
   Step,
-  StepLabel
-} from '@mui/material';
-import { STAFF_ROLES } from '@/src/config/global';
+  StepLabel,
+} from "@mui/material";
+import { STAFF_ROLES } from "@/src/config/global";
 
-import AdminLayout from '@/src/content/AdminLayout';
-import { useAppContext } from '@/src/context/app';
-import { useRouter } from 'next/router';
-import { useTournamentContext } from '@/src/context/TournamentContext';
-import { useAuthContext } from '@/src/context/AuthContext';
-import Validator from 'validatorjs';
+import AdminLayout from "@/src/content/AdminLayout";
+import { useAppContext } from "@/src/context/app";
+import { useRouter } from "next/router";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+import { useAuthContext } from "@/src/context/AuthContext";
+import Validator from "validatorjs";
 
 const initialInputs = {
-  uid: '',
-  role: ''
-}
+  uid: "",
+  role: "",
+};
 
 const rules = {
-  uid: 'required'
-}
+  uid: "required",
+};
 
 const customMessages = {
-  'required.uid': 'Rogue ID is required.'
-}
+  "required.uid": "Rogue ID is required.",
+};
 
-const steps = ['Input Rogue ID', 'Select staff position'];
+const steps = ["Input Rogue ID", "Select staff position"];
 
 const Page = (props) => {
   const theme = useTheme();
@@ -58,11 +58,11 @@ const Page = (props) => {
       const newOID = router.query.organization;
       organization.setCurrent(newOID);
     }
-  }, [router])
+  }, [router]);
 
   useEffect(() => {
-    setTitle('ADD A STAFF');
-  }, [])
+    setTitle("ADD A STAFF");
+  }, []);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -72,64 +72,66 @@ const Page = (props) => {
     }
     if (!Object.keys(player.players).includes(data.uid)) {
       setErrors({
-        uid: 'User with the id does not exist.'
-      })
+        uid: "User with the id does not exist.",
+      });
       return false;
     }
     setErrors({});
     return true;
-  }
+  };
 
   const handle = {
     create: async (e) => {
       let newStaff = organization.organizations[organization.current]?.staff;
       if (!newStaff) newStaff = [];
       newStaff = [
-        ...newStaff.filter(val => val.uid !== inputs.uid),
+        ...newStaff.filter((val) => val.uid !== inputs.uid),
         {
           uid: inputs.uid,
           role: inputs.role,
           deleted: false,
           lastLogin: new Date(),
           createdAt: new Date(),
-          modifiedAt: new Date()
-        }
-      ]
+          // modifiedAt: new Date()
+        },
+      ];
 
-      const res = await organization.update(organization.current, { staff: newStaff })
+      const res = await organization.update(organization.current, {
+        staff: newStaff,
+      });
 
-      if (res.code === 'succeed') {
-        router.push('/staff?organization=' + organization.current);
-      } else if (res.code === 'failed') {
-        console.error(res.message)
+      if (res.code === "succeed") {
+        router.push("/staff?organization=" + organization.current);
+      } else if (res.code === "failed") {
+        console.error(res.message);
       }
     },
     inputs: (e) => {
       let { name, type, value } = e.target;
-      if (type === 'number') value = Number(value);
+      if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
-        [name]: value
-      })
+        [name]: value,
+      });
     },
     next: () => {
       if (!validate(inputs, rules, customMessages)) return;
-      setActiveStep(prev => prev + 1);
+      setActiveStep((prev) => prev + 1);
     },
     finish: () => {
-      setActiveStep(prev => prev + 1);
+      setActiveStep((prev) => prev + 1);
     },
     back: () => {
-      setActiveStep(prev => prev - 1);
+      setActiveStep((prev) => prev - 1);
     },
     reset: () => {
       setActiveStep(0);
-    }
-  }
+    },
+  };
 
   return (
     <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: "100%" }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             return (
@@ -144,81 +146,91 @@ const Page = (props) => {
             <Typography sx={{ mt: 2, mb: 1 }}>
               All steps completed - you&apos;re finished
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button variant='contained' onClick={handle.create}>Save</Button>
-              <Button variant='contained' onClick={handle.reset}>Reset</Button>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button variant="contained" onClick={handle.create}>
+                Save
+              </Button>
+              <Button variant="contained" onClick={handle.reset}>
+                Reset
+              </Button>
+            </Box>
+          </Fragment>
+        ) : activeStep === 0 ? (
+          <Fragment>
+            <FormControl fullWidth error={errors.uid !== undefined}>
+              <OutlinedInput
+                id="rogue-id"
+                name="uid"
+                value={inputs.uid}
+                aria-describedby="rogue-id-helper"
+                onChange={handle.inputs}
+                sx={{ mt: 1 }}
+                fullWidth
+                required
+              />
+              {errors.uid !== undefined && (
+                <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>
+                  {errors.uid}
+                </FormHelperText>
+              )}
+            </FormControl>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button
+                variant="contained"
+                disabled={activeStep === 0}
+                onClick={handle.back}
+                sx={{ mr: 1 }}
+              >
+                Back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button variant="contained" onClick={handle.next}>
+                Next
+              </Button>
             </Box>
           </Fragment>
         ) : (
-          activeStep === 0 ? (
-            <Fragment>
-              <FormControl fullWidth error={errors.uid !== undefined}>
-                <OutlinedInput id="rogue-id" name="uid" value={inputs.uid} aria-describedby="rogue-id-helper"
-                  onChange={handle.inputs} sx={{ mt: 1 }} fullWidth required />
-                {errors.uid !== undefined && <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>{errors.uid}</FormHelperText>}
-              </FormControl>
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                <Button
-                  variant='contained'
-                  disabled={activeStep === 0}
-                  onClick={handle.back}
-                  sx={{ mr: 1 }}
-                >
-                  Back
-                </Button>
-                <Box sx={{ flex: '1 1 auto' }} />
-                <Button
-                  variant='contained'
-                  onClick={handle.next}
-                >
-                  Next
-                </Button>
-              </Box>
-            </Fragment>
-          ) : (
-            <Fragment>
-              <Select
-                labelId="position-select-label"
-                id="position-select"
-                variant='outlined'
-                sx={{ mt: 1 }}
-                value={inputs.role}
-                name='role'
-                onChange={handle.inputs}
-                fullWidth
+          <Fragment>
+            <Select
+              labelId="position-select-label"
+              id="position-select"
+              variant="outlined"
+              sx={{ mt: 1 }}
+              value={inputs.role}
+              name="role"
+              onChange={handle.inputs}
+              fullWidth
+            >
+              {STAFF_ROLES.map((val, i) => (
+                <MenuItem key={"staff_role_" + val.id} value={val.id}>
+                  {val.name}
+                </MenuItem>
+              ))}
+            </Select>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Button
+                variant="contained"
+                disabled={activeStep === 0}
+                onClick={handle.back}
+                sx={{ mr: 1 }}
               >
-                {STAFF_ROLES.map((val, i) => (
-                  <MenuItem key={'staff_role_' + val.id} value={val.id}>{val.name}</MenuItem>
-                ))}
-              </Select>
-              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                <Button
-                  variant='contained'
-                  disabled={activeStep === 0}
-                  onClick={handle.back}
-                  sx={{ mr: 1 }}
-                >
-                  Back
-                </Button>
-                <Box sx={{ flex: '1 1 auto' }} />
-                <Button
-                  variant='contained'
-                  onClick={handle.finish}
-                >
-                  Finish
-                </Button>
-              </Box>
-            </Fragment>
-          )
+                Back
+              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button variant="contained" onClick={handle.finish}>
+                Finish
+              </Button>
+            </Box>
+          </Fragment>
         )}
       </Box>
     </Paper>
-  )
-}
+  );
+};
 
 Page.getLayout = (page) => {
-  return <AdminLayout>{page}</AdminLayout>
-}
+  return <AdminLayout>{page}</AdminLayout>;
+};
 
 export default Page;

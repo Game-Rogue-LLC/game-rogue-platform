@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Box, Button, Menu, MenuItem } from "@mui/material";
 import { ChromePicker } from "@hello-pangea/color-picker";
 
-const ColorSelect = ({ name, label, value, onChange }) => {
+const ColorSelect = ({ name, label, value, onChange, sx }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -22,13 +22,24 @@ const ColorSelect = ({ name, label, value, onChange }) => {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         sx={{
-          backgroundColor: value,
-          ":hover": {
-            backgroundColor: value,
-          },
+          border: "solid 2px rgba(255,255,255,0.2)",
+          backgroundColor: "transparent",
+          padding: "2px",
+          ":hover": {},
+          ...sx,
         }}
+        fullWidth
       >
-        {label}
+        <Box
+          sx={{
+            width: "100%",
+            height: "30px",
+            backgroundColor: value,
+            ":hover": {
+              backgroundColor: value,
+            },
+          }}
+        ></Box>
       </Button>
       <Menu
         id={`${name}-color-select-menu`}
@@ -39,7 +50,7 @@ const ColorSelect = ({ name, label, value, onChange }) => {
           "aria-labelledby": `${name}-color-select-button`,
         }}
       >
-        <ChromePicker onChange={onChange} />
+        <ChromePicker onChange={onChange} defaultColor={value} />
       </Menu>
     </div>
   );

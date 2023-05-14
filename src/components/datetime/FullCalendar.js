@@ -1,34 +1,36 @@
-import { useEffect, useState } from 'react';
-import { formatDate } from '@fullcalendar/core';
-import ReactFullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
-import { nanoid } from 'nanoid';
-import _ from 'lodash';
-import MatchDialog from '@/src/components/dialog/MatchDialog';
+import { useEffect, useState } from "react";
+import ReactFullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
+import { nanoid } from "nanoid";
+import _ from "lodash";
+import MatchDialog from "@/src/components/dialog/MatchDialog";
+import { formatDate } from "@/src/utils/utils";
 
-export const colors = [
-  "#B65A0C",
-  "#880167",
-  "#014984",
-  "#5E8F1C"
-]
+export const colors = ["#B65A0C", "#880167", "#014984", "#5E8F1C"];
 
-const FullCalendar = ({ events, setEvents, limit, sx, selectable, editable }) => {
+const FullCalendar = ({
+  events,
+  setEvents,
+  limit,
+  sx,
+  selectable,
+  editable,
+}) => {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
   const handleWeekendsToggle = () => {
     setWeekendsVisible(!weekendsVisible);
-  }
+  };
 
   const handleDateSelect = (selectInfo) => {
-    if (limit && events.length >= limit || !setEvents) return;
-    let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
+    if ((limit && events.length >= limit) || !setEvents) return;
+    let title = prompt("Please enter a new title for your event");
+    let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect() // clear date selection
+    calendarApi.unselect(); // clear date selection
 
     if (title) {
       // calendarApi.addEvent({
@@ -52,35 +54,43 @@ const FullCalendar = ({ events, setEvents, limit, sx, selectable, editable }) =>
           endStr: selectInfo.endStr,
           allDay: selectInfo.allDay,
           color: colors[_.random(0, 13) % 4],
-          resourceId: (selectInfo.reseource ? selectInfo.resource.id : undefined)
-        }
-      ])
+          resourceId: selectInfo.reseource ? selectInfo.resource.id : undefined,
+        },
+      ]);
     }
-  }
+  };
 
   const handleEventClick = (clickInfo) => {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    if (
+      confirm(
+        `Are you sure you want to delete the event '${clickInfo.event.title}'`
+      )
+    ) {
       clickInfo.event.remove();
       setEvents(events.filter((val, i) => val.id != clickInfo.event.id));
     }
-  }
+  };
 
   // const handleEvents = (evts) => {
   //   setEvents(evts);
   // }
 
   return (
-    <div className='demo-app' style={sx}>
-      <div className='demo-app-main'>
+    <div className="demo-app" style={sx}>
+      <div className="demo-app-main">
         <MatchDialog open={false} />
         <ReactFullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin/*, resourceTimelinePlugin*/]}
+          plugins={[
+            dayGridPlugin,
+            timeGridPlugin,
+            interactionPlugin /*, resourceTimelinePlugin*/,
+          ]}
           headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'//,resourceTimelineDay'
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay", //,resourceTimelineDay'
           }}
-          initialView='dayGridMonth'
+          initialView="dayGridMonth"
           editable={editable == true ? true : false}
           selectable={selectable == true ? true : false}
           selectMirror={true}
@@ -106,7 +116,7 @@ const FullCalendar = ({ events, setEvents, limit, sx, selectable, editable }) =>
           // }}
           events={events}
 
-        /* you can update a remote database when these fire:
+          /* you can update a remote database when these fire:
         eventAdd={function(){}}
         eventChange={function(){}}
         eventRemove={function(){}}
@@ -114,8 +124,8 @@ const FullCalendar = ({ events, setEvents, limit, sx, selectable, editable }) =>
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
 function renderEventContent(eventInfo) {
   return (
@@ -123,16 +133,22 @@ function renderEventContent(eventInfo) {
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
-  )
+  );
 }
 
 function renderSidebarEvent(event) {
   return (
     <li key={event.id}>
-      <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
+      <b>
+        {formatDate(event.start, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}
+      </b>
       <i>{event.title}</i>
     </li>
-  )
+  );
 }
 
 export default FullCalendar;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -13,29 +13,38 @@ import {
   Typography,
   useTheme,
   TextField,
-} from '@mui/material'
-import { useRouter } from 'next/router'
-import { LoadingButton } from '@mui/lab'
+} from "@mui/material";
+import { useRouter } from "next/router";
+import { LoadingButton } from "@mui/lab";
 
-import { Edit } from '@mui/icons-material';
-import AdminLayout from '@/src/content/AdminLayout'
-import { useAppContext } from '@/src/context/app'
-import DateTimePicker from '@/src/components/datetime/DateTimePicker'
-import Validator from 'validatorjs'
-import { useTournamentContext } from '@/src/context/TournamentContext'
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO, EVENT_STATES } from '@/src/config/global';
-import EventInput from '@/src/components/widgets/event/EventInput';
-import { model, rules, customMessages } from '@/lib/firestore/collections/event';
-import { htmlToMarkdown } from '@/src/utils/html-markdown';
+import { Edit } from "@mui/icons-material";
+import AdminLayout from "@/src/content/AdminLayout";
+import { useAppContext } from "@/src/context/app";
+import DateTimePicker from "@/src/components/datetime/DateTimePicker";
+import Validator from "validatorjs";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+import {
+  DEFAULT_CONTENTBLOCK_IMAGE,
+  DEFAULT_LOGO,
+  EVENT_STATES,
+} from "@/src/config/global";
+import EventInput from "@/src/components/widgets/event/EventInput";
+import {
+  model,
+  rules,
+  customMessages,
+} from "@/lib/firestore/collections/event";
+import { htmlToMarkdown } from "@/src/utils/html-markdown";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const initialInputs = {
-  ...model
-}
+  ...model,
+};
 
 const Page = (props) => {
-  const theme = useTheme()
-  const router = useRouter()
-  const { setTitle } = useAppContext()
+  const theme = useTheme();
+  const router = useRouter();
+  const { setTitle } = useAppContext();
   const { organization, event } = useTournamentContext();
   const [oid, setOID] = useState(organization?.current);
   const [saving, setSaving] = useState(false);
@@ -49,28 +58,37 @@ const Page = (props) => {
   const [darkLogo, setDarkLogo] = useState(null);
   const [lightLogo, setLightLogo] = useState(null);
 
+  const { setColors, buttonStyle } = useStyleContext();
+
   useEffect(() => {
-    setTitle('REGISTER AN EVENT');
+    setColors({
+      primary: inputs?.primary,
+      secondary: inputs?.secondary,
+      tertiary: inputs?.tertiary,
+    });
+  }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
+
+  useEffect(() => {
+    setTitle("REGISTER AN EVENT");
     event.setCurrent(null);
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (router?.query?.organization) {
       const newOID = router.query.organization;
       organization.setCurrent(newOID);
       setOID(newOID);
-      setInputs(prev => ({
+      setInputs((prev) => ({
         ...prev,
-        oid: newOID
-      }))
+        oid: newOID,
+      }));
     }
-  }, [router])
+  }, [router]);
 
   useEffect(() => {
-    if (event.activeCount[oid] >= 5)
-      setDisabled(true)
-    else setDisabled(false)
-  }, [oid, event.activeCount])
+    if (event.activeCount[oid] >= 5) setDisabled(true);
+    else setDisabled(false);
+  }, [oid, event.activeCount]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -80,124 +98,124 @@ const Page = (props) => {
     }
     setErrors({});
     return true;
-  }
+  };
 
   const handle = {
     create: async (e) => {
       if (validate(inputs, rules, customMessages) === false) {
         return;
       }
-      let newEvent = { ...inputs };
+      let newEvent = { ...inputs, createdAt: new Date() };
       newEvent.description = htmlToMarkdown(newEvent.description);
-      setSaving(true)
+      setSaving(true);
       const data = await event.create(newEvent);
-      if (data.code === 'succeed') {
+      if (data.code === "succeed") {
         let uploaded = true;
         newEvent = {};
 
         if (banner) {
           uploaded = false;
-          const res = await event.upload(banner, data.id, 'banner');
-          if (res.code === 'succeed') {
+          const res = await event.upload(banner, data.id, "banner");
+          if (res.code === "succeed") {
             newEvent.banner = res.url;
             uploaded = true;
           }
         }
         if (darkLogo) {
           uploaded = false;
-          const res = await event.upload(darkLogo, data.id, 'darkLogo');
-          if (res.code === 'succeed') {
+          const res = await event.upload(darkLogo, data.id, "darkLogo");
+          if (res.code === "succeed") {
             newEvent.darkLogo = res.url;
             uploaded = true;
           }
         }
         if (lightLogo) {
           uploaded = false;
-          const res = await event.upload(lightLogo, data.id, 'lightLogo');
-          if (res.code === 'succeed') {
+          const res = await event.upload(lightLogo, data.id, "lightLogo");
+          if (res.code === "succeed") {
             newEvent.lightLogo = res.url;
             uploaded = true;
           }
         }
         if (rulebook) {
           uploaded = false;
-          const res = await event.upload(rulebook, data.id, 'rulebook');
-          if (res.code === 'succeed') {
+          const res = await event.upload(rulebook, data.id, "rulebook");
+          if (res.code === "succeed") {
             newEvent.rulebook = res.url;
             uploaded = true;
           }
         }
         if (terms) {
           uploaded = false;
-          const res = await event.upload(terms, data.id, 'terms');
-          if (res.code === 'succeed') {
+          const res = await event.upload(terms, data.id, "terms");
+          if (res.code === "succeed") {
             newEvent.terms = res.url;
             uploaded = true;
           }
         }
         if (privacy) {
           uploaded = false;
-          const res = await event.upload(privacy, data.id, 'privacy');
-          if (res.code === 'succeed') {
+          const res = await event.upload(privacy, data.id, "privacy");
+          if (res.code === "succeed") {
             newEvent.privacy = res.url;
             uploaded = true;
           }
         }
         const res = await event.update(data.id, newEvent);
-        if (res.code === 'succeed') {
-          alert('Saved successfully!');
+        if (res.code === "succeed") {
+          alert("Saved successfully!");
         }
-      } else if (data.code === 'failed') {
+      } else if (data.code === "failed") {
         console.error(data.message);
       }
       setSaving(false);
     },
     inputs: (e) => {
-      let { name, type, value } = e.target
-      if (type === 'number') value = Number(value);
+      let { name, type, value } = e.target;
+      if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
-        [name]: value
-      })
+        [name]: value,
+      });
     },
     setDate: (name, newDate) => {
-      setInputs(prev => ({
+      setInputs((prev) => ({
         ...prev,
-        [name]: new Date(newDate)
-      }))
+        [name]: new Date(newDate),
+      }));
     },
     upload: (e, name) => {
       const file = e.target?.files[0];
       const url = URL.createObjectURL(file);
       switch (name) {
-        case 'banner':
+        case "banner":
           setBanner(file);
           setInputs({
             ...inputs,
-            banner: url
-          })
+            banner: url,
+          });
           break;
-        case 'darkLogo':
+        case "darkLogo":
           setDarkLogo(file);
           setInputs({
             ...inputs,
-            darkLogo: url
-          })
+            darkLogo: url,
+          });
           break;
-        case 'lightLogo':
+        case "lightLogo":
           setLightLogo(file);
           setInputs({
             ...inputs,
-            lightLogo: url
-          })
+            lightLogo: url,
+          });
           break;
-        case 'rulebook':
+        case "rulebook":
           setRulebook(file);
           break;
-        case 'terms':
+        case "terms":
           setTerms(file);
           break;
-        case 'privacy':
+        case "privacy":
           setPrivacy(file);
           break;
       }
@@ -205,39 +223,53 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO
-      })
+        darkLogo: DEFAULT_LOGO,
+      });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO
-      })
-    }
-  }
+        lightLogo: DEFAULT_LOGO,
+      });
+    },
+    colorChange: (name, value) => {
+      setInputs({
+        ...inputs,
+        [name]: value?.hex,
+      });
+    },
+  };
 
   return (
     <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
-      <EventInput handle={handle} inputs={inputs} errors={errors} disabled={disabled} />
+      <EventInput
+        handle={handle}
+        inputs={inputs}
+        errors={errors}
+        disabled={disabled}
+      />
 
       <Grid container sx={{ mt: 3 }}>
         <Grid item xs={12}>
           <LoadingButton
             loading={saving}
-            variant='contained'
+            variant="contained"
             onClick={handle.create}
             disabled={disabled}
+            sx={{
+              ...buttonStyle,
+            }}
           >
             Register
           </LoadingButton>
         </Grid>
       </Grid>
     </Paper>
-  )
-}
+  );
+};
 
 Page.getLayout = (page) => {
-  return <AdminLayout>{page}</AdminLayout>
-}
+  return <AdminLayout>{page}</AdminLayout>;
+};
 
 export default Page;

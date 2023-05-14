@@ -41,6 +41,8 @@ import {
   Sell,
 } from "@mui/icons-material";
 import _ from "lodash";
+import { formatDate, romanNumber } from "@/src/utils/utils";
+import ParticipantProfile from "@/src/components/widgets/ParticipantProfile";
 
 const Page = (props) => {
   const router = useRouter();
@@ -108,14 +110,6 @@ const Page = (props) => {
     if (eventStatus == EVENT_STATES.FINISHED.value) return "FINISHED";
   };
 
-  const getTeamPlayers = (team) => {
-    if (!team) return [];
-    return team.players.map((val) => ({
-      ...val,
-      ...player.players[val.id],
-    }));
-  };
-
   return (
     <Box>
       <Box
@@ -169,17 +163,17 @@ const Page = (props) => {
                   height: "100px",
                 }}
               >
-                <Box
+                {/* <Box
                   component="img"
                   src={organization?.organizations[oid]?.contentBlock?.image}
                   alt=""
                   width={25}
                   height={25}
-                ></Box>
+                ></Box> */}
                 <Box>
                   <Link href={`/profile/?organization=${oid}`}>
                     <Typography variant="h4" fontSize={18}>
-                      ORGANIZER
+                      VIEW ORGANIZER
                     </Typography>
                     <Typography variant="body1">
                       {organization?.organizations[oid]?.name}
@@ -242,9 +236,18 @@ const Page = (props) => {
                   <Typography variant="h4" fontSize={18}>
                     EVENT
                   </Typography>
-                  <Typography variant="body1">
-                    {event?.events[eid]?.name}
-                  </Typography>
+                  {/* {event?.events[eid]?.name} */}
+                  <Chip
+                    label={
+                      "Round " + romanNumber(event?.events[eid]?.currentRound)
+                    }
+                    sx={{
+                      backgroundColor: "rgba(0,0,0,.5)", //"#393D40",
+                      backdropFilter: "blur(3px)",
+                      color: "white",
+                      mt: 1,
+                    }}
+                  />
                 </Box>
               </Box>
               <Box
@@ -345,164 +348,11 @@ const Page = (props) => {
         <Box component="section" sx={{ mt: 15 }}>
           <Grid container spacing={5}>
             <Grid item xs={12} lg={6}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Box
-                  component="img"
-                  src={team?.teams[item?.participants[0].id]?.darkLogo}
-                  width={100}
-                  height={100}
-                ></Box>
-                <Box sx={{ flex: 1 }}>
-                  <Typography variant="h4" fontSize={24}>
-                    {team1?.name}
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                      mt: 1,
-                    }}
-                  >
-                    <Chip icon={<Grid3x3 />} label={team1?.id} sx={{ p: 1 }} />
-                    <Chip icon={<Sell />} label={team1?.short} sx={{ p: 1 }} />
-                    <Chip
-                      icon={
-                        <img
-                          loading="lazy"
-                          width="20"
-                          src={`https://flagcdn.com/w20/${team1?.residency.code.toLowerCase()}.png`}
-                          srcSet={`https://flagcdn.com/w40/${team1?.residency.code.toLowerCase()}.png 2x`}
-                          alt=""
-                        />
-                      }
-                      label={team1?.residency?.label}
-                      sx={{ p: 1 }}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-              <Box sx={{ width: "100%" }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">USER NAME</TableCell>
-                      <TableCell align="center">POSITION</TableCell>
-                      <TableCell align="center">RESIDENCY</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {getTeamPlayers(team1).map((val, i) => (
-                      <TableRow hover key={"user_" + val.id}>
-                        <TableCell align="center">
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 2,
-                              justifyContent: "center",
-                            }}
-                          >
-                            <Avatar
-                              variant="circular"
-                              src={player.players[val.id].profilePic}
-                            />
-                            {/* <Link href={'/user/' + val.id}>{player.players[val.id].name}</Link> */}
-                            {player.players[val.id].name}
-                          </Box>
-                        </TableCell>
-                        <TableCell align="center">
-                          {team?.positions[val?.position]?.name}
-                        </TableCell>
-                        <TableCell align="center">
-                          {val.residency?.label}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Box>
+              <ParticipantProfile item={team1} />
             </Grid>
 
             <Grid item xs={12} lg={6}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Box
-                  component="img"
-                  src={team?.teams[item?.participants[1].id]?.darkLogo}
-                  width={100}
-                  height={100}
-                ></Box>
-                <Box sx={{ flex: 1 }}>
-                  <Typography variant="h4" fontSize={24}>
-                    {team2?.name}
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                      mt: 1,
-                    }}
-                  >
-                    <Chip icon={<Grid3x3 />} label={team2?.id} sx={{ p: 1 }} />
-                    <Chip icon={<Sell />} label={team2?.short} sx={{ p: 1 }} />
-                    <Chip
-                      icon={
-                        <img
-                          loading="lazy"
-                          width="20"
-                          src={`https://flagcdn.com/w20/${team2?.residency.code.toLowerCase()}.png`}
-                          srcSet={`https://flagcdn.com/w40/${team2?.residency.code.toLowerCase()}.png 2x`}
-                          alt=""
-                        />
-                      }
-                      label={team2?.residency?.label}
-                      sx={{ p: 1 }}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-              <Box sx={{ width: "100%" }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="center">USER NAME</TableCell>
-                      <TableCell align="center">POSITION</TableCell>
-                      <TableCell align="center">RESIDENCY</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {getTeamPlayers(team2).map((val, i) => (
-                      <TableRow hover key={"user_" + val.id}>
-                        <TableCell align="center">
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 2,
-                              justifyContent: "center",
-                            }}
-                          >
-                            <Avatar
-                              variant="circular"
-                              src={player.players[val.id].profilePic}
-                            />
-                            <Link href={"/user/" + val.id}>
-                              {player.players[val.id].name}
-                            </Link>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="center">
-                          {team?.positions[val?.position]?.name}
-                        </TableCell>
-                        <TableCell align="center">
-                          {val.residency?.label}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Box>
+              <ParticipantProfile item={team2} />
             </Grid>
           </Grid>
         </Box>
