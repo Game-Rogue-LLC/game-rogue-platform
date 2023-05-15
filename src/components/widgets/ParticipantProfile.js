@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import {
   Avatar,
   Box,
@@ -19,9 +20,12 @@ import { formatDate } from "@/src/utils/utils";
 
 export default function ParticipantProfile({ item }) {
   const theme = useTheme();
+  const router = useRouter();
   const { team, player } = useTournamentContext();
 
   const getTeamPlayers = (team) => {
+    const router = useRouter();
+
     if (!team) return [];
     return team.players.map((val) => ({
       ...val,
@@ -79,7 +83,13 @@ export default function ParticipantProfile({ item }) {
               sx={{ p: 1 }}
             />
           </Box>
-          <Button variant="contained" sx={{ mt: 1 }}>
+          <Button
+            variant="contained"
+            sx={{ mt: 1 }}
+            onClick={() => {
+              router.push("/team/" + item?.id);
+            }}
+          >
             VIEW PROFILE
           </Button>
           {/* <Chip
@@ -138,6 +148,7 @@ export default function ParticipantProfile({ item }) {
                     variant="contained"
                     onClick={() => {
                       // TODO: Redirect to Rogue Social Profile
+                      router.push("/user/" + val.id);
                     }}
                   >
                     VIEW PROFILE

@@ -1,76 +1,94 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
-    Avatar,
-    Box,
-    Button,
-    Grid,
-    Paper,
-    Typography,
-    useTheme
-} from '@mui/material';
-import { useRouter } from 'next/router';
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { useRouter } from "next/router";
 
-import AdminLayout from '@/src/content/AdminLayout';
-import { useAppContext } from '@/src/context/app';
-import { useTournamentContext } from '@/src/context/TournamentContext';
-import TeamTable from '@/src/components/table/TeamTable';
-import UserInfo from '@/src/components/widgets/user/UserInfo';
+import AdminLayout from "@/src/content/AdminLayout";
+import { useAppContext } from "@/src/context/app";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+import TeamTable from "@/src/components/table/TeamTable";
+import UserInfo from "@/src/components/widgets/user/UserInfo";
+import { useAuthContext } from "@/src/context/AuthContext";
 
 const Page = (props) => {
-    const router = useRouter();
-    const theme = useTheme();
-    const [uid, setUID] = useState(props.uid);
-    const [item, setItem] = useState(null);
-    const { setTitle } = useAppContext();
-    const { player, team } = useTournamentContext();
+  const router = useRouter();
+  const theme = useTheme();
+  const { user } = useAuthContext();
+  const [uid, setUID] = useState(props.uid);
+  const [item, setItem] = useState(null);
+  const { setTitle } = useAppContext();
+  const { player, team } = useTournamentContext();
 
-    const handle = {
-        show: (id) => {
-            router.push('/team/' + id);
-        },
-        edit: (e) => {
-            router.push('/user/' + uid + '/edit');
-        }
+  const handle = {
+    show: (id) => {
+      router.push("/team/" + id);
+    },
+    edit: (e) => {
+      router.push("/user/" + uid + "/edit");
+    },
+  };
+
+  useEffect(() => {
+    setItem(player.players[uid]);
+  }, [player.players, uid]);
+
+  useEffect(() => {
+    if (router?.query?.uid) {
+      const newUID = router.query.uid;
+      if (player.players[newUID]) {
+        setUID(router.query.uid);
+      } else {
+        console.error("Invalid User ID");
+      }
     }
+  }, [router]);
 
-    useEffect(() => {
-        setItem(player.players[uid]);
-    }, [player.players, uid])
+  useEffect(() => {
+    setTitle("USER PROFILE");
+  }, []);
 
-    useEffect(() => {
-        if (router?.query?.uid) {
-            const newUID = router.query.uid;
-            if (player.players[newUID]) {
-                setUID(router.query.uid);
-            } else {
-                console.error('Invalid User ID');
-            }
-        }
-    }, [router])
-
-    useEffect(() => {
-        setTitle('USER PROFILE');
-    }, [])
-
-    return (
-        <Paper sx={{ p: 4 }}>
-            <Grid container spacing={2}>
-                <Grid item sx={{ width: 300 }}>
-                    <UserInfo avatar={item?.profilePic} item={item} editable={false} handle={handle.edit} />
-                </Grid>
-                <Grid item xs container>
-                    <Box sx={{ border: 'solid 1px rgb(52, 43, 35)', width: '100%', borderRadius: '5px' }}>
-                        <TeamTable teams={team.teams} uid={uid} handleClick={handle.show} showCreate={true} />
-                    </Box>
-                </Grid>
-            </Grid>
-        </Paper>
-    )
-}
+  return (
+    <Paper sx={{ p: 4 }}>
+      <Grid container spacing={2}>
+        <Grid item sx={{ width: 300 }}>
+          <UserInfo
+            avatar={item?.profilePic}
+            item={item}
+            editable={false}
+            handle={handle.edit}
+          />
+        </Grid>
+        <Grid item xs container>
+          <Box
+            sx={{
+              border: "solid 1px rgb(52, 43, 35)",
+              width: "100%",
+              borderRadius: "5px",
+            }}
+          >
+            <TeamTable
+              teams={team.teams}
+              uid={uid}
+              handleClick={handle.show}
+              showCreate={uid === user.id}
+            />
+          </Box>
+        </Grid>
+      </Grid>
+    </Paper>
+  );
+};
 
 Page.getLayout = (page) => {
-    return <AdminLayout>{page}</AdminLayout>
-}
+  return <AdminLayout>{page}</AdminLayout>;
+};
 
 // export async function getStaticPaths() {
 //     return {

@@ -26,6 +26,7 @@ import { useAuthContext } from "@/src/context/AuthContext";
 import EventInfoPublic from "@/src/components/widgets/event/EventInfoPublic";
 import EventCoursePublic from "@/src/components/widgets/event/EventCoursePublic";
 import { useStyleContext } from "@/src/context/StyleContext";
+import SlantBanner from "@/src/components/widgets/SlantBanner";
 
 const Page = (props) => {
   const router = useRouter();
@@ -84,20 +85,15 @@ const Page = (props) => {
 
   return (
     <Box>
+      <SlantBanner background={item?.banner} />
       <Box
         sx={{
-          background: "url(" + item?.banner + ")",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          height: "300px",
-        }}
-      ></Box>
-      <Box
-        sx={{
-          height: "0px",
+          height: "100px",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: "left",
+          paddingLeft: "10%",
+          alignItems: "end",
+          gap: 2,
         }}
       >
         <img
@@ -111,6 +107,12 @@ const Page = (props) => {
             // outlineOffset: '2px'
           }}
         />
+        <Box sx={{mb: 4}}>
+          <Typography variant="h4">{item?.name}</Typography>
+          <Typography variant="h5">
+            {organization.organizations[item?.oid]?.name}
+          </Typography>
+        </Box>
       </Box>
       <Container sx={{ mt: "100px" }}>
         <TabContext value={tab}>

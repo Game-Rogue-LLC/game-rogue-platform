@@ -43,6 +43,7 @@ import {
 import _ from "lodash";
 import { formatDate, romanNumber } from "@/src/utils/utils";
 import ParticipantProfile from "@/src/components/widgets/ParticipantProfile";
+import SlantBanner from "@/src/components/widgets/SlantBanner";
 
 const Page = (props) => {
   const router = useRouter();
@@ -112,20 +113,15 @@ const Page = (props) => {
 
   return (
     <Box>
+      <SlantBanner background={event?.events[eid]?.banner} />
       <Box
         sx={{
-          background: "url(" + event?.events[eid]?.banner + ")",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          height: "500px",
-        }}
-      ></Box>
-      <Box
-        sx={{
-          height: "0px",
+          height: "100px",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: "left",
+          paddingLeft: "10%",
+          alignItems: "end",
+          gap: 2,
         }}
       >
         <img
@@ -139,8 +135,14 @@ const Page = (props) => {
             // outlineOffset: '2px'
           }}
         />
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4">{event?.events[eid]?.name}</Typography>
+          <Typography variant="h5">
+            {organization.organizations[event?.events[eid]?.oid]?.name}
+          </Typography>
+        </Box>
       </Box>
-      <Container sx={{ mt: "100px", py: 5 }}>
+      <Container sx={{ mt: "20px", py: 5 }}>
         <Box component={"section"}>
           <Box sx={{ display: "flex", gap: 1 }}>
             <Box
