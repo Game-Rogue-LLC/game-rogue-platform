@@ -54,11 +54,19 @@ const Page = (props) => {
   const [darkLogo, setDarkLogo] = useState(null);
   const [lightLogo, setLightLogo] = useState(null);
 
-  const { buttonStyle } = useStyleContext();
+  const { setColors, buttonStyle } = useStyleContext();
 
   useEffect(() => {
     setTitle("EDIT EVENT");
   }, []);
+
+  useEffect(() => {
+    setColors({
+      primary: inputs?.primary,
+      secondary: inputs?.secondary,
+      tertiary: inputs?.tertiary,
+    });
+  }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
   useEffect(() => {
     if (router?.query?.eid) {
@@ -224,6 +232,12 @@ const Page = (props) => {
       setInputs({
         ...inputs,
         lightLogo: DEFAULT_LOGO,
+      });
+    },
+    colorChange: (name, value) => {
+      setInputs({
+        ...inputs,
+        [name]: value?.hex,
       });
     },
   };

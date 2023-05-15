@@ -31,7 +31,7 @@ import SlantBanner from "@/src/components/widgets/SlantBanner";
 const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { setColors, buttonStyle } = useStyleContext();
+  const { setColors, buttonStyle, colors } = useStyleContext();
   const { organization, event, team, match, matchLoading } =
     useTournamentContext();
   const [eid, setEID] = useState(router?.query?.eid);
@@ -107,9 +107,11 @@ const Page = (props) => {
             // outlineOffset: '2px'
           }}
         />
-        <Box sx={{mb: 4}}>
-          <Typography variant="h4">{item?.name}</Typography>
-          <Typography variant="h5">
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4" color={colors.primary}>
+            {item?.name}
+          </Typography>
+          <Typography variant="h5" color={colors.secondary}>
             {organization.organizations[item?.oid]?.name}
           </Typography>
         </Box>

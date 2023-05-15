@@ -1,10 +1,13 @@
+import { useStyleContext } from "@/src/context/StyleContext";
 import { Box } from "@mui/material";
 
 export default function SlantBanner({ background }) {
+  const { colors } = useStyleContext();
+
   return (
     <Box
       sx={{
-        filter: "drop-shadow(0 6px 0 white)",
+        filter: `drop-shadow(0 6px 0 ${colors.primary})`,
       }}
     >
       <Box

@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import {
+  Button,
   Chip,
   Grid,
   InputBase,
@@ -48,7 +49,7 @@ const TeamSelect = styled(Select)(({ theme }) => ({
 const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   const router = useRouter();
   const { user } = useAuthContext();
-  const { buttonStyle } = useStyleContext();
+  const { colors, buttonStyle } = useStyleContext();
   const { organization, event, team, currentTime } = useTournamentContext();
   const [myTeam, setMyTeam] = useState("");
   const [registrationStatus, setRegistrationStatus] = useState(0);
@@ -104,7 +105,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     <Grid container spacing={2} rowSpacing={3} sx={{ mt: 2 }}>
       <Grid item xs={12} lg={6}>
         <Paper sx={{ p: 3, minHeight: "200px" }}>
-          <Typography variant="h4" fontSize={24}>
+          <Typography variant="h4" fontSize={24} color={colors.primary}>
             Description
           </Typography>
           <div
@@ -119,7 +120,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
       <Grid item xs={12} lg={6} container spacing={2} rowSpacing={2}>
         <Grid item xs={12}>
           <Paper sx={{ p: 3, height: "100%" }}>
-            <Typography variant="h4" fontSize={24}>
+            <Typography variant="h4" fontSize={24} color={colors.primary}>
               Registration
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
@@ -136,7 +137,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
         </Grid>
         <Grid item xs={12} lg={6}>
           <Paper sx={{ p: 3, height: "100%" }}>
-            <Typography variant="h4" fontSize={24}>
+            <Typography variant="h4" fontSize={24} color={colors.primary}>
               Game
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
@@ -146,7 +147,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
         </Grid>
         <Grid item xs={12} lg={6}>
           <Paper sx={{ p: 3, height: "100%" }}>
-            <Typography variant="h4" fontSize={24}>
+            <Typography variant="h4" fontSize={24} color={colors.primary}>
               Platform
             </Typography>
             <Chip label={"PC"} sx={{ mt: 1 }} />
@@ -154,7 +155,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
         </Grid>
         <Grid item xs={12} lg={6}>
           <Paper sx={{ p: 3, height: "100%" }}>
-            <Typography variant="h4" fontSize={24}>
+            <Typography variant="h4" fontSize={24} color={colors.primary}>
               Format
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
@@ -164,7 +165,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
         </Grid>
         <Grid item xs={12} lg={6}>
           <Paper sx={{ p: 3, height: "100%" }}>
-            <Typography variant="h4" fontSize={24}>
+            <Typography variant="h4" fontSize={24} color={colors.primary}>
               Participants
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>

@@ -310,6 +310,7 @@ const TournamentProvider = (props) => {
   useEffect(() => {
     event.read("");
     player.read();
+    organization.read("");
     team.read("");
     match.read();
     const intervalId = setInterval(() => {

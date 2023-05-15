@@ -17,15 +17,15 @@ import {
 import { Event, Grid3x3 } from "@mui/icons-material";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { formatDate } from "@/src/utils/utils";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 export default function ParticipantProfile({ item }) {
   const theme = useTheme();
   const router = useRouter();
+  const { colors, buttonStyle } = useStyleContext();
   const { team, player } = useTournamentContext();
 
   const getTeamPlayers = (team) => {
-    const router = useRouter();
-
     if (!team) return [];
     return team.players.map((val) => ({
       ...val,
@@ -40,7 +40,7 @@ export default function ParticipantProfile({ item }) {
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 2,
+            gap: 1,
             flexDirection: "column",
           }}
         >
@@ -50,11 +50,21 @@ export default function ParticipantProfile({ item }) {
             width={100}
             height={100}
           ></Box>
-          <Chip
-            icon={<Grid3x3 />}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Grid3x3 fontSize="12px" />
+            <Typography variant="body2">{item?.id}</Typography>
+          </Box>
+          {/* <Chip
+            icon={}
             label={item?.id}
-            sx={{ p: 1, opacity: 0.8 }}
-          />
+            sx={{ opacity: 0.8, p: 0, height: "20px" }}
+          /> */}
         </Box>
         <Box sx={{ flex: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -67,11 +77,7 @@ export default function ParticipantProfile({ item }) {
                 alt=""
               />
             </Tooltip>
-            <Typography
-              variant="h4"
-              fontSize={24}
-              color={theme.palette.primary.main}
-            >
+            <Typography variant="h4" fontSize={24} color={colors.primary}>
               {item?.name}
             </Typography>
           </Box>
@@ -85,7 +91,7 @@ export default function ParticipantProfile({ item }) {
           </Box>
           <Button
             variant="contained"
-            sx={{ mt: 1 }}
+            sx={{ mt: 1, ...buttonStyle }}
             onClick={() => {
               router.push("/team/" + item?.id);
             }}
@@ -146,6 +152,7 @@ export default function ParticipantProfile({ item }) {
                 <TableCell align="center">
                   <Button
                     variant="contained"
+                    sx={{ ...buttonStyle }}
                     onClick={() => {
                       // TODO: Redirect to Rogue Social Profile
                       router.push("/user/" + val.id);

@@ -44,11 +44,13 @@ import _ from "lodash";
 import { formatDate, romanNumber } from "@/src/utils/utils";
 import ParticipantProfile from "@/src/components/widgets/ParticipantProfile";
 import SlantBanner from "@/src/components/widgets/SlantBanner";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const theme = useTheme();
+  const { colors, setColors } = useStyleContext();
   const { organization, event, team, match, player } = useTournamentContext();
   const [oid, setOID] = useState();
   const [eid, setEID] = useState();
@@ -75,6 +77,11 @@ const Page = (props) => {
   useEffect(() => {
     if (event?.events[eid]) {
       setOID(event.events[eid].oid);
+      setColors({
+        primary: event.events[eid].primary,
+        secondary: event.events[eid].secondary,
+        tertiary: event.events[eid].tertiary,
+      });
     }
   }, [eid, event?.events]);
 
@@ -136,8 +143,10 @@ const Page = (props) => {
           }}
         />
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h4">{event?.events[eid]?.name}</Typography>
-          <Typography variant="h5">
+          <Typography variant="h4" color={colors.primary}>
+            {event?.events[eid]?.name}
+          </Typography>
+          <Typography variant="h5" color={colors.secondary}>
             {organization.organizations[event?.events[eid]?.oid]?.name}
           </Typography>
         </Box>
