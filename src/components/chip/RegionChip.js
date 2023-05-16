@@ -8,7 +8,7 @@ const RegionChip = ({ type, sx }) => {
       sx={{
         backgroundColor: "#393D40",
         color: "white",
-        fontSize: "1rem",
+        fontSize: "14px",
         backdropFilter: "blur(2px)",
         ...sx,
       }}

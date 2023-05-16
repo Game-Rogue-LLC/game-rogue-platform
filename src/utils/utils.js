@@ -1,26 +1,28 @@
-import colorConvert from "color-convert";
+import Color from "color";
 import dayjs from "dayjs";
 
+// * Begin: Color Util Functions
 export const isBrightColor = (hex) => {
-  const color = colorConvert.hex.rgb(hex);
-  const hsp = Math.sqrt(
-    color[0] * color[0] * 0.299 +
-      color[1] * color[1] * 0.587 +
-      color[2] * color[2] * 0.114
-  );
-
-  return hsp > 127.5;
+  return Color(hex).isLight();
 };
 
-export const brighterColor = (hex, plus) => {
-  const color = colorConvert.hex.hsl(hex);
-  console.log("hsl", color);
-  return colorConvert.hsl.hex(
-    color[0],
-    color[1],
-    Math.min(color[2] + 100 * plus, 100)
-  );
+export const brighterColor = (hex, ratio) => {
+  return Color(hex).lighten(ratio).hexa();
 };
+
+export const darkerColor = (hex, ratio) => {
+  return Color(hex).darken(ratio).hexa();
+};
+
+export const hoverColor = (hex) => {
+  if (isBrightColor(hex)) return darkerColor(hex, 0.1);
+  return brighterColor(hex, 0.1);
+};
+
+export const withOpacity = (hex, opacity) => {
+  return Color(hex).alpha(opacity).hexa();
+};
+// * End: Color Util Functions
 
 export const formatDate = (date, format) => {
   if (format) {

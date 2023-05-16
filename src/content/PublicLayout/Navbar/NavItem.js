@@ -18,6 +18,7 @@ export const StyledMenu = styled((props) => <Menu {...props} />)(
       background: "linear-gradient(to top,#64370c,#2a0d00)",
       borderRadius: 0,
       // backgroundColor: '#000',
+      marginTop: theme.spacing(1),
       padding: theme.spacing(1),
       zIndex: 8500,
       minWidth: 180,

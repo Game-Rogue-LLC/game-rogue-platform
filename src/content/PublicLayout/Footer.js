@@ -37,7 +37,7 @@ const Footer = (props) => {
               variant="h4"
               sx={{ color: "white", fontSize: "25px", mt: 3 }}
             >
-              ABOUT US
+              <Link href="/about">ABOUT US</Link>
             </Typography>
             <Typography
               variant="h4"
@@ -245,6 +245,7 @@ const Footer = (props) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            width: "100%",
           }}
         >
           <img src="/GR_Letters.png" />
@@ -265,6 +266,8 @@ const Footer = (props) => {
           <Box
             sx={{
               display: "flex",
+              width: "100px",
+              flexDirection: "row-reverse",
               justifyContent: "space-between",
               gap: 1,
             }}

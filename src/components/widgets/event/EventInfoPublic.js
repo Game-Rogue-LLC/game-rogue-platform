@@ -49,7 +49,8 @@ const TeamSelect = styled(Select)(({ theme }) => ({
 const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   const router = useRouter();
   const { user } = useAuthContext();
-  const { colors, buttonStyle } = useStyleContext();
+  const { colors, buttonStyle, secondaryBackgroundColor, fontColor } =
+    useStyleContext();
   const { organization, event, team, currentTime } = useTournamentContext();
   const [myTeam, setMyTeam] = useState("");
   const [registrationStatus, setRegistrationStatus] = useState(0);
@@ -104,7 +105,13 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   return (
     <Grid container spacing={2} rowSpacing={3} sx={{ mt: 2 }}>
       <Grid item xs={12} lg={6}>
-        <Paper sx={{ p: 3, minHeight: "200px" }}>
+        <Paper
+          sx={{
+            p: 3,
+            minHeight: "200px",
+            backgroundColor: secondaryBackgroundColor,
+          }}
+        >
           <Typography variant="h4" fontSize={24} color={colors.primary}>
             Description
           </Typography>
@@ -119,7 +126,13 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
       </Grid>
       <Grid item xs={12} lg={6} container spacing={2} rowSpacing={2}>
         <Grid item xs={12}>
-          <Paper sx={{ p: 3, height: "100%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              backgroundColor: secondaryBackgroundColor,
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Registration
             </Typography>
@@ -136,7 +149,13 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={6}>
-          <Paper sx={{ p: 3, height: "100%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              backgroundColor: secondaryBackgroundColor,
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Game
             </Typography>
@@ -146,7 +165,13 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={6}>
-          <Paper sx={{ p: 3, height: "100%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              backgroundColor: secondaryBackgroundColor,
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Platform
             </Typography>
@@ -154,7 +179,13 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={6}>
-          <Paper sx={{ p: 3, height: "100%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              backgroundColor: secondaryBackgroundColor,
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Format
             </Typography>
@@ -164,7 +195,13 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={6}>
-          <Paper sx={{ p: 3, height: "100%" }}>
+          <Paper
+            sx={{
+              p: 3,
+              height: "100%",
+              backgroundColor: secondaryBackgroundColor,
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Participants
             </Typography>
@@ -174,7 +211,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
           </Paper>
         </Grid>
         <Grid item xs={12}>
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: 3, backgroundColor: secondaryBackgroundColor }}>
             {user && (
               <TeamSelect
                 labelId="team-select-label"

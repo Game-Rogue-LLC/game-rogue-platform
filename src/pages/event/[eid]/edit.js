@@ -72,15 +72,16 @@ const Page = (props) => {
     if (router?.query?.eid) {
       setEID(router.query.eid);
     }
-  }, [router?.query?.eid]);
+  }, [router]);
 
   useEffect(() => {
     if (event?.events[eid]) {
       event.setCurrent(eid);
-      organization.setCurrent(event.events[eid]?.oid);
+      organization.setCurrent(event.events[eid].oid);
+      console.log(event.events[eid], eid);
       setInputs({
         ...event.events[eid],
-        description: markdownToHtml(event.events[eid]?.description),
+        description: markdownToHtml(event.events[eid].description),
       });
     }
   }, [eid, event?.events]);

@@ -10,6 +10,7 @@ import {
   Paper,
   Select,
   Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
 import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
@@ -27,6 +28,9 @@ import EventInfoPublic from "@/src/components/widgets/event/EventInfoPublic";
 import EventCoursePublic from "@/src/components/widgets/event/EventCoursePublic";
 import { useStyleContext } from "@/src/context/StyleContext";
 import SlantBanner from "@/src/components/widgets/SlantBanner";
+import StyledTabPanel, {
+  tabProps,
+} from "@/src/components/styled/StyledTabPanel";
 
 const Page = (props) => {
   const router = useRouter();
@@ -111,17 +115,51 @@ const Page = (props) => {
           <Typography variant="h4" color={colors.primary}>
             {item?.name}
           </Typography>
-          <Typography variant="h5" color={colors.secondary}>
+          <Typography variant="h5" fontWeight="bold" color={colors.secondary}>
             {organization.organizations[item?.oid]?.name}
           </Typography>
         </Box>
       </Box>
       <Container sx={{ mt: "100px" }}>
+        {/* <Tabs
+          value={tab}
+          onChange={handle.changeTab}
+          TabIndicatorProps={{ sx: { backgroundColor: colors.primary } }}
+        >
+          <Tab
+            label="Info"
+            {...tabProps("info")}
+            sx={{ "&.Mui-selected": { color: colors.primary } }}
+          />
+          <Tab label="Course" {...tabProps("course")} />
+        </Tabs>
+        <StyledTabPanel name="info" value={0} tab={tab}>
+          <EventInfoPublic
+            eid={eid}
+            item={item}
+            startTime={startTime}
+            endTime={endTime}
+          />
+        </StyledTabPanel>
+        <StyledTabPanel name="course" value={1} tab={tab}>
+          <EventCoursePublic eid={eid} />
+        </StyledTabPanel> */}
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handle.changeTab} aria-label="">
-              <Tab label="Info" value="1" />
-              <Tab label="Course" value="2" />
+            <TabList
+              onChange={handle.changeTab}
+              TabIndicatorProps={{ sx: { backgroundColor: colors.primary } }}
+            >
+              <Tab
+                label="Info"
+                value="1"
+                sx={{ "&.Mui-selected": { color: colors.primary } }}
+              />
+              <Tab
+                label="Course"
+                value="2"
+                sx={{ "&.Mui-selected": { color: colors.primary } }}
+              />
             </TabList>
           </Box>
           <TabPanel value="1">

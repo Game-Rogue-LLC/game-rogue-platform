@@ -34,6 +34,23 @@ import { useRouter } from "next/router";
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
 import { useAppContext } from "@/src/context/app";
 
+const SearchInput = styled(OutlinedInput)(({ theme }) => ({
+  ".MuiSvgIcon-root": {
+    transform: "rotateY(0deg) tranlate(0,0)",
+    transition: "all 0.5s linear",
+  },
+  "& :hover": {
+    ".MuiSvgIcon-root": {
+      transform: "rotateY(180deg)",
+    },
+  },
+  "& :focus": {
+    ".MuiSvgIcon-root": {
+      transform: "translate(-100px, 0px)",
+    },
+  },
+}));
+
 const Navbar = ({ sx }) => {
   const user = useAuthContext();
   const router = useRouter();
@@ -125,8 +142,8 @@ const Navbar = ({ sx }) => {
             }}
           >
             <img src="/GR_Letters.png" height={40} />
-            <FormControl>
-              <OutlinedInput
+            <Box id="search-box">
+              <SearchInput
                 id="search"
                 name="search"
                 placeholder="Search"
@@ -136,12 +153,12 @@ const Navbar = ({ sx }) => {
                   height: "40px",
                 }}
                 startAdornment={
-                  <InputAdornment position="start">
+                  <InputAdornment position="start" onMouseOver>
                     <Search fontSize="large" />
                   </InputAdornment>
                 }
               />
-            </FormControl>
+            </Box>
             <NavItem
               name="HOME"
               active={currentPage === "home"}
