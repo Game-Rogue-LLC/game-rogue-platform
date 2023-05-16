@@ -165,7 +165,8 @@ const Page = (props) => {
             >
               <Box
                 sx={{
-                  p: 2,
+                  py: 2,
+                  px: 3,
                   backgroundColor: style.secondaryBackgroundColor,
                   display: "flex",
                   alignItems: "center",
@@ -190,7 +191,7 @@ const Page = (props) => {
                     >
                       VIEW ORGANIZER
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body1" paddingLeft="5px">
                       {organization?.organizations[oid]?.name}
                     </Typography>
                   </Link>
@@ -208,11 +209,11 @@ const Page = (props) => {
                 }}
               >
                 <AccessTimeFilled />
-                <Box>
+                <Box sx={{ ml: "-10px" }}>
                   <Typography variant="h4" fontSize={18} color={colors.primary}>
                     START TIME
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" paddingLeft="5px">
                     {dayjs(item?.start).format("MMM DD, YYYY, HH:mm A") +
                       " GMT" +
                       dayjs(item?.start).format("Z")}
@@ -247,8 +248,13 @@ const Page = (props) => {
                   width={25}
                   height={25}
                 ></Box>
-                <Box>
-                  <Typography variant="h4" fontSize={18} color={colors.primary}>
+                <Box sx={{ ml: "-10px" }}>
+                  <Typography
+                    variant="h4"
+                    fontSize={18}
+                    color={colors.primary}
+                    marginLeft="5px"
+                  >
                     EVENT
                   </Typography>
                   {/* {event?.events[eid]?.name} */}
@@ -295,7 +301,9 @@ const Page = (props) => {
                     >
                       MATCH STATE
                     </Typography>
-                    <Typography variant="body1">{getStatus(item)}</Typography>
+                    <Typography variant="body1" paddingLeft="5px">
+                      {getStatus(item)}
+                    </Typography>
                   </Box>
                 </Box>
 
@@ -319,7 +327,7 @@ const Page = (props) => {
                     >
                       FORMAT
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body1" paddingLeft="5px">
                       {EVENT_FORMATS[event?.events[eid]?.format || 0].name}
                     </Typography>
                   </Box>
@@ -345,7 +353,9 @@ const Page = (props) => {
                     >
                       EVENT ID
                     </Typography>
-                    <Typography variant="body1">{eid || ""}</Typography>
+                    <Typography variant="body1" paddingLeft="5px">
+                      {eid || ""}
+                    </Typography>
                   </Box>
                 </Box>
 
@@ -369,7 +379,9 @@ const Page = (props) => {
                     >
                       MATCH ID
                     </Typography>
-                    <Typography variant="body1">{mid || ""}</Typography>
+                    <Typography variant="body1" paddingLeft="5px">
+                      {mid || ""}
+                    </Typography>
                   </Box>
                 </Box>
               </Box>
