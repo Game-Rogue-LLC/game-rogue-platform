@@ -162,6 +162,38 @@ const TournamentProvider = (props) => {
   };
   /** End Event Data / Functions */
 
+  /** Begin Ticket Data / Functions */
+  const [tickets, setTickets] = useState({});
+  const [ticketLoading, setTicketLoading] = useState(true);
+  const ticket = {
+    tickets,
+    setTickets,
+    create: async (newTicket) => {
+      const res = await store.ticket.save(null, newTicket);
+      return res;
+    },
+    read: async (uid) => {
+      setTicketLoading(true);
+      const res = await store.ticket.read(
+        uid,
+        async (data) => {
+          setTickets(data);
+          console.info("tickets:", data);
+        },
+        () => setTicketLoading(false)
+      );
+    },
+    update: async (id, newTicket) => {
+      const res = await store.ticket.save(id, newTicket);
+      return res;
+    },
+    delete: async (id) => {
+      res = await store.ticket.save(id, { deleted: true });
+      return res;
+    },
+  };
+  /** End Ticket Data / Functions */
+
   /** Begin Team Data / Functions */
   const [teams, setTeams] = useState({});
   const [teamLoading, setTeamLoading] = useState(true);
@@ -293,13 +325,26 @@ const TournamentProvider = (props) => {
   /** End Match Data / Functions */
 
   const isLoading = useMemo(() => {
-    return organizationLoading || eventLoading || teamLoading || playerLoading;
-  }, [organizationLoading, eventLoading, teamLoading, playerLoading]);
+    return (
+      organizationLoading ||
+      eventLoading ||
+      teamLoading ||
+      playerLoading ||
+      ticketLoading
+    );
+  }, [
+    organizationLoading,
+    eventLoading,
+    teamLoading,
+    playerLoading,
+    ticketLoading,
+  ]);
 
   const loadTournament = useCallback(() => {
     if (user && user.id) {
       organization.read(user.id);
       team.read(user.id);
+      ticket.read(user.id);
     }
   }, [user]);
 
@@ -332,6 +377,7 @@ const TournamentProvider = (props) => {
         team,
         player,
         match,
+        ticket,
         organizationLoading,
         eventLoading,
         matchLoading,

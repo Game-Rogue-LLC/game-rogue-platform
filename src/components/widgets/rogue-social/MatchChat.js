@@ -8,6 +8,7 @@ import {
   Typography,
   OutlinedInput,
 } from "@mui/material";
+import { nanoid } from "nanoid";
 import { Send } from "@mui/icons-material";
 import { DEFAULT_LOGO } from "@/src/config/global";
 import match from "@/lib/firestore/collections/match";
@@ -50,6 +51,7 @@ const MatchChat = ({ item }) => {
         messages: [
           ...messages,
           {
+            id: nanoid(),
             sender: myTeam.id,
             text: input,
             sentAt: new Date(),
