@@ -1,11 +1,12 @@
-import Link from "next/link";
 import { Box, SvgIcon, Typography, useTheme } from "@mui/material";
 import { Instagram, Twitter, YouTube } from "@mui/icons-material";
+
+import Link from "next/link";
 
 const Footer = (props) => {
   const theme = useTheme();
   return (
-    <Box component={"footer"} sx={{ zIndex: 100 }}>
+    <Box component={"footer"} sx={{ zIndex: 100, backgroundColor: "black" }}>
       <Box
         component={"section"}
         sx={{

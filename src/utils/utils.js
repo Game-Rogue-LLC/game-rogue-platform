@@ -7,16 +7,16 @@ export const isBrightColor = (hex) => {
 };
 
 export const brighterColor = (hex, ratio) => {
-  return Color(hex).lighten(ratio).hexa();
+  return Color(hex).lighten(ratio).hex();
 };
 
 export const darkerColor = (hex, ratio) => {
-  return Color(hex).darken(ratio).hexa();
+  return Color(hex).darken(ratio).hex();
 };
 
 export const hoverColor = (hex) => {
-  if (isBrightColor(hex)) return darkerColor(hex, 0.1);
-  return brighterColor(hex, 0.1);
+  if (isBrightColor(hex)) return darkerColor(hex, 0.3);
+  return brighterColor(hex, 0.3);
 };
 
 export const withOpacity = (hex, opacity) => {

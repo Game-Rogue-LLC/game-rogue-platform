@@ -112,19 +112,25 @@ a {
 @keyframes rogue-social-splash {
   0% {
     display: block;
-    z-index: 9000;
+    opacity: 1;
+    z-index: 9999;
   }
 
   95% {
+    display: block;
     opacity: 1;
+    z-index: 9999;
   }
 
   99% {
+    display: block;
     opacity: 0;
+    z-index: 9999;
   }
 
   100% {
     opacity: 0;
+    display: none;
     z-index: -1;
   }
 }
@@ -144,26 +150,36 @@ a {
 
   17% {
     background-image: url("/static/images/navigation/1.png");
+    display: block;
+    z-index: 9000;
   }
 
   34% {
     background-image: url("/static/images/navigation/2.png");
+    display: block;
+    z-index: 9000;
   }
 
   51% {
     background-image: url("/static/images/navigation/3.png");
+    display: block;
+    z-index: 9000;
   }
 
   68% {
     background-image: url("/static/images/navigation/4.png");
+    display: block;
+    z-index: 9000;
   }
 
   85% {
     background-image: url("/static/images/navigation/5.png");
+    display: block;
+    z-index: 9000;
   }
 
   100% {
-    background-image: none;
+    display: none;
     z-index: -1;
   }
 }
@@ -482,4 +498,8 @@ input#search::placeholder {
 
 #search-box {
   overflow: hidden;
+}
+
+.MuiMenu-paper {
+  z-index: 900;
 }

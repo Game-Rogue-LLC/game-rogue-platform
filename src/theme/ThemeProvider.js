@@ -1,8 +1,9 @@
-import { useState, createContext, useEffect } from "react";
-import { ThemeProvider } from "@mui/material";
-import { themeCreator } from "./base";
+import { ThemeProvider, createTheme } from "@mui/material";
+import { createContext, useCallback, useEffect, useState } from "react";
+
 import { StylesProvider } from "@mui/styles";
 import { defaultDarkTheme } from "./schemes/dark";
+import { themeCreator } from "./base";
 
 export const ThemeContext = createContext((_themeName) => {});
 
@@ -21,6 +22,11 @@ const ThemeProviderWrapper = (props) => {
   // }, [themeName]);
 
   const theme = themeCreator(themeName);
+
+  // useEffect(() => {
+  //   changeThemeByName();
+  // }, [changeThemeByName]);
+
   const setThemeName = (themeName) => {
     window.localStorage.setItem("appTheme", themeName);
     _setThemeName(themeName);
@@ -34,15 +40,17 @@ const ThemeProviderWrapper = (props) => {
   // };
 
   // const setThemePrimaryColor = (color) => {
-  //   _setTheme({
-  //     ...defaultDarkTheme,
-  //     palette: {
-  //       ...defaultDarkTheme.palette,
-  //       primary: {
-  //         main: color,
+  //   _setTheme(
+  //     createTheme({
+  //       ...defaultDarkTheme,
+  //       palette: {
+  //         ...defaultDarkTheme.palette,
+  //         primary: {
+  //           main: color,
+  //         },
   //       },
-  //     },
-  //   });
+  //     })
+  //   );
   // };
 
   return (

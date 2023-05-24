@@ -1,38 +1,39 @@
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
   AppBar,
   Avatar,
   Box,
   Button,
   Container,
-  Toolbar,
+  Divider,
+  FormControl,
   IconButton,
   InputAdornment,
   Menu,
   MenuItem,
   OutlinedInput,
+  Toolbar,
   Typography,
-  FormControl,
   styled,
   useTheme,
-  Divider,
 } from "@mui/material";
 import {
-  Search,
-  Logout,
-  Login,
-  Person,
   ArrowRight,
   ArrowRightAlt,
   ArrowRightOutlined,
   ArrowRightSharp,
   ChevronRight,
+  Login,
+  Logout,
+  Person,
+  Search,
 } from "@mui/icons-material";
+import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
+import { useEffect, useState } from "react";
+
+import Link from "next/link";
+import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
-import { useAppContext } from "@/src/context/app";
 
 const SearchInput = styled(OutlinedInput)(({ theme }) => ({
   ".MuiSvgIcon-root": {
@@ -51,7 +52,7 @@ const SearchInput = styled(OutlinedInput)(({ theme }) => ({
   },
 }));
 
-const Navbar = ({ sx }) => {
+const PublicNavbar = ({ sx }) => {
   const user = useAuthContext();
   const router = useRouter();
   const theme = useTheme();
@@ -153,7 +154,7 @@ const Navbar = ({ sx }) => {
                   height: "40px",
                 }}
                 startAdornment={
-                  <InputAdornment position="start" onMouseOver>
+                  <InputAdornment position="start">
                     <Search fontSize="large" />
                   </InputAdornment>
                 }
@@ -520,4 +521,4 @@ const Navbar = ({ sx }) => {
   );
 };
 
-export default Navbar;
+export default PublicNavbar;

@@ -1,10 +1,19 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
   brighterColor,
   hoverColor as getHoverColor,
   isBrightColor,
   withOpacity,
 } from "@/src/utils/utils";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import { ThemeContext } from "@/src//theme/ThemeProvider";
 
 const initialColors = {
   primary: "#f5851f",
@@ -17,6 +26,7 @@ const StyleContext = createContext({});
 export const useStyleContext = () => useContext(StyleContext);
 
 const StyleProvider = ({ children }) => {
+  // const { setThemePrimaryColor } = useContext(ThemeContext);
   const [colors, setColors] = useState(initialColors);
 
   const buttonStyle = useMemo(() => {
@@ -27,7 +37,7 @@ const StyleProvider = ({ children }) => {
       color: isBright ? "black" : "white",
       "&:hover": {
         color: isBright ? "black" : "white",
-        backgroundColor: "#" + hoverColor,
+        backgroundColor: hoverColor,
       },
     };
   }, [colors.primary]);
@@ -48,7 +58,15 @@ const StyleProvider = ({ children }) => {
 
   const secondaryBackgroundColor = useMemo(() => {
     return withOpacity(colors.secondary, 0.5);
-  }, [colors.primary]);
+  }, [colors.secondary]);
+
+  // const changeTheme = useCallback(() => {
+  //   setThemePrimaryColor(colors.primary);
+  // }, [colors.primary]);
+
+  // useEffect(() => {
+  //   changeTheme();
+  // }, [changeTheme]);
 
   return (
     <StyleContext.Provider

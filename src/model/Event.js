@@ -6,14 +6,14 @@ export const Event = {
   banner: "",
   darkLogo: "",
   lightLogo: "",
-  format: 0,      // default: Single Elimination
+  format: 0, // default: Single Elimination
   registrationStartAt: new Date(),
   registrationEndAt: new Date(),
   checkIn: 15,
   startAt: new Date(),
   endAt: new Date(),
   timezone: 0,
-  seedingType: 0,       // Random Seeding/Manual Seeding
+  seedingType: 0, // Random Seeding/Manual Seeding
   participants: [],
   participantsCount: 2,
   staffs: [],
@@ -21,8 +21,8 @@ export const Event = {
   privacy: "",
   ruleBook: "",
   status: 0,
-  deleted: false
-}
+  deleted: false,
+};
 
 export const EventParticipant = {
   tid: "",
@@ -31,5 +31,5 @@ export const EventParticipant = {
   loses: 0,
   draws: 0,
   registeredAt: "",
-  deleted: false
-}
+  deleted: false,
+};
