@@ -1,13 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Paper,
-  Typography,
-  OutlinedInput,
-} from "@mui/material";
+import { Box, Button, Grid, TextField, Paper, Typography, OutlinedInput } from "@mui/material";
 import { nanoid } from "nanoid";
 import { Send } from "@mui/icons-material";
 import { DEFAULT_LOGO } from "@/src/config/global";
@@ -54,9 +46,9 @@ const MatchChat = ({ item }) => {
             id: nanoid(),
             sender: myTeam.id,
             text: input,
-            sentAt: new Date(),
-          },
-        ],
+            sentAt: new Date()
+          }
+        ]
       });
       setInput("");
     }
@@ -75,26 +67,20 @@ const MatchChat = ({ item }) => {
     <Box
       sx={{
         width: "250px",
-        height: "400px",
+        height: "300px",
         display: "flex",
         flexDirection: "column",
         bgcolor: "grey.200",
-        border: "solid 1px rgba(255,255,255,0.1)",
-      }}
-    >
+        border: "solid 1px rgba(255,255,255,0.1)"
+      }}>
       <Box sx={{ backgroundColor: "black" }}>
-        <Typography variant="h4" textAlign="center" fontSize="20px">
+        <Typography variant="h4" textAlign="center" fontSize="20px" color="white">
           Game Chat
         </Typography>
       </Box>
-      <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }} ref={messageBoxRef}>
+      <Box sx={{ flexGrow: 1, overflow: "auto", p: 1 }} ref={messageBoxRef}>
         {messages.map((message) => (
-          <Message
-            key={message.id}
-            message={message}
-            team1={opTeam}
-            team2={myTeam}
-          />
+          <Message key={message.id} message={message} team1={opTeam} team2={myTeam} />
         ))}
       </Box>
       <Box sx={{ p: 2, backgroundColor: "background.default" }}>
@@ -110,12 +96,7 @@ const MatchChat = ({ item }) => {
             />
           </Grid>
           <Grid item xs={4}>
-            <Button
-              fullWidth
-              color="primary"
-              variant="contained"
-              onClick={handleSend}
-            >
+            <Button fullWidth color="primary" variant="contained" onClick={handleSend}>
               <Send />
             </Button>
           </Grid>
@@ -132,31 +113,24 @@ const Message = ({ message, team1, team2 }) => {
       sx={{
         display: "flex",
         justifyContent: isLeft ? "flex-start" : "flex-end",
-        mb: 2,
-      }}
-    >
+        mb: 2
+      }}>
       <Box
         sx={{
           display: "flex",
           flexDirection: isLeft ? "row" : "row-reverse",
-          alignItems: "center",
-        }}
-      >
-        <img
-          src={isLeft ? team1?.darkLogo : team2?.darkLogo}
-          width={50}
-          height={50}
-        />
+          alignItems: "center"
+        }}>
+        <img src={isLeft ? team1?.darkLogo : team2?.darkLogo} width={40} height={40} />
         <Paper
           variant="outlined"
           sx={{
-            p: 2,
+            p: 1,
             ml: isLeft ? 1 : 0,
             mr: isLeft ? 0 : 1,
             backgroundColor: isLeft ? "primary.light" : "secondary.light",
-            borderRadius: isLeft ? "20px 20px 20px 5px" : "20px 20px 5px 20px",
-          }}
-        >
+            borderRadius: isLeft ? "20px 20px 20px 5px" : "20px 20px 5px 20px"
+          }}>
           <Typography variant="body1">{message.text}</Typography>
         </Paper>
       </Box>

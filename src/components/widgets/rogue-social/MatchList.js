@@ -39,7 +39,7 @@ const MatchList = () => {
       }}
     >
       {upcomingMatches.map((item) => (
-        <MatchItem key={"match_" + item} item={item} />
+        <MatchItem key={"match_" + item.id} item={item} />
       ))}
     </Box>
   );

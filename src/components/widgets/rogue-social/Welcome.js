@@ -11,6 +11,7 @@ const Welcome = () => {
         textAlign="center"
         textTransform="uppercase"
         marginTop="30px"
+        color="white"
       >
         WELCOME TO{" "}
         <span style={{ color: theme.palette.primary.main }}>ROGUE SOCIAL!</span>

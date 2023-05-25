@@ -1,58 +1,51 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  Menu,
-  MenuItem,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Checkbox, Menu, MenuItem, Tooltip, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { DEFAULT_LOGO } from "@/src/config/global";
-import { Check, CheckBoxOutlineBlank, Close } from "@mui/icons-material";
+import { Check, CheckBoxOutlineBlank, Close, ExpandMore } from "@mui/icons-material";
 import { useAuthContext } from "@/src/context/AuthContext";
 import _ from "lodash";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { LoadingButton } from "@mui/lab";
+import { SnackbarProvider, useSnackbar } from "notistack";
 
 const maps = [
   {
     title: "Bank",
-    image: "/static/images/maps/Bank.png",
+    image: "/static/images/maps/Bank.png"
   },
   {
     title: "Border",
-    image: "/static/images/maps/Border.png",
+    image: "/static/images/maps/Border.png"
   },
   {
     title: "Chalet",
-    image: "/static/images/maps/Chalet.png",
+    image: "/static/images/maps/Chalet.png"
   },
   {
     title: "Club House",
-    image: "/static/images/maps/Clubhouse.png",
+    image: "/static/images/maps/Clubhouse.png"
   },
   {
     title: "Cafe",
-    image: "/static/images/maps/Kafe.png",
+    image: "/static/images/maps/Kafe.png"
   },
   {
     title: "Oregon",
-    image: "/static/images/maps/Oregon.png",
+    image: "/static/images/maps/Oregon.png"
   },
   {
     title: "Sky Scraper",
-    image: "/static/images/maps/Skyscraper.png",
+    image: "/static/images/maps/Skyscraper.png"
   },
   {
     title: "Theme Park",
-    image: "/static/images/maps/Theme_park.png",
+    image: "/static/images/maps/Theme_park.png"
   },
   {
     title: "Villa",
-    image: "/static/images/maps/Villa.png",
-  },
+    image: "/static/images/maps/Villa.png"
+  }
 ];
 
 const ThreeStateCheckbox = () => {
@@ -72,13 +65,24 @@ const ThreeStateCheckbox = () => {
   );
 };
 
-const MapBans = ({ item, onComplete }) => {
+const MapMenu = styled(Menu)(({ theme }) => ({
+  ".MuiMenu-list": {
+    padding: "0px !important"
+  },
+  ".MuiMenuItem-root": {
+    paddingInline: "0px !important",
+    paddingBlock: "2px !important"
+  }
+}));
+
+const MapBans = ({ item }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const { user } = useAuthContext();
   const { team, match } = useTournamentContext();
   const { buttonStyle } = useStyleContext();
+  const { enqueueSnackbar } = useSnackbar();
   const [team1, setTeam1] = useState(null);
   const [team2, setTeam2] = useState(null);
   const [banned1, setBanned1] = useState(_.fill(Array(maps.length), 0));
@@ -89,15 +93,22 @@ const MapBans = ({ item, onComplete }) => {
     return team?.uid === user?.id;
   };
 
+  const isAccepted = () => {
+    return (
+      (isMyTeam(team1) && item?.accepted && item.accepted[0] === true) ||
+      (isMyTeam(team2) && item?.accepted && item.accepted[1] === true)
+    );
+  };
+
   const onMapBan = (e, ind) => {
     if (isMyTeam(team1))
-      setBanned1((val) =>
-        val.map((ban, i) => (i === ind ? (ban + 1) % 3 : ban))
-      );
+      setBanned1((val) => val.map((ban, i) => (i === ind ? (ban + 1) % 3 : ban)));
     else if (isMyTeam(team2))
-      setBanned2((val) =>
-        val.map((ban, i) => (i === ind ? (ban + 1) % 3 : ban))
-      );
+      setBanned2((val) => val.map((ban, i) => (i === ind ? (ban + 1) % 3 : ban)));
+  };
+
+  const getCommonMaps = () => {
+    return maps.filter((val, i) => banned1[i] === 2 && banned2[i] === 2);
   };
 
   const onSave = async (e) => {
@@ -106,7 +117,6 @@ const MapBans = ({ item, onComplete }) => {
       const res = await match.update(item.id, { mapbans: { 0: banned1 } });
       if (res.code === "succeed") {
         alert("Saved successfully!");
-        onComplete();
       } else {
         console.error(res.message);
       }
@@ -114,12 +124,62 @@ const MapBans = ({ item, onComplete }) => {
       const res = await match.update(item.id, { mapbans: { 1: banned2 } });
       if (res.code === "succeed") {
         alert("Saved successfully!");
-        onComplete();
       } else {
         console.error(res.message);
       }
     }
     setSaving(false);
+  };
+
+  const startMatch = () => {
+    let countDown = 5;
+    const interval = setInterval(() => {
+      enqueueSnackbar(`Game starts in ${countDown} seconds.`, { variant: "info" });
+      countDown--;
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(interval);
+    }, [5000]);
+  };
+
+  const onAccept = async (e) => {
+    if (confirm("Are you ready for the game?") == false) return;
+    if (isMyTeam(team1)) {
+      await match.update(item.id, { mapbans: { 0: banned1 } });
+      if (item?.accepted && item.accepted[1] === true) {
+        startMatch();
+        await match.update(item.id, {
+          maps: getCommonMaps()
+        });
+      }
+      await match.update(item.id, {
+        accepted: [true, item?.accepted ? item.accepted[1] || false : false]
+      });
+    } else if (isMyTeam(team2)) {
+      await match.update(item.id, { mapbans: { 1: banned2 } });
+      if (item?.accepted && item.accepted[0] === true) {
+        startMatch();
+        await match.update(item.id, {
+          maps: getCommonMaps()
+        });
+      }
+      await match.update(item.id, {
+        accepted: [item?.accepted ? item.accepted[0] || false : false, true]
+      });
+    }
+  };
+
+  const onDecline = async (e) => {
+    if (isMyTeam(team1)) {
+      await match.update(item.id, {
+        accepted: [false, item?.accepted ? item.accepted[1] || false : false]
+      });
+    }
+    if (isMyTeam(team2)) {
+      await match.update(item.id, {
+        accepted: [item?.accepted ? item.accepted[0] || false : false, false]
+      });
+    }
   };
 
   useEffect(() => {
@@ -134,10 +194,8 @@ const MapBans = ({ item, onComplete }) => {
   }, [item]);
 
   useEffect(() => {
-    if (item?.participants[0]?.id)
-      setTeam1(team?.teams[item.participants[0].id]);
-    if (item?.participants[1]?.id)
-      setTeam2(team?.teams[item.participants[1].id]);
+    if (item?.participants[0]?.id) setTeam1(team?.teams[item.participants[0].id]);
+    if (item?.participants[1]?.id) setTeam2(team?.teams[item.participants[1].id]);
   }, [team?.teams, item]);
 
   const onOpen = (e) => {
@@ -157,16 +215,10 @@ const MapBans = ({ item, onComplete }) => {
               mt: 2,
               height: "150px",
               width: "150px",
-              filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))",
+              filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
             }}
-            src={team1?.darkLogo || DEFAULT_LOGO}
-          ></Box>
-          <Typography
-            variant="body1"
-            textAlign={"center"}
-            fontSize={"1.5rem"}
-            color={"white"}
-          >
+            src={team1?.darkLogo || DEFAULT_LOGO}></Box>
+          <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
             {team1?.name}
           </Typography>
         </Box>
@@ -178,9 +230,8 @@ const MapBans = ({ item, onComplete }) => {
           alignItems: "center",
           gap: 4,
           flexDirection: "column",
-          zIndex: 500,
-        }}
-      >
+          zIndex: 500
+        }}>
         <Box>
           <Button
             id="map-bans-btn"
@@ -188,27 +239,25 @@ const MapBans = ({ item, onComplete }) => {
             aria-controls={open ? "map-bans-menu" : undefined}
             aria-haspopup="true"
             onClick={onOpen}
-            sx={{ ...buttonStyle }}
-          >
+            sx={{ ...buttonStyle, width: "300px" }}>
             Map Bans
           </Button>
-          <Menu
+          <MapMenu
             id="map-bans-menu"
             anchorEl={anchorEl}
             anchorOrigin={{
               vertical: "bottom",
-              horizontal: "center",
+              horizontal: "center"
             }}
             transformOrigin={{
               vertical: "top",
-              horizontal: "center",
+              horizontal: "center"
             }}
             // disablePortal={true}
             disableScrollLock={true}
             open={open}
             MenuListProps={{ "aria-labelledby": "map-bans-btn" }}
-            onClose={onClose}
-          >
+            onClose={onClose}>
             {maps.map((img, i) => (
               <MenuItem key={`map_${i}`} onClick={(e) => onMapBan(e, i)}>
                 <Box
@@ -216,17 +265,10 @@ const MapBans = ({ item, onComplete }) => {
                     width: "50px",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                    justifyContent: "center"
+                  }}>
                   {/* <ThreeStateCheckbox /> */}
-                  {banned1[i] === 1 ? (
-                    <Close />
-                  ) : banned1[i] === 2 ? (
-                    <Check />
-                  ) : (
-                    <></>
-                  )}
+                  {banned1[i] === 1 ? <Close /> : banned1[i] === 2 ? <Check /> : <></>}
                 </Box>
 
                 <Tooltip title={img.title}>
@@ -236,8 +278,8 @@ const MapBans = ({ item, onComplete }) => {
                       height: "50px",
                       backgroundImage: "url(" + img.image + ")",
                       backgroundSize: "cover",
-                    }}
-                  ></Box>
+                      backgroundPosition: "center"
+                    }}></Box>
                 </Tooltip>
 
                 <Box
@@ -245,27 +287,45 @@ const MapBans = ({ item, onComplete }) => {
                     width: "50px",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                    justifyContent: "center"
+                  }}>
                   {/* <ThreeStateCheckbox /> */}
-                  {banned2[i] === 1 ? (
-                    <Close />
-                  ) : banned2[i] === 2 ? (
-                    <Check />
-                  ) : (
-                    <></>
-                  )}
+                  {banned2[i] === 1 ? <Close /> : banned2[i] === 2 ? <Check /> : <></>}
                 </Box>
               </MenuItem>
             ))}
-          </Menu>
+            <Box sx={{ py: 1, display: "flex", alignItems: "center" }}>
+              <Box
+                width={50}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                {item?.accepted && item.accepted[0] === true ? <Check /> : <></>}
+              </Box>
+              {isAccepted() === true ? (
+                <Button variant="contained" sx={{ flexGrow: 1 }} onClick={onDecline} color="error">
+                  Decline
+                </Button>
+              ) : (
+                <Button variant="contained" sx={{ flexGrow: 1 }} onClick={onAccept} color="success">
+                  Accept
+                </Button>
+              )}
+              <Box
+                width={50}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                {item?.accepted && item.accepted[1] === true ? <Check /> : <></>}
+              </Box>
+            </Box>
+          </MapMenu>
         </Box>
-        <LoadingButton
-          sx={{ ...buttonStyle }}
-          onClick={onSave}
-          loading={saving}
-        >
+        <LoadingButton sx={{ ...buttonStyle }} onClick={onSave} loading={saving}>
           Save
         </LoadingButton>
       </Box>
@@ -278,16 +338,10 @@ const MapBans = ({ item, onComplete }) => {
               mt: 2,
               height: "150px",
               width: "150px",
-              filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))",
+              filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
             }}
-            src={team2?.darkLogo || DEFAULT_LOGO}
-          ></Box>
-          <Typography
-            variant="body1"
-            textAlign={"center"}
-            fontSize={"1.5rem"}
-            color={"white"}
-          >
+            src={team2?.darkLogo || DEFAULT_LOGO}></Box>
+          <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
             {team2?.name}
           </Typography>
         </Box>

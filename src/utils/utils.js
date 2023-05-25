@@ -26,7 +26,7 @@ export const withOpacity = (hex, opacity) => {
 
 export const formatDate = (date, format) => {
   if (format) {
-    return dayjs(date).format(format);
+    return dayjs(new Date(date)).format(format);
   }
   return dayjs(date).format("DD.MM.YYYY");
 };
@@ -75,4 +75,9 @@ export const romanNumber = (number) => {
     default:
       return "";
   }
+};
+
+export const numberLang = (number) => {
+  const numbers = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+  return numbers[number - 1];
 };

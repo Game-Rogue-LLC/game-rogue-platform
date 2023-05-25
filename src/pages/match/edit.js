@@ -152,11 +152,11 @@ const Page = (props) => {
     finishScheduling: async (e) => {
       setChangingStatus(true);
       if (confirm("Do you really want to finish scheduling this event?")) {
-        for (let i = 0; i < matches.length; i++) {
-          const res = await match.update(matches[i].id, {
-            status: MATCH_STATES.SCHEDULED.value,
-          });
-        }
+        // for (let i = 0; i < matches.length; i++) {
+        //   const res = await match.update(matches[i].id, {
+        //     status: MATCH_STATES.SCHEDULED.value,
+        //   });
+        // }
         const res = await event.update(eid, {
           status: EVENT_STATES.SCHEDULED.value,
         });
@@ -169,11 +169,11 @@ const Page = (props) => {
     startEvent: async (e) => {
       setChangingStatus(true);
       if (confirm("Do you really want to start this event?")) {
-        for (let i = 0; i < matches.length; i++) {
-          const res = await match.update(matches[i].id, {
-            status: MATCH_STATES.STARTED.value,
-          });
-        }
+        // for (let i = 0; i < matches.length; i++) {
+        //   const res = await match.update(matches[i].id, {
+        //     status: MATCH_STATES.STARTED.value,
+        //   });
+        // }
         const res = await event.update(eid, {
           status: EVENT_STATES.STARTED.value,
         });

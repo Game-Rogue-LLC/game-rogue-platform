@@ -188,7 +188,7 @@ const TournamentProvider = (props) => {
       return res;
     },
     delete: async (id) => {
-      res = await store.ticket.save(id, { deleted: true });
+      const res = await store.ticket.save(id, { deleted: true });
       return res;
     },
   };

@@ -1,22 +1,22 @@
-import {
-  Box
-} from '@mui/material'
+import { Box } from "@mui/material";
 
-import Navbar from '@/src/content/PublicLayout/Navbar';
-import Footer from '@/src/content/PublicLayout/Footer';
+import Navbar from "@/src/content/PublicLayout/Navbar";
+import Footer from "@/src/content/PublicLayout/Footer";
+import { SnackbarProvider } from "notistack";
 
 const PublicLayout = (props) => {
   return (
-    <Box sx={{ background: 'black', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar sx={{ position: 'fixed' }} />
+    <SnackbarProvider maxSnack={5}>
+      <Box
+        sx={{ background: "black", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        <Navbar sx={{ position: "fixed" }} />
 
-      <Box sx={{ background: 'black', flex: 1, marginTop: '73px' }}>
-        {props.children}
+        <Box sx={{ background: "black", flex: 1, marginTop: "73px" }}>{props.children}</Box>
+
+        <Footer />
       </Box>
-
-      <Footer />
-    </Box>
-  )
-}
+    </SnackbarProvider>
+  );
+};
 
 export default PublicLayout;
