@@ -12,7 +12,7 @@ import {
   Paper,
   Select,
   Typography,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { LoadingButton } from "@mui/lab";
@@ -25,16 +25,13 @@ import DateTimePicker from "@/src/components/datetime/DateTimePicker";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { DEFAULT_LOGO, DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
 import EventInput from "@/src/components/widgets/event/EventInput";
-import {
-  model,
-  rules,
-  customMessages,
-} from "@/lib/firestore/collections/event";
+import { model, rules, customMessages } from "@/lib/firestore/collections/event";
 import { htmlToMarkdown, markdownToHtml } from "@/src/utils/html-markdown";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const initialInputs = {
-  ...model,
+  ...model
 };
 
 const Page = (props) => {
@@ -54,7 +51,7 @@ const Page = (props) => {
   const [darkLogo, setDarkLogo] = useState(null);
   const [lightLogo, setLightLogo] = useState(null);
 
-  const { setColors, buttonStyle } = useStyleContext();
+  const { setColors } = useStyleContext();
 
   useEffect(() => {
     setTitle("EDIT EVENT");
@@ -64,7 +61,7 @@ const Page = (props) => {
     setColors({
       primary: inputs?.primary,
       secondary: inputs?.secondary,
-      tertiary: inputs?.tertiary,
+      tertiary: inputs?.tertiary
     });
   }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
@@ -81,7 +78,7 @@ const Page = (props) => {
       console.log(event.events[eid], eid);
       setInputs({
         ...event.events[eid],
-        description: markdownToHtml(event.events[eid].description),
+        description: markdownToHtml(event.events[eid].description)
       });
     }
   }, [eid, event?.events]);
@@ -90,7 +87,7 @@ const Page = (props) => {
     if (data.participantsCount % 2) {
       setErrors((prev) => ({
         ...prev,
-        participantsCount: "Participant Count must be even number.",
+        participantsCount: "Participant Count must be even number."
       }));
     }
 
@@ -98,7 +95,7 @@ const Page = (props) => {
     if (validator.fails()) {
       setErrors((prev) => ({
         ...prev,
-        ...validator.errors.errors,
+        ...validator.errors.errors
       }));
       return false;
     }
@@ -178,13 +175,13 @@ const Page = (props) => {
       if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
-        [name]: value,
+        [name]: value
       });
     },
     setDate: (name, newDate) => {
       setInputs((prev) => ({
         ...prev,
-        [name]: new Date(newDate),
+        [name]: new Date(newDate)
       }));
     },
     upload: (e, name) => {
@@ -195,21 +192,21 @@ const Page = (props) => {
           setBanner(file);
           setInputs({
             ...inputs,
-            banner: url,
+            banner: url
           });
           break;
         case "darkLogo":
           setDarkLogo(file);
           setInputs({
             ...inputs,
-            darkLogo: url,
+            darkLogo: url
           });
           break;
         case "lightLogo":
           setLightLogo(file);
           setInputs({
             ...inputs,
-            lightLogo: url,
+            lightLogo: url
           });
           break;
         case "rulebook":
@@ -226,43 +223,36 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO,
+        darkLogo: DEFAULT_LOGO
       });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO,
+        lightLogo: DEFAULT_LOGO
       });
     },
     colorChange: (name, value) => {
       setInputs({
         ...inputs,
-        [name]: value?.hex,
+        [name]: value?.hex
       });
-    },
+    }
   };
 
   return (
     <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
-      <EventInput
-        handle={handle}
-        inputs={inputs}
-        errors={errors}
-        disabled={disabled}
-      />
+      <EventInput handle={handle} inputs={inputs} errors={errors} disabled={disabled} />
 
       <Grid container sx={{ mt: 3 }}>
         <Grid item xs={12}>
-          <LoadingButton
+          <CustomLoadingButton
             loading={saving}
             variant="contained"
             onClick={handle.save}
-            disabled={disabled}
-            sx={{ ...buttonStyle }}
-          >
+            disabled={disabled}>
             Save
-          </LoadingButton>
+          </CustomLoadingButton>
         </Grid>
       </Grid>
     </Paper>

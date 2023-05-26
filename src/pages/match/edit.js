@@ -10,7 +10,7 @@ import {
   Paper,
   Select,
   Typography,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { LoadingButton } from "@mui/lab";
@@ -27,13 +27,9 @@ import {
   MATCH_STATES,
   SCORE_DRAW,
   SCORE_LOSE,
-  SCORE_WIN,
+  SCORE_WIN
 } from "@/src/config/global";
-import {
-  DoubleElimination,
-  SingleElimination,
-  Stepladder,
-} from "tournament-pairings";
+import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
 import { nanoid } from "nanoid";
 import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
 import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
@@ -43,14 +39,14 @@ import ScoresDialog from "@/src/components/dialog/ScoresDialog";
 import DatePickDialog from "@/src/components/dialog/DatePickDialog";
 import { NULL_FUNCTION } from "@/src/config/global";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { setColors, buttonStyle } = useStyleContext();
-  const { organization, event, team, match, matchLoading } =
-    useTournamentContext();
+  const { setColors } = useStyleContext();
+  const { organization, event, team, match, matchLoading } = useTournamentContext();
   const [matches, setMatches] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
@@ -124,7 +120,7 @@ const Page = (props) => {
       setColors({
         primary: event.events[eid].primary,
         secondary: event.events[eid].secondary,
-        tertiary: event.events[eid].tertiary,
+        tertiary: event.events[eid].tertiary
       });
     }
   }, [eid, event?.events]);
@@ -143,7 +139,7 @@ const Page = (props) => {
     if (matches) {
       return {
         upper: [...matches.filter((val) => val.group == 0)],
-        lower: [...matches.filter((val) => val.group == 1)],
+        lower: [...matches.filter((val) => val.group == 1)]
       };
     }
   }, [matches]);
@@ -158,7 +154,7 @@ const Page = (props) => {
         //   });
         // }
         const res = await event.update(eid, {
-          status: EVENT_STATES.SCHEDULED.value,
+          status: EVENT_STATES.SCHEDULED.value
         });
         if (res.code === "succeed") {
           alert("Scheduled successfully!");
@@ -175,7 +171,7 @@ const Page = (props) => {
         //   });
         // }
         const res = await event.update(eid, {
-          status: EVENT_STATES.STARTED.value,
+          status: EVENT_STATES.STARTED.value
         });
         if (res.code === "succeed") {
           alert("Event started!");
@@ -188,11 +184,11 @@ const Page = (props) => {
       if (confirm("Do you really want to finish this event?")) {
         for (let i = 0; i < matches.length; i++) {
           const res = await match.update(matches[i].id, {
-            status: MATCH_STATES.FINISHED.value,
+            status: MATCH_STATES.FINISHED.value
           });
         }
         const res = await event.update(eid, {
-          status: EVENT_STATES.FINISHED.value,
+          status: EVENT_STATES.FINISHED.value
         });
         if (res.code === "succeed") {
           alert("Event finished!");
@@ -249,14 +245,8 @@ const Page = (props) => {
       }
     },
     doubleMatchClick: (match) => {
-      const indexInUpper = _.findIndex(
-        matches.upper,
-        (val) => val.id == match.id
-      );
-      const indexInLower = _.findIndex(
-        matches.lower,
-        (val) => val.id == match.id
-      );
+      const indexInUpper = _.findIndex(matches.upper, (val) => val.id == match.id);
+      const indexInLower = _.findIndex(matches.lower, (val) => val.id == match.id);
 
       // if (matches.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
       // if (matches.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
@@ -302,7 +292,7 @@ const Page = (props) => {
         newGames[selectedMatch] = {
           ...newGames[selectedMatch],
           start,
-          end,
+          end
         };
       }
       // else if (format == 1) {
@@ -329,16 +319,13 @@ const Page = (props) => {
       const index = _.findLastIndex(
         matches,
         (val) =>
-          (val.participants[0]?.id == party.id &&
-            val.participants[0]?.round == party.round) ||
-          (val.participants[1]?.id == party.id &&
-            val.participants[1]?.round == party.round)
+          (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
       );
 
       if (
         index < 0 ||
-        matches[index]?.participants?.filter((val) => (val.id ? true : false))
-          .length < 2
+        matches[index]?.participants?.filter((val) => (val.id ? true : false)).length < 2
       )
         return;
 
@@ -357,30 +344,24 @@ const Page = (props) => {
       const indexInUpper = _.findLastIndex(
         matches.upper,
         (val) =>
-          (val.participants[0]?.id == party.id &&
-            val.participants[0]?.round == party.round) ||
-          (val.participants[1]?.id == party.id &&
-            val.participants[1]?.round == party.round)
+          (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
       );
       const indexInLower = _.findLastIndex(
         matches.lower,
         (val) =>
-          (val.participants[0]?.id == party.id &&
-            val.participants[0]?.round == party.round) ||
-          (val.participants[1]?.id == party.id &&
-            val.participants[1]?.round == party.round)
+          (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
       );
 
       if (
-        matches.upper[indexInUpper]?.participants?.filter((val) =>
-          val.id ? true : false
-        ).length < 2
+        matches.upper[indexInUpper]?.participants?.filter((val) => (val.id ? true : false)).length <
+        2
       )
         return;
       if (
-        matches.lower[indexInLower]?.participants?.filter((val) =>
-          val.id ? true : false
-        ).length < 2
+        matches.lower[indexInLower]?.participants?.filter((val) => (val.id ? true : false)).length <
+        2
       )
         return;
 
@@ -475,7 +456,7 @@ const Page = (props) => {
             isWinner: false,
             score: 0,
             resultText: "",
-            status: null,
+            status: null
           };
 
           if (newGames[selectedMatch].id == newGames[nextIndex].up)
@@ -506,7 +487,7 @@ const Page = (props) => {
             round: newGames[selectedMatch].participants[winner].round + 1,
             isWinner: false,
             resultText: "",
-            status: null,
+            status: null
           };
           if (newGames[nextIndex]?.id == newGames[selectedMatch].nextMatchId) {
             if (newGames[nextIndex]?.participants.length == 0)
@@ -529,7 +510,7 @@ const Page = (props) => {
             round: newGames[selectedMatch].participants[1 - winner].round + 1,
             isWinner: false,
             resultText: "",
-            status: null,
+            status: null
           };
 
           if (newGames[nextLooserIndex].participants.length == 0)
@@ -578,7 +559,7 @@ const Page = (props) => {
       }
       setOpenScores(false);
       setMatches(newGames);
-    },
+    }
   };
 
   return (
@@ -587,9 +568,8 @@ const Page = (props) => {
         sx={{
           border: `solid 1px rgba(255, 255, 255, 0.2)`,
           borderRadius: "4px",
-          padding: 3,
-        }}
-      >
+          padding: 3
+        }}>
         {matches && selectedMatch >= 0 && (
           <ScoresDialog
             title={"Team scores"}
@@ -602,9 +582,7 @@ const Page = (props) => {
             onScore1Change={handle.score1Change}
             onScore2Change={handle.score2Change}
             onSave={handle.saveScore}
-            editable={
-              matches[selectedMatch].status !== MATCH_STATES.FINISHED.value
-            }
+            editable={matches[selectedMatch].status !== MATCH_STATES.FINISHED.value}
           />
         )}
         <DatePickDialog
@@ -623,18 +601,15 @@ const Page = (props) => {
               width: "300px",
               display: "flex",
               flexDirection: "column",
-              gap: 3,
-            }}
-          >
+              gap: 3
+            }}>
             <Typography variant="h5">Event Details</Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Box sx={{ width: "130px" }}>
                 <Typography variant="h6">Name:</Typography>
               </Box>
               <Box>
-                <Typography variant="body1">
-                  {event?.events[eid]?.name}
-                </Typography>
+                <Typography variant="body1">{event?.events[eid]?.name}</Typography>
               </Box>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -662,55 +637,45 @@ const Page = (props) => {
                 <Typography variant="h6">Participants:</Typography>
               </Box>
               <Box>
-                <Typography variant="body1">
-                  {event?.events[eid]?.participantsCount}
-                </Typography>
+                <Typography variant="body1">{event?.events[eid]?.participantsCount}</Typography>
               </Box>
             </Box>
             {event?.events[eid]?.status != EVENT_STATES.SCHEDULED.value &&
               event.events[eid]?.status != EVENT_STATES.FINISHED.value && (
-                <LoadingButton
+                <CustomLoadingButton
                   loading={saving}
                   variant="contained"
                   onClick={handle.save}
-                  disabled={disabled}
-                  sx={{ ...buttonStyle }}
-                >
+                  disabled={disabled}>
                   Save
-                </LoadingButton>
+                </CustomLoadingButton>
               )}
             {event?.events[eid]?.status == EVENT_STATES.SCHEDULING.value && (
-              <LoadingButton
+              <CustomLoadingButton
                 loading={changingStatus}
                 variant="contained"
                 onClick={handle.finishScheduling}
-                disabled={disabled}
-                sx={{ ...buttonStyle }}
-              >
+                disabled={disabled}>
                 Finish Scheduling
-              </LoadingButton>
+              </CustomLoadingButton>
             )}
             {event?.events[eid]?.status == EVENT_STATES.SCHEDULED.value && (
-              <LoadingButton
+              <CustomLoadingButton
                 loading={changingStatus}
                 variant="contained"
                 onClick={handle.startEvent}
-                disabled={disabled}
-                sx={{ ...buttonStyle }}
-              >
+                disabled={disabled}>
                 Start Event
-              </LoadingButton>
+              </CustomLoadingButton>
             )}
             {event?.events[eid]?.status == EVENT_STATES.STARTED.value && (
-              <LoadingButton
+              <CustomLoadingButton
                 loading={changingStatus}
                 variant="contained"
                 onClick={handle.finishEvent}
-                disabled={disabled}
-                sx={{ ...buttonStyle }}
-              >
+                disabled={disabled}>
                 Finish Event
-              </LoadingButton>
+              </CustomLoadingButton>
             )}
           </Box>
           <Box
@@ -719,13 +684,12 @@ const Page = (props) => {
               flex: 1,
               border: "solid 1px rgba(255, 255, 255, 0.2)",
               minHeight: "300px",
-              borderRadius: "4px",
-            }}
-          >
+              borderRadius: "4px"
+            }}>
             {event?.events[eid] && event.events[eid].format == 2 ? (
               <FullCalendar
                 sx={{
-                  marginTop: "24px",
+                  marginTop: "24px"
                 }}
                 events={events}
                 setEvents={setEvents}
@@ -738,27 +702,21 @@ const Page = (props) => {
                 <SingleEliminationBracket
                   matches={matches}
                   handleMatchClick={
-                    event.events[eid].status == 1 ||
-                    event.events[eid].status == 3
+                    event.events[eid].status == 1 || event.events[eid].status == 3
                       ? handle.matchClick
                       : null
                   }
-                  handlePartyClick={
-                    event.events[eid].status == 3 ? handle.partyClick : null
-                  }
+                  handlePartyClick={event.events[eid].status == 3 ? handle.partyClick : null}
                 />
               ) : event?.events[eid]?.format == 1 ? (
                 <DoubleEliminationBracket
                   matches={doubleEliminationMatches}
                   handleMatchClick={
-                    event.events[eid].status == 1 ||
-                    event.events[eid].status == 3
+                    event.events[eid].status == 1 || event.events[eid].status == 3
                       ? handle.matchClick
                       : null
                   }
-                  handlePartyClick={
-                    event.events[eid].status == 3 ? handle.partyClick : null
-                  }
+                  handlePartyClick={event.events[eid].status == 3 ? handle.partyClick : null}
                 />
               ) : (
                 <></>

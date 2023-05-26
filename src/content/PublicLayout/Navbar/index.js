@@ -14,7 +14,7 @@ import {
   Toolbar,
   Typography,
   styled,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import {
   ArrowRight,
@@ -25,7 +25,7 @@ import {
   Login,
   Logout,
   Person,
-  Search,
+  Search
 } from "@mui/icons-material";
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
 import { useEffect, useState } from "react";
@@ -38,18 +38,18 @@ import { useRouter } from "next/router";
 const SearchInput = styled(OutlinedInput)(({ theme }) => ({
   ".MuiSvgIcon-root": {
     transform: "rotateY(0deg) tranlate(0,0)",
-    transition: "all 0.5s linear",
+    transition: "all 0.5s linear"
   },
   "& :hover": {
     ".MuiSvgIcon-root": {
-      transform: "rotateY(180deg)",
-    },
+      transform: "rotateY(180deg)"
+    }
   },
   "& :focus": {
     ".MuiSvgIcon-root": {
-      transform: "translate(-100px, 0px)",
-    },
-  },
+      transform: "translate(-100px, 0px)"
+    }
+  }
 }));
 
 const PublicNavbar = ({ sx }) => {
@@ -67,15 +67,10 @@ const PublicNavbar = ({ sx }) => {
     if (router?.pathname) {
       const pathname = router.pathname;
       if (pathname === "/") setCurrentPage("home");
-      else if (
-        pathname.substring(1, 6) === "event" ||
-        pathname.substring(1, 6) === "match"
-      )
+      else if (pathname.substring(1, 6) === "event" || pathname.substring(1, 6) === "match")
         setCurrentPage("event");
-      else if (pathname.substring(1, 6) === "rogue")
-        setCurrentPage("rogue-social");
-      else if (pathname.substring(1, 13) === "organization")
-        setCurrentPage("organization");
+      else if (pathname.substring(1, 6) === "rogue") setCurrentPage("rogue-social");
+      else if (pathname.substring(1, 13) === "organization") setCurrentPage("organization");
       else if (pathname.substring(1, 5) === "tool") setCurrentPage("tool");
     }
   }, [router]);
@@ -88,7 +83,7 @@ const PublicNavbar = ({ sx }) => {
     },
     changeFund: (e) => {
       setFund(e.target.value);
-    },
+    }
   };
 
   const handleClickHome = (e) => {
@@ -122,26 +117,21 @@ const PublicNavbar = ({ sx }) => {
     <AppBar
       position="sticky"
       sx={{
-        height: "73px",
+        height: "67px",
         // backgroundColor: 'rgba(0, 0, 0, 0.2)'
         backgroundColor: "black",
         backgroundImage: "none",
         zIndex: 8000,
-        ...sx,
-      }}
-    >
+        ...sx
+      }}>
       <Container maxWidth="xxl" sx={{ borderBottom: "solid 3px #f5831f" }}>
-        <Toolbar
-          disableGutters
-          sx={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
               gap: 3,
-              alignItems: "center",
-            }}
-          >
+              alignItems: "center"
+            }}>
             <img src="/GR_Letters.png" height={40} />
             <Box id="search-box">
               <SearchInput
@@ -151,7 +141,7 @@ const PublicNavbar = ({ sx }) => {
                 value={search}
                 onChange={handle.changeSearch}
                 sx={{
-                  height: "40px",
+                  height: "40px"
                 }}
                 startAdornment={
                   <InputAdornment position="start">
@@ -160,11 +150,7 @@ const PublicNavbar = ({ sx }) => {
                 }
               />
             </Box>
-            <NavItem
-              name="HOME"
-              active={currentPage === "home"}
-              handleClick={handleClickHome}
-            />
+            <NavItem name="HOME" active={currentPage === "home"} handleClick={handleClickHome} />
             <NavItem
               name="Events"
               active={currentPage === "event"}
@@ -176,26 +162,26 @@ const PublicNavbar = ({ sx }) => {
                   name: "Matches",
                   key: "upcoming-matches",
                   isLink: true,
-                  to: "/match/upcoming",
+                  to: "/match/upcoming"
                 },
                 {
                   name: "Events",
                   key: "upcoming-events",
                   isLink: true,
-                  to: "/event/upcoming",
+                  to: "/event/upcoming"
                 },
                 {
                   name: "Live Events",
                   key: "ongoing-events",
                   isLink: true,
-                  to: "/event/ongoing",
+                  to: "/event/ongoing"
                 },
                 {
                   name: "Past Events",
                   key: "completed-events",
                   isLink: true,
-                  to: "/event/completed",
-                },
+                  to: "/event/completed"
+                }
               ]}
             />
             <NavItem
@@ -208,14 +194,14 @@ const PublicNavbar = ({ sx }) => {
                   name: "My Team",
                   key: "my-team",
                   isLink: true,
-                  to: "/team",
+                  to: "/team"
                 },
                 {
                   name: "Scout Opponent",
                   key: "scout-opponent",
                   isLink: true,
-                  to: "/team",
-                },
+                  to: "/team"
+                }
               ]}
             />
             <NavItem name="ROGUE TV" handleClick={() => {}} />
@@ -227,9 +213,8 @@ const PublicNavbar = ({ sx }) => {
               sx={{
                 display: { xs: "none", md: "flex" },
                 gap: 3,
-                alignItems: "center",
-              }}
-            >
+                alignItems: "center"
+              }}>
               <NavItem
                 name="Organize"
                 active={currentPage === "organization"}
@@ -240,14 +225,14 @@ const PublicNavbar = ({ sx }) => {
                     name: "My Organizer",
                     key: "my-organizer",
                     isLink: true,
-                    to: "/organization",
+                    to: "/organization"
                   },
                   {
                     name: "Producer Dashboard",
                     key: "producer-dashboard",
                     isLink: true,
-                    to: "/",
-                  },
+                    to: "/"
+                  }
                 ]}
               />
               {/* <NavItem
@@ -292,36 +277,36 @@ const PublicNavbar = ({ sx }) => {
                     name: "Video Editor",
                     key: "video-editor",
                     isLink: true,
-                    to: "/",
+                    to: "/"
                   },
                   {
                     name: "Customize",
                     key: "customize",
                     isLink: true,
-                    to: "/",
+                    to: "/"
                   },
                   {
                     name: "Create Article",
                     key: "create-article",
                     isLink: true,
-                    to: "/",
+                    to: "/"
                   },
                   {
                     name: "_divider",
-                    key: "divider",
+                    key: "divider"
                   },
                   {
                     name: "WIKI",
                     key: "wiki",
                     isLink: true,
-                    to: "/",
+                    to: "/"
                   },
                   {
                     name: "FAQS",
                     key: "faqs",
                     isLink: true,
-                    to: "/",
-                  },
+                    to: "/"
+                  }
                 ]}
               />
               <NavItem
@@ -334,20 +319,20 @@ const PublicNavbar = ({ sx }) => {
                     name: "Player Plus",
                     key: "add-player",
                     isLink: true,
-                    to: "/",
+                    to: "/"
                   },
                   {
                     name: "Team Plus",
                     key: "add-team",
                     isLink: true,
-                    to: "/team/create",
+                    to: "/team/create"
                   },
                   {
                     name: "Organizer Plus",
                     key: "add-organizer",
                     isLink: true,
-                    to: "/organization/create",
-                  },
+                    to: "/organization/create"
+                  }
                 ]}
               />
             </Box>
@@ -356,9 +341,8 @@ const PublicNavbar = ({ sx }) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  cursor: "pointer",
-                }}
-              >
+                  cursor: "pointer"
+                }}>
                 <Button
                   id="user-button"
                   aria-controls={anchorElUser ? "user-menu" : undefined}
@@ -374,16 +358,15 @@ const PublicNavbar = ({ sx }) => {
                     background: "transparent",
                     cursor: "pointer",
                     ":hover": {
-                      background: "rgba(255,255,255,0.08)",
-                    },
-                  }}
-                >
+                      background: "rgba(255,255,255,0.08)"
+                    }
+                  }}>
                   <Avatar alt={user.user?.name} src={user.user?.profilePic} />
                   <ChevronRight
                     sx={{
                       color: theme.palette.primary.main,
                       transform: Boolean(anchorElUser) ? "rotate(90deg)" : "",
-                      transition: "all 0.2s",
+                      transition: "all 0.2s"
                     }}
                   />
                 </Button>
@@ -392,9 +375,8 @@ const PublicNavbar = ({ sx }) => {
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "center",
-                }}
-              >
+                  alignItems: "center"
+                }}>
                 <IconButton
                   id="user-button"
                   aria-controls={anchorElUser ? "user-menu" : undefined}
@@ -404,9 +386,8 @@ const PublicNavbar = ({ sx }) => {
                   // onMouseOut={handleMouseOutUser}
                   sx={{
                     zIndex: 8500,
-                    cursor: "pointer",
-                  }}
-                >
+                    cursor: "pointer"
+                  }}>
                   <img
                     src="/static/images/Profile_Picture.png"
                     style={{ width: "50px", height: "50px" }}
@@ -415,7 +396,7 @@ const PublicNavbar = ({ sx }) => {
                     sx={{
                       color: theme.palette.primary.main,
                       transform: Boolean(anchorElUser) ? "rotate(90deg)" : "",
-                      transition: "all 0.2s",
+                      transition: "all 0.2s"
                     }}
                   />
                 </IconButton>
@@ -426,7 +407,7 @@ const PublicNavbar = ({ sx }) => {
               <StyledMenu
                 id="user-menu"
                 MenuListProps={{
-                  "aria-labelledby": "user-button",
+                  "aria-labelledby": "user-button"
                   // onMouseLeave: handleCloseUser,
                   // onMouseOver: handleMouseOverUser,
                 }}
@@ -436,15 +417,14 @@ const PublicNavbar = ({ sx }) => {
                 anchorEl={anchorElUser}
                 anchorOrigin={{
                   vertical: "bottom",
-                  horizontal: "right",
+                  horizontal: "right"
                 }}
                 transformOrigin={{
                   vertical: "top",
-                  horizontal: "right",
+                  horizontal: "right"
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUser}
-              >
+                onClose={handleCloseUser}>
                 <MenuItem onClick={handleCloseUser} key="signup" disableRipple>
                   <Link href={"/auth"}>Sign Up</Link>
                 </MenuItem>
@@ -456,7 +436,7 @@ const PublicNavbar = ({ sx }) => {
               <StyledMenu
                 id="user-menu"
                 MenuListProps={{
-                  "aria-labelledby": "user-button",
+                  "aria-labelledby": "user-button"
                   // onMouseLeave: handleCloseUser,
                   // onMouseOver: handleMouseOverUser,
                 }}
@@ -466,39 +446,26 @@ const PublicNavbar = ({ sx }) => {
                 anchorEl={anchorElUser}
                 anchorOrigin={{
                   vertical: "bottom",
-                  horizontal: "right",
+                  horizontal: "right"
                 }}
                 transformOrigin={{
                   vertical: "top",
-                  horizontal: "right",
+                  horizontal: "right"
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUser}
-              >
-                <MenuItem
-                  onClick={handleCloseUser}
-                  key="user-setting"
-                  disableRipple
-                >
+                onClose={handleCloseUser}>
+                <MenuItem onClick={handleCloseUser} key="user-setting" disableRipple>
                   <Link href={"/user/" + user.user?.id}>Settings</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-team" disableRipple>
                   <Link href={"/user/" + user.user?.id}>My Team</Link>
                 </MenuItem>
-                <MenuItem
-                  onClick={handleCloseUser}
-                  key="my-organizer"
-                  disableRipple
-                >
+                <MenuItem onClick={handleCloseUser} key="my-organizer" disableRipple>
                   <Link href={"/user/" + user.user?.id}>My Organizer</Link>
                 </MenuItem>
                 <Divider />
-                <MenuItem
-                  onClick={handleCloseUser}
-                  key="my-profile"
-                  disableRipple
-                >
+                <MenuItem onClick={handleCloseUser} key="my-profile" disableRipple>
                   <Link href={"/user/" + user.user?.id}>My Profile</Link>
                 </MenuItem>
                 <MenuItem
@@ -507,8 +474,7 @@ const PublicNavbar = ({ sx }) => {
                     user.logout();
                   }}
                   key="logout-user"
-                  disableRipple
-                >
+                  disableRipple>
                   LOGOUT
                 </MenuItem>
               </StyledMenu>

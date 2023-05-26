@@ -9,19 +9,20 @@ import {
   DialogTitle,
   OutlinedInput,
   Typography,
-  useTheme,
+  useTheme
 } from "@mui/material";
+import CustomButton from "@/src/components/button/CustomButton";
 
 const scoreStyles = {
   win: {
     color: "#efe804",
-    textShadow: "0 0 12px #ff2f00",
+    textShadow: "0 0 12px #ff2f00"
   },
   lose: {},
   draw: {
     color: "#efe804",
-    textShadow: "0 0 12px #ff2f00",
-  },
+    textShadow: "0 0 12px #ff2f00"
+  }
 };
 
 const ScoresDialog = ({
@@ -35,10 +36,9 @@ const ScoresDialog = ({
   onScore2Change,
   onSave,
   onClose,
-  editable,
+  editable
 }) => {
   const theme = useTheme();
-  const { buttonStyle } = useStyleContext();
   const sc1 = score1 || 0,
     sc2 = score2 || 0;
   let style1 = {},
@@ -60,16 +60,10 @@ const ScoresDialog = ({
         style: {
           backgroundColor: "#0a1e28",
           backgroundImage: "linear-gradient(0deg, #ab013875, transparent)",
-          padding: "20px",
-        },
-      }}
-    >
-      <DialogTitle
-        variant="h2"
-        fontSize={"3rem"}
-        textAlign={"center"}
-        textTransform={"uppercase"}
-      >
+          padding: "20px"
+        }
+      }}>
+      <DialogTitle variant="h2" fontSize={"3rem"} textAlign={"center"} textTransform={"uppercase"}>
         {title}
       </DialogTitle>
       <DialogContent>
@@ -79,16 +73,14 @@ const ScoresDialog = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            gap: 2,
-          }}
-        >
+            gap: 2
+          }}>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 2,
-            }}
-          >
+              gap: 2
+            }}>
             <Box textAlign={"center"}>
               <Box
                 component={"img"}
@@ -96,15 +88,10 @@ const ScoresDialog = ({
                   mt: 2,
                   height: "150px",
                   width: "150px",
-                  filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))",
+                  filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
                 }}
-                src={team1?.darkLogo || DEFAULT_LOGO}
-              ></Box>
-              <Typography
-                variant="body1"
-                textAlign={"center"}
-                fontSize={"1.5rem"}
-              >
+                src={team1?.darkLogo || DEFAULT_LOGO}></Box>
+              <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"}>
                 {team1?.name}
               </Typography>
               {editable == true ? (
@@ -124,9 +111,8 @@ const ScoresDialog = ({
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+              justifyContent: "center"
+            }}>
             <img src="/static/images/vs.png" height={80} />
           </Box>
           <Box
@@ -134,9 +120,8 @@ const ScoresDialog = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "right",
-              gap: 2,
-            }}
-          >
+              gap: 2
+            }}>
             <Box textAlign={"center"}>
               <Box
                 component={"img"}
@@ -144,15 +129,10 @@ const ScoresDialog = ({
                   mt: 2,
                   height: "150px",
                   width: "150px",
-                  filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))",
+                  filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
                 }}
-                src={team2?.darkLogo || DEFAULT_LOGO}
-              ></Box>
-              <Typography
-                variant="body1"
-                textAlign={"center"}
-                fontSize={"1.5rem"}
-              >
+                src={team2?.darkLogo || DEFAULT_LOGO}></Box>
+              <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"}>
                 {team2?.name}
               </Typography>
               {editable == true ? (
@@ -172,9 +152,9 @@ const ScoresDialog = ({
       </DialogContent>
       {editable == true && (
         <DialogActions>
-          <Button variant="contained" sx={{ ...buttonStyle }} onClick={onSave}>
+          <CustomButton variant="contained" onClick={onSave}>
             Save
-          </Button>
+          </CustomButton>
         </DialogActions>
       )}
     </Dialog>

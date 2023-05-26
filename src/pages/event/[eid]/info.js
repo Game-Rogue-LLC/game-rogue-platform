@@ -11,14 +11,12 @@ import {
   Select,
   Tab,
   Tabs,
-  Typography,
+  Typography
 } from "@mui/material";
 import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
 import PublicLayout from "@/src/content/PublicLayout";
 import { useAppContext } from "@/src/context/app";
-import TournamentProvider, {
-  useTournamentContext,
-} from "@/src/context/TournamentContext";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from "@/src/config/global";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -28,16 +26,13 @@ import EventInfoPublic from "@/src/components/widgets/event/EventInfoPublic";
 import EventCoursePublic from "@/src/components/widgets/event/EventCoursePublic";
 import { useStyleContext } from "@/src/context/StyleContext";
 import SlantBanner from "@/src/components/widgets/SlantBanner";
-import StyledTabPanel, {
-  tabProps,
-} from "@/src/components/styled/StyledTabPanel";
+import StyledTabPanel, { tabProps } from "@/src/components/styled/StyledTabPanel";
 
 const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { setColors, buttonStyle, colors } = useStyleContext();
-  const { organization, event, team, match, matchLoading } =
-    useTournamentContext();
+  const { setColors, colors } = useStyleContext();
+  const { organization, event, team, match, matchLoading } = useTournamentContext();
   const [eid, setEID] = useState(router?.query?.eid);
   const [item, setItem] = useState(null);
   const [startTime, setStartTime] = useState(new Date());
@@ -62,21 +57,13 @@ const Page = (props) => {
     if (event?.events[eid]) {
       setItem(event.events[eid]);
       setStartTime(
-        dayjs(event.events[eid].registerTo).subtract(
-          event.events[eid].checkin,
-          "minute"
-        )
+        dayjs(event.events[eid].registerTo).subtract(event.events[eid].checkin, "minute")
       );
-      setEndTime(
-        dayjs(event.events[eid].registerTo).add(
-          event.events[eid].checkin,
-          "minute"
-        )
-      );
+      setEndTime(dayjs(event.events[eid].registerTo).add(event.events[eid].checkin, "minute"));
       setColors({
         primary: event.events[eid].primary,
         secondary: event.events[eid].secondary,
-        tertiary: event.events[eid].tertiary,
+        tertiary: event.events[eid].tertiary
       });
     }
   }, [eid, event?.events]);
@@ -84,7 +71,7 @@ const Page = (props) => {
   const handle = {
     changeTab: (e, newTab) => {
       setTab(newTab);
-    },
+    }
   };
 
   return (
@@ -97,9 +84,8 @@ const Page = (props) => {
           justifyContent: "left",
           paddingLeft: "10%",
           alignItems: "end",
-          gap: 2,
-        }}
-      >
+          gap: 2
+        }}>
         <img
           src={item?.darkLogo}
           width={200}
@@ -107,7 +93,7 @@ const Page = (props) => {
           style={{
             // borderRadius: '50%',
             // outline: '2px solid rgba(245, 131, 31, 0.5)',
-            objectFit: "cover",
+            objectFit: "cover"
             // outlineOffset: '2px'
           }}
         />
@@ -148,27 +134,13 @@ const Page = (props) => {
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList
               onChange={handle.changeTab}
-              TabIndicatorProps={{ sx: { backgroundColor: colors.primary } }}
-            >
-              <Tab
-                label="Info"
-                value="1"
-                sx={{ "&.Mui-selected": { color: colors.primary } }}
-              />
-              <Tab
-                label="Course"
-                value="2"
-                sx={{ "&.Mui-selected": { color: colors.primary } }}
-              />
+              TabIndicatorProps={{ sx: { backgroundColor: colors.primary } }}>
+              <Tab label="Info" value="1" sx={{ "&.Mui-selected": { color: colors.primary } }} />
+              <Tab label="Course" value="2" sx={{ "&.Mui-selected": { color: colors.primary } }} />
             </TabList>
           </Box>
           <TabPanel value="1">
-            <EventInfoPublic
-              eid={eid}
-              item={item}
-              startTime={startTime}
-              endTime={endTime}
-            />
+            <EventInfoPublic eid={eid} item={item} startTime={startTime} endTime={endTime} />
           </TabPanel>
           <TabPanel value="2">
             <EventCoursePublic eid={eid} />

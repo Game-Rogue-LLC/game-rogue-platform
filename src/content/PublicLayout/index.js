@@ -11,7 +11,7 @@ const PublicLayout = (props) => {
         sx={{ background: "black", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         <Navbar sx={{ position: "fixed" }} />
 
-        <Box sx={{ background: "black", flex: 1, marginTop: "73px" }}>{props.children}</Box>
+        <Box sx={{ background: "black", flex: 1, marginTop: "67px" }}>{props.children}</Box>
 
         <Footer />
       </Box>

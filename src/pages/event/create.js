@@ -12,7 +12,7 @@ import {
   Select,
   Typography,
   useTheme,
-  TextField,
+  TextField
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { LoadingButton } from "@mui/lab";
@@ -23,22 +23,15 @@ import { useAppContext } from "@/src/context/app";
 import DateTimePicker from "@/src/components/datetime/DateTimePicker";
 import Validator from "validatorjs";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import {
-  DEFAULT_CONTENTBLOCK_IMAGE,
-  DEFAULT_LOGO,
-  EVENT_STATES,
-} from "@/src/config/global";
+import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO, EVENT_STATES } from "@/src/config/global";
 import EventInput from "@/src/components/widgets/event/EventInput";
-import {
-  model,
-  rules,
-  customMessages,
-} from "@/lib/firestore/collections/event";
+import { model, rules, customMessages } from "@/lib/firestore/collections/event";
 import { htmlToMarkdown } from "@/src/utils/html-markdown";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const initialInputs = {
-  ...model,
+  ...model
 };
 
 const Page = (props) => {
@@ -58,13 +51,13 @@ const Page = (props) => {
   const [darkLogo, setDarkLogo] = useState(null);
   const [lightLogo, setLightLogo] = useState(null);
 
-  const { setColors, buttonStyle } = useStyleContext();
+  const { setColors } = useStyleContext();
 
   useEffect(() => {
     setColors({
       primary: inputs?.primary,
       secondary: inputs?.secondary,
-      tertiary: inputs?.tertiary,
+      tertiary: inputs?.tertiary
     });
   }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
@@ -80,7 +73,7 @@ const Page = (props) => {
       setOID(newOID);
       setInputs((prev) => ({
         ...prev,
-        oid: newOID,
+        oid: newOID
       }));
     }
   }, [router]);
@@ -175,13 +168,13 @@ const Page = (props) => {
       if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
-        [name]: value,
+        [name]: value
       });
     },
     setDate: (name, newDate) => {
       setInputs((prev) => ({
         ...prev,
-        [name]: new Date(newDate),
+        [name]: new Date(newDate)
       }));
     },
     upload: (e, name) => {
@@ -192,21 +185,21 @@ const Page = (props) => {
           setBanner(file);
           setInputs({
             ...inputs,
-            banner: url,
+            banner: url
           });
           break;
         case "darkLogo":
           setDarkLogo(file);
           setInputs({
             ...inputs,
-            darkLogo: url,
+            darkLogo: url
           });
           break;
         case "lightLogo":
           setLightLogo(file);
           setInputs({
             ...inputs,
-            lightLogo: url,
+            lightLogo: url
           });
           break;
         case "rulebook":
@@ -223,45 +216,36 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO,
+        darkLogo: DEFAULT_LOGO
       });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO,
+        lightLogo: DEFAULT_LOGO
       });
     },
     colorChange: (name, value) => {
       setInputs({
         ...inputs,
-        [name]: value?.hex,
+        [name]: value?.hex
       });
-    },
+    }
   };
 
   return (
     <Paper sx={{ p: 4, backgroundColor: theme.palette.card.main }}>
-      <EventInput
-        handle={handle}
-        inputs={inputs}
-        errors={errors}
-        disabled={disabled}
-      />
+      <EventInput handle={handle} inputs={inputs} errors={errors} disabled={disabled} />
 
       <Grid container sx={{ mt: 3 }}>
         <Grid item xs={12}>
-          <LoadingButton
+          <CustomLoadingButton
             loading={saving}
             variant="contained"
             onClick={handle.create}
-            disabled={disabled}
-            sx={{
-              ...buttonStyle,
-            }}
-          >
+            disabled={disabled}>
             Register
-          </LoadingButton>
+          </CustomLoadingButton>
         </Grid>
       </Grid>
     </Paper>

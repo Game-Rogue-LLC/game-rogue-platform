@@ -18,7 +18,7 @@ const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { setColors, buttonStyle } = useStyleContext();
+  const { setColors } = useStyleContext();
   const { ticket, match } = useTournamentContext();
   const [tab, setTab] = useState("1");
   const [mid, setMID] = useState(router?.query?.mid);

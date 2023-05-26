@@ -8,12 +8,11 @@ import MatchChat from "./MatchChat";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useRouter } from "next/router";
-import StyledButton from "../../button/StyledButton";
+import CustomButton from "@/src/components/button/CustomButton";
 
 const MatchScoreBoard = ({ item }) => {
   const theme = useTheme();
   const router = useRouter();
-  const { buttonStyle } = useStyleContext();
   const { team, event } = useTournamentContext();
   const { user } = useAuthContext();
   const [myTeam, setMyTeam] = useState(null);
@@ -46,12 +45,8 @@ const MatchScoreBoard = ({ item }) => {
   return (
     <Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2, px: 5 }}>
-        <StyledButton sx={{ ...buttonStyle }} onClick={onBansBtnClick}>
-          BANS
-        </StyledButton>
-        <StyledButton sx={{ ...buttonStyle }} onClick={onRulebookBtnClick}>
-          RULEBOOK
-        </StyledButton>
+        <CustomButton onClick={onBansBtnClick}>BANS</CustomButton>
+        <CustomButton onClick={onRulebookBtnClick}>RULEBOOK</CustomButton>
       </Box>
       <TabContext value={tab}>
         <TabList onChange={onTabChange} sx={{ mt: 2 }}>
@@ -72,9 +67,9 @@ const MatchScoreBoard = ({ item }) => {
                     gap: 2
                   }}>
                   <TeamScoreBoard item={opTeam} sx={{ flexGrow: 1 }} />
-                  <Button variant="contained" sx={{ width: "250px" }}>
+                  <CustomButton variant="contained" sx={{ width: "250px" }}>
                     Full Analysis
-                  </Button>
+                  </CustomButton>
                 </Box>
 
                 <Box
@@ -94,7 +89,8 @@ const MatchScoreBoard = ({ item }) => {
                       />
                     </Tooltip>
                   </Box>
-                  <Box sx={{ borderLeft: "solid 2px white", width: "0px", height: "50px" }}></Box>
+                  <Box
+                    sx={{ borderLeft: "solid 2px lightgray", width: "0px", height: "50px" }}></Box>
                   <Box
                     sx={{
                       textAlign: "center"
@@ -103,7 +99,8 @@ const MatchScoreBoard = ({ item }) => {
                       {(Math.random() * 10).toFixed(0)} - {(Math.random() * 10).toFixed(0)}
                     </Typography>
                   </Box>
-                  <Box sx={{ borderLeft: "solid 2px white", width: "0px", height: "50px" }}></Box>
+                  <Box
+                    sx={{ borderLeft: "solid 2px lightgray", width: "0px", height: "50px" }}></Box>
                   <Box>
                     <Typography variant="h4" color="white">
                       Banned Operators

@@ -1,11 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Grid, TextField, Paper, Typography, OutlinedInput } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Paper,
+  Typography,
+  OutlinedInput,
+  IconButton,
+  InputAdornment
+} from "@mui/material";
 import { nanoid } from "nanoid";
 import { Send } from "@mui/icons-material";
 import { DEFAULT_LOGO } from "@/src/config/global";
 import match from "@/lib/firestore/collections/match";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import CustomButton from "@/src/components/button/CustomButton";
 
 const MatchChat = ({ item }) => {
   const messageBoxRef = useRef(null);
@@ -67,7 +78,7 @@ const MatchChat = ({ item }) => {
     <Box
       sx={{
         width: "250px",
-        height: "300px",
+        height: "400px",
         display: "flex",
         flexDirection: "column",
         bgcolor: "grey.200",
@@ -85,20 +96,25 @@ const MatchChat = ({ item }) => {
       </Box>
       <Box sx={{ p: 2, backgroundColor: "background.default" }}>
         <Grid container spacing={2}>
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <TextField
               size="small"
               fullWidth
               placeholder="Type a message"
               variant="outlined"
               value={input}
+              sx={{ ".MuiInputBase-root": { paddingRight: 0 } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end" sx={{ paddingInline: 0 }}>
+                    <IconButton color="primary" variant="contained" onClick={handleSend}>
+                      <Send />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
               onChange={handleInputChange}
             />
-          </Grid>
-          <Grid item xs={4}>
-            <Button fullWidth color="primary" variant="contained" onClick={handleSend}>
-              <Send />
-            </Button>
           </Grid>
         </Grid>
       </Box>

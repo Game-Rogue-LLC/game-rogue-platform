@@ -22,7 +22,7 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
-  Checkbox,
+  Checkbox
 } from "@mui/material";
 
 import { LoadingButton } from "@mui/lab";
@@ -33,26 +33,25 @@ import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
 import ContentBlock from "@/src/components/widgets/ContentBlock";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import Validator from "validatorjs";
-import {
-  model,
-  rules,
-  customMessages,
-} from "@/lib/firestore/collections/organization";
+import { model, rules, customMessages } from "@/lib/firestore/collections/organization";
 import ColorSelect from "@/src/components/dropdown/ColorSelect";
 import { htmlToMarkdown } from "@/src/utils/html-markdown";
 import Colors from "@/src/components/Colors";
 import { brighterColor, isBrightColor } from "@/src/utils/utils";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import CustomButton from "@/src/components/button/CustomButton";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const initialInputs = {
-  ...model,
+  ...model
 };
 
 const Page = (props) => {
   const router = useRouter();
   const theme = useTheme();
   const { setTitle } = useAppContext();
-  const { colors, setColors, buttonStyle } = useStyleContext();
+  const { colors, setColors } = useStyleContext();
   const { organization, event } = useTournamentContext();
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -64,14 +63,14 @@ const Page = (props) => {
     name: false,
     social: false,
     contentBlock: false,
-    features: false,
+    features: false
   });
   const [inputs, setInputs] = useState({ ...initialInputs });
 
   const onColorChange = (name, value) => {
     setInputs({
       ...inputs,
-      [name]: value?.hex,
+      [name]: value?.hex
     });
   };
 
@@ -79,7 +78,7 @@ const Page = (props) => {
     setColors({
       primary: inputs?.primary,
       secondary: inputs?.secondary,
-      tertiary: inputs?.tertiary,
+      tertiary: inputs?.tertiary
     });
   }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
@@ -98,7 +97,7 @@ const Page = (props) => {
   useEffect(() => {
     setInputs((prev) => ({
       ...prev,
-      ...organization.organizations[oid],
+      ...organization.organizations[oid]
     }));
     // setColors({
     //   primary: organization.organizations[oid].primary,
@@ -123,7 +122,7 @@ const Page = (props) => {
 
       setSaving((prev) => ({
         ...prev,
-        name: true,
+        name: true
       }));
 
       const res = await organization.update(oid, {
@@ -131,7 +130,7 @@ const Page = (props) => {
         tagline: inputs?.tagline,
         primary: inputs?.primary,
         secondary: inputs?.secondary,
-        tertiary: inputs?.tertiary,
+        tertiary: inputs?.tertiary
       });
 
       if (res.code == "succeed") {
@@ -140,13 +139,13 @@ const Page = (props) => {
 
       setSaving((prev) => ({
         ...prev,
-        name: false,
+        name: false
       }));
     },
     saveLink: async (e) => {
       setSaving((prev) => ({
         ...prev,
-        social: true,
+        social: true
       }));
 
       const res = await organization.update(oid, {
@@ -154,7 +153,7 @@ const Page = (props) => {
         instagramLink: inputs?.instagramLink,
         youtubeLink: inputs?.youtubeLink,
         twitchLink: inputs?.twitchLink,
-        discordLink: inputs?.discordLink,
+        discordLink: inputs?.discordLink
       });
 
       if (res.code == "succeed") {
@@ -163,20 +162,20 @@ const Page = (props) => {
 
       setSaving((prev) => ({
         ...prev,
-        social: false,
+        social: false
       }));
     },
     saveContentBlock: async (e) => {
       setSaving((prev) => ({
         ...prev,
-        contentBlock: true,
+        contentBlock: true
       }));
 
       let newOrganization = {
         contentBlock: {
-          ...inputs?.contentBlock,
+          ...inputs?.contentBlock
           // text: htmlToMarkdown(inputs?.contentBlock.text)
-        },
+        }
       };
 
       let uploaded = true;
@@ -201,13 +200,13 @@ const Page = (props) => {
 
       setSaving((prev) => ({
         ...prev,
-        contentBlock: false,
+        contentBlock: false
       }));
     },
     saveFeatures: async (e) => {
       setSaving((prev) => ({
         ...prev,
-        features: true,
+        features: true
       }));
 
       const res = await organization
@@ -220,19 +219,19 @@ const Page = (props) => {
           crowdFund: inputs?.crowdFund,
           actualFund: inputs?.actualFund,
           credit: inputs?.credit,
-          paypal: inputs?.paypal,
+          paypal: inputs?.paypal
         })
         .then((res) => {
           if (res.code == "succeed") alert(res.message);
           setSaving((prev) => ({
             ...prev,
-            features: false,
+            features: false
           }));
         })
         .catch((err) => {
           setSaving((prev) => ({
             ...prev,
-            features: false,
+            features: false
           }));
         });
     },
@@ -240,7 +239,7 @@ const Page = (props) => {
       setOpen(false);
       setSaving((prev) => ({
         ...prev,
-        disband: true,
+        disband: true
       }));
       organization.delete(oid);
     },
@@ -255,14 +254,14 @@ const Page = (props) => {
       let { name, type, value } = e.target;
       setInputs((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: value
       }));
     },
     switch: (e) => {
       const { name, checked } = e.target;
       setInputs((prev) => ({
         ...prev,
-        [name]: checked,
+        [name]: checked
       }));
     },
     changeContentBlock: (data) => {
@@ -270,8 +269,8 @@ const Page = (props) => {
         ...prev,
         contentBlock: {
           ...prev.contentBlock,
-          ...data,
-        },
+          ...data
+        }
       }));
     },
     uploadContentImageAction: (e, name) => {
@@ -283,45 +282,39 @@ const Page = (props) => {
         ...prev,
         contentBlock: {
           ...prev.contentBlock,
-          image: path,
-        },
+          image: path
+        }
       }));
-    },
+    }
   };
 
   return (
     <Box>
       <Paper sx={{ p: 4 }}>
         <Typography variant="h6">Disband/Delete Profile</Typography>
-        <LoadingButton
+        <CustomLoadingButton
           loading={saving?.disband}
           variant="contained"
-          sx={{ mt: 2, ...buttonStyle }}
-          onClick={handle.modalOpen}
-        >
+          sx={{ mt: 2 }}
+          onClick={handle.modalOpen}>
           Disband
-        </LoadingButton>
+        </CustomLoadingButton>
         <Dialog
           open={open}
           onClose={handle.modalClose}
           aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {"Delete the organizer profile?"}
-          </DialogTitle>
+          aria-describedby="alert-dialog-description">
+          <DialogTitle id="alert-dialog-title">{"Delete the organizer profile?"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Do you really want to delete this profile?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handle.modalClose} sx={{ ...buttonStyle }}>
-              Cancel
-            </Button>
-            <Button onClick={handle.delete} sx={{ ...buttonStyle }} autoFocus>
+            <CustomButton onClick={handle.modalClose}>Cancel</CustomButton>
+            <CustomButton onClick={handle.delete} autoFocus>
               OK
-            </Button>
+            </CustomButton>
           </DialogActions>
         </Dialog>
       </Paper>
@@ -372,14 +365,13 @@ const Page = (props) => {
           <Colors colors={inputs} onColorChange={onColorChange} />
         </Box>
 
-        <LoadingButton
+        <CustomLoadingButton
           loading={saving?.name}
           variant="contained"
-          sx={{ mt: 2, ...buttonStyle }}
-          onClick={handle.saveName}
-        >
+          sx={{ mt: 2 }}
+          onClick={handle.saveName}>
           Save
-        </LoadingButton>
+        </CustomLoadingButton>
       </Paper>
 
       <ContentBlock
@@ -388,7 +380,6 @@ const Page = (props) => {
         save={handle.saveContentBlock}
         handleUpload={handle.uploadContentImageAction}
         saving={saving?.contentBlock}
-        buttonStyle={buttonStyle}
       />
 
       <Paper sx={{ p: 4, mt: 4 }}>
@@ -492,8 +483,7 @@ const Page = (props) => {
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"
-                      viewBox="0 0 24 24"
-                    >
+                      viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
                         d="M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29l-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43Z"
@@ -505,86 +495,48 @@ const Page = (props) => {
             />
           </FormControl>
         </Box>
-        <LoadingButton
+        <CustomLoadingButton
           loading={saving?.social}
           variant="contained"
-          sx={{ mt: 2, ...buttonStyle }}
-          onClick={handle.saveLink}
-        >
+          sx={{ mt: 2 }}
+          onClick={handle.saveLink}>
           Save
-        </LoadingButton>
+        </CustomLoadingButton>
       </Paper>
 
       <Paper sx={{ p: 4, mt: 4 }}>
         <Typography variant="h6">Turn on/off features</Typography>
         <FormGroup sx={{ mt: 2 }}>
           <FormControlLabel
-            control={
-              <Switch
-                checked={inputs?.signup}
-                name="signup"
-                onChange={handle.switch}
-              />
-            }
+            control={<Switch checked={inputs?.signup} name="signup" onChange={handle.switch} />}
             label="Sign-up"
           />
           <FormControlLabel
-            control={
-              <Switch
-                checked={inputs?.discord}
-                name="discord"
-                onChange={handle.switch}
-              />
-            }
+            control={<Switch checked={inputs?.discord} name="discord" onChange={handle.switch} />}
             label="Discord community preview"
           />
           <FormControlLabel
-            control={
-              <Switch
-                checked={inputs?.twitter}
-                name="twitter"
-                onChange={handle.switch}
-              />
-            }
+            control={<Switch checked={inputs?.twitter} name="twitter" onChange={handle.switch} />}
             label="Show recent Twitter activity"
           />
           <FormControlLabel
             control={
-              <Switch
-                checked={inputs?.instagram}
-                name="instagram"
-                onChange={handle.switch}
-              />
+              <Switch checked={inputs?.instagram} name="instagram" onChange={handle.switch} />
             }
             label="Show recent Instagram activity"
           />
           <FormControlLabel
-            control={
-              <Switch
-                checked={inputs?.youtube}
-                name="youtube"
-                onChange={handle.switch}
-              />
-            }
+            control={<Switch checked={inputs?.youtube} name="youtube" onChange={handle.switch} />}
             label="Show recent YouTube videos"
           />
           <FormControlLabel
-            control={
-              <Switch
-                checked={inputs?.twitch}
-                name="twitch"
-                onChange={handle.switch}
-              />
-            }
+            control={<Switch checked={inputs?.twitch} name="twitch" onChange={handle.switch} />}
             label="Twitch streams"
           />
         </FormGroup>
         <Grid container spacing={2} sx={{ alignItems: "center" }}>
           <Grid item>
-            <FormControlLabel
-              control={<Switch defaultChecked />}
-              label="Crowdfund"
-            />
+            <FormControlLabel control={<Switch defaultChecked />} label="Crowdfund" />
           </Grid>
           <Grid item>
             <OutlinedInput
@@ -609,11 +561,7 @@ const Page = (props) => {
         <Box display="flex" sx={{ pl: 5 }}>
           <Box>
             <Box display="flex" alignItems="center">
-              <Checkbox
-                name="credit"
-                checked={inputs?.credit}
-                onChange={handle.switch}
-              />
+              <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
               <CreditCard />
               <Typography variant="body2" sx={{ ml: 2 }}>
                 Credit/Debit Card
@@ -623,26 +571,18 @@ const Page = (props) => {
           </Box>
           <Box>
             <Box display="flex" alignItems="center">
-              <Checkbox
-                name="paypal"
-                checked={inputs?.paypal}
-                onChange={handle.switch}
-              />
-              <img
-                src="/static/images/paypal-color.svg"
-                style={{ height: "30px" }}
-              />
+              <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
+              <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
             </Box>
           </Box>
         </Box>
-        <LoadingButton
+        <CustomLoadingButton
           loading={saving?.features}
           variant="contained"
-          sx={{ mt: 2, ...buttonStyle }}
-          onClick={handle.saveFeatures}
-        >
+          sx={{ mt: 2 }}
+          onClick={handle.saveFeatures}>
           Save
-        </LoadingButton>
+        </CustomLoadingButton>
       </Paper>
     </Box>
   );

@@ -8,6 +8,8 @@ import _ from "lodash";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { LoadingButton } from "@mui/lab";
 import { SnackbarProvider, useSnackbar } from "notistack";
+import CustomButton from "@/src/components/button/CustomButton";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const maps = [
   {
@@ -81,7 +83,6 @@ const MapBans = ({ item }) => {
 
   const { user } = useAuthContext();
   const { team, match } = useTournamentContext();
-  const { buttonStyle } = useStyleContext();
   const { enqueueSnackbar } = useSnackbar();
   const [team1, setTeam1] = useState(null);
   const [team2, setTeam2] = useState(null);
@@ -91,6 +92,10 @@ const MapBans = ({ item }) => {
 
   const isMyTeam = (team) => {
     return team?.uid === user?.id;
+  };
+
+  const isMapBanned = (i) => {
+    return (isMyTeam(team1) && banned1[i] === 1) || (isMyTeam(team2) && banned2[i] === 1);
   };
 
   const isAccepted = () => {
@@ -233,15 +238,15 @@ const MapBans = ({ item }) => {
           zIndex: 500
         }}>
         <Box>
-          <Button
+          <CustomButton
             id="map-bans-btn"
             variant="contained"
             aria-controls={open ? "map-bans-menu" : undefined}
             aria-haspopup="true"
             onClick={onOpen}
-            sx={{ ...buttonStyle, width: "300px" }}>
+            sx={{ width: "300px" }}>
             Map Bans
-          </Button>
+          </CustomButton>
           <MapMenu
             id="map-bans-menu"
             anchorEl={anchorEl}
@@ -279,7 +284,26 @@ const MapBans = ({ item }) => {
                       backgroundImage: "url(" + img.image + ")",
                       backgroundSize: "cover",
                       backgroundPosition: "center"
-                    }}></Box>
+                    }}>
+                    {isMapBanned(i) && (
+                      <Box
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "rgba(0,0,0,0.65)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}>
+                        <Typography
+                          variant="h5"
+                          sx={{ color: "black", fontWeight: "bold" }}
+                          textTransform="uppercase">
+                          Banned
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
                 </Tooltip>
 
                 <Box
@@ -325,9 +349,9 @@ const MapBans = ({ item }) => {
             </Box>
           </MapMenu>
         </Box>
-        <LoadingButton sx={{ ...buttonStyle }} onClick={onSave} loading={saving}>
+        <CustomLoadingButton onClick={onSave} loading={saving}>
           Save
-        </LoadingButton>
+        </CustomLoadingButton>
       </Box>
 
       <Box>

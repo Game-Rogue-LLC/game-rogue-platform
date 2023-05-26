@@ -9,7 +9,7 @@ import {
   Paper,
   Select,
   Typography,
-  styled,
+  styled
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import dayjs from "dayjs";
@@ -22,6 +22,8 @@ import TeamItem from "@/src/components/item/TeamItem";
 import { useRouter } from "next/router";
 import { markdownToHtml } from "@/src/utils/html-markdown";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomButton from "@/src/components/button/CustomButton";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const TeamSelectInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -34,23 +36,22 @@ const TeamSelectInput = styled(InputBase)(({ theme }) => ({
     "& .MuiListItemIcon-root": {
       minWidth: "40px",
       "& :hover": {
-        border: "none",
-      },
-    },
-  },
+        border: "none"
+      }
+    }
+  }
 }));
 
 const TeamSelect = styled(Select)(({ theme }) => ({
   "& .MuiSelect-select": {
-    minHeight: "2em !important",
-  },
+    minHeight: "2em !important"
+  }
 }));
 
 const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   const router = useRouter();
   const { user } = useAuthContext();
-  const { colors, buttonStyle, secondaryBackgroundColor, fontColor } =
-    useStyleContext();
+  const { colors, secondaryBackgroundColor, fontColor } = useStyleContext();
   const { organization, event, team, currentTime } = useTournamentContext();
   const [myTeam, setMyTeam] = useState("");
   const [registrationStatus, setRegistrationStatus] = useState(0);
@@ -58,9 +59,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
 
   const myTeams = useMemo(() => {
     if (team?.teams) {
-      return Object.keys(team.teams).filter(
-        (key) => team.teams[key].uid === user?.id
-      );
+      return Object.keys(team.teams).filter((key) => team.teams[key].uid === user?.id);
     }
     return [];
   }, [team?.teams, user]);
@@ -68,8 +67,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   useEffect(() => {
     if (currentTime) {
       if (dayjs(currentTime).isAfter(dayjs(endTime))) setRegistrationStatus(2);
-      else if (dayjs(currentTime).isBefore(dayjs(startTime)))
-        setRegistrationStatus(0);
+      else if (dayjs(currentTime).isBefore(dayjs(startTime))) setRegistrationStatus(0);
       else setRegistrationStatus(1);
     }
   }, [currentTime]);
@@ -109,9 +107,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
           sx={{
             p: 3,
             minHeight: "200px",
-            backgroundColor: secondaryBackgroundColor,
-          }}
-        >
+            backgroundColor: secondaryBackgroundColor
+          }}>
           <Typography variant="h4" fontSize={24} color={colors.primary}>
             Description
           </Typography>
@@ -119,9 +116,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             className="html-wrapper"
             style={{ marginTop: "16px" }}
             dangerouslySetInnerHTML={{
-              __html: markdownToHtml(item?.description),
-            }}
-          ></div>
+              __html: markdownToHtml(item?.description)
+            }}></div>
         </Paper>
       </Grid>
       <Grid item xs={12} lg={6} container spacing={2} rowSpacing={2}>
@@ -130,9 +126,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             sx={{
               p: 3,
               height: "100%",
-              backgroundColor: secondaryBackgroundColor,
-            }}
-          >
+              backgroundColor: secondaryBackgroundColor
+            }}>
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Registration
             </Typography>
@@ -153,9 +148,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             sx={{
               p: 3,
               height: "100%",
-              backgroundColor: secondaryBackgroundColor,
-            }}
-          >
+              backgroundColor: secondaryBackgroundColor
+            }}>
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Game
             </Typography>
@@ -169,9 +163,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             sx={{
               p: 3,
               height: "100%",
-              backgroundColor: secondaryBackgroundColor,
-            }}
-          >
+              backgroundColor: secondaryBackgroundColor
+            }}>
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Platform
             </Typography>
@@ -183,9 +176,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             sx={{
               p: 3,
               height: "100%",
-              backgroundColor: secondaryBackgroundColor,
-            }}
-          >
+              backgroundColor: secondaryBackgroundColor
+            }}>
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Format
             </Typography>
@@ -199,9 +191,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             sx={{
               p: 3,
               height: "100%",
-              backgroundColor: secondaryBackgroundColor,
-            }}
-          >
+              backgroundColor: secondaryBackgroundColor
+            }}>
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Participants
             </Typography>
@@ -222,24 +213,22 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                 onChange={handleSelectTeam}
                 variant="outlined"
                 sx={{
-                  mt: 1,
+                  mt: 1
                 }}
                 fullWidth
                 input={<TeamSelectInput />}
                 inputProps={{
                   MenuProps: {
-                    disableScrollLock: true,
-                  },
-                }}
-              >
+                    disableScrollLock: true
+                  }
+                }}>
                 {myTeams?.map((tid) => {
                   const item = team.teams[tid];
                   return (
                     <MenuItem
                       key={"team_" + tid}
                       value={tid}
-                      sx={{ display: "flex", alignItems: "center" }}
-                    >
+                      sx={{ display: "flex", alignItems: "center" }}>
                       <ListItemIcon>
                         <img
                           src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
@@ -247,7 +236,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                           width={30}
                           style={{
                             objectFit: "cover",
-                            objectPosition: "center",
+                            objectPosition: "center"
                           }}
                         />
                       </ListItemIcon>
@@ -258,26 +247,20 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               </TeamSelect>
             )}
             {!user ? (
-              <Button
-                variant="contained"
-                sx={{ width: "100%", mt: 1, ...buttonStyle }}
-                onClick={handleLogin}
-              >
+              <CustomButton variant="contained" sx={{ width: "100%", mt: 1 }} onClick={handleLogin}>
                 Login to Register
-              </Button>
+              </CustomButton>
             ) : (
-              <LoadingButton
+              <CustomLoadingButton
                 loading={registering}
                 variant="contained"
-                sx={{ width: "100%", mt: 1, ...buttonStyle }}
+                sx={{ width: "100%", mt: 1 }}
                 onClick={handleRegister}
                 disabled={
-                  dayjs(currentTime).isBefore(startTime) ||
-                  dayjs(currentTime).isAfter(endTime)
-                }
-              >
+                  dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
+                }>
                 Register to an event
-              </LoadingButton>
+              </CustomLoadingButton>
             )}
           </Paper>
         </Grid>

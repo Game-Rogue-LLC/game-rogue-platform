@@ -11,7 +11,7 @@ import {
   Typography,
   TextField,
   Alert,
-  OutlinedInput,
+  OutlinedInput
 } from "@mui/material";
 
 import AdminLayout from "@/src/content/AdminLayout";
@@ -21,23 +21,16 @@ import Validator from "validatorjs";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { useAuthContext } from "@/src/context/AuthContext";
 // import ColorPicker from "@mapbox/react-colorpickr";
-import {
-  GooglePicker,
-  SketchPicker,
-  ChromePicker,
-} from "@hello-pangea/color-picker";
+import { GooglePicker, SketchPicker, ChromePicker } from "@hello-pangea/color-picker";
 import ColorSelect from "@/src/components/dropdown/ColorSelect";
-import {
-  model,
-  rules,
-  customMessages,
-} from "@/lib/firestore/collections/organization";
+import { model, rules, customMessages } from "@/lib/firestore/collections/organization";
 import colorConvert from "color-convert";
 import { brighterColor, isBrightColor } from "@/src/utils/utils";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomButton from "@/src/components/button/CustomButton";
 
 const initialInputs = {
-  ...model,
+  ...model
 };
 
 const Page = (props) => {
@@ -45,7 +38,7 @@ const Page = (props) => {
   const { user } = useAuthContext();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { colors, setColors, buttonStyle } = useStyleContext();
+  const { colors, setColors } = useStyleContext();
   const { organization, event } = useTournamentContext();
   const [inputs, setInputs] = useState({ ...initialInputs });
   const [errors, setErrors] = useState({});
@@ -66,7 +59,7 @@ const Page = (props) => {
     setColors({
       primary: inputs?.primary,
       secondary: inputs?.secondary,
-      tertiary: inputs?.tertiary,
+      tertiary: inputs?.tertiary
     });
   }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
@@ -85,7 +78,7 @@ const Page = (props) => {
       if (!validate(inputs, rules, customMessages)) return;
       const newOrg = {
         ...inputs,
-        uid: user.id,
+        uid: user.id
       };
 
       organization
@@ -106,15 +99,15 @@ const Page = (props) => {
       if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
-        [name]: value,
+        [name]: value
       });
-    },
+    }
   };
 
   const onColorChange = (name, value) => {
     setInputs({
       ...inputs,
-      [name]: value?.hex,
+      [name]: value?.hex
     });
   };
 
@@ -150,11 +143,7 @@ const Page = (props) => {
         </Grid>
         <Grid item xs={12}>
           <InputLabel htmlFor="org-tag">Tagline</InputLabel>
-          <FormControl
-            fullWidth
-            sx={{ mt: 1 }}
-            error={errors.tagline !== undefined}
-          >
+          <FormControl fullWidth sx={{ mt: 1 }} error={errors.tagline !== undefined}>
             <OutlinedInput
               id="org-tag"
               name="tagline"
@@ -206,16 +195,9 @@ const Page = (props) => {
           </Grid>
         </Grid>
         <Grid item>
-          <Button
-            variant="contained"
-            onClick={handle.create}
-            disabled={disabled}
-            sx={{
-              ...buttonStyle,
-            }}
-          >
+          <CustomButton variant="contained" onClick={handle.create} disabled={disabled}>
             Register
-          </Button>
+          </CustomButton>
         </Grid>
       </Grid>
     </Paper>

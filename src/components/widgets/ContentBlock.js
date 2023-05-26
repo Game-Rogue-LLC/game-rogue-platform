@@ -1,31 +1,17 @@
 import { useState } from "react";
 import { Edit } from "@mui/icons-material";
-import {
-  Box,
-  IconButton,
-  InputLabel,
-  OutlinedInput,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import { Box, IconButton, InputLabel, OutlinedInput, Paper, Typography } from "@mui/material";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
 import { useEffect } from "react";
 import RichTextInput from "@/src/components/input/RichTextInput";
 
-const ContentBlock = ({
-  contentBlock,
-  handleChange,
-  handleUpload,
-  save,
-  saving,
-  buttonStyle,
-}) => {
+const ContentBlock = ({ contentBlock, handleChange, handleUpload, save, saving }) => {
   const handleInputs = (e) => {
     let { name, type, value } = e.target;
     const content = {
       ...contentBlock,
-      [name]: value,
+      [name]: value
     };
     handleChange(content);
   };
@@ -33,7 +19,7 @@ const ContentBlock = ({
     if (contentBlock.text != newEditorState) {
       handleChange({
         ...contentBlock,
-        text: newEditorState,
+        text: newEditorState
       });
     }
   };
@@ -45,8 +31,7 @@ const ContentBlock = ({
         <IconButton
           sx={{ position: "absolute", right: 0, bottom: 0 }}
           color="primary"
-          component="label"
-        >
+          component="label">
           <Edit />
           <input
             type="file"
@@ -100,14 +85,9 @@ const ContentBlock = ({
           handleContentChange={handleContentBlockTextChange}
         />
       </Box>
-      <LoadingButton
-        loading={saving}
-        variant="contained"
-        sx={{ mt: 2, ...buttonStyle }}
-        onClick={save}
-      >
+      <CustomLoadingButton loading={saving} variant="contained" sx={{ mt: 2 }} onClick={save}>
         Save
-      </LoadingButton>
+      </CustomLoadingButton>
     </Paper>
   );
 };

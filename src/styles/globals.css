@@ -103,6 +103,10 @@ a {
   text-decoration: none;
 }
 
+input:-webkit-autofill {
+  -webkit-box-shadow: 500px 500px 100px #f5851ff0 inset !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

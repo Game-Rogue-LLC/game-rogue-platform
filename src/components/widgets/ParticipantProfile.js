@@ -12,24 +12,25 @@ import {
   TableRow,
   TableCell,
   Tooltip,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import { Event, Grid3x3 } from "@mui/icons-material";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { formatDate } from "@/src/utils/utils";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomButton from "@/src/components/button/CustomButton";
 
 export default function ParticipantProfile({ item }) {
   const theme = useTheme();
   const router = useRouter();
-  const { colors, buttonStyle } = useStyleContext();
+  const { colors } = useStyleContext();
   const { team, player } = useTournamentContext();
 
   const getTeamPlayers = (team) => {
     if (!team) return [];
     return team.players.map((val) => ({
       ...val,
-      ...player.players[val.id],
+      ...player.players[val.id]
     }));
   };
 
@@ -41,22 +42,15 @@ export default function ParticipantProfile({ item }) {
             display: "flex",
             alignItems: "center",
             gap: 1,
-            flexDirection: "column",
-          }}
-        >
-          <Box
-            component="img"
-            src={team?.teams[item?.id]?.darkLogo}
-            width={100}
-            height={100}
-          ></Box>
+            flexDirection: "column"
+          }}>
+          <Box component="img" src={team?.teams[item?.id]?.darkLogo} width={100} height={100}></Box>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+              justifyContent: "center"
+            }}>
             <Grid3x3 fontSize="12px" />
             <Typography variant="body2">{item?.id}</Typography>
           </Box>
@@ -83,21 +77,16 @@ export default function ParticipantProfile({ item }) {
           </Box>
           <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
             <Typography variant="body1">Rogue Social Member Since:</Typography>
-            <Chip
-              icon={<Event />}
-              label={formatDate(item?.createdAt, "MMM. YYYY")}
-              sx={{ p: 1 }}
-            />
+            <Chip icon={<Event />} label={formatDate(item?.createdAt, "MMM. YYYY")} sx={{ p: 1 }} />
           </Box>
-          <Button
+          <CustomButton
             variant="contained"
-            sx={{ mt: 1, ...buttonStyle }}
+            sx={{ mt: 1 }}
             onClick={() => {
               router.push("/team/" + item?.id);
-            }}
-          >
+            }}>
             VIEW PROFILE
-          </Button>
+          </CustomButton>
           {/* <Chip
           icon={
             <img
@@ -132,9 +121,8 @@ export default function ParticipantProfile({ item }) {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      justifyContent: "center",
-                    }}
-                  >
+                      justifyContent: "center"
+                    }}>
                     <Avatar
                       variant="circular"
                       src={val.profilePic} //player.players[val.id].profilePic}
@@ -145,21 +133,17 @@ export default function ParticipantProfile({ item }) {
                     </Link>
                   </Box>
                 </TableCell>
-                <TableCell align="center">
-                  {team?.positions[val?.position]?.name}
-                </TableCell>
+                <TableCell align="center">{team?.positions[val?.position]?.name}</TableCell>
                 <TableCell align="center">{val.residency?.label}</TableCell>
                 <TableCell align="center">
-                  <Button
+                  <CustomButton
                     variant="contained"
-                    sx={{ ...buttonStyle }}
                     onClick={() => {
                       // TODO: Redirect to Rogue Social Profile
                       router.push("/user/" + val.id);
-                    }}
-                  >
+                    }}>
                     VIEW PROFILE
-                  </Button>
+                  </CustomButton>
                 </TableCell>
               </TableRow>
             ))}

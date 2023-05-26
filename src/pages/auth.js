@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  InputLabel,
+  InputLabel
 } from "@mui/material";
 import { useRouter } from "next/router";
 
@@ -61,9 +61,8 @@ const Auth = () => {
           position: "fixed",
           zIndex: -2,
           top: 0,
-          left: 0,
-        }}
-      >
+          left: 0
+        }}>
         <video autoPlay loop muted poster="/static/images/event_banner.png">
           <source src="/static/images/event_banner.mp4" type="video/mp4" />
         </video>
@@ -77,9 +76,8 @@ const Auth = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          backdropFilter: "blur(6px)",
-        }}
-      ></Box>
+          backdropFilter: "blur(6px)"
+        }}></Box>
       <Box
         pt={20}
         sx={{
@@ -89,9 +87,8 @@ const Auth = () => {
           position: "fixed",
           top: 0,
           color: "#fff",
-          textAlign: "center",
-        }}
-      >
+          textAlign: "center"
+        }}>
         <Button
           variant="text"
           sx={{
@@ -99,12 +96,11 @@ const Auth = () => {
             alignItems: "center",
             left: "20px",
             top: "20px",
-            color: "white",
+            color: "white"
           }}
           onClick={() => {
             router.push("/");
-          }}
-        >
+          }}>
           <Home />
           &nbsp;
           <Typography variant="body1">Home</Typography>
@@ -117,15 +113,11 @@ const Auth = () => {
               position: "fixed",
               left: "50%",
               top: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
+              transform: "translate(-50%, -50%)"
+            }}>
             <Box maxWidth="sm">
               <Box className="gr-login-banner" sx={{ py: 4 }}>
-                <img
-                  src="/GR_Letters.png"
-                  style={{ filter: "brightness(0)" }}
-                />
+                <img src="/GR_Letters.png" style={{ filter: "brightness(0)" }} />
               </Box>
               <Box sx={{ mt: 4, px: 4 }}></Box>
               <Box sx={{ mt: 2, p: 4 }}>
@@ -149,9 +141,8 @@ const Auth = () => {
                         handleOpenSignup(e);
                       }}
                       sx={{
-                        maxWidth: "360px",
-                      }}
-                    >
+                        maxWidth: "360px"
+                      }}>
                       Sign up with email
                     </Button>
                   </Grid>
@@ -167,16 +158,14 @@ const Auth = () => {
           onClose={handleCloseSignup}
           PaperProps={{
             style: {
-              padding: "20px",
-            },
-          }}
-        >
+              padding: "20px"
+            }
+          }}>
           <DialogTitle
             variant="h2"
             fontSize={"3rem"}
             textAlign={"center"}
-            textTransform={"uppercase"}
-          >
+            textTransform={"uppercase"}>
             Sign up
           </DialogTitle>
           <DialogContent>
@@ -191,7 +180,7 @@ const Auth = () => {
                     value={email}
                     onChange={handleEmailChange}
                     sx={{
-                      mt: 1,
+                      mt: 1
                     }}
                     fullWidth
                   />
@@ -206,7 +195,7 @@ const Auth = () => {
                     value={password}
                     onChange={handlePasswordChange}
                     sx={{
-                      mt: 1,
+                      mt: 1
                     }}
                     fullWidth
                   />
@@ -218,8 +207,7 @@ const Auth = () => {
             <Button
               variant="contained"
               startIcon={<PersonAddAlt fontSize="small" />}
-              onClick={handleSignupBtnClick}
-            >
+              onClick={handleSignupBtnClick}>
               Sign Up
             </Button>
           </DialogActions>

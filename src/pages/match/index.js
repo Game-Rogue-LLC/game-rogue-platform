@@ -9,7 +9,7 @@ import {
   TableCell,
   TableContainer,
   TableFooter,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import AdminLayout from "@/src/content/AdminLayout";
 import { useAppContext } from "@/src/context/app";
@@ -19,12 +19,13 @@ import dayjs from "dayjs";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { EVENT_STATES, MATCH_STATES } from "@/src/config/global";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomButton from "@/src/components/button/CustomButton";
 
 const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { setColors, buttonStyle } = useStyleContext();
+  const { setColors } = useStyleContext();
   const { organization, event, player, match } = useTournamentContext();
   // const { match } = useMatchContext();
   const [eid, setEID] = useState(router?.query?.event);
@@ -59,7 +60,7 @@ const Page = (props) => {
       setColors({
         primary: event.events[eid].primary,
         secondary: event.events[eid].secondary,
-        tertiary: event.events[eid].tertiary,
+        tertiary: event.events[eid].tertiary
       });
     }
   }, [eid, event?.events]);
@@ -70,10 +71,7 @@ const Page = (props) => {
       end = dayjs(item.end),
       status = item.status,
       eventStatus = event.events[item.eid].status;
-    if (
-      eventStatus == EVENT_STATES.CREATING.value ||
-      eventStatus == EVENT_STATES.SCHEDULING.value
-    )
+    if (eventStatus == EVENT_STATES.CREATING.value || eventStatus == EVENT_STATES.SCHEDULING.value)
       return "SCHEDULING";
     if (eventStatus == EVENT_STATES.SCHEDULED.value) return "SCHEDULED";
     if (eventStatus == EVENT_STATES.STARTED.value) {
@@ -86,16 +84,10 @@ const Page = (props) => {
 
   const handle = {
     create: (e) => {
-      if (
-        event.events[eid].participants?.length <
-        event.events[eid].participantsCount
-      ) {
+      if (event.events[eid].participants?.length < event.events[eid].participantsCount) {
         alert("Too few participants.");
         return;
-      } else if (
-        event.events[eid].participants?.length ===
-        event.events[eid].participantsCount
-      ) {
+      } else if (event.events[eid].participants?.length === event.events[eid].participantsCount) {
         router.push("/match/create?event=" + eid);
       }
     },
@@ -103,7 +95,7 @@ const Page = (props) => {
       if (event.events[eid].status) {
         router.push("/match/show?event=" + eid);
       }
-    },
+    }
   };
 
   return (
@@ -130,14 +122,11 @@ const Page = (props) => {
                 <TableCell align="center">{getStatus(item)}</TableCell>
                 <TableCell align="center">
                   {
-                    player.players[
-                      organization.organizations[event.events[item.eid].oid].uid
-                    ].userName
+                    player.players[organization.organizations[event.events[item.eid].oid].uid]
+                      .userName
                   }
                 </TableCell>
-                <TableCell align="center">
-                  {dayjs(item.createdAt).format("MMM DD")}
-                </TableCell>
+                <TableCell align="center">{dayjs(item.createdAt).format("MMM DD")}</TableCell>
                 <TableCell align="center">{"ROUND" + item.round}</TableCell>
                 <TableCell align="center">
                   {item.status == MATCH_STATES.NOT_STARTED_SCHEDULING.value
@@ -167,26 +156,21 @@ const Page = (props) => {
           <TableRow>
             <TableCell sx={{ border: "none" }} colSpan={9}>
               {event?.events[eid]?.status ? (
-                <Button
+                <CustomButton
                   variant="contained"
                   onClick={handle.show}
-                  sx={{ ...buttonStyle }}
                   // sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
                 >
                   VIEW MATCHES
-                </Button>
+                </CustomButton>
               ) : (
-                <Button
-                  variant="contained"
-                  onClick={handle.create}
-                  sx={{ ...buttonStyle }}
-                >
+                <CustomButton variant="contained" onClick={handle.create}>
                   CREATE MATCHES
-                </Button>
+                </CustomButton>
               )}
-              <Button variant="contained" sx={{ ml: 2, ...buttonStyle }}>
+              <CustomButton variant="contained" sx={{ ml: 2 }}>
                 PAST MATCHES
-              </Button>
+              </CustomButton>
             </TableCell>
           </TableRow>
         </TableBody>

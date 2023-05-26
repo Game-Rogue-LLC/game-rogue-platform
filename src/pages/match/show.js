@@ -10,7 +10,7 @@ import {
   Paper,
   Select,
   Typography,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { LoadingButton } from "@mui/lab";
@@ -22,11 +22,7 @@ import DatePicker from "@/src/components/datetime/DatePicker";
 import { useMatchContext } from "@/src/context/MatchContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { EVENT_FORMATS } from "@/src/config/global";
-import {
-  DoubleElimination,
-  SingleElimination,
-  Stepladder,
-} from "tournament-pairings";
+import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
 import { nanoid } from "nanoid";
 import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
 import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
@@ -34,14 +30,14 @@ import LadderEliminationBracket from "@/src/components/tournament-bracket/Ladder
 import FullCalendar from "@/src/components/datetime/FullCalendar.js";
 import ScoresDialog from "@/src/components/dialog/ScoresDialog";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomButton from "@/src/components/button/CustomButton";
 
 const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { setColors, buttonStyle } = useStyleContext();
-  const { organization, event, team, match, matchLoading } =
-    useTournamentContext();
+  const { setColors } = useStyleContext();
+  const { organization, event, team, match, matchLoading } = useTournamentContext();
   const [matches, setMatches] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
@@ -79,7 +75,7 @@ const Page = (props) => {
       } else if (format === 1) {
         setMatches({
           upper: [...newMatches.filter((val) => val.group == 0)],
-          lower: [...newMatches.filter((val) => val.group == 1)],
+          lower: [...newMatches.filter((val) => val.group == 1)]
         });
       }
     }
@@ -94,7 +90,7 @@ const Page = (props) => {
             schedules.map((val) => ({
               ...val,
               start: val.start.toDate(),
-              end: val.end.toDate(),
+              end: val.end.toDate()
             }))
           );
         }
@@ -102,7 +98,7 @@ const Page = (props) => {
       setColors({
         primary: event.events[eid].primary,
         secondary: event.events[eid].secondary,
-        tertiary: event.events[eid].tertiary,
+        tertiary: event.events[eid].tertiary
       });
     }
   }, [eid, event?.events]);
@@ -122,14 +118,8 @@ const Page = (props) => {
       }
     },
     doubleMatchClick: (match) => {
-      const indexInUpper = _.findLastIndex(
-        matches.upper,
-        (val) => val.id == match.id
-      );
-      const indexInLower = _.findLastIndex(
-        matches.lower,
-        (val) => val.id == match.id
-      );
+      const indexInUpper = _.findLastIndex(matches.upper, (val) => val.id == match.id);
+      const indexInLower = _.findLastIndex(matches.lower, (val) => val.id == match.id);
 
       // if (matches.upper[indexInUpper]?.participants?.filter(val => val.id ? true : false).length < 2) return;
       // if (matches.lower[indexInLower]?.participants?.filter(val => val.id ? true : false).length < 2) return;
@@ -155,7 +145,7 @@ const Page = (props) => {
         setOpen(true);
         return;
       }
-    },
+    }
   };
 
   return (
@@ -164,27 +154,23 @@ const Page = (props) => {
         sx={{
           border: `solid 1px rgba(255, 255, 255, 0.2)`,
           borderRadius: "4px",
-          padding: 3,
-        }}
-      >
+          padding: 3
+        }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
           <Box
             sx={{
               width: "300px",
               display: "flex",
               flexDirection: "column",
-              gap: 3,
-            }}
-          >
+              gap: 3
+            }}>
             <Typography variant="h5">Event Details</Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Box sx={{ width: "130px" }}>
                 <Typography variant="h6">Name:</Typography>
               </Box>
               <Box>
-                <Typography variant="body1">
-                  {event?.events[eid]?.name}
-                </Typography>
+                <Typography variant="body1">{event?.events[eid]?.name}</Typography>
               </Box>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -212,19 +198,12 @@ const Page = (props) => {
                 <Typography variant="h6">Participants:</Typography>
               </Box>
               <Box>
-                <Typography variant="body1">
-                  {event?.events[eid]?.participantsCount}
-                </Typography>
+                <Typography variant="body1">{event?.events[eid]?.participantsCount}</Typography>
               </Box>
             </Box>
-            <Button
-              variant="contained"
-              onClick={handle.edit}
-              disabled={disabled}
-              sx={{ ...buttonStyle }}
-            >
+            <CustomButton variant="contained" onClick={handle.edit} disabled={disabled}>
               Edit
-            </Button>
+            </CustomButton>
           </Box>
           <Box
             sx={{
@@ -232,13 +211,12 @@ const Page = (props) => {
               flex: 1,
               border: "solid 1px rgba(255, 255, 255, 0.2)",
               minHeight: "300px",
-              borderRadius: "4px",
-            }}
-          >
+              borderRadius: "4px"
+            }}>
             {event?.events[eid] && event.events[eid].format == 2 ? (
               <FullCalendar
                 sx={{
-                  marginTop: "24px",
+                  marginTop: "24px"
                 }}
                 events={events}
                 setEvents={setEvents}

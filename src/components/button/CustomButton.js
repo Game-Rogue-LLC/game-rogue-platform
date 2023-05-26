@@ -1,13 +1,13 @@
 import { useStyleContext } from "@/src/context/StyleContext";
 import { Button } from "@mui/material";
 
-const StyledButton = (props) => {
+const CustomButton = ({ sx, ...props }) => {
   const { buttonStyle } = useStyleContext();
   return (
-    <Button {...props} sx={{ ...buttonStyle, ...props?.sx }}>
+    <Button {...props} sx={{ ...buttonStyle, ...sx }}>
       {props.children}
     </Button>
   );
 };
 
-export default StyledButton;
+export default CustomButton;

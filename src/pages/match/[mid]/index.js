@@ -10,7 +10,7 @@ import {
   Paper,
   Select,
   Typography,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { LoadingButton } from "@mui/lab";
@@ -22,11 +22,7 @@ import DatePicker from "@/src/components/datetime/DatePicker";
 import { useMatchContext } from "@/src/context/MatchContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { EVENT_FORMATS } from "@/src/config/global";
-import {
-  DoubleElimination,
-  SingleElimination,
-  Stepladder,
-} from "tournament-pairings";
+import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
 import { nanoid } from "nanoid";
 import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
 import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
@@ -34,14 +30,14 @@ import LadderEliminationBracket from "@/src/components/tournament-bracket/Ladder
 import FullCalendar from "@/src/components/datetime/FullCalendar.js";
 import ScoresDialog from "@/src/components/dialog/ScoresDialog";
 import { useStyleContext } from "@/src/context/StyleContext";
+import CustomButton from "@/src/components/button/CustomButton";
 
 const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { setColors, buttonStyle } = useStyleContext();
-  const { organization, event, team, match, matchLoading } =
-    useTournamentContext();
+  const { setColors } = useStyleContext();
+  const { organization, event, team, match, matchLoading } = useTournamentContext();
   const [matches, setMatches] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
@@ -86,18 +82,12 @@ const Page = (props) => {
       setColors({
         primary: event.events[eid].primary,
         secondary: event.events[eid].secondary,
-        tertiary: event.events[eid].tertiary,
+        tertiary: event.events[eid].tertiary
       });
     }
   }, [eid, event?.events]);
 
-  const createMatches = (
-    type,
-    teams,
-    participants,
-    participantsCount,
-    randomized
-  ) => {
+  const createMatches = (type, teams, participants, participantsCount, randomized) => {
     if (type === 0) {
       //* Single Elimination Bracket
       let newGames = []; //, gameIDs = []
@@ -112,7 +102,7 @@ const Page = (props) => {
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player1 - 1].tid].name,
+            name: teams[participants[val.player1 - 1].tid].name
           });
         }
 
@@ -123,7 +113,7 @@ const Page = (props) => {
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player2 - 1].tid].name,
+            name: teams[participants[val.player2 - 1].tid].name
           });
         }
 
@@ -138,7 +128,7 @@ const Page = (props) => {
           tournamentRoundText: `${val.round}`,
           startTime: "",
           state: "DONE",
-          participants: newParticipants,
+          participants: newParticipants
         };
 
         // gameIDs.push(newGame.id);
@@ -159,7 +149,7 @@ const Page = (props) => {
       //* Double Elimination Bracket
       let newGames = {
         upper: [],
-        lower: [],
+        lower: []
       };
       // let gameIDs = []
       const matches = DoubleElimination(randomized);
@@ -173,7 +163,7 @@ const Page = (props) => {
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player1 - 1].tid].name,
+            name: teams[participants[val.player1 - 1].tid].name
           });
         }
 
@@ -184,7 +174,7 @@ const Page = (props) => {
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player2 - 1].tid].name,
+            name: teams[participants[val.player2 - 1].tid].name
           });
         }
 
@@ -200,7 +190,7 @@ const Page = (props) => {
           tournamentRoundText: `${val.round}`,
           startTime: "",
           state: "DONE",
-          participants: newParticipants,
+          participants: newParticipants
         };
 
         // gameIDs.push(newGame.id);
@@ -219,13 +209,11 @@ const Page = (props) => {
         );
         if (nextMatch >= 0) {
           newGames.upper[i].nextMatchId = newGames.upper[nextMatch].id;
-          if (!newGames.upper[nextMatch].up)
-            newGames.upper[nextMatch].up = newGames.upper[i].id;
+          if (!newGames.upper[nextMatch].up) newGames.upper[nextMatch].up = newGames.upper[i].id;
           else newGames.upper[nextMatch].down = newGames.upper[i].id;
         }
         if (nextLooserMatch >= 0) {
-          newGames.upper[i].nextLooserMatchId =
-            newGames.lower[nextLooserMatch].id;
+          newGames.upper[i].nextLooserMatchId = newGames.lower[nextLooserMatch].id;
         }
       });
       newGames.lower.forEach((val, i) => {
@@ -263,7 +251,7 @@ const Page = (props) => {
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player1 - 1].tid].name,
+            name: teams[participants[val.player1 - 1].tid].name
           });
         }
 
@@ -273,7 +261,7 @@ const Page = (props) => {
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player2 - 1].tid].name,
+            name: teams[participants[val.player2 - 1].tid].name
           });
         }
 
@@ -286,7 +274,7 @@ const Page = (props) => {
           tournamentRoundText: `${val.round}`,
           startTime: "",
           state: "DONE",
-          participants: newParticipants,
+          participants: newParticipants
         };
 
         gameIDs.push(newGame.id);
@@ -353,16 +341,13 @@ const Page = (props) => {
       const ind = _.findLastIndex(
         matches,
         (val) =>
-          (val.participants[0]?.id == party.id &&
-            val.participants[0]?.round == party.round) ||
-          (val.participants[1]?.id == party.id &&
-            val.participants[1]?.round == party.round)
+          (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
       );
 
       if (
         ind < 0 ||
-        matches[ind]?.participants?.filter((val) => (val.id ? true : false))
-          .length < 2
+        matches[ind]?.participants?.filter((val) => (val.id ? true : false)).length < 2
       )
         return;
 
@@ -415,30 +400,24 @@ const Page = (props) => {
       const indexInUpper = _.findLastIndex(
         matches.upper,
         (val) =>
-          (val.participants[0]?.id == party.id &&
-            val.participants[0]?.round == party.round) ||
-          (val.participants[1]?.id == party.id &&
-            val.participants[1]?.round == party.round)
+          (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
       );
       const indexInLower = _.findLastIndex(
         matches.lower,
         (val) =>
-          (val.participants[0]?.id == party.id &&
-            val.participants[0]?.round == party.round) ||
-          (val.participants[1]?.id == party.id &&
-            val.participants[1]?.round == party.round)
+          (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
       );
 
       if (
-        matches.upper[indexInUpper]?.participants?.filter((val) =>
-          val.id ? true : false
-        ).length < 2
+        matches.upper[indexInUpper]?.participants?.filter((val) => (val.id ? true : false)).length <
+        2
       )
         return;
       if (
-        matches.lower[indexInLower]?.participants?.filter((val) =>
-          val.id ? true : false
-        ).length < 2
+        matches.lower[indexInLower]?.participants?.filter((val) => (val.id ? true : false)).length <
+        2
       )
         return;
 
@@ -457,16 +436,11 @@ const Page = (props) => {
 
       if (indexInUpper >= 0) {
         newGames.upper[indexInUpper].participants[participant].isWinner = true;
-        newGames.upper[indexInUpper].participants[participant].resultText =
-          "WON";
+        newGames.upper[indexInUpper].participants[participant].resultText = "WON";
         newGames.upper[indexInUpper].participants[participant].status = "DONE";
-        newGames.upper[indexInUpper].participants[
-          1 - participant
-        ].isWinner = false;
-        newGames.upper[indexInUpper].participants[1 - participant].resultText =
-          "LOST";
-        newGames.upper[indexInUpper].participants[1 - participant].status =
-          "DONE";
+        newGames.upper[indexInUpper].participants[1 - participant].isWinner = false;
+        newGames.upper[indexInUpper].participants[1 - participant].resultText = "LOST";
+        newGames.upper[indexInUpper].participants[1 - participant].status = "DONE";
 
         let nextIndex = -1,
           nextLooserIndex = -1;
@@ -493,35 +467,24 @@ const Page = (props) => {
         if (nextIndex >= 0) {
           const newParticipant = {
             ...newGames.upper[indexInUpper].participants[participant],
-            round:
-              newGames.upper[indexInUpper].participants[participant].round + 1,
+            round: newGames.upper[indexInUpper].participants[participant].round + 1,
             isWinner: false,
             resultText: "",
-            status: null,
+            status: null
           };
-          if (
-            newGames.upper[nextIndex]?.id ==
-            newGames.upper[indexInUpper].nextMatchId
-          ) {
+          if (newGames.upper[nextIndex]?.id == newGames.upper[indexInUpper].nextMatchId) {
             if (newGames.upper[nextIndex]?.participants.length == 0)
               newGames.upper[nextIndex].participants = [{}, {}];
 
-            if (
-              newGames.upper[indexInUpper - 1]?.nextMatchId ===
-              newGames.upper[nextIndex]?.id
-            ) {
+            if (newGames.upper[indexInUpper - 1]?.nextMatchId === newGames.upper[nextIndex]?.id) {
               newGames.upper[nextIndex].participants[1] = newParticipant;
             } else if (
-              newGames.upper[indexInUpper + 1]?.nextMatchId ===
-              newGames.upper[nextIndex]?.id
+              newGames.upper[indexInUpper + 1]?.nextMatchId === newGames.upper[nextIndex]?.id
             ) {
               newGames.upper[nextIndex].participants[0] = newParticipant;
             }
           }
-          if (
-            newGames.lower[nextIndex]?.id ==
-            newGames.upper[indexInUpper].nextMatchId
-          ) {
+          if (newGames.lower[nextIndex]?.id == newGames.upper[indexInUpper].nextMatchId) {
             if (newGames.lower[nextIndex]?.participants.length == 0)
               newGames.lower[nextIndex].participants = [{}, {}];
             newGames.lower[nextIndex].participants[0] = newParticipant;
@@ -531,12 +494,10 @@ const Page = (props) => {
         if (nextLooserIndex >= 0) {
           const newParticipant = {
             ...newGames.upper[indexInUpper].participants[1 - participant],
-            round:
-              newGames.upper[indexInUpper].participants[1 - participant].round +
-              1,
+            round: newGames.upper[indexInUpper].participants[1 - participant].round + 1,
             isWinner: false,
             resultText: "",
-            status: null,
+            status: null
           };
 
           if (newGames.lower[nextLooserIndex].participants.length == 0)
@@ -553,16 +514,11 @@ const Page = (props) => {
 
       if (indexInLower >= 0) {
         newGames.lower[indexInLower].participants[participant].isWinner = true;
-        newGames.lower[indexInLower].participants[participant].resultText =
-          "WON";
+        newGames.lower[indexInLower].participants[participant].resultText = "WON";
         newGames.lower[indexInLower].participants[participant].status = "DONE";
-        newGames.lower[indexInLower].participants[
-          1 - participant
-        ].isWinner = false;
-        newGames.lower[indexInLower].participants[1 - participant].resultText =
-          "LOST";
-        newGames.lower[indexInLower].participants[1 - participant].status =
-          "DONE";
+        newGames.lower[indexInLower].participants[1 - participant].isWinner = false;
+        newGames.lower[indexInLower].participants[1 - participant].resultText = "LOST";
+        newGames.lower[indexInLower].participants[1 - participant].status = "DONE";
 
         let nextIndex = -1;
 
@@ -576,20 +532,16 @@ const Page = (props) => {
         if (nextIndex >= 0) {
           const newParticipant = {
             ...newGames.lower[indexInLower].participants[participant],
-            round:
-              newGames.lower[indexInLower].participants[participant].round + 1,
+            round: newGames.lower[indexInLower].participants[participant].round + 1,
             isWinner: false,
             resultText: "",
-            status: null,
+            status: null
           };
 
           if (newGames.lower[nextIndex].participants.length == 0)
             newGames.lower[nextIndex].participants = [{}, {}];
           if (newGames.lower[nextIndex].nextMatchId) {
-            if (
-              newGames.lower[indexInLower + 1]?.nextMatchId ==
-              newGames.lower[nextIndex].id
-            )
+            if (newGames.lower[indexInLower + 1]?.nextMatchId == newGames.lower[nextIndex].id)
               newGames.lower[nextIndex].participants[0] = newParticipant;
             else newGames.lower[nextIndex].participants[1] = newParticipant;
           } else {
@@ -620,10 +572,7 @@ const Page = (props) => {
 
       let nextIndex = -1;
       if (newGames[selectedMatch].nextMatchId) {
-        nextIndex = _.findIndex(
-          matches,
-          (val) => val?.id === newGames[selectedMatch].nextMatchId
-        );
+        nextIndex = _.findIndex(matches, (val) => val?.id === newGames[selectedMatch].nextMatchId);
       }
 
       if (nextIndex >= 0) {
@@ -636,18 +585,17 @@ const Page = (props) => {
           isWinner: false,
           score: 0,
           resultText: "",
-          status: null,
+          status: null
         };
 
-        newGames[nextIndex].participants[
-          1 - newGames[selectedMatch].id == newGames[nextIndex].up
-        ] = newParticipant;
+        newGames[nextIndex].participants[1 - newGames[selectedMatch].id == newGames[nextIndex].up] =
+          newParticipant;
 
         console.warn(newGames[nextIndex].participants);
       }
       setGames(newGames);
       setOpen(false);
-    },
+    }
   };
 
   return (
@@ -656,9 +604,8 @@ const Page = (props) => {
         sx={{
           border: `solid 1px rgba(255, 255, 255, 0.2)`,
           borderRadius: "4px",
-          padding: 3,
-        }}
-      >
+          padding: 3
+        }}>
         {matches && selectedMatch >= 0 && (
           <ScoresDialog
             title={"Team scores"}
@@ -684,9 +631,7 @@ const Page = (props) => {
                   <Typography variant="h6">Name:</Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">
-                    {event?.events[eid]?.name}
-                  </Typography>
+                  <Typography variant="body1">{event?.events[eid]?.name}</Typography>
                 </Grid>
               </Grid>
               <Grid container sx={{ alignItems: "center" }}>
@@ -714,9 +659,7 @@ const Page = (props) => {
                   <Typography variant="h6">Participants:</Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="body1">
-                    {event?.events[eid]?.participantsCount}
-                  </Typography>
+                  <Typography variant="body1">{event?.events[eid]?.participantsCount}</Typography>
                 </Grid>
               </Grid>
             </Box>
@@ -725,17 +668,12 @@ const Page = (props) => {
             {event?.events[eid] &&
               (event.events[eid].format == 2 ? (
                 <Box>
-                  <Button
-                    variant="contained"
-                    onClick={handle.save}
-                    disabled={disabled}
-                    sx={{ ...buttonStyle }}
-                  >
+                  <CustomButton variant="contained" onClick={handle.save} disabled={disabled}>
                     Save
-                  </Button>
+                  </CustomButton>
                   <FullCalendar
                     sx={{
-                      marginTop: "24px",
+                      marginTop: "24px"
                     }}
                     events={events}
                     setEvents={setEvents}
@@ -747,24 +685,21 @@ const Page = (props) => {
                 <Grid container spacing={2} rowSpacing={3}>
                   <Grid item xs={12}>
                     {event?.events[eid]?.status == 0 && (
-                      <Button
+                      <CustomButton
                         variant="contained"
                         onClick={handle.buildTemplate}
-                        disabled={disabled}
-                        sx={{ ...buttonStyle }}
-                      >
+                        disabled={disabled}>
                         Build Template
-                      </Button>
+                      </CustomButton>
                     )}
-                    <LoadingButton
+                    <CustomLoadingButton
                       loading={saving}
                       variant="contained"
                       onClick={handle.save}
                       disabled={disabled}
-                      sx={{ ml: 2, ...buttonStyle }}
-                    >
+                      sx={{ ml: 2 }}>
                       Save
-                    </LoadingButton>
+                    </CustomLoadingButton>
                   </Grid>
                   <Grid item xs={12}>
                     <Box
@@ -772,9 +707,8 @@ const Page = (props) => {
                         overflow: "auto",
                         border: "solid 1px rgba(255, 255, 255, 0.2)",
                         minHeight: "300px",
-                        borderRadius: "4px",
-                      }}
-                    >
+                        borderRadius: "4px"
+                      }}>
                       {matches && event?.events[eid]?.format == 0 ? (
                         <SingleEliminationBracket
                           matches={matches}
