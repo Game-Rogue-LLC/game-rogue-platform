@@ -41,7 +41,6 @@ import { brighterColor, isBrightColor } from "@/src/utils/utils";
 import { useStyleContext } from "@/src/context/StyleContext";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 import CustomButton from "@/src/components/button/CustomButton";
-import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const initialInputs = {
   ...model

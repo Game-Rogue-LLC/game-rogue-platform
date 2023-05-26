@@ -60,7 +60,7 @@ const Page = (props) => {
     if (item?.start) {
       setMatchTime(item.start);
     }
-    if (tab === "1" && item?.status === MATCH_STATES.SCHEDULED.value) setTab("2");
+    // if (tab === "1" && item?.status === MATCH_STATES.SCHEDULED.value) setTab("2");
   }, [item]);
 
   useEffect(() => {
@@ -118,28 +118,30 @@ const Page = (props) => {
   return (
     <Container sx={{ padding: 5 }}>
       <TabContext value={tab}>
-        <TabList onChange={onTabChange}>
-          {item?.status !== MATCH_STATES.SCHEDULED.value ? (
+        {item?.status !== MATCH_STATES.SCHEDULED.value ? (
+          <TabList onChange={onTabChange}>
             <Tab value="1" label="Schedule" />
-          ) : (
-            <Tab value="2" label="Share/Save" />
-          )}
-          <Tab value="3" label="Map Bans" />
-          <Tab value="4" label="Scoreboard" />
-        </TabList>
+          </TabList>
+        ) : (
+          <TabList onChange={onTabChange}>
+            <Tab value="1" label="Share/Save" />
+            <Tab value="2" label="Map Bans" />
+            <Tab value="3" label="Scoreboard" />
+          </TabList>
+        )}
         {item?.status !== MATCH_STATES.SCHEDULED.value ? (
           <TabPanel value="1">
             <MatchSchedule matchTime={matchTime} setMatchTime={setMatchTime} item={item} />
           </TabPanel>
         ) : (
           <>
-            <TabPanel value="2">
+            <TabPanel value="1">
               <MatchShare matchTime={matchTime} onComplete={onNext} />
             </TabPanel>
-            <TabPanel value="3">
+            <TabPanel value="2">
               <MapBans item={item} />
             </TabPanel>
-            <TabPanel value="4">
+            <TabPanel value="3">
               <MatchScoreBoard item={item} onComplete={onNext} />
             </TabPanel>
           </>
