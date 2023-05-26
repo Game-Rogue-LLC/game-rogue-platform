@@ -5,11 +5,18 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 import dayjs from "dayjs";
 import MatchItem from "@/src/components/widgets/rogue-social/MatchItem";
 import { useAuthContext } from "@/src/context/AuthContext";
+import CustomButton from "@/src/components/button/CustomButton";
+import { useRouter } from "next/router";
 
-const MatchList = () => {
+const RightSidebar = () => {
+  const router = useRouter();
   const { setTitle } = useAppContext();
   const { user } = useAuthContext();
   const { team, match, currentTime, setCurrentTime } = useTournamentContext();
+
+  const onViewAllClick = (e) => {
+    router.push("/rogue-social/matches");
+  };
 
   const upcomingMatches = useMemo(() => {
     if (match?.matches) {
@@ -27,23 +34,28 @@ const MatchList = () => {
   }, [match?.matches, currentTime, team?.teams]);
 
   useEffect(() => {
-    setTitle("Upcoming Matches");
-    setCurrentTime(new Date());
-  }, []);
+    console.log(upcomingMatches);
+  }, [upcomingMatches]);
 
   return (
     <Box
       sx={{
+        width: "400px",
         display: "flex",
         alignItems: "left",
         gap: 1,
         flexDirection: "column"
       }}>
-      {upcomingMatches.map((item) => (
-        <MatchItem key={"match_" + item.id} item={item} />
-      ))}
+      {upcomingMatches.length < 4
+        ? upcomingMatches.map((item) => <MatchItem key={"match_" + item.id} item={item} />)
+        : upcomingMatches
+            .slice(0, 4)
+            .map((item) => <MatchItem key={"match_" + item.id} item={item} />)}
+      {upcomingMatches.length >= 4 && (
+        <CustomButton onClick={onViewAllClick}>VIEW ALL</CustomButton>
+      )}
     </Box>
   );
 };
 
-export default MatchList;
+export default RightSidebar;

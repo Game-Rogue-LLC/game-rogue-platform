@@ -13,8 +13,8 @@ import {
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Welcome from "@/src/components/widgets/rogue-social/Welcome";
-import MatchList from "@/src/components/widgets/rogue-social/MatchList";
 import TournamentProvider from "@/src/context/TournamentContext";
+import RightSidebar from "@/src/components/widgets/rogue-social/RightSidebar";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontSize: "24px",
@@ -105,7 +105,7 @@ const Page = (props) => {
           borderLeft: "solid 1px rgba(255,255,255,.2)",
           p: 1
         }}>
-        <MatchList />
+        <RightSidebar />
       </Box>
     </Box>
   );
