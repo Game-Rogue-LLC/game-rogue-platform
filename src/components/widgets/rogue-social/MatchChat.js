@@ -18,18 +18,12 @@ import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import CustomButton from "@/src/components/button/CustomButton";
 
-const MatchChat = ({ item }) => {
+const MatchChat = ({ item, myTeam, opTeam }) => {
   const messageBoxRef = useRef(null);
   const { user } = useAuthContext();
-  const { team, match } = useTournamentContext();
+  const { match } = useTournamentContext();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
-  const [myTeam, setMyTeam] = useState(null);
-  const [opTeam, setOpTeam] = useState(null);
-
-  const isMyTeam = (team) => {
-    return team.uid === user.id;
-  };
 
   useEffect(() => {
     if (item?.messages) {
@@ -37,19 +31,8 @@ const MatchChat = ({ item }) => {
     }
   }, [item]);
 
-  useEffect(() => {
-    if (isMyTeam(team?.teams[item?.participants[0]?.id])) {
-      setMyTeam(team.teams[item.participants[0].id]);
-      setOpTeam(team.teams[item.participants[1].id]);
-    } else if (isMyTeam(team?.teams[item?.participants[1]?.id])) {
-      setMyTeam(team.teams[item.participants[1].id]);
-      setOpTeam(team.teams[item.participants[0].id]);
-    }
-  }, [team?.teams, item]);
-
   const handleSend = () => {
     if (input.trim() !== "" && item?.id) {
-      console.log(input);
       match.update(item?.id, {
         messages: [
           ...messages,
@@ -83,7 +66,8 @@ const MatchChat = ({ item }) => {
         flexDirection: "column",
         bgcolor: "grey.200",
         border: "solid 1px rgba(255,255,255,0.1)"
-      }}>
+      }}
+    >
       <Box sx={{ backgroundColor: "black" }}>
         <Typography variant="h4" textAlign="center" fontSize="20px" color="white">
           Game Chat
@@ -130,13 +114,15 @@ const Message = ({ message, team1, team2 }) => {
         display: "flex",
         justifyContent: isLeft ? "flex-start" : "flex-end",
         mb: 2
-      }}>
+      }}
+    >
       <Box
         sx={{
           display: "flex",
           flexDirection: isLeft ? "row" : "row-reverse",
           alignItems: "center"
-        }}>
+        }}
+      >
         <img src={isLeft ? team1?.darkLogo : team2?.darkLogo} width={40} height={40} />
         <Paper
           variant="outlined"
@@ -146,7 +132,8 @@ const Message = ({ message, team1, team2 }) => {
             mr: isLeft ? 0 : 1,
             backgroundColor: isLeft ? "primary.light" : "secondary.light",
             borderRadius: isLeft ? "20px 20px 20px 5px" : "20px 20px 5px 20px"
-          }}>
+          }}
+        >
           <Typography variant="body1">{message.text}</Typography>
         </Paper>
       </Box>

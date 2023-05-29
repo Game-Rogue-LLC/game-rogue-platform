@@ -8,7 +8,7 @@ import { useAuthContext } from "@/src/context/AuthContext";
 import CustomButton from "@/src/components/button/CustomButton";
 import { useRouter } from "next/router";
 
-const RightSidebar = () => {
+const RightSidebar = ({ sx }) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { user } = useAuthContext();
@@ -21,21 +21,13 @@ const RightSidebar = () => {
   const upcomingMatches = useMemo(() => {
     if (match?.matches) {
       const res = match.matches.filter(
-        (item) =>
-          dayjs(item.start).isAfter(currentTime) &&
-          item.participants?.length === 2 &&
-          (team.teams[item.participants[0].id].players.findIndex((val) => val.id === user.id) >=
-            0 ||
-            team.teams[item.participants[1].id].players.findIndex((val) => val.id === user.id) >= 0)
+        (item) => dayjs(item.start).isAfter(currentTime) && item.participants?.length === 2
+        // isMyMatch(item, team.teams, user.id)
       );
       return res;
     }
     return [];
   }, [match?.matches, currentTime, team?.teams]);
-
-  useEffect(() => {
-    console.log(upcomingMatches);
-  }, [upcomingMatches]);
 
   return (
     <Box
@@ -44,8 +36,10 @@ const RightSidebar = () => {
         display: "flex",
         alignItems: "left",
         gap: 1,
-        flexDirection: "column"
-      }}>
+        flexDirection: "column",
+        ...sx
+      }}
+    >
       {upcomingMatches.length < 4
         ? upcomingMatches.map((item) => <MatchItem key={"match_" + item.id} item={item} />)
         : upcomingMatches

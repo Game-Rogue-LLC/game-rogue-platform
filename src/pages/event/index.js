@@ -6,9 +6,7 @@ import PublicLayout from "@/src/content/PublicLayout";
 import dayjs from "dayjs";
 import EventContainer from "@/src/components/widgets/event/EventContainer";
 import MatchContainer from "@/src/components/widgets/match/MatchContainer";
-import TournamentProvider, {
-  useTournamentContext,
-} from "@/src/context/TournamentContext";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { useRouter } from "next/router";
 import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
 
@@ -25,15 +23,13 @@ const Page = (props) => {
     color: "white",
     ":hover": {
       backgroundColor: "rgba(0,0,0,0.6)",
-      color: "white",
-    },
+      color: "white"
+    }
   };
 
   const upcomingMatches = useMemo(() => {
     if (match?.matches) {
-      return match.matches.filter((item) =>
-        dayjs(item.start).isAfter(currentTime)
-      );
+      return match.matches.filter((item) => dayjs(item.start).isAfter(currentTime));
     }
     return [];
   }, [match?.matches, currentTime]);
@@ -83,7 +79,7 @@ const Page = (props) => {
           backgroundPosition: "center",
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "center"
         }}
       >
         <video autoPlay loop muted poster="/static/images/event_banner.png">
@@ -98,12 +94,10 @@ const Page = (props) => {
         sx={{
           position: "relative",
           backgroundColor: "rgb(36, 35, 35)",
-          py: "10px",
+          py: "10px"
         }}
       >
-        <Container
-          sx={{ margin: "auto", display: "flex", alignItems: "center", gap: 1 }}
-        >
+        <Container sx={{ margin: "auto", display: "flex", alignItems: "center", gap: 1 }}>
           <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
           <Typography
             variant="body1"
@@ -121,7 +115,7 @@ const Page = (props) => {
               display: "flex",
               gap: 2,
               alignItems: "center",
-              flexDirection: "row-reverse",
+              flexDirection: "row-reverse"
             }}
           >
             <Button variant="contained" sx={{ textTransform: "uppercase" }}>
@@ -142,7 +136,7 @@ const Page = (props) => {
         sx={{
           position: "relative",
           background: "linear-gradient(to top,#28160c,#000)",
-          position: "relative",
+          position: "relative"
         }}
       >
         <Container sx={{ margin: "auto", pb: 5 }}>
@@ -156,7 +150,7 @@ const Page = (props) => {
                 background: "linear-gradient(to right, #321401 30%, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
-                padding: 2,
+                padding: 2
               }}
             >
               <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
@@ -172,7 +166,7 @@ const Page = (props) => {
               <Box
                 sx={{
                   flex: 1,
-                  textAlign: "right",
+                  textAlign: "right"
                 }}
               >
                 <Button
@@ -182,7 +176,7 @@ const Page = (props) => {
                     ":hover": {
                       // backgroundColor: "#ff4929",
                     },
-                    ...moreButtonStyle,
+                    ...moreButtonStyle
                   }}
                   onClick={() => {
                     router.push("/match/upcoming");
@@ -194,7 +188,7 @@ const Page = (props) => {
             </Box>
             <Box
               sx={{
-                mt: 2,
+                mt: 2
               }}
             >
               <MatchContainer matches={upcomingMatches} limit={6} />
@@ -211,7 +205,7 @@ const Page = (props) => {
                 background: "linear-gradient(to right, #321401 30%, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
-                padding: 2,
+                padding: 2
               }}
             >
               <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
@@ -227,7 +221,7 @@ const Page = (props) => {
               <Box
                 sx={{
                   flex: 1,
-                  textAlign: "right",
+                  textAlign: "right"
                 }}
               >
                 <Button
@@ -237,7 +231,7 @@ const Page = (props) => {
                     ":hover": {
                       // backgroundColor: "#2993ff",
                     },
-                    ...moreButtonStyle,
+                    ...moreButtonStyle
                   }}
                   onClick={() => {
                     router.push("/event/ongoing");
@@ -249,7 +243,7 @@ const Page = (props) => {
             </Box>
             <Box
               sx={{
-                mt: 2,
+                mt: 2
               }}
             >
               <EventContainer
@@ -269,7 +263,7 @@ const Page = (props) => {
                 background: "linear-gradient(to right, #321401 30%, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
-                padding: 2,
+                padding: 2
               }}
             >
               <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
@@ -285,7 +279,7 @@ const Page = (props) => {
               <Box
                 sx={{
                   flex: 1,
-                  textAlign: "right",
+                  textAlign: "right"
                 }}
               >
                 <Button
@@ -295,7 +289,7 @@ const Page = (props) => {
                     ":hover": {
                       // backgroundColor: "#ff4929",
                     },
-                    ...moreButtonStyle,
+                    ...moreButtonStyle
                   }}
                   onClick={() => {
                     router.push("/event/upcoming");
@@ -307,7 +301,7 @@ const Page = (props) => {
             </Box>
             <Box
               sx={{
-                mt: 2,
+                mt: 2
               }}
             >
               <EventContainer
@@ -327,7 +321,7 @@ const Page = (props) => {
                 background: "linear-gradient(to right, #321401 30%, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
-                padding: 2,
+                padding: 2
               }}
             >
               <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
@@ -343,7 +337,7 @@ const Page = (props) => {
               <Box
                 sx={{
                   flex: 1,
-                  textAlign: "right",
+                  textAlign: "right"
                 }}
               >
                 <Button
@@ -353,7 +347,7 @@ const Page = (props) => {
                     ":hover": {
                       // backgroundColor: "#ff29f4",
                     },
-                    ...moreButtonStyle,
+                    ...moreButtonStyle
                   }}
                   onClick={() => {
                     router.push("/event/completed");
@@ -365,7 +359,7 @@ const Page = (props) => {
             </Box>
             <Box
               sx={{
-                mt: 2,
+                mt: 2
               }}
             >
               <EventContainer

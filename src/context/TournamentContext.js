@@ -1,11 +1,4 @@
-import {
-  useState,
-  useCallback,
-  useContext,
-  createContext,
-  useEffect,
-  useMemo,
-} from "react";
+import { useState, useCallback, useContext, createContext, useEffect, useMemo } from "react";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import store from "@/lib/firestore/collections";
@@ -38,10 +31,7 @@ const TournamentProvider = (props) => {
     setOrganizations,
     current: useMemo(() => currentOrganization, [currentOrganization]),
     setCurrent: setCurrentOrganization,
-    activeCount: useMemo(
-      () => activeOrganizationCount,
-      [activeOrganizationCount]
-    ),
+    activeCount: useMemo(() => activeOrganizationCount, [activeOrganizationCount]),
     setActiveCount: setActiveOrganizationCount,
     create: async (newOrganization) => {
       const res = await store.organization.save(null, newOrganization);
@@ -51,8 +41,8 @@ const TournamentProvider = (props) => {
       setOrganizationLoading(true);
       const res = await store.organization.read(
         uid,
-        async (data, active) => {
-          await setOrganizations(data);
+        (data, active) => {
+          setOrganizations(data);
           setActiveOrganizationCount(active);
           console.info("organizations:", data, active);
         },
@@ -67,7 +57,7 @@ const TournamentProvider = (props) => {
       res = await store.organization.save(id, { deleted: true });
       return res;
     },
-    upload: store.organization.uploadFile,
+    upload: store.organization.uploadFile
   };
   /** End Organization Data / Functions */
 
@@ -92,8 +82,8 @@ const TournamentProvider = (props) => {
       setEventLoading(true);
       const res = await store.event.read(
         "",
-        async (data, active) => {
-          await setEvents(data);
+        (data, active) => {
+          setEvents(data);
           setActiveEventCount(active);
           console.info("events:", data, active);
         },
@@ -104,7 +94,7 @@ const TournamentProvider = (props) => {
       setEventLoading(true);
       const res = await store.event.read(
         "",
-        async (data) => {
+        (data) => {
           setAllEvents(data);
           console.info("all events:", data);
         },
@@ -122,22 +112,17 @@ const TournamentProvider = (props) => {
     upload: store.event.uploadFile,
     addParticipant: async (id, tid) => {
       if (events[id].participants?.length >= events[id].participantsCount) {
-        alert(
-          "Only " + events[id].participantsCount + " participants are allowed."
-        );
+        alert("Only " + events[id].participantsCount + " participants are allowed.");
         return {
           code: "failed",
-          message:
-            "Only " +
-            events[id].participantsCount +
-            " participants are allowed.",
+          message: "Only " + events[id].participantsCount + " participants are allowed."
         };
       }
       if (events[id].participants?.findIndex((val) => val.tid === tid) >= 0) {
         alert("This team is already registered.");
         return {
           code: "failed",
-          message: "This team is already registered.",
+          message: "This team is already registered."
         };
       }
       let newParticipants = events[id]?.participants;
@@ -152,13 +137,13 @@ const TournamentProvider = (props) => {
           draws: 0,
           deleted: false,
           createdAt: new Date(),
-          registeredAt: new Date(),
-        },
+          registeredAt: new Date()
+        }
       ];
 
       const res = await event.update(id, { participants: newParticipants });
       return res;
-    },
+    }
   };
   /** End Event Data / Functions */
 
@@ -176,7 +161,7 @@ const TournamentProvider = (props) => {
       setTicketLoading(true);
       const res = await store.ticket.read(
         uid,
-        async (data) => {
+        (data) => {
           setTickets(data);
           console.info("tickets:", data);
         },
@@ -190,7 +175,7 @@ const TournamentProvider = (props) => {
     delete: async (id) => {
       const res = await store.ticket.save(id, { deleted: true });
       return res;
-    },
+    }
   };
   /** End Ticket Data / Functions */
 
@@ -208,8 +193,8 @@ const TournamentProvider = (props) => {
       setTeamLoading(true);
       const res = await store.team.read(
         uid,
-        async (data) => {
-          await setTeams(data);
+        (data) => {
+          setTeams(data);
           console.info("teams:", data);
         },
         () => setTeamLoading(false)
@@ -228,31 +213,31 @@ const TournamentProvider = (props) => {
       if (res.code === "succeed") {
         if (res.data.accessCode === accessCode) {
           return {
-            code: "succeed",
+            code: "succeed"
           };
         } else {
           return {
             code: "failed",
-            message: "Access Code does not match",
+            message: "Access Code does not match"
           };
         }
       }
       return {
         code: "failed",
-        message: res.message,
+        message: res.message
       };
     },
     upload: store.team.uploadFile,
     positions: [
       {
         val: 0,
-        name: "Manager",
+        name: "Manager"
       },
       {
         val: 1,
-        name: "Player",
-      },
-    ],
+        name: "Player"
+      }
+    ]
   };
   /** End Team Data / Functions */
 
@@ -270,7 +255,7 @@ const TournamentProvider = (props) => {
       setPlayerLoading(true);
       const res = await store.player.readAll(
         async (data) => {
-          await setPlayers(data);
+          setPlayers(data);
           console.info("players:", data);
         },
         () => setPlayerLoading(false)
@@ -284,7 +269,7 @@ const TournamentProvider = (props) => {
       await store.player.save(id, { deleted: true });
       // router.push('/');
     },
-    upload: store.player.uploadFile,
+    upload: store.player.uploadFile
   };
   /** End Player Data / Functions */
 
@@ -301,15 +286,15 @@ const TournamentProvider = (props) => {
     read: async () => {
       setMatchLoading(true);
       const res = await store.match.read(
-        async (data) => {
+        (data) => {
           setMatches(data);
           console.info("matches:", data);
         },
         () => setMatchLoading(false)
       );
     },
-    update: async (id, newTeam) => {
-      const res = await store.match.save(id, newTeam);
+    update: async (id, newMatch) => {
+      const res = await store.match.save(id, newMatch);
       return res;
     },
     delete: async (id) => {
@@ -320,25 +305,48 @@ const TournamentProvider = (props) => {
       const res = await store.match.delete(id);
       return res;
     },
-    upload: store.match.uploadFile,
+    upload: store.match.uploadFile
   };
   /** End Match Data / Functions */
 
+  /** Begin Posting Data / Functions */
+  const [posts, setPosts] = useState({});
+  const [postLoading, setPostLoading] = useState(true);
+  const post = {
+    posts,
+    setPosts,
+    create: async (newPost) => {
+      const res = await store.post.save(nanoid(), newPost);
+      return res;
+    },
+    read: async () => {
+      setPostLoading(true);
+      const res = await store.post.readAll(
+        (data) => {
+          setPosts(data);
+          console.info("posts:", data);
+        },
+        () => setPostLoading(false)
+      );
+    },
+    update: async (id, newPost) => {
+      const res = await store.post.save(id, newPost);
+      return res;
+    },
+    delete: async (id) => {
+      await store.post.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.post.delete(id);
+      return res;
+    }
+  };
+  /** End Posting Data / Functions */
+
   const isLoading = useMemo(() => {
-    return (
-      organizationLoading ||
-      eventLoading ||
-      teamLoading ||
-      playerLoading ||
-      ticketLoading
-    );
-  }, [
-    organizationLoading,
-    eventLoading,
-    teamLoading,
-    playerLoading,
-    ticketLoading,
-  ]);
+    return organizationLoading || eventLoading || teamLoading || playerLoading || ticketLoading;
+  }, [organizationLoading, eventLoading, teamLoading, playerLoading, ticketLoading]);
 
   const loadTournament = useCallback(() => {
     if (user && user.id) {
@@ -358,6 +366,7 @@ const TournamentProvider = (props) => {
     organization.read("");
     team.read("");
     match.read();
+    post.read();
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
@@ -378,13 +387,15 @@ const TournamentProvider = (props) => {
         player,
         match,
         ticket,
+        post,
         organizationLoading,
         eventLoading,
         matchLoading,
         playerLoading,
         teamLoading,
+        postLoading,
         currentTime,
-        setCurrentTime,
+        setCurrentTime
       }}
     >
       {isLoading ? <Splash content={"Loading data..."} /> : props.children}

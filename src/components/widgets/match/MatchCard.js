@@ -14,8 +14,7 @@ const MatchCard = ({ item }) => {
   const { event, team, currentTime } = useTournamentContext();
 
   const getStatus = (start, curTime) => {
-    if (dayjs(start).isSame(curTime, "day"))
-      return dayjs(start).format("HH:mmZ[Z]");
+    if (dayjs(start).isSame(curTime, "day")) return dayjs(start).format("HH:mmZ[Z]");
     if (dayjs(start).diff(curTime, "day") == 1) return "TOMORROW";
     return dayjs(start).format("DD.MMM.YYYY");
   };
@@ -29,24 +28,22 @@ const MatchCard = ({ item }) => {
           background: "black",
           ":hover": {
             cursor: "pointer",
-            background: "rgba(245, 131, 31, 0.1)",
-          },
+            background: "rgba(245, 131, 31, 0.1)"
+          }
         }}
       >
         <Box
           sx={{
             height: "70px",
             background:
-              "url(" +
-              (event?.events[item?.eid]?.banner || DEFAULT_CONTENTBLOCK_IMAGE) +
-              ")",
+              "url(" + (event?.events[item?.eid]?.banner || DEFAULT_CONTENTBLOCK_IMAGE) + ")",
             backgroundSize: "cover",
             backgroundPosition: "center",
             borderBottom: "solid 1px gray",
             p: 1,
             alignItems: "center",
             display: "flex",
-            gap: 1,
+            gap: 1
           }}
         ></Box>
         <Box
@@ -56,14 +53,16 @@ const MatchCard = ({ item }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 1,
+            gap: 1
           }}
         >
           <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <img
                 src={event?.events[item?.eid]?.darkLogo || DEFAULT_LOGO}
-                style={{ height: "40px", width: "40px", objectFit: "cover" }}
+                width={40}
+                height={40}
+                style={{ objectFit: "cover" }}
               />
               <Typography
                 variant="h4"
@@ -81,7 +80,7 @@ const MatchCard = ({ item }) => {
                 alignItems: "center",
                 mt: 1,
                 gap: 1,
-                flexWrap: true,
+                flexWrap: true
               }}
             >
               <GameChip />
@@ -95,7 +94,7 @@ const MatchCard = ({ item }) => {
               maxWidth: "80px",
               borderRadius: "10px",
               backgroundColor: "#1c0a00",
-              border: "solid 2px rgba(255,255,255,0.3)",
+              border: "solid 2px rgba(255,255,255,0.3)"
             }}
           >
             <Typography
@@ -109,12 +108,10 @@ const MatchCard = ({ item }) => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "center"
               }}
             >
-              <Typography variant="h4">
-                {formatDate(item?.start, "DD")}
-              </Typography>
+              <Typography variant="h4">{formatDate(item?.start, "DD")}</Typography>
             </Box>
           </Box>
           {/* <Chip
@@ -136,7 +133,7 @@ const MatchCard = ({ item }) => {
                 backgroundColor: "#c35600",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "center"
               }}
             >
               <Typography variant="h6">VS</Typography>
@@ -148,7 +145,7 @@ const MatchCard = ({ item }) => {
                   pl: 1,
                   py: 0.5,
                   justifyContent: "left",
-                  borderBottom: "solid 1px #c35600b5",
+                  borderBottom: "solid 1px #c35600b5"
                 }}
                 disableLink
               />

@@ -5,6 +5,7 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 import dayjs from "dayjs";
 import MatchItem from "@/src/components/widgets/rogue-social/MatchItem";
 import { useAuthContext } from "@/src/context/AuthContext";
+import { isMyMatch } from "@/src/utils/utils";
 
 const MatchList = () => {
   const { setTitle } = useAppContext();
@@ -14,12 +15,8 @@ const MatchList = () => {
   const upcomingMatches = useMemo(() => {
     if (match?.matches) {
       const res = match.matches.filter(
-        (item) =>
-          dayjs(item.start).isAfter(currentTime) &&
-          item.participants?.length === 2 &&
-          (team.teams[item.participants[0].id].players.findIndex((val) => val.id === user.id) >=
-            0 ||
-            team.teams[item.participants[1].id].players.findIndex((val) => val.id === user.id) >= 0)
+        (item) => dayjs(item.start).isAfter(currentTime) && item.participants?.length === 2
+        // isMyMatch(item, team.teams, user.id)
       );
       return res;
     }
@@ -38,7 +35,8 @@ const MatchList = () => {
         alignItems: "left",
         gap: 1,
         flexDirection: "column"
-      }}>
+      }}
+    >
       {upcomingMatches.map((item) => (
         <MatchItem key={"match_" + item.id} item={item} />
       ))}

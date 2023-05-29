@@ -5,72 +5,73 @@ export const defaultDarkTheme = {
   palette: {
     mode: "dark",
     primary: {
-      main: "#f5831f",
+      main: "#f5831f"
     },
     secondary: {
-      main: "#440f06",
+      main: "#440f06"
     },
     card: {
       main: "#180e05",
-      darker: "#180e05",
+      darker: "#180e05"
     },
     backgroundColor: {
-      header: "#28180a",
+      header: "#28180a"
     },
     action: {
-      selectedOpacity: 0.1,
-    },
+      selectedOpacity: 0.1
+    }
   },
   typography: {
+    color: "white",
     fontFamily: "ProximaNovaRegular, Industry",
     h1: {
-      fontFamily: "Industry",
+      fontFamily: "Industry"
     },
     h2: {
-      fontFamily: "Industry",
+      fontFamily: "Industry"
     },
     h3: {
-      fontFamily: "Industry",
+      fontFamily: "Industry"
     },
     h4: {
-      fontFamily: "Industry",
+      fontFamily: "Industry"
     },
     h5: {
-      fontFamily: "ProximaNovaRegular",
+      fontFamily: "ProximaNovaRegular"
     },
     h6: {
-      fontFamily: "ProximaNovaRegular",
+      fontFamily: "ProximaNovaRegular"
     },
     label: {
-      fontFamily: "ProximaNovaRegular",
+      fontFamily: "ProximaNovaRegular"
     },
     subtitle2: {
-      color: "gray",
-    },
+      color: "gray"
+    }
   },
   components: {
     MuiLink: {
       styleOverrides: {
         root: {
-          textDecoration: "none",
-        },
-      },
+          textDecoration: "none"
+        }
+      }
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#CCCACA",
-        },
-      },
+          backgroundColor: "#CCCACA"
+        }
+      }
     },
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundColor: "#180e05",
-        },
-      },
-    },
-  },
+          backgroundColor: "#180e05"
+        }
+      }
+    }
+  }
 };
 
 export default createTheme(defaultDarkTheme);

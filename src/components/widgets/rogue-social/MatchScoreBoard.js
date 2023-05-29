@@ -65,7 +65,8 @@ const MatchScoreBoard = ({ item }) => {
                     justifyContent: "space-between",
                     alignItems: "start",
                     gap: 2
-                  }}>
+                  }}
+                >
                   <TeamScoreBoard item={opTeam} sx={{ flexGrow: 1 }} />
                   <CustomButton variant="contained" sx={{ width: "250px" }}>
                     Full Analysis
@@ -78,7 +79,8 @@ const MatchScoreBoard = ({ item }) => {
                     justifyContent: "space-between",
                     pl: "175px",
                     pr: "270px"
-                  }}>
+                  }}
+                >
                   <Box>
                     <Tooltip title={val.title}>
                       <img
@@ -90,17 +92,20 @@ const MatchScoreBoard = ({ item }) => {
                     </Tooltip>
                   </Box>
                   <Box
-                    sx={{ borderLeft: "solid 2px lightgray", width: "0px", height: "50px" }}></Box>
+                    sx={{ borderLeft: "solid 2px lightgray", width: "0px", height: "50px" }}
+                  ></Box>
                   <Box
                     sx={{
                       textAlign: "center"
-                    }}>
+                    }}
+                  >
                     <Typography variant="h4" color="white">
                       {(Math.random() * 10).toFixed(0)} - {(Math.random() * 10).toFixed(0)}
                     </Typography>
                   </Box>
                   <Box
-                    sx={{ borderLeft: "solid 2px lightgray", width: "0px", height: "50px" }}></Box>
+                    sx={{ borderLeft: "solid 2px lightgray", width: "0px", height: "50px" }}
+                  ></Box>
                   <Box>
                     <Typography variant="h4" color="white">
                       Banned Operators
@@ -114,9 +119,10 @@ const MatchScoreBoard = ({ item }) => {
                     justifyContent: "space-between",
                     alignItems: "start",
                     gap: 2
-                  }}>
+                  }}
+                >
                   <TeamScoreBoard item={myTeam} sx={{ flexGrow: 1 }} />
-                  <MatchChat item={item} />
+                  <MatchChat item={item} myTeam={myTeam} opTeam={opTeam} />
                 </Box>
               </Box>
             </TabPanel>

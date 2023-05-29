@@ -12,9 +12,11 @@ import {
   Settings
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import Welcome from "@/src/components/widgets/rogue-social/Welcome";
-import TournamentProvider from "@/src/context/TournamentContext";
+import MatchHome from "@/src/components/widgets/rogue-social/Home";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import RightSidebar from "@/src/components/widgets/rogue-social/RightSidebar";
+import TeamList from "@/src/components/list/TeamList";
+import MyTeams from "@/src/components/widgets/rogue-social/MyTeams";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontSize: "24px",
@@ -34,13 +36,15 @@ const Page = (props) => {
       sx={{
         background: "black",
         display: "flex"
-      }}>
+      }}
+    >
       <Box
         sx={{
           background: "black",
           display: "flex",
           flexGrow: 1
-        }}>
+        }}
+      >
         <TabContext value={tab}>
           <Box sx={{ borderRight: 1, borderColor: "divider" }}>
             <TabList onChange={onTabChange} orientation="vertical" sx={{ width: "360px" }}>
@@ -94,8 +98,11 @@ const Page = (props) => {
               />
             </TabList>
           </Box>
-          <TabPanel value="0" sx={{ flexGrow: 1 }}>
-            <Welcome />
+          <TabPanel value="0" sx={{ flexGrow: 1, p: 1 }}>
+            <MatchHome />
+          </TabPanel>
+          <TabPanel value="4" sx={{ flexGrow: 1, p: 1 }}>
+            <MyTeams />
           </TabPanel>
         </TabContext>
         {/* <MessagesField /> */}
@@ -104,7 +111,8 @@ const Page = (props) => {
         sx={{
           borderLeft: "solid 1px rgba(255,255,255,.2)",
           p: 1
-        }}>
+        }}
+      >
         <RightSidebar />
       </Box>
     </Box>
@@ -118,17 +126,27 @@ Page.getLayout = (page) => {
         sx={{
           backgroundColor: "black",
           position: "fixed",
-          width: "100%",
-          height: "100%",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
+          width: "100vw",
+          height: "100vh",
+          top: 0,
+          left: 0,
           zIndex: 9999
         }}
-        className="rogue-social-splash">
-        <Box sx={{ position: "relative", zIndex: 9999 }}>
-          <img src="/rogue_social.gif" />
-        </Box>
+        className="rogue-social-splash"
+      >
+        <Box
+          component="img"
+          src="/rogue_social.gif"
+          sx={{
+            position: "fixed",
+            width: "100vw",
+            height: "100vh",
+            top: "50vh",
+            left: "50vw",
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999
+          }}
+        ></Box>
       </Box>
 
       <PublicLayout>{page}</PublicLayout>

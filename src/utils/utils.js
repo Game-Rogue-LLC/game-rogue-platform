@@ -1,3 +1,4 @@
+import team from "@/lib/firestore/collections/team";
 import Color from "color";
 import dayjs from "dayjs";
 
@@ -80,4 +81,23 @@ export const romanNumber = (number) => {
 export const numberLang = (number) => {
   const numbers = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
   return numbers[number - 1];
+};
+
+/** Tournament Related functions */
+export const isMyTeam = (team, uid) => {
+  if (!team || !uid) return false;
+  if (!team.players) return false;
+  for (let i = 0; i < team.players.length; i++) {
+    if (team.players[i].id === uid) return true;
+  }
+  return false;
+};
+
+export const isMyMatch = (match, teams, uid) => {
+  if (!match || !teams || !uid) return false;
+  if (!match.participants) return false;
+  for (let i = 0; i < match.participants.length; i++) {
+    if (isMyTeam(teams[match.participants[i].id], uid)) return true;
+  }
+  return false;
 };

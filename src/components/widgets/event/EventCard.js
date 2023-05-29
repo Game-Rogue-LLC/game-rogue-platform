@@ -30,22 +30,21 @@ const EventCard = ({ item }) => {
           background: "black",
           ":hover": {
             cursor: "pointer",
-            background: "rgba(245, 131, 31, 0.1)",
-          },
+            background: "rgba(245, 131, 31, 0.1)"
+          }
         }}
       >
         <Box
           sx={{
             height: "70px",
-            background:
-              "url(" + (item?.banner || DEFAULT_CONTENTBLOCK_IMAGE) + ")",
+            background: "url(" + (item?.banner || DEFAULT_CONTENTBLOCK_IMAGE) + ")",
             backgroundSize: "cover",
             backgroundPosition: "center",
             borderBottom: "solid 1px gray",
             p: 1,
             alignItems: "center",
             display: "flex",
-            gap: 1,
+            gap: 1
           }}
         ></Box>
         <Box
@@ -55,14 +54,16 @@ const EventCard = ({ item }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 1,
+            gap: 1
           }}
         >
           <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <img
                 src={item?.darkLogo || DEFAULT_LOGO}
-                style={{ height: "40px", width: "40px", objectFit: "cover" }}
+                width={40}
+                height={40}
+                style={{ objectFit: "cover" }}
               />
               <Typography
                 variant="h4"
@@ -80,7 +81,7 @@ const EventCard = ({ item }) => {
                 alignItems: "center",
                 mt: 1,
                 gap: 1,
-                flexWrap: true,
+                flexWrap: true
               }}
             >
               <GameChip />
@@ -94,7 +95,7 @@ const EventCard = ({ item }) => {
               maxWidth: "80px",
               borderRadius: "10px",
               backgroundColor: "#1c0a00",
-              border: "solid 2px rgba(255,255,255,0.3)",
+              border: "solid 2px rgba(255,255,255,0.3)"
             }}
           >
             <Typography
@@ -108,12 +109,10 @@ const EventCard = ({ item }) => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "center"
               }}
             >
-              <Typography variant="h4">
-                {formatDate(item?.start, "DD")}
-              </Typography>
+              <Typography variant="h4">{formatDate(item?.start, "DD")}</Typography>
             </Box>
           </Box>
           {/* <Chip
@@ -142,9 +141,7 @@ const EventCard = ({ item }) => {
           <Grid container color="lightgray" sx={{ mt: 2 }}>
             <Grid item xs>
               {isUpcoming ? (
-                <Button variant="contained">
-                  ${formatNumber(item?.entryFee, 2)}
-                </Button>
+                <Button variant="contained">${formatNumber(item?.entryFee, 2)}</Button>
               ) : (
                 <>
                   <Button variant="contained">View now</Button>
