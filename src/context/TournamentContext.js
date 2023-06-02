@@ -118,7 +118,7 @@ const TournamentProvider = (props) => {
           message: "Only " + events[id].participantsCount + " participants are allowed."
         };
       }
-      if (events[id].participants?.findIndex((val) => val.tid === tid) >= 0) {
+      if (events[id].participants?.findIndex((val) => val.id === tid) >= 0) {
         alert("This team is already registered.");
         return {
           code: "failed",
@@ -130,7 +130,7 @@ const TournamentProvider = (props) => {
       newParticipants = [
         ...newParticipants,
         {
-          tid,
+          id: tid,
           score: 0,
           wins: 0,
           loses: 0,
@@ -227,17 +227,14 @@ const TournamentProvider = (props) => {
         message: res.message
       };
     },
-    upload: store.team.uploadFile,
-    positions: [
-      {
-        val: 0,
-        name: "Manager"
-      },
-      {
-        val: 1,
-        name: "Player"
-      }
-    ]
+    getPlacements: async (id) => {
+      const res = await store.event.placements(id);
+      if (res.code === "succeed") return res.data;
+      else console.error(res.message);
+    },
+    getUpcomingGames: (id) => {},
+    getNews: (id) => {},
+    upload: store.team.uploadFile
   };
   /** End Team Data / Functions */
 
@@ -308,6 +305,41 @@ const TournamentProvider = (props) => {
     upload: store.match.uploadFile
   };
   /** End Match Data / Functions */
+
+  /** Begin Message Data / Functions */
+  const [messages, setMessages] = useState({});
+  const [messageLoading, setMessageLoading] = useState(true);
+  const message = {
+    messages,
+    setMessages,
+    create: async (newMessage) => {
+      const res = await store.message.save(nanoid(), newMessage);
+      return res;
+    },
+    read: async () => {
+      setPostLoading(true);
+      const res = await store.post.readAll(
+        (data) => {
+          setPosts(data);
+          console.info("posts:", data);
+        },
+        () => setPostLoading(false)
+      );
+    },
+    update: async (id, newMessage) => {
+      const res = await store.message.save(id, newMessage);
+      return res;
+    },
+    delete: async (id) => {
+      await store.message.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.message.delete(id);
+      return res;
+    }
+  };
+  /** End Message Data / Functions */
 
   /** Begin Posting Data / Functions */
   const [posts, setPosts] = useState({});
@@ -388,6 +420,7 @@ const TournamentProvider = (props) => {
         match,
         ticket,
         post,
+        message,
         organizationLoading,
         eventLoading,
         matchLoading,

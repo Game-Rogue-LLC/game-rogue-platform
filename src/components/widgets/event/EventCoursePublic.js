@@ -11,7 +11,7 @@ import {
   Select,
   Typography,
   Tab,
-  useTheme,
+  useTheme
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { LoadingButton, TabContext, TabPanel, TabList } from "@mui/lab";
@@ -21,15 +21,9 @@ import AdminLayout from "@/src/content/AdminLayout";
 import { useAppContext } from "@/src/context/app";
 import DatePicker from "@/src/components/datetime/DatePicker";
 import { useMatchContext } from "@/src/context/MatchContext";
-import TournamentProvider, {
-  useTournamentContext,
-} from "@/src/context/TournamentContext";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { EVENT_FORMATS } from "@/src/config/global";
-import {
-  DoubleElimination,
-  SingleElimination,
-  Stepladder,
-} from "tournament-pairings";
+import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
 import { nanoid } from "nanoid";
 import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
 import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
@@ -49,8 +43,7 @@ const EventCoursePublic = ({ eid }) => {
   const { user } = useAuthContext();
   const { setTitle } = useAppContext();
   const { colors } = useStyleContext();
-  const { organization, event, team, match, matchLoading } =
-    useTournamentContext();
+  const { organization, event, team, match, matchLoading } = useTournamentContext();
   const [disabled, setDisabled] = useState(false);
   const [tab, setTab] = useState("1");
   const [myTeam, setMyTeam] = useState(null);
@@ -62,11 +55,10 @@ const EventCoursePublic = ({ eid }) => {
 
   useEffect(() => {
     if (event?.events[eid]) {
-      if (event.events[eid].format !== format)
-        setFormat(event.events[eid].format);
+      if (event.events[eid].format !== format) setFormat(event.events[eid].format);
       const { participants } = event.events[eid];
       participants.forEach((item) => {
-        if (team.teams[item.tid].uid == user?.id) setMyTeam(item.tid);
+        if (team.teams[item.id].uid == user?.id) setMyTeam(item.id);
       });
     }
   }, [eid, team?.teams, event?.events]);
@@ -85,7 +77,7 @@ const EventCoursePublic = ({ eid }) => {
             start: val.start,
             end: val.end,
             startStr: dayjs(val.start).format("YYYY-MM-DD hh:mm"),
-            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm"),
+            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm")
           });
         });
       } else if (format == 1) {
@@ -98,7 +90,7 @@ const EventCoursePublic = ({ eid }) => {
             start: val.start,
             end: val.end,
             startStr: dayjs(val.start).format("YYYY-MM-DD hh:mm"),
-            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm"),
+            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm")
           });
         });
       } else if (format == 2) {
@@ -111,7 +103,7 @@ const EventCoursePublic = ({ eid }) => {
             start: val.start,
             end: val.end,
             startStr: dayjs(val.start).format("YYYY-MM-DD hh:mm"),
-            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm"),
+            endStr: dayjs(val.end).format("YYYY-MM-DD hh:mm")
           });
         });
       }
@@ -139,7 +131,7 @@ const EventCoursePublic = ({ eid }) => {
   const doubleEliminationMatches = useMemo(() => {
     return {
       upper: [...matches.filter((val) => val.group == 0)],
-      lower: [...matches.filter((val) => val.group == 1)],
+      lower: [...matches.filter((val) => val.group == 1)]
     };
   }, [matches]);
 
@@ -154,16 +146,13 @@ const EventCoursePublic = ({ eid }) => {
       const ind = _.findIndex(
         matches,
         (val) =>
-          (val.participants[0]?.id == party.id &&
-            val.participants[0]?.round == party.round) ||
-          (val.participants[1]?.id == party.id &&
-            val.participants[1]?.round == party.round)
+          (val.participants[0]?.id == party.id && val.participants[0]?.round == party.round) ||
+          (val.participants[1]?.id == party.id && val.participants[1]?.round == party.round)
       );
 
       if (
         ind < 0 ||
-        matches[ind]?.participants?.filter((val) => (val.id ? true : false))
-          .length < 2
+        matches[ind]?.participants?.filter((val) => (val.id ? true : false)).length < 2
       )
         return;
 
@@ -184,7 +173,7 @@ const EventCoursePublic = ({ eid }) => {
     },
     closeMatchDialog: () => {
       setMatchDialogOpen(false);
-    },
+    }
   };
 
   return (
@@ -200,11 +189,7 @@ const EventCoursePublic = ({ eid }) => {
             value="1"
             sx={{ "&.Mui-selected": { color: colors.primary } }}
           />
-          <Tab
-            label="Table View"
-            value="2"
-            sx={{ "&.Mui-selected": { color: colors.primary } }}
-          />
+          <Tab label="Table View" value="2" sx={{ "&.Mui-selected": { color: colors.primary } }} />
           {format != 2 && (
             <Tab
               label="Graphic View"
@@ -218,12 +203,7 @@ const EventCoursePublic = ({ eid }) => {
         </TabPanel>
         <TabPanel value="2">
           {event?.events[eid] && matches && (
-            <EventTableView
-              format={format}
-              myTeam={myTeam}
-              eid={eid}
-              matches={matches}
-            />
+            <EventTableView format={format} myTeam={myTeam} eid={eid} matches={matches} />
           )}
         </TabPanel>
         {format != 2 && (

@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { Box, Tab, Tabs, Typography, styled } from "@mui/material";
-import PublicLayout from "@/src/content/PublicLayout";
 import {
   Explore,
   Groups,
@@ -12,11 +10,14 @@ import {
   Settings
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import MatchHome from "@/src/components/widgets/rogue-social/Home";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useEffect, useState } from "react";
+
+import MatchHome from "@/src/components/widgets/rogue-social/Home";
+import MyTeams from "@/src/components/widgets/rogue-social/MyTeams";
+import PublicLayout from "@/src/content/PublicLayout";
 import RightSidebar from "@/src/components/widgets/rogue-social/RightSidebar";
 import TeamList from "@/src/components/list/TeamList";
-import MyTeams from "@/src/components/widgets/rogue-social/MyTeams";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontSize: "24px",
@@ -46,8 +47,22 @@ const Page = (props) => {
         }}
       >
         <TabContext value={tab}>
-          <Box sx={{ borderRight: 1, borderColor: "divider" }}>
-            <TabList onChange={onTabChange} orientation="vertical" sx={{ width: "360px" }}>
+          <Box
+            sx={{
+              position: "static",
+              borderRight: 1,
+              borderColor: "divider"
+            }}
+          >
+            <TabList
+              onChange={onTabChange}
+              orientation="vertical"
+              sx={{
+                width: "360px",
+                height: "100%",
+                background: "linear-gradient(to top,#28160c 60%,#000)"
+              }}
+            >
               <StyledTab
                 icon={<Home fontSize="large" />}
                 iconPosition="start"
@@ -98,7 +113,7 @@ const Page = (props) => {
               />
             </TabList>
           </Box>
-          <TabPanel value="0" sx={{ flexGrow: 1, p: 1 }}>
+          <TabPanel value="0" sx={{ flexGrow: 1, p: 0 }}>
             <MatchHome />
           </TabPanel>
           <TabPanel value="4" sx={{ flexGrow: 1, p: 1 }}>

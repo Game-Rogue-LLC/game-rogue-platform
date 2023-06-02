@@ -11,14 +11,14 @@ import {
   Typography,
   useTheme,
   DialogActions
-} from '@mui/material'
-import { LoadingButton } from '@mui/lab';
-import { useTournamentContext } from '@/src/context/TournamentContext';
-import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import MatchTable from '@/src/components/table/MatchTable';
-import TeamItem from '@/src/components/item/TeamItem';
-import TeamList from '@/src/components/list/TeamList';
+} from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import MatchTable from "@/src/components/table/MatchTable";
+import TeamItem from "@/src/components/item/TeamItem";
+import TeamList from "@/src/components/list/TeamList";
 
 const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
@@ -29,32 +29,30 @@ const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
   useEffect(() => {
     if (event?.events[eid]) {
       let temp = [];
-      event.events[eid].participants.forEach(item => {
+      event.events[eid].participants.forEach((item) => {
         temp.push({
-          ...team.teams[item.tid]
+          ...team.teams[item.id]
         });
-      })
+      });
       setTeams(temp);
     }
-  }, [eid, event?.events, team.teams])
+  }, [eid, event?.events, team.teams]);
 
   return (
     <Box
       sx={{
-        display: 'flex',
+        display: "flex",
         gap: 2
       }}
     >
-      <Box
-        sx={{ width: '300px' }}
-      >
+      <Box sx={{ width: "300px" }}>
         <TeamList teams={teams} myTeam={myTeam} />
       </Box>
       <Box sx={{ flex: 1, zIndex: 100 }}>
         <MatchTable matches={matches} eid={eid} myTeam={myTeam} />
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export default DoubleEliminationTableView;

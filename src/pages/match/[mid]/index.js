@@ -97,23 +97,23 @@ const Page = (props) => {
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
-            id: participants[val.player1 - 1].tid,
+            id: participants[val.player1 - 1].id,
             round: val.round,
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player1 - 1].tid].name
+            name: teams[participants[val.player1 - 1].id].name
           });
         }
 
         if (val.player2 && participants[val.player2 - 1]) {
           newParticipants.push({
-            id: participants[val.player2 - 1].tid,
+            id: participants[val.player2 - 1].id,
             round: val.round,
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player2 - 1].tid].name
+            name: teams[participants[val.player2 - 1].id].name
           });
         }
 
@@ -158,23 +158,23 @@ const Page = (props) => {
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
-            id: participants[val.player1 - 1].tid,
+            id: participants[val.player1 - 1].id,
             round: val.round,
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player1 - 1].tid].name
+            name: teams[participants[val.player1 - 1].id].name
           });
         }
 
         if (val.player2 && participants[val.player2 - 1]) {
           newParticipants.push({
-            id: participants[val.player2 - 1].tid,
+            id: participants[val.player2 - 1].id,
             round: val.round,
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player2 - 1].tid].name
+            name: teams[participants[val.player2 - 1].id].name
           });
         }
 
@@ -247,21 +247,21 @@ const Page = (props) => {
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
-            id: participants[val.player1 - 1].tid,
+            id: participants[val.player1 - 1].id,
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player1 - 1].tid].name
+            name: teams[participants[val.player1 - 1].id].name
           });
         }
 
         if (val.player2 && participants[val.player2 - 1]) {
           newParticipants.push({
-            id: participants[val.player2 - 1].tid,
+            id: participants[val.player2 - 1].id,
             resultText: "",
             isWinner: false,
             status: null,
-            name: teams[participants[val.player2 - 1].tid].name
+            name: teams[participants[val.player2 - 1].id].name
           });
         }
 
@@ -605,7 +605,8 @@ const Page = (props) => {
           border: `solid 1px rgba(255, 255, 255, 0.2)`,
           borderRadius: "4px",
           padding: 3
-        }}>
+        }}
+      >
         {matches && selectedMatch >= 0 && (
           <ScoresDialog
             title={"Team scores"}
@@ -688,7 +689,8 @@ const Page = (props) => {
                       <CustomButton
                         variant="contained"
                         onClick={handle.buildTemplate}
-                        disabled={disabled}>
+                        disabled={disabled}
+                      >
                         Build Template
                       </CustomButton>
                     )}
@@ -697,7 +699,8 @@ const Page = (props) => {
                       variant="contained"
                       onClick={handle.save}
                       disabled={disabled}
-                      sx={{ ml: 2 }}>
+                      sx={{ ml: 2 }}
+                    >
                       Save
                     </CustomLoadingButton>
                   </Grid>
@@ -708,7 +711,8 @@ const Page = (props) => {
                         border: "solid 1px rgba(255, 255, 255, 0.2)",
                         minHeight: "300px",
                         borderRadius: "4px"
-                      }}>
+                      }}
+                    >
                       {matches && event?.events[eid]?.format == 0 ? (
                         <SingleEliminationBracket
                           matches={matches}

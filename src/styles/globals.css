@@ -255,7 +255,7 @@ input:-webkit-autofill {
 
 td.td-border::before {
   content: "";
-  background-color: #f58515;
+  background-color: #f5831f;
   position: absolute;
   left: 0;
   top: 1px;
@@ -506,4 +506,41 @@ input#search::placeholder {
 
 .MuiMenu-paper {
   z-index: 900;
+}
+
+.ql-toolbar .ql-stroke {
+  fill: none;
+  stroke: #f5831f;
+}
+
+.ql-toolbar .ql-fill {
+  fill: #f5831f;
+  stroke: none;
+}
+
+.ql-toolbar .ql-picker {
+  color: #f5831f;
+}
+
+.tweet-textedit .ql-toolbar {
+  background: transparent;
+  border: none !important;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  transform: translateY(100%);
+}
+
+.tweet-textedit .ql-container {
+  font-size: 1.5rem;
+  border: none !important;
+}
+
+.tweet-placeholder {
+  user-select: none;
+  position: absolute;
+  font-size: 2rem;
+  top: 0.5rem;
+  left: 1rem;
+  color: gray;
 }

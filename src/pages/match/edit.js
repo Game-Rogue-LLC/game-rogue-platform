@@ -414,10 +414,10 @@ const Page = (props) => {
 
       const newEventParticipant = [...event.events[eid].participants],
         player1 = newEventParticipant.findIndex(
-          (val) => val.tid === newGames[selectedMatch].participants[0].id
+          (val) => val.id === newGames[selectedMatch].participants[0].id
         ),
         player2 = newEventParticipant.findIndex(
-          (val) => val.tid === newGames[selectedMatch].participants[1].id
+          (val) => val.id === newGames[selectedMatch].participants[1].id
         );
       if (score1 > score2) {
         newEventParticipant[player1].score += SCORE_WIN;
@@ -569,7 +569,8 @@ const Page = (props) => {
           border: `solid 1px rgba(255, 255, 255, 0.2)`,
           borderRadius: "4px",
           padding: 3
-        }}>
+        }}
+      >
         {matches && selectedMatch >= 0 && (
           <ScoresDialog
             title={"Team scores"}
@@ -602,7 +603,8 @@ const Page = (props) => {
               display: "flex",
               flexDirection: "column",
               gap: 3
-            }}>
+            }}
+          >
             <Typography variant="h5">Event Details</Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Box sx={{ width: "130px" }}>
@@ -646,7 +648,8 @@ const Page = (props) => {
                   loading={saving}
                   variant="contained"
                   onClick={handle.save}
-                  disabled={disabled}>
+                  disabled={disabled}
+                >
                   Save
                 </CustomLoadingButton>
               )}
@@ -655,7 +658,8 @@ const Page = (props) => {
                 loading={changingStatus}
                 variant="contained"
                 onClick={handle.finishScheduling}
-                disabled={disabled}>
+                disabled={disabled}
+              >
                 Finish Scheduling
               </CustomLoadingButton>
             )}
@@ -664,7 +668,8 @@ const Page = (props) => {
                 loading={changingStatus}
                 variant="contained"
                 onClick={handle.startEvent}
-                disabled={disabled}>
+                disabled={disabled}
+              >
                 Start Event
               </CustomLoadingButton>
             )}
@@ -673,7 +678,8 @@ const Page = (props) => {
                 loading={changingStatus}
                 variant="contained"
                 onClick={handle.finishEvent}
-                disabled={disabled}>
+                disabled={disabled}
+              >
                 Finish Event
               </CustomLoadingButton>
             )}
@@ -685,7 +691,8 @@ const Page = (props) => {
               border: "solid 1px rgba(255, 255, 255, 0.2)",
               minHeight: "300px",
               borderRadius: "4px"
-            }}>
+            }}
+          >
             {event?.events[eid] && event.events[eid].format == 2 ? (
               <FullCalendar
                 sx={{

@@ -3,178 +3,178 @@ export const DEFAULT_LOGO = "/LOGO.png";
 export const STAFF_ROLES = [
   {
     id: 0,
-    name: "Event Director",
+    name: "Event Director"
   },
   {
     id: 1,
-    name: "Event Assistant Director",
+    name: "Event Assistant Director"
   },
   {
     id: 2,
-    name: "Event Manager",
+    name: "Event Manager"
   },
   {
     id: 3,
-    name: "Event Admin",
+    name: "Event Admin"
   },
   {
     id: 4,
-    name: "Producer",
+    name: "Producer"
   },
   {
     id: 5,
-    name: "Broadcaster",
+    name: "Broadcaster"
   },
   {
     id: 6,
-    name: "Commentator",
-  },
+    name: "Commentator"
+  }
 ];
 
 export const EVENT_CATEGORIES = {
   tournament: {
     value: 0,
-    name: "Tournament",
+    name: "Tournament"
   },
   league: {
     value: 1,
-    name: "League",
-  },
+    name: "League"
+  }
 };
 
 export const EVENT_FORMATS = [
   {
     key: "single-elimination",
     value: 0,
-    name: "Single Elimination",
+    name: "Single Elimination"
   },
   {
     key: "double-elimination",
     value: 1,
-    name: "Double Elimination",
+    name: "Double Elimination"
   },
   {
     key: "ladder-elimination",
     value: 2,
-    name: "Ladder Elimination",
+    name: "Ladder Elimination"
   },
   {
     key: "pyramid-elimination",
     value: 3,
-    name: "Pyramid Elimination",
+    name: "Pyramid Elimination"
   },
   {
     key: "straight-round-robin",
     value: 4,
-    name: "Straight Round Robin",
+    name: "Straight Round Robin"
   },
   {
     key: "round-robin-double-split",
     value: 5,
-    name: "Round Robin Double Split",
+    name: "Round Robin Double Split"
   },
   {
     key: "round-robin-triple-split",
     value: 6,
-    name: "Round Robin Triple Split",
+    name: "Round Robin Triple Split"
   },
   {
     key: "round-robin-quadruple-split",
     value: 7,
-    name: "Round Robin Quadruple split",
+    name: "Round Robin Quadruple split"
   },
   {
     key: "round-robin-semi-split",
     value: 8,
-    name: "Semi Round Robin",
-  },
+    name: "Semi Round Robin"
+  }
 ];
 
 export const EVENT_SEED_TYPES = {
   manual: {
     value: 0,
-    name: "Manual",
+    name: "Manual"
   },
   random: {
     value: 1,
-    name: "Random",
-  },
+    name: "Random"
+  }
 };
 
 export const EVENT_REGIONS = [
   {
     value: 0,
-    name: "North America",
+    name: "North America"
   },
   {
     value: 1,
-    name: "Europe",
-  },
+    name: "Europe"
+  }
 ];
 
 export const EVENT_STATES = {
   CREATING: {
     value: 0,
-    name: "CREATING",
+    name: "CREATING"
   },
   SCHEDULING: {
     value: 1,
-    name: "SCHEDULING",
+    name: "SCHEDULING"
   },
   SCHEDULED: {
     value: 2,
-    name: "SCHEDULED",
+    name: "SCHEDULED"
   },
   STARTED: {
     value: 3,
-    name: "STARTED",
+    name: "STARTED"
   },
   FINISHED: {
     value: 4,
-    name: "FINISHED",
-  },
+    name: "FINISHED"
+  }
 };
 
 export const MATCH_STATES = {
   NOT_STARTED_SCHEDULING: {
     value: 0,
-    name: "NOT STARTED SCHEDULING",
+    name: "NOT STARTED SCHEDULING"
   },
   SCHEDULING: {
     value: 1,
-    name: "SCHEDULING",
+    name: "SCHEDULING"
   },
   SCHEDULED: {
     value: 2,
-    name: "SCHEDULED",
+    name: "SCHEDULED"
   },
   STARTED: {
     value: 3,
-    name: "STARTED",
+    name: "STARTED"
   },
   FINISHED: {
     value: 4,
-    name: "FINISHED",
-  },
+    name: "FINISHED"
+  }
 };
 
 export const PLATFORMS = [
   {
     value: 0,
-    name: "XBox",
+    name: "XBox"
   },
   {
     value: 1,
-    name: "PC",
+    name: "PC"
   },
   {
     value: 2,
-    name: "PS4",
+    name: "PS4"
   },
   {
     value: 3,
-    name: "Cross-Platform",
-  },
+    name: "Cross-Platform"
+  }
 ];
 
 export const NULL_FUNCTION = () => {};
@@ -200,5 +200,16 @@ export const PARTICIPANT_STATES = {
   WALK_OVER: "WALK_OVER",
   NO_PARTY: "NO_PARTY",
   CREATED: "CREATED",
-  PLAYING: "PLAYING",
+  PLAYING: "PLAYING"
 };
+
+export const TEAM_POSITIONS = [
+  {
+    val: 0,
+    name: "Manager"
+  },
+  {
+    val: 1,
+    name: "Player"
+  }
+];

@@ -85,7 +85,7 @@ const Page = (props) => {
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
-            id: participants[val.player1 - 1].tid,
+            id: participants[val.player1 - 1].id,
             round: val.round,
             resultText: "",
             isWinner: false,
@@ -94,13 +94,13 @@ const Page = (props) => {
             wins: 0,
             loses: 0,
             draws: 0,
-            name: teams[participants[val.player1 - 1].tid].name
+            name: teams[participants[val.player1 - 1].id].name
           });
         }
 
         if (val.player2 && participants[val.player2 - 1]) {
           newParticipants.push({
-            id: participants[val.player2 - 1].tid,
+            id: participants[val.player2 - 1].id,
             round: val.round,
             resultText: "",
             isWinner: false,
@@ -109,7 +109,7 @@ const Page = (props) => {
             wins: 0,
             loses: 0,
             draws: 0,
-            name: teams[participants[val.player2 - 1].tid].name
+            name: teams[participants[val.player2 - 1].id].name
           });
         }
 
@@ -157,7 +157,7 @@ const Page = (props) => {
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
-            id: participants[val.player1 - 1].tid,
+            id: participants[val.player1 - 1].id,
             round: val.round,
             resultText: "",
             isWinner: false,
@@ -166,13 +166,13 @@ const Page = (props) => {
             wins: 0,
             loses: 0,
             draws: 0,
-            name: teams[participants[val.player1 - 1].tid].name
+            name: teams[participants[val.player1 - 1].id].name
           });
         }
 
         if (val.player2 && participants[val.player2 - 1]) {
           newParticipants.push({
-            id: participants[val.player2 - 1].tid,
+            id: participants[val.player2 - 1].id,
             round: val.round,
             resultText: "",
             isWinner: false,
@@ -181,7 +181,7 @@ const Page = (props) => {
             wins: 0,
             loses: 0,
             draws: 0,
-            name: teams[participants[val.player2 - 1].tid].name
+            name: teams[participants[val.player2 - 1].id].name
           });
         }
 
@@ -259,7 +259,7 @@ const Page = (props) => {
 
         if (val.player1 && participants[val.player1 - 1]) {
           newParticipants.push({
-            id: participants[val.player1 - 1].tid,
+            id: participants[val.player1 - 1].id,
             resultText: "",
             isWinner: false,
             status: null,
@@ -267,13 +267,13 @@ const Page = (props) => {
             wins: 0,
             loses: 0,
             draws: 0,
-            name: teams[participants[val.player1 - 1].tid].name
+            name: teams[participants[val.player1 - 1].id].name
           });
         }
 
         if (val.player2 && participants[val.player2 - 1]) {
           newParticipants.push({
-            id: participants[val.player2 - 1].tid,
+            id: participants[val.player2 - 1].id,
             resultText: "",
             isWinner: false,
             status: null,
@@ -281,7 +281,7 @@ const Page = (props) => {
             wins: 0,
             loses: 0,
             draws: 0,
-            name: teams[participants[val.player2 - 1].tid].name
+            name: teams[participants[val.player2 - 1].id].name
           });
         }
 
@@ -389,7 +389,7 @@ const Page = (props) => {
         let participants = [];
         event.events[eid].participants.forEach((item) => {
           participants.push({
-            ...team.teams[item.tid]
+            ...team.teams[item.id]
           });
         });
         participants.sort((a, b) => a.level - b.level);
@@ -449,7 +449,8 @@ const Page = (props) => {
           border: `solid 1px rgba(255, 255, 255, 0.2)`,
           borderRadius: "4px",
           padding: 3
-        }}>
+        }}
+      >
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
           <Box
             sx={{
@@ -457,7 +458,8 @@ const Page = (props) => {
               display: "flex",
               flexDirection: "column",
               gap: 3
-            }}>
+            }}
+          >
             <Typography variant="h5">Event Details</Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Box sx={{ width: "130px" }}>
@@ -501,7 +503,8 @@ const Page = (props) => {
                 <CustomButton
                   variant="contained"
                   onClick={handle.buildTemplate}
-                  disabled={disabled}>
+                  disabled={disabled}
+                >
                   Build Template
                 </CustomButton>
               )}
@@ -509,7 +512,8 @@ const Page = (props) => {
               loading={saving}
               variant="contained"
               onClick={handle.save}
-              disabled={disabled}>
+              disabled={disabled}
+            >
               Save
             </CustomLoadingButton>
           </Box>
@@ -520,7 +524,8 @@ const Page = (props) => {
               border: "solid 1px rgba(255, 255, 255, 0.2)",
               minHeight: "300px",
               borderRadius: "4px"
-            }}>
+            }}
+          >
             {event?.events[eid] && event.events[eid].format == 2 ? (
               <FullCalendar
                 sx={{
