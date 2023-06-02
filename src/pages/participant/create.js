@@ -87,30 +87,14 @@ const Page = (props) => {
       // }
       if (validate(inputs, rules, customMessages) === false)
         return;
-      if (event.events[event.current].participants?.findIndex(val => val.tid === inputs.tid) >= 0) {
-        alert('This team is already registered.');
-        return;
-      }
+
       setSaving(true);
-      let newParticipants = event.events[event.current]?.participants;
-      if (!newParticipants) newParticipants = [];
-      newParticipants = [
-        ...newParticipants,
-        {
-          tid: inputs.tid,
-          deleted: false,
-          registeredAt: new Date()
-        }
-      ]
-
-      const res = await event.update(event.current, { participants: newParticipants });
-
+      const res = await event.addParticipant(event.current, inputs.tid);
       if (res.code === 'succeed') {
         router.push('/participant?event=' + event.current);
       } else if (res.code === 'failed') {
         console.error(res.message)
       }
-
       setSaving(false);
     },
     inputs: (e) => {

@@ -1,99 +1,138 @@
-import { useState, useEffect } from 'react';
-import {
-    Box,
-    Container,
-    Grid,
-    Typography
-} from '@mui/material'
-import PublicLayout from '@/src/content/PublicLayout';
+import { useEffect, useMemo, useState } from 'react';
+import Button from '@mui/material/Button';
 import { useAppContext } from '@/src/context/app';
-import TournamentProvider, { useTournamentContext } from '@/src/context/TournamentContext';
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from '@/src/config/global';
+import {
+  Box,
+  Container,
+  Typography,
+  useTheme
+} from '@mui/material';
+import PublicLayout from '@/src/content/PublicLayout';
 import dayjs from 'dayjs';
-import Link from 'next/link';
+import EventContainer from '@/src/components/widgets/event/EventContainer';
+import TournamentProvider, { useTournamentContext } from '@/src/context/TournamentContext';
+import { useRouter } from 'next/router';
+import FeaturedTournaments from '@/src/components/widgets/FeaturedTournaments';
 
 const Page = (props) => {
-    const { setTitle } = useAppContext();
-    const { event } = useTournamentContext();
+  const theme = useTheme();
+  const router = useRouter();
+  const { setTitle } = useAppContext();
+  const { event, match, currentTime, setCurrentTime } = useTournamentContext();
 
-    useEffect(() => {
-        setTitle('UPCOMING EVENTS');
-    }, [])
+  const upcomingEventIds = useMemo(() => {
+    if (event?.events) {
+      return Object.keys(event.events).filter(key => dayjs(event.events[key].startAt).isAfter(currentTime));
+    }
+    return [];
+  }, [event?.events, currentTime])
 
-    return (
-        <Container>
-            <Grid container spacing={2} rowSpacing={3} sx={{ mt: 2 }}>
-                {event?.events && Object.keys(event.events).filter(key => dayjs(event.events[key].startAt).isAfter(new Date())).map(eid => {
-                    const item = event.events[eid];
-                    return (
-                        <Grid item xs={12} sm={6} lg={4}>
-                            <Link href={'/event/' + eid + '/info'}>
-                                <Box
-                                    sx={{
-                                        border: 'solid 1px rgba(255, 255, 255, 0.2)',
-                                        borderRadius: '4px',
-                                        height: '280px',
-                                        background: 'rgba(25, 25, 25, 0.8)',
-                                        ':hover': {
-                                            cursor: 'pointer',
-                                            background: 'rgba(245, 131, 31, 0.1)'
-                                        }
-                                    }}
-                                >
-                                    <Box
-                                        sx={{
-                                            height: '70px',
-                                            background: 'url(' + (item?.banner || DEFAULT_CONTENTBLOCK_IMAGE) + ')',
-                                            backgroundSize: 'cover',
-                                            backgroundPosition: 'center',
-                                            borderBottom: 'solid 1px gray'
-                                        }}
-                                    >
-                                    </Box>
-                                    <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-                                        <img src={item?.darkLogo || DEFAULT_LOGO} style={{ height: '40px', width: '40px', objectFit: 'cover' }} />
-                                        <Typography variant='h4'>
-                                            {item?.name}
-                                        </Typography>
-                                    </Box>
-                                    <Box sx={{ p: 2, background: 'transparent' }}>
-                                        <Grid container>
-                                            <Grid item sx={{ width: '100px' }}>
-                                                Date:
-                                            </Grid>
-                                            <Grid item xs>
-                                                <Typography variant='body2'>
-                                                    {dayjs(item?.startAt).format('DD. MMM. YYYY')}
-                                                </Typography>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid container>
-                                            <Grid item sx={{ width: '100px' }}>
-                                                Min Age:
-                                            </Grid>
-                                            <Grid item xs>
-                                                16
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                </Box>
-                            </Link>
-                        </Grid>
-                    )
-                })}
-            </Grid>
+  useEffect(() => {
+    setTitle("Upcoming Events");
+    setCurrentTime(new Date());
+  }, [])
+
+  return (
+    <>
+      <Box
+        component={'section'}
+        sx={{
+          position: 'relative',
+          backgroundImage: 'url(/static/images/event_banner.png)',
+          height: '998px',
+          backgroundPosition: 'center',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          poster="/static/images/event_banner.png"
+        >
+          <source
+            src="/static/images/event_banner.mp4"
+            type="video/mp4"
+          />
+        </video>
+      </Box>
+
+      <FeaturedTournaments />
+
+      <Box
+        component={'section'}
+        sx={{
+          position: 'relative',
+          backgroundColor: 'rgb(36, 35, 35)',
+          py: '10px'
+        }}
+      >
+        <Container sx={{ margin: 'auto', display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box
+            component={'img'}
+            src="/static/images/games/r6s.webp"
+          ></Box>
+          <Typography variant="body1" fontWeight={700} fontSize={25} color={theme.palette.primary.main} textTransform='uppercase'>
+            Rainbow six siege
+          </Typography>
+          <Box
+            sx={{
+              flex: 1,
+              textAlign: 'right'
+            }}
+          >
+            <Button variant="contained">
+              CHANGE GAME
+            </Button>
+          </Box>
         </Container>
-    )
+      </Box>
+
+      <Box
+        component={'section'}
+        sx={{
+          position: 'relative',
+          background: 'linear-gradient(to top,#28160c,#000)',
+          position: 'relative'
+        }}
+      >
+        <Container sx={{ margin: 'auto', pb: 5 }}>
+          <Box sx={{ mt: 8 }}>
+            <Box
+              sx={{ display: 'flex', gap: 1, alignItems: 'center', backgroundColor: '#140300', padding: 2, border: 'solid 1px rgba(255, 255, 255, 0.2)' }}
+            >
+              <Box
+                component={'img'}
+                src="/static/images/games/r6s.webp"
+              ></Box>
+              <Typography variant="body1" fontWeight={700} fontSize={25} color={theme.palette.primary.main} textTransform='uppercase'>
+                UPCOMING EVENTS
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                mt: 2
+              }}
+            >
+              <EventContainer events={upcomingEventIds?.map(eid => event?.events[eid])} />
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+    </>
+  )
 }
 
 Page.getLayout = (page) => {
-    return (
-        <PublicLayout>
-            <TournamentProvider>
-                {page}
-            </TournamentProvider>
-        </PublicLayout>
-    )
+  return (
+    <PublicLayout>
+      <TournamentProvider>
+        {page}
+      </TournamentProvider>
+    </PublicLayout>
+  )
 }
 
 export default Page;

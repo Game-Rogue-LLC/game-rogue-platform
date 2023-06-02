@@ -1,150 +1,385 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import {
-    Box,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    FormControl,
-    FormHelperText,
-    Grid,
-    InputLabel,
-    MenuItem,
-    OutlinedInput,
-    Paper,
-    Select,
-    Typography,
-    useTheme,
-} from '@mui/material';
-import People from '@mui/icons-material/People';
-
-import AdminLayout from '@/src/content/AdminLayout';
-import { useAppContext } from '@/src/context/app';
-
-import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from "react";
+import Button from "@mui/material/Button";
+import { useAppContext } from "@/src/context/app";
+import { Box, Container, Typography, useTheme } from "@mui/material";
+import PublicLayout from "@/src/content/PublicLayout";
+import dayjs from "dayjs";
+import EventContainer from "@/src/components/widgets/event/EventContainer";
+import MatchContainer from "@/src/components/widgets/match/MatchContainer";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useRouter } from "next/router";
+import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
 
 const Page = (props) => {
-    const theme = useTheme();
-    const router = useRouter();
-    const { organizations, addEvent, setTitle, current } = useAppContext();
-    const [org, setOrg] = React.useState("");
-    const [inputs, setInputs] = React.useState({ name: '' });
-    const [valid, setValid] = React.useState({ name: true });
-    const [disabled, setDisabled] = React.useState(false);
-    const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const router = useRouter();
+  const { setTitle } = useAppContext();
+  const { event, match, currentTime, setCurrentTime } = useTournamentContext();
 
-    const handleOpen = (e) => {
-        setOpen(true);
+  const moreButtonStyle = {
+    fontWeight: 700,
+    textTransform: "uppercase",
+    backgroundColor: "rgba(0,0,0,0.9)",
+    color: "white",
+    ":hover": {
+      backgroundColor: "rgba(0,0,0,0.6)",
+      color: "white"
     }
+  };
 
-    const handleClose = (e) => {
-        setOpen(false);
+  const upcomingMatches = useMemo(() => {
+    if (match?.matches) {
+      return match.matches.filter((item) => dayjs(item.start).isAfter(currentTime));
     }
+    return [];
+  }, [match?.matches, currentTime]);
 
-    const handleDelete = (e) => {
-        deleteOrganization(orgId);
-        setOpen(false)
+  const ongoingEventIds = useMemo(() => {
+    if (event?.events) {
+      return Object.keys(event.events).filter(
+        (key) =>
+          dayjs(event.events[key].startAt).isBefore(currentTime) &&
+          dayjs(event.events[key].endAt).isAfter(currentTime)
+      );
     }
+    return [];
+  }, [event?.events, currentTime]);
 
-    const handleChange = (e) => {
-        setOrg(e.target.value);
+  const upcomingEventIds = useMemo(() => {
+    if (event?.events) {
+      return Object.keys(event.events).filter((key) =>
+        dayjs(event.events[key].startAt).isAfter(currentTime)
+      );
     }
+    return [];
+  }, [event?.events, currentTime]);
 
-    const handleInputs = (e) => {
-        let { name, type, value } = e.target;
-        setInputs({
-            ...inputs,
-            [name]: value
-        })
+  const finishedEventIds = useMemo(() => {
+    if (event?.events) {
+      return Object.keys(event.events).filter((key) =>
+        dayjs(event.events[key].endAt).isBefore(currentTime)
+      );
     }
+    return [];
+  }, [event?.events, currentTime]);
 
-    React.useEffect(() => {
-        setTitle('REGISTER AN EVENT');
-    }, [])
+  useEffect(() => {
+    setTitle("Events");
+    setCurrentTime(new Date());
+  }, []);
 
-    // React.useEffect(() => {
-    //     if (current.organization?.events?.length >= 5)
-    //         setDisabled(true);
-    // }, [current])
+  return (
+    <>
+      <Box
+        component={"section"}
+        sx={{
+          position: "relative",
+          backgroundImage: "url(/static/images/event_banner.png)",
+          height: "998px",
+          backgroundPosition: "center",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <video autoPlay loop muted poster="/static/images/event_banner.png">
+          <source src="/static/images/event_banner.mp4" type="video/mp4" />
+        </video>
+      </Box>
 
-    return (
-        <Box>
-            <Paper sx={{ p: 4 }}>
-                <Typography variant='h6'>Disband/Delete Profile</Typography>
-                <Button variant='contained' sx={{ borderRadius: 0, mt: 2 }} onClick={handleOpen}>Disband</Button>
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
+      <FeaturedTournaments />
+
+      <Box
+        component={"section"}
+        sx={{
+          position: "relative",
+          backgroundColor: "rgb(36, 35, 35)",
+          py: "10px"
+        }}
+      >
+        <Container sx={{ margin: "auto", display: "flex", alignItems: "center", gap: 1 }}>
+          <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+          <Typography
+            variant="body1"
+            fontWeight={700}
+            fontSize={25}
+            color={theme.palette.primary.main}
+            textTransform="uppercase"
+          >
+            Rainbow six siege
+          </Typography>
+          <Box
+            sx={{
+              flex: 1,
+              textAlign: "right",
+              display: "flex",
+              gap: 2,
+              alignItems: "center",
+              flexDirection: "row-reverse"
+            }}
+          >
+            <Button variant="contained" sx={{ textTransform: "uppercase" }}>
+              CHANGE GAME
+            </Button>
+            <Button variant="contained" sx={{ textTransform: "uppercase" }}>
+              CHANGE PLATFORM
+            </Button>
+            <Button variant="contained" sx={{ textTransform: "uppercase" }}>
+              CHANGE REGION
+            </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      <Box
+        component={"section"}
+        sx={{
+          position: "relative",
+          background: "linear-gradient(to top,#28160c,#000)",
+          position: "relative"
+        }}
+      >
+        <Container sx={{ margin: "auto", pb: 5 }}>
+          <Box sx={{ mt: 8 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                // backgroundColor: "#140300",
+                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                border: "none",
+                borderLeft: "solid 5px #ed7606",
+                padding: 2
+              }}
+            >
+              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Typography
+                variant="body1"
+                fontWeight={700}
+                fontSize={25}
+                color="white"
+                textTransform="uppercase"
+              >
+                UPCOMING MATCHES
+              </Typography>
+              <Box
+                sx={{
+                  flex: 1,
+                  textAlign: "right"
+                }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    // backgroundColor: "#c2260a",
+                    ":hover": {
+                      // backgroundColor: "#ff4929",
+                    },
+                    ...moreButtonStyle
+                  }}
+                  onClick={() => {
+                    router.push("/match/upcoming");
+                  }}
                 >
-                    <DialogTitle id="alert-dialog-title">
-                        {"Delete the organizer profile?"}
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Do you really want to delete this profile?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handleDelete} autoFocus>
-                            OK
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </Paper>
+                  MORE MATCHES
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                mt: 2
+              }}
+            >
+              <MatchContainer matches={upcomingMatches} limit={6} />
+            </Box>
+          </Box>
 
-            <Paper sx={{ p: 4, mt: 4 }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Typography variant='h6'>
-                            Register Event
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Organization</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={org}
-                                label="Organization"
-                                onChange={handleChange}
-                                variant="outlined"
-                                disabled={disabled}
-                            >
-                                {organizations?.map((val, i) => <MenuItem key={val.id} value={val.id}>{val.name}</MenuItem>)}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <InputLabel htmlFor="event-name">Event Name</InputLabel>
-                        <FormControl fullWidth error={!valid?.name} sx={{ mt: 1 }}>
-                            <OutlinedInput id="event-name" name="name" aria-describedby="event-name-helper" value={inputs.name} disabled={disabled}
-                                onChange={handleInputs} />
-                            {!valid?.name && <FormHelperText id="event-name-helper" sx={{ mt: 2 }}>Name is required.</FormHelperText>}
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            variant='contained'
-                            // onClick={handleCreate}
-                            disabled={disabled}
-                        >
-                            Register
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Paper>
-        </Box>
-    )
-}
+          <Box sx={{ mt: 8 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                // backgroundColor: "#000a14",
+                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                border: "none",
+                borderLeft: "solid 5px #ed7606",
+                padding: 2
+              }}
+            >
+              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Typography
+                variant="body1"
+                fontWeight={700}
+                fontSize={25}
+                color="white"
+                textTransform="uppercase"
+              >
+                ONGOING EVENTS
+              </Typography>
+              <Box
+                sx={{
+                  flex: 1,
+                  textAlign: "right"
+                }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    // backgroundColor: "#0a68c7",
+                    ":hover": {
+                      // backgroundColor: "#2993ff",
+                    },
+                    ...moreButtonStyle
+                  }}
+                  onClick={() => {
+                    router.push("/event/ongoing");
+                  }}
+                >
+                  MORE EVENTS
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                mt: 2
+              }}
+            >
+              <EventContainer
+                events={ongoingEventIds?.map((eid) => event?.events[eid])}
+                limit={6}
+              />
+            </Box>
+          </Box>
+
+          <Box sx={{ mt: 8 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                // backgroundColor: "#140300",
+                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                border: "none",
+                borderLeft: "solid 5px #ed7606",
+                padding: 2
+              }}
+            >
+              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Typography
+                variant="body1"
+                fontWeight={700}
+                fontSize={25}
+                color="white"
+                textTransform="uppercase"
+              >
+                UPCOMING EVENTS
+              </Typography>
+              <Box
+                sx={{
+                  flex: 1,
+                  textAlign: "right"
+                }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    // backgroundColor: "#c2260a",
+                    ":hover": {
+                      // backgroundColor: "#ff4929",
+                    },
+                    ...moreButtonStyle
+                  }}
+                  onClick={() => {
+                    router.push("/event/upcoming");
+                  }}
+                >
+                  MORE EVENTS
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                mt: 2
+              }}
+            >
+              <EventContainer
+                events={upcomingEventIds?.map((eid) => event?.events[eid])}
+                limit={6}
+              />
+            </Box>
+          </Box>
+
+          <Box sx={{ mt: 8 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+                // backgroundColor: "#140013",
+                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                border: "none",
+                borderLeft: "solid 5px #ed7606",
+                padding: 2
+              }}
+            >
+              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Typography
+                variant="body1"
+                fontWeight={700}
+                fontSize={25}
+                color="white"
+                textTransform="uppercase"
+              >
+                COMPLETED EVENTS
+              </Typography>
+              <Box
+                sx={{
+                  flex: 1,
+                  textAlign: "right"
+                }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{
+                    // backgroundColor: "#c20ab9",
+                    ":hover": {
+                      // backgroundColor: "#ff29f4",
+                    },
+                    ...moreButtonStyle
+                  }}
+                  onClick={() => {
+                    router.push("/event/completed");
+                  }}
+                >
+                  MORE EVENTS
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                mt: 2
+              }}
+            >
+              <EventContainer
+                events={finishedEventIds?.map((eid) => event?.events[eid])}
+                limit={6}
+              />
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+    </>
+  );
+};
 
 Page.getLayout = (page) => {
-    return <AdminLayout>{page}</AdminLayout>
-}
+  return (
+    <PublicLayout>
+      <TournamentProvider>{page}</TournamentProvider>
+    </PublicLayout>
+  );
+};
 
 export default Page;

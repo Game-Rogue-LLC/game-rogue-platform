@@ -23,35 +23,15 @@ import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
 import { useRouter } from 'next/router';
 import { useTournamentContext } from '@/src/context/TournamentContext';
-import CountrySelect from '@/src/components/CountrySelect';
-import GameSelect from '@/src/components/GameSelect';
+import CountrySelect from '@/src/components/dropdown/CountrySelect';
+import GameSelect from '@/src/components/dropdown/GameSelect';
 import { useUser } from '@/lib/firebase/useUser';
 import { DEFAULT_LOGO } from '@/src/config/global';
 import Validator from 'validatorjs';
+import { model, rules, customMessages } from '@/lib/firestore/collections/team';
 
 const initialInputs = {
-  name: '',
-  short: '',
-  accessCode: '',
-  residency: '',
-  game: '',
-  type: 0,
-  darkLogo: DEFAULT_LOGO,
-  lightLogo: DEFAULT_LOGO,
-  description: '',
-  deleted: false
-}
-
-const rules = {
-  name: 'required',
-  short: 'required',
-  accessCode: 'required|min:4'
-}
-
-const customMessages = {
-  'required.name': 'Team Name is required.',
-  'required.short': 'Short Name is required.',
-  'required.accessCode': 'Access Code is required.',
+  ...model
 }
 
 const Page = (props) => {
@@ -184,11 +164,11 @@ const Page = (props) => {
             <Box display={'flex'} justifyContent={'center'} gap={4} alignItems={'center'} mt={2}>
               <Box display={'flex'} justifyContent={'center'} gap={2}>
                 <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'baseline'}>
-                  <Button variant='contained' color='primary' component='label'>
+                  <Button variant='contained' component='label'>
                     UPLOAD DARK LOGO
                     <input type="file" accept="image/*" name="upload-dark-logo" id="upload-dark-logo" hidden onChange={handle.changeDarkLogo} />
                   </Button>
-                  <Button variant='contained' color='primary' component='label' onClick={handle.removeDarkLogo}>
+                  <Button variant='contained' component='label' onClick={handle.removeDarkLogo}>
                     REMOVE DARK LOGO
                   </Button>
                 </Box>
@@ -198,11 +178,11 @@ const Page = (props) => {
               </Box>
               <Box display={'flex'} justifyContent={'center'} gap={2}>
                 <Box display={'flex'} flexDirection={'column'} gap={2} alignItems={'baseline'}>
-                  <Button variant='contained' color='primary' component='label'>
+                  <Button variant='contained' component='label'>
                     UPLOAD LIGHT LOGO
                     <input type="file" accept="image/*" name="upload-light-logo" id="upload-light-logo" hidden onChange={handle.changeLightLogo} />
                   </Button>
-                  <Button variant='contained' color='primary' component='label' onClick={handle.removeLightLogo}>
+                  <Button variant='contained' component='label' onClick={handle.removeLightLogo}>
                     REMOVE LIGHT LOGO
                   </Button>
                 </Box>

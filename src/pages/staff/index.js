@@ -65,16 +65,7 @@ const Page = (props) => {
                                 <TableCell align='center'>{dayjs(val.lastLogin.toDate()).fromNow()}</TableCell>
                                 <TableCell align='center'>{ }</TableCell>
                                 <TableCell align='center'>
-                                    <Button
-                                        variant='contained'
-                                        sx={{
-                                            background: 'black',
-                                            color: 'white',
-                                            ':hover': {
-                                                background: theme.palette.primary.main
-                                            }
-                                        }}
-                                    >
+                                    <Button variant='contained'>
                                         VIEW
                                     </Button>
                                 </TableCell>
@@ -88,15 +79,7 @@ const Page = (props) => {
                     }
                     <TableRow>
                         <TableCell sx={{ border: 'none' }}>
-                            <Button
-                                variant='contained'
-                                sx={{
-                                    borderRadius: 0,
-                                    color: 'white',
-                                    bgcolor: 'black'
-                                }}
-                                onClick={handle.addStaff}
-                            >
+                            <Button variant='contained'>
                                 ADD STAFF
                             </Button>
                         </TableCell>

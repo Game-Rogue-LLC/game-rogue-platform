@@ -64,7 +64,7 @@ const Page = (props) => {
                     </TableRow>
                     <TableRow>
                         <TableCell sx={{ border: 'none' }}>
-                            <Button variant='contained' sx={{ borderRadius: 0, color: 'white', bgcolor: 'black' }}>
+                            <Button variant='contained'>
                                 PAST ARCHIVED
                             </Button>
                         </TableCell>
