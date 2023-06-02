@@ -47,14 +47,23 @@ const RightSidebar = ({ sx }) => {
       <Box>
         <OutlinedInput placeholder="Search here..." fullWidth />
       </Box>
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "left",
+          gap: 1,
+          flexDirection: "column"
+        }}
+      >
         {upcomingMatches.length < 4
           ? upcomingMatches.map((item) => <MatchItem key={"match_" + item.id} item={item} />)
           : upcomingMatches
               .slice(0, 4)
               .map((item) => <MatchItem key={"match_" + item.id} item={item} />)}
         {upcomingMatches.length >= 4 && (
-          <CustomButton onClick={onViewAllClick}>VIEW ALL</CustomButton>
+          <CustomButton onClick={onViewAllClick} sx={{ width: "100%" }}>
+            VIEW ALL
+          </CustomButton>
         )}
         {upcomingMatches.length === 0 && (
           <>
