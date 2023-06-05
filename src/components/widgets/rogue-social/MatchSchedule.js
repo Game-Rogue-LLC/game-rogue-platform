@@ -1,24 +1,27 @@
-import { useState, useEffect } from "react";
 import {
   Box,
   Button,
+  Menu,
   Table,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
   TableRow,
-  Typography,
+  Typography
 } from "@mui/material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+
+import CustomDateTimePicker from "@/src/components/datetime/DateTimePicker";
+import { DEFAULT_LOGO } from "@/src/config/global";
 import Link from "next/link";
 import { LoadingButton } from "@mui/lab";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { DEFAULT_LOGO } from "@/src/config/global";
-import CustomDateTimePicker from "@/src/components/datetime/DateTimePicker";
-import dayjs from "dayjs";
-import { useAuthContext } from "@/src/context/AuthContext";
-import TeamItem from "@/src/components/item/TeamItem";
-import { formatDate } from "@/src/utils/utils";
 import { MATCH_STATES } from "@/src/config/global";
+import TeamItem from "@/src/components/item/TeamItem";
+import dayjs from "dayjs";
+import { formatDate } from "@/src/utils/utils";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
   const { user } = useAuthContext();
@@ -26,6 +29,15 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
   const [myTeam, setMyTeam] = useState(null);
   const [opTeam, setOpTeam] = useState(null);
   const [asking, setAsking] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const onOpen = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+  const onClose = (e) => {
+    setAnchorEl(null);
+  };
 
   const isMyTeam = (team) => {
     return team?.uid === user.id;
@@ -50,10 +62,10 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
       data: {
         time: matchTime,
         senderTeam: myTeam.id,
-        receiverTeam: opTeam.id,
+        receiverTeam: opTeam.id
       },
       createdAt: new Date(),
-      deleted: false,
+      deleted: false
     };
 
     const res = await ticket.create(newTicket);
@@ -68,7 +80,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
     });
     const res = await match.update(item.id, {
       start: time,
-      status: MATCH_STATES.SCHEDULED.value,
+      status: MATCH_STATES.SCHEDULED.value
     });
     if (res.code === "succeed") {
       alert("Scheduled Successfully!");
@@ -96,39 +108,65 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
                 mt: 2,
                 height: "150px",
                 width: "150px",
-                filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))",
+                filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
               }}
               src={myTeam?.darkLogo || DEFAULT_LOGO}
             ></Box>
-            <Typography
-              variant="body1"
-              textAlign="center"
-              fontSize="1.5rem"
-              color="white"
-            >
+            <Typography variant="body1" textAlign="center" fontSize="1.5rem" color="white">
               {myTeam?.name}
             </Typography>
           </Box>
         </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            flexDirection: "column",
-          }}
-        >
-          <CustomDateTimePicker
-            name="schedule"
-            minDateTime={dayjs(item?.start)}
-            maxDateTime={dayjs(item?.end)}
-            value={matchTime}
-            setValue={onDateTimeChange}
-          />
-          <LoadingButton loading={asking} variant="contained" onClick={onAsk}>
-            ASK
-          </LoadingButton>
+        <Box>
+          <Button
+            id="schedule-btn"
+            variant="contained"
+            aria-controls={open ? "schedule-menu" : undefined}
+            aria-haspopup="true"
+            onClick={onOpen}
+            endIcon={open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+            fullWidth
+          >
+            Schedule
+          </Button>
+          <Menu
+            id="schedule-menu"
+            anchorEl={anchorEl}
+            disableScrollLock={true}
+            open={open}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center"
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center"
+            }}
+            MenuListProps={{ "aria-labelledby": "schedule-btn" }}
+            onClose={onClose}
+          >
+            <Box
+              sx={{
+                padding: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                flexDirection: "column"
+              }}
+            >
+              <CustomDateTimePicker
+                name="schedule"
+                minDateTime={dayjs(item?.start)}
+                maxDateTime={dayjs(item?.end)}
+                value={matchTime}
+                setValue={onDateTimeChange}
+              />
+              <LoadingButton loading={asking} variant="contained" onClick={onAsk}>
+                ASK
+              </LoadingButton>
+            </Box>
+          </Menu>
         </Box>
 
         <Box>
@@ -139,16 +177,11 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
                 mt: 2,
                 height: "150px",
                 width: "150px",
-                filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))",
+                filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
               }}
               src={opTeam?.darkLogo || DEFAULT_LOGO}
             ></Box>
-            <Typography
-              variant="body1"
-              textAlign={"center"}
-              fontSize={"1.5rem"}
-              color={"white"}
-            >
+            <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
               {opTeam?.name}
             </Typography>
           </Box>
@@ -171,16 +204,10 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
               return (
                 <TableRow>
                   <TableCell>
-                    <TeamItem
-                      team={team?.teams[val.data.senderTeam]}
-                      disableLink={true}
-                    />
+                    <TeamItem team={team?.teams[val.data.senderTeam]} disableLink={true} />
                   </TableCell>
                   <TableCell>
-                    <TeamItem
-                      team={team?.teams[val.data.receiverTeam]}
-                      disableLink={true}
-                    />
+                    <TeamItem team={team?.teams[val.data.receiverTeam]} disableLink={true} />
                   </TableCell>
                   <TableCell align="center">
                     {formatDate(val.data.time.toDate(), "YYYY-MM-DD HH:mm")}

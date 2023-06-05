@@ -54,13 +54,13 @@ const PostItem = ({ item, onEdit, onDelete }) => {
       }}
     >
       <Grid container spacing={2}>
-        <Grid item xs="60px">
-          <Avatar src={player?.players[item.uid].profilePic} sx={{ width: 50, height: 50 }} />
+        <Grid item>
+          <Avatar src={player?.players[item.uid]?.profilePic} sx={{ width: 50, height: 50 }} />
         </Grid>
         <Grid item xs>
           <Box>
             <Typography variant="h5" color="white">
-              {player?.players[item.uid].userName || player?.players[item.uid].name}
+              {player?.players[item.uid]?.userName || player?.players[item.uid]?.name}
             </Typography>
             <Typography style={{ color: "grey" }}>{player?.players[item.uid]?.name}</Typography>
           </Box>

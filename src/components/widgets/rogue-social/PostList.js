@@ -1,8 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 import ConfirmDialog from "../../dialog/ConfirmDialog";
 import PostDialog from "@/src/components/widgets/rogue-social/PostDialog";
 import PostItem from "@/src/components/widgets/rogue-social/PostItem";
+import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
@@ -10,7 +11,8 @@ const PostList = ({}) => {
   const [openPostDialog, setOpenPostDialog] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
-  const { post } = useTournamentContext();
+  const { post: postController } = useTournamentContext();
+  const post = useSelector((state) => state.post);
 
   const onOpenPostDialog = () => {
     setOpenPostDialog(true);
@@ -28,7 +30,7 @@ const PostList = ({}) => {
   };
 
   const onAccept = async () => {
-    await post.update(selectedPost, {
+    await postController.update(selectedPost, {
       deleted: true
     });
     setOpenConfirm(false);
@@ -37,9 +39,17 @@ const PostList = ({}) => {
     setOpenConfirm(false);
   };
 
-  if (Object.keys(post?.posts).length === 0)
+  if (post && post?.status === "loading") {
     return (
-      <Box sx={{ py: 1 }}>
+      <Box textAlign="center">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (post && Object.keys(post.posts).length === 0)
+    return (
+      <Box>
         <Typography variant="h6" align="center">
           NO POSTS
         </Typography>
@@ -63,7 +73,9 @@ const PostList = ({}) => {
       )}
       {Object.keys(post?.posts).map((key) => {
         const item = post.posts[key];
-        return <PostItem item={item} onEdit={onEditPost} onDelete={onDeletePost} />;
+        return (
+          <PostItem key={"post_" + key} item={item} onEdit={onEditPost} onDelete={onDeletePost} />
+        );
       })}
     </Box>
   );

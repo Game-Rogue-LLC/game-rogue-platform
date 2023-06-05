@@ -1,11 +1,12 @@
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useTournamentContext } from "@/src/context/TournamentContext";
 import { Box, Button, Typography } from "@mui/material";
-import { useTheme } from "@mui/material";
-import { formatDate } from "@/src/utils/utils";
+import { useEffect, useState } from "react";
 
-const MatchItem = ({ item }) => {
+import Link from "next/link";
+import { formatDate } from "@/src/utils/utils";
+import { useTheme } from "@mui/material";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+
+const MatchItem = ({ item, sx }) => {
   const theme = useTheme();
   const { team } = useTournamentContext();
   const [team1, setTeam1] = useState(null);
@@ -34,8 +35,9 @@ const MatchItem = ({ item }) => {
           borderRadius: "5px",
           textAlign: "left",
           ":hover": {
-            backgroundColor: "rgba(245, 131, 31, .2)",
+            backgroundColor: "rgba(245, 131, 31, .2)"
           },
+          ...sx
         }}
       >
         <Box>
@@ -45,9 +47,7 @@ const MatchItem = ({ item }) => {
             {team2?.name}
           </Typography>
           <Typography variant="body1" textAlign="left" color="white">
-            {formatDate(item?.start, "YYYY.MM.DD") +
-              " - " +
-              formatDate(item?.end, "YYYY.MM.DD")}
+            {formatDate(item?.start, "YYYY.MM.DD") + " - " + formatDate(item?.end, "YYYY.MM.DD")}
           </Typography>
         </Box>
       </Box>

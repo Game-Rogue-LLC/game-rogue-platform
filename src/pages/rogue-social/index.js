@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, Typography, styled } from "@mui/material";
+import { Box, ButtonBase, Tab, Tabs, Typography, styled } from "@mui/material";
 import {
   Explore,
   Groups,
@@ -145,11 +145,19 @@ Page.getLayout = (page) => {
           height: "100vh",
           top: 0,
           left: 0,
-          zIndex: 9999
+          zIndex: 9999,
+          backgroundImage: "url(/rogue_social.gif)",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          cursor: "pointer"
         }}
         className="rogue-social-splash"
+        onClick={(e) => {
+          e.currentTarget.classList.add("splash-hidden");
+        }}
       >
-        <Box
+        {/* <Box
           component="img"
           src="/rogue_social.gif"
           sx={{
@@ -161,7 +169,7 @@ Page.getLayout = (page) => {
             transform: "translate(-50%, -50%)",
             zIndex: 9999
           }}
-        ></Box>
+        ></Box> */}
       </Box>
 
       <PublicLayout>{page}</PublicLayout>
