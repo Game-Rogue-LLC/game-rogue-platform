@@ -14,7 +14,9 @@ import {
 
 import Link from "next/link";
 import { markdownToHtml } from "@/src/utils/html-markdown";
+import { setPost } from "@/src/redux/features/postSlice";
 import { useAuthContext } from "@/src/context/AuthContext";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
@@ -24,6 +26,7 @@ const PostItem = ({ item, onEdit, onDelete }) => {
   const { player, post } = useTournamentContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const openMenu = Boolean(anchorEl);
+  const dispatch = useDispatch();
 
   const onOpenMenu = (e) => {
     setAnchorEl(e.currentTarget);
@@ -92,7 +95,9 @@ const PostItem = ({ item, onEdit, onDelete }) => {
             <Link
               href="#"
               onClick={(e) => {
-                post.update(item.id, { reshare: item.reshare + 1 });
+                const temp = item.reshare + 1;
+                post.update(item.id, { reshare: temp });
+                dispatch(setPost({ id: item.id, data: { reshare: temp } }));
               }}
             >
               <Box
@@ -110,7 +115,9 @@ const PostItem = ({ item, onEdit, onDelete }) => {
             <Link
               href="#"
               onClick={(e) => {
-                post.update(item.id, { vote: item.vote + 1 });
+                const temp = item.vote + 1;
+                post.update(item.id, { vote: temp });
+                dispatch(setPost({ id: item.id, data: { vote: temp } }));
               }}
             >
               <Box
@@ -128,7 +135,9 @@ const PostItem = ({ item, onEdit, onDelete }) => {
             <Link
               href="#"
               onClick={(e) => {
-                post.update(item.id, { view: item.view + 1 });
+                const temp = item.view + 1;
+                post.update(item.id, { view: temp });
+                dispatch(setPost({ id: item.id, data: { view: temp } }));
               }}
             >
               <Box

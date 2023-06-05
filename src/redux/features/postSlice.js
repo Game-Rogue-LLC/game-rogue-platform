@@ -46,13 +46,13 @@ export const postSlice = createSlice({
       state.posts = {
         ...state.posts,
         ...data
-      }
+      };
     },
-    setPost: (id, post) => {
-      state.posts[id] = {
-        ...state.posts[id],
-        ...post
-      }
+    setPost: (state, action) => {
+      state.posts[action.payload.id] = {
+        ...state.posts[action.payload.id],
+        ...action.payload.data
+      };
     }
   },
   extraReducers(builder) {
@@ -88,6 +88,5 @@ export const postSlice = createSlice({
   }
 });
 
-// export const { setPrescriptionData } = prescriptionSlice.actions;
-
+export const { setPost, setPosts } = postSlice.actions;
 export default postSlice.reducer;
