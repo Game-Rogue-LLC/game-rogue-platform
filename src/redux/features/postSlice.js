@@ -41,6 +41,20 @@ export const postSlice = createSlice({
     posts: {},
     last: null
   },
+  reducers: {
+    setPosts: (data) => {
+      state.posts = {
+        ...state.posts,
+        ...data
+      }
+    },
+    setPost: (id, post) => {
+      state.posts[id] = {
+        ...state.posts[id],
+        ...post
+      }
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(readPost.pending, (state, action) => {

@@ -44,10 +44,12 @@ const PostItem = ({ item, onEdit, onDelete }) => {
   return (
     <Box
       sx={{
+        position: "relative",
         marginInline: "auto",
         width: "100%",
         borderBottom: "solid 1px rgb(255,255,255,0.2)",
         padding: 2,
+        zIndex: 0,
         ":hover": {
           backgroundColor: "rgba(255,255,255,0.2)"
         }

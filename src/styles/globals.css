@@ -524,6 +524,7 @@ input#search::placeholder {
 
 .tweet-textedit {
   position: relative;
+  z-index: inherit;
 }
 
 .tweet-textedit .ql-toolbar {
@@ -569,27 +570,50 @@ input#search::placeholder {
   border: none !important;
 }
 
-.tweet-placeholder {
-  /* display: none; */
-  user-select: none;
-  position: absolute;
-  font-size: 2rem;
-  top: 0.5rem;
-  left: 1rem;
+.tweet-textedit .ql-container > .ql-editor.ql-blank::before {
+  z-index: 900;
+  font-style: normal;
   color: gray;
 }
 
 .tweet-container {
   position: relative;
-  border: solid 1px rgba(255,255,255,.5);
+  border: solid 1px rgba(255,255,255,.3);
   border-radius: 10px;
   overflow: hidden;
   transition: all ease-in-out .2s;
   height: 150px;
+  z-index: 100;
+}
+
+.tweet-container * {
+  z-index: 100 !important;
+}
+
+.tweet-textedit .ql-picker.ql-expanded .ql-picker-options {
+  margin-top: 5px !important;
+  z-index: 10 !important;
+}
+
+.tweet-textedit .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) svg {
+  margin-top: -12px !important;
+}
+
+@keyframes animate-tweet {
+  0% {
+    overflow: hidden;
+  }
+  99% {
+    overflow: hidden;
+  }
+  100% {
+    overflow: visible;
+  }
 }
 
 .tweet-container:focus-within {
   height: 210px;
+  animation: forwards animate-tweet .2s;
   padding-bottom: 50px;
 }
 

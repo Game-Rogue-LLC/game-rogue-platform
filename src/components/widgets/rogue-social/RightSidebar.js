@@ -48,9 +48,6 @@ const RightSidebar = ({ sx }) => {
         ...sx
       }}
     >
-      <Typography variant="h4" fontSize={30} color="white">
-        Messages
-      </Typography>
       <Box className="search-box">
         <SearchInput
           id="search"

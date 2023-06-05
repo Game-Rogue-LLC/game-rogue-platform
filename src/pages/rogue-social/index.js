@@ -14,10 +14,13 @@ import TournamentProvider, { useTournamentContext } from "@/src/context/Tourname
 import { useEffect, useState } from "react";
 
 import MatchHome from "@/src/components/widgets/rogue-social/Home";
+import Messages from "@/src/components/widgets/rogue-social/Messages";
 import MyTeams from "@/src/components/widgets/rogue-social/MyTeams";
 import PublicLayout from "@/src/content/PublicLayout";
 import RightSidebar from "@/src/components/widgets/rogue-social/RightSidebar";
 import TeamList from "@/src/components/list/TeamList";
+
+// import Messages from "@/lib/firestore/collections/messages";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontSize: "24px",
@@ -27,6 +30,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 
 const Page = (props) => {
   const [tab, setTab] = useState("0");
+  const [showMessages, setShowMessages] = useState(false);
 
   const onTabChange = (event, newTab) => {
     setTab(newTab);
@@ -130,6 +134,7 @@ const Page = (props) => {
       >
         <RightSidebar />
       </Box>
+      <Messages onClick={() => {}} />
     </Box>
   );
 };

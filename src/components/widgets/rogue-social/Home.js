@@ -104,11 +104,6 @@ const Home = () => {
               placeholder="What's happening?"
               handleContentChange={onContentChange}
             />
-            {(!content || !htmlToMarkdown(content)) && (
-              <Typography variant="body1" className="tweet-placeholder">
-                What's happening?
-              </Typography>
-            )}
             <Box
               sx={{
                 display: "flex",
