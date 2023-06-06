@@ -7,10 +7,11 @@ const StyledButton = styled(Button)((theme) => ({
   borderBottomRightRadius: 0,
   position: "fixed",
   bottom: 0,
-  right: "50px",
-  minWidth: "300px",
+  right: 0,
+  minWidth: "416px",
   fontSize: "22px",
-  alignItems: "center"
+  alignItems: "center",
+  zIndex: 9999
 }));
 
 const Messages = ({}) => {

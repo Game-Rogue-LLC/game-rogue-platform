@@ -50,6 +50,7 @@ const Home = () => {
       vote: 0,
       view: 0,
       replies: [],
+
       createdAt: new Date(),
       deleted: false
     });
@@ -106,12 +107,9 @@ const Home = () => {
             />
             <Box
               sx={{
-                display: "flex",
-                flexDirection: "row-reverse",
-                alignItems: "center",
-                justifyContent: "space-between",
-                px: 2,
-                py: 1
+                position: "absolute",
+                right: "16px",
+                bottom: "12px"
               }}
             >
               <LoadingButton

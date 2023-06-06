@@ -28,7 +28,7 @@ import {
   Search
 } from "@mui/icons-material";
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
 import SearchInput from "@/src/components/input/SearchInput";
@@ -45,6 +45,7 @@ const PublicNavbar = ({ sx }) => {
   const [fund, setFund] = useState("");
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(router?.pathname);
+  const logoRef = useRef();
   let currentHoverUser = false;
 
   useEffect(() => {
@@ -58,6 +59,14 @@ const PublicNavbar = ({ sx }) => {
       else if (pathname.substring(1, 5) === "tool") setCurrentPage("tool");
     }
   }, [router]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      logoRef.current.classList.toggle("opacity-0");
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [user.id]);
+
   const handle = {
     switchLogoNav: (e) => {
       setLogoNav((prev) => !prev);
@@ -118,7 +127,16 @@ const PublicNavbar = ({ sx }) => {
               alignItems: "center"
             }}
           >
-            <img src="/GR_Letters.png" height={40} />
+            <Box sx={{ position: "relative" }}>
+              <Box component="img" src="/GR_Letters.png" height={40} />
+              <Box
+                component="img"
+                src="/GR_Letters.png"
+                height={40}
+                ref={logoRef}
+                style={{ position: "absolute", left: 0, top: 0, filter: "brightness(10)" }}
+              />
+            </Box>
             <Box className="search-box">
               <SearchInput
                 id="search"

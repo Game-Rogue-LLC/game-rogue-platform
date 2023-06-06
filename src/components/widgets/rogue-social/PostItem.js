@@ -1,7 +1,17 @@
-import { Autorenew, BarChart, Delete, Edit, Favorite, MoreVert, Sms } from "@mui/icons-material";
+import {
+  Autorenew,
+  BarChart,
+  Delete,
+  Edit,
+  Favorite,
+  MoreVert,
+  Report,
+  Sms
+} from "@mui/icons-material";
 import {
   Avatar,
   Box,
+  ButtonBase,
   Grid,
   IconButton,
   ListItemIcon,
@@ -20,7 +30,7 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
-const PostItem = ({ item, onEdit, onDelete }) => {
+const PostItem = ({ item, onEdit, onDelete, onReport }) => {
   const theme = useTheme();
   const { user } = useAuthContext();
   const { player, post } = useTournamentContext();
@@ -41,6 +51,10 @@ const PostItem = ({ item, onEdit, onDelete }) => {
   };
   const onDeletePost = (e) => {
     onDelete(item.id);
+    onCloseMenu(e);
+  };
+  const onReportPost = (e) => {
+    onReport(item.id);
     onCloseMenu(e);
   };
 
@@ -79,7 +93,7 @@ const PostItem = ({ item, onEdit, onDelete }) => {
             }}
           ></div>
           <Box sx={{ marginTop: 2, display: "flex", gap: 4, color: "white" }}>
-            <Link href="#" onClick={(e) => {}}>
+            <ButtonBase onClick={(e) => {}}>
               <Box
                 sx={{
                   display: "flex",
@@ -89,11 +103,10 @@ const PostItem = ({ item, onEdit, onDelete }) => {
                 }}
               >
                 <Sms />
-                {item?.reply}
+                <Typography variant="body1">{item?.reply}</Typography>
               </Box>
-            </Link>
-            <Link
-              href="#"
+            </ButtonBase>
+            <ButtonBase
               onClick={(e) => {
                 const temp = item.reshare + 1;
                 post.update(item.id, { reshare: temp });
@@ -109,11 +122,10 @@ const PostItem = ({ item, onEdit, onDelete }) => {
                 }}
               >
                 <Autorenew />
-                {item?.reshare}
+                <Typography variant="body1">{item?.reshare}</Typography>
               </Box>
-            </Link>
-            <Link
-              href="#"
+            </ButtonBase>
+            <ButtonBase
               onClick={(e) => {
                 const temp = item.vote + 1;
                 post.update(item.id, { vote: temp });
@@ -129,11 +141,10 @@ const PostItem = ({ item, onEdit, onDelete }) => {
                 }}
               >
                 <Favorite />
-                {item?.vote}
+                <Typography variant="body1">{item?.vote}</Typography>
               </Box>
-            </Link>
-            <Link
-              href="#"
+            </ButtonBase>
+            <ButtonBase
               onClick={(e) => {
                 const temp = item.view + 1;
                 post.update(item.id, { view: temp });
@@ -149,9 +160,9 @@ const PostItem = ({ item, onEdit, onDelete }) => {
                 }}
               >
                 <BarChart />
-                {item?.view}
+                <Typography variant="body1">{item?.view}</Typography>
               </Box>
-            </Link>
+            </ButtonBase>
           </Box>
         </Grid>
         <Grid item xs="auto">
@@ -174,18 +185,29 @@ const PostItem = ({ item, onEdit, onDelete }) => {
               "aria-labelledby": item.id + "-more-btn"
             }}
           >
-            <MenuItem onClick={onEditPost} disabled={item.uid !== user.id}>
-              <ListItemIcon>
-                <Edit fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Edit</ListItemText>
-            </MenuItem>
-            <MenuItem onClick={onDeletePost} disabled={item.uid !== user.id}>
-              <ListItemIcon>
-                <Delete fontSize="small" />
-              </ListItemIcon>
-              <ListItemText>Delete</ListItemText>
-            </MenuItem>
+            {item.uid === user.id ? (
+              <>
+                <MenuItem onClick={onEditPost}>
+                  <ListItemIcon>
+                    <Edit fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Edit</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={onDeletePost}>
+                  <ListItemIcon>
+                    <Delete fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>Delete</ListItemText>
+                </MenuItem>
+              </>
+            ) : (
+              <MenuItem onClick={onReportPost}>
+                <ListItemIcon>
+                  <Report fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Report</ListItemText>
+              </MenuItem>
+            )}
           </Menu>
         </Grid>
       </Grid>

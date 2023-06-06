@@ -28,6 +28,9 @@ const PostList = ({}) => {
     setSelectedPost(id);
     setOpenConfirm(true);
   };
+  const onReportPost = (id) => {
+    // Report function
+  };
 
   const onAccept = async () => {
     await postController.update(selectedPost, {
@@ -74,7 +77,13 @@ const PostList = ({}) => {
       {Object.keys(post?.posts).map((key) => {
         const item = post.posts[key];
         return (
-          <PostItem key={"post_" + key} item={item} onEdit={onEditPost} onDelete={onDeletePost} />
+          <PostItem
+            key={"post_" + key}
+            item={item}
+            onEdit={onEditPost}
+            onDelete={onDeletePost}
+            onReport={onReportPost}
+          />
         );
       })}
     </Box>

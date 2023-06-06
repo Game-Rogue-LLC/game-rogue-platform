@@ -113,6 +113,10 @@ input:-webkit-autofill {
   }
 }
 
+.opacity-0 {
+  opacity: 0;
+}
+
 @keyframes rogue-social-splash {
   0% {
     display: block;
@@ -578,11 +582,12 @@ input#search::placeholder {
 
 .tweet-container {
   position: relative;
-  border: solid 1px rgba(255,255,255,.3);
+  border: solid 1px rgb(255,255,255);
   border-radius: 10px;
   overflow: hidden;
   transition: all ease-in-out .2s;
   height: 150px;
+  margin-inline: 1rem;
   z-index: 100;
 }
 
@@ -623,4 +628,63 @@ input#search::placeholder {
   z-index: -1;
   opacity: 0;
   display: none;
+}
+
+@keyframes match-chat-team {
+  0% {
+    top: calc(100px + 50%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  20% {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  80% {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  100% {
+    top: calc(100px + 50%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+}
+
+.match-chat-team {
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  animation: match-chat-team 10s forwards;
+}
+
+@keyframes match-chat-anim {
+  0% {
+    display: block;
+    opacity: 1;
+    z-index: 9999;
+  }
+  99% {
+    display: block;
+    opacity: 1;
+    z-index: 9999;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    z-index: -2;
+  }
+}
+
+.match-chat-anim {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: black;
+  animation: match-chat-anim 10s forwards;
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { AccessTimeFilled, Grid3x3, LockClock, PunchClock, Sell } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -11,39 +11,32 @@ import {
   Paper,
   Select,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
   TableCell,
+  TableHead,
+  TableRow,
   Typography,
-  useTheme,
+  useTheme
 } from "@mui/material";
-import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
-import PublicLayout from "@/src/content/PublicLayout";
-import { useAppContext } from "@/src/context/app";
-import TournamentProvider, {
-  useTournamentContext,
-} from "@/src/context/TournamentContext";
 import {
   DEFAULT_CONTENTBLOCK_IMAGE,
   DEFAULT_LOGO,
   EVENT_FORMATS,
-  EVENT_STATES,
+  EVENT_STATES
 } from "@/src/config/global";
-import dayjs from "dayjs";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import {
-  AccessTimeFilled,
-  Grid3x3,
-  LockClock,
-  PunchClock,
-  Sell,
-} from "@mui/icons-material";
-import _ from "lodash";
+import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { formatDate, romanNumber } from "@/src/utils/utils";
-import ParticipantProfile from "@/src/components/widgets/ParticipantProfile";
+import { useEffect, useMemo, useState } from "react";
+
+import Link from "next/link";
+import ParticipantProfile from "@/src/components/widgets/match/ParticipantProfile";
+import PublicLayout from "@/src/content/PublicLayout";
 import SlantBanner from "@/src/components/widgets/SlantBanner";
+import _ from "lodash";
+import dayjs from "dayjs";
+import { useAppContext } from "@/src/context/app";
+import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 
 const Page = (props) => {
@@ -80,7 +73,7 @@ const Page = (props) => {
       setColors({
         primary: event.events[eid].primary,
         secondary: event.events[eid].secondary,
-        tertiary: event.events[eid].tertiary,
+        tertiary: event.events[eid].tertiary
       });
     }
   }, [eid, event?.events]);
@@ -104,10 +97,7 @@ const Page = (props) => {
       end = dayjs(item?.end),
       status = item?.status,
       eventStatus = event?.events[item?.eid]?.status;
-    if (
-      eventStatus == EVENT_STATES.CREATING.value ||
-      eventStatus == EVENT_STATES.SCHEDULING.value
-    )
+    if (eventStatus == EVENT_STATES.CREATING.value || eventStatus == EVENT_STATES.SCHEDULING.value)
       return "SCHEDULING";
     if (eventStatus == EVENT_STATES.SCHEDULED.value) return "SCHEDULED";
     if (eventStatus == EVENT_STATES.STARTED.value) {
@@ -128,7 +118,7 @@ const Page = (props) => {
           justifyContent: "left",
           paddingLeft: "10%",
           alignItems: "end",
-          gap: 2,
+          gap: 2
         }}
       >
         <img
@@ -138,7 +128,7 @@ const Page = (props) => {
           style={{
             // borderRadius: '50%',
             // outline: '2px solid rgba(245, 131, 31, 0.5)',
-            objectFit: "cover",
+            objectFit: "cover"
             // outlineOffset: '2px'
           }}
         />
@@ -160,7 +150,7 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 flexDirection: "column",
-                flexBasis: "20%",
+                flexBasis: "20%"
               }}
             >
               <Box
@@ -172,7 +162,7 @@ const Page = (props) => {
                   alignItems: "center",
                   gap: 2,
                   width: "100%",
-                  height: "100px",
+                  height: "100px"
                 }}
               >
                 {/* <Box
@@ -184,11 +174,7 @@ const Page = (props) => {
                 ></Box> */}
                 <Box>
                   <Link href={`/profile/?organization=${oid}`}>
-                    <Typography
-                      variant="h4"
-                      fontSize={18}
-                      color={colors.primary}
-                    >
+                    <Typography variant="h4" fontSize={18} color={colors.primary}>
                       VIEW ORGANIZER
                     </Typography>
                     <Typography variant="body1" paddingLeft="5px">
@@ -205,7 +191,7 @@ const Page = (props) => {
                   alignItems: "center",
                   gap: 2,
                   width: "100%",
-                  height: "100px",
+                  height: "100px"
                 }}
               >
                 <AccessTimeFilled />
@@ -227,7 +213,7 @@ const Page = (props) => {
                 flexDirection: "column",
                 gap: 1,
                 alignItems: "center",
-                flexGrow: 4,
+                flexGrow: 4
               }}
             >
               <Box
@@ -238,7 +224,7 @@ const Page = (props) => {
                   gap: 2,
                   alignItems: "center",
                   width: "100%",
-                  height: "100px",
+                  height: "100px"
                 }}
               >
                 <Box
@@ -249,12 +235,7 @@ const Page = (props) => {
                   height={25}
                 ></Box>
                 <Box sx={{ ml: "-10px" }}>
-                  <Typography
-                    variant="h4"
-                    fontSize={18}
-                    color={colors.primary}
-                    marginLeft="5px"
-                  >
+                  <Typography variant="h4" fontSize={18} color={colors.primary} marginLeft="5px">
                     EVENT
                   </Typography>
                   {/* {event?.events[eid]?.name} */}
@@ -267,7 +248,7 @@ const Page = (props) => {
                       backgroundColor: "rgba(0,0,0,.5)", //"#393D40",
                       backdropFilter: "blur(3px)",
                       color: "white",
-                      mt: 1,
+                      mt: 1
                     }}
                   />
                 </Box>
@@ -278,7 +259,7 @@ const Page = (props) => {
                   alignItems: "center",
                   height: "100px",
                   width: "100%",
-                  gap: 1,
+                  gap: 1
                 }}
               >
                 <Box
@@ -290,15 +271,11 @@ const Page = (props) => {
                     display: "flex",
                     gap: 2,
                     alignItems: "center",
-                    height: "100%",
+                    height: "100%"
                   }}
                 >
                   <Box>
-                    <Typography
-                      variant="h4"
-                      fontSize={18}
-                      color={colors.primary}
-                    >
+                    <Typography variant="h4" fontSize={18} color={colors.primary}>
                       MATCH STATE
                     </Typography>
                     <Typography variant="body1" paddingLeft="5px">
@@ -316,15 +293,11 @@ const Page = (props) => {
                     display: "flex",
                     gap: 2,
                     alignItems: "center",
-                    height: "100%",
+                    height: "100%"
                   }}
                 >
                   <Box>
-                    <Typography
-                      variant="h4"
-                      fontSize={18}
-                      color={colors.primary}
-                    >
+                    <Typography variant="h4" fontSize={18} color={colors.primary}>
                       FORMAT
                     </Typography>
                     <Typography variant="body1" paddingLeft="5px">
@@ -342,15 +315,11 @@ const Page = (props) => {
                     display: "flex",
                     gap: 2,
                     alignItems: "center",
-                    height: "100%",
+                    height: "100%"
                   }}
                 >
                   <Box>
-                    <Typography
-                      variant="h4"
-                      fontSize={18}
-                      color={colors.primary}
-                    >
+                    <Typography variant="h4" fontSize={18} color={colors.primary}>
                       EVENT ID
                     </Typography>
                     <Typography variant="body1" paddingLeft="5px">
@@ -368,15 +337,11 @@ const Page = (props) => {
                     display: "flex",
                     gap: 2,
                     alignItems: "center",
-                    height: "100%",
+                    height: "100%"
                   }}
                 >
                   <Box>
-                    <Typography
-                      variant="h4"
-                      fontSize={18}
-                      color={colors.primary}
-                    >
+                    <Typography variant="h4" fontSize={18} color={colors.primary}>
                       MATCH ID
                     </Typography>
                     <Typography variant="body1" paddingLeft="5px">
@@ -406,14 +371,14 @@ const Page = (props) => {
             <Grid item xs={12}>
               <Box
                 sx={{
-                  backgroundColor: style.primaryBackgroundColor /*"#9d4f12"*/,
+                  backgroundColor: style.primaryBackgroundColor /*"#9d4f12"*/
                 }}
               >
                 <Typography
                   variant="h4"
                   sx={{
                     textAlign: "center",
-                    fontSize: "1.5rem",
+                    fontSize: "1.5rem"
                   }}
                 >
                   MAPBAN
@@ -425,7 +390,7 @@ const Page = (props) => {
                 <Box
                   sx={{
                     height: "15rem",
-                    width: "100%",
+                    width: "100%"
                   }}
                 >
                   <Box
@@ -434,7 +399,7 @@ const Page = (props) => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      height: "100%",
+                      height: "100%"
                     }}
                   >
                     {i % 2 == 0 ? (
@@ -454,7 +419,7 @@ const Page = (props) => {
                   <Box
                     sx={{
                       backgroundColor: "black",
-                      border: `solid 1px ${style.secondaryBackgroundColor}`,
+                      border: `solid 1px ${style.secondaryBackgroundColor}`
                     }}
                   >
                     <Typography variant="body1" sx={{ textAlign: "center" }}>
@@ -464,7 +429,7 @@ const Page = (props) => {
                   <Box
                     sx={{
                       backgroundColor: "black",
-                      border: `solid 1px ${style.secondaryBackgroundColor}`,
+                      border: `solid 1px ${style.secondaryBackgroundColor}`
                     }}
                   >
                     <Typography variant="body1" sx={{ textAlign: "center" }}>
@@ -482,13 +447,10 @@ const Page = (props) => {
             <Grid item xs={12}>
               <Box
                 sx={{
-                  backgroundColor: style.primaryBackgroundColor /*"#9d4f12"*/,
+                  backgroundColor: style.primaryBackgroundColor /*"#9d4f12"*/
                 }}
               >
-                <Typography
-                  variant="h4"
-                  sx={{ textAlign: "center", fontSize: "1.5rem" }}
-                >
+                <Typography variant="h4" sx={{ textAlign: "center", fontSize: "1.5rem" }}>
                   POST GAME REPORT
                 </Typography>
               </Box>
@@ -502,7 +464,7 @@ const Page = (props) => {
                   justifyContent: "center",
                   alignItems: "center",
                   gap: 4,
-                  backgroundColor: style.secondaryBackgroundColor,
+                  backgroundColor: style.secondaryBackgroundColor
                 }}
               >
                 <Box
@@ -510,7 +472,7 @@ const Page = (props) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    gap: 1,
+                    gap: 1
                   }}
                 >
                   <Box
@@ -519,7 +481,7 @@ const Page = (props) => {
                     sx={{
                       alignItems: "center",
                       justifyContent: "center",
-                      height: "80px",
+                      height: "80px"
                     }}
                   ></Box>
                   <Link href={`/team/${team1?.id}`}>
@@ -533,7 +495,7 @@ const Page = (props) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: 3,
+                    gap: 3
                   }}
                 >
                   <Typography variant="h4" sx={{ textAlign: "center" }}>
@@ -547,7 +509,7 @@ const Page = (props) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    gap: 1,
+                    gap: 1
                   }}
                 >
                   <Box
@@ -556,14 +518,14 @@ const Page = (props) => {
                     sx={{
                       alignItems: "center",
                       justifyContent: "center",
-                      height: "80px",
+                      height: "80px"
                     }}
                   ></Box>
                   <Link href={`/team/${team2?.id}`}>
                     <Typography
                       variant="h5"
                       sx={{
-                        textAlign: "center",
+                        textAlign: "center"
                         // ":hover": { color: theme.palette.primary.main },
                       }}
                     >

@@ -17,6 +17,7 @@ import { DEFAULT_LOGO } from "@/src/config/global";
 import Link from "next/link";
 import { LoadingButton } from "@mui/lab";
 import { MATCH_STATES } from "@/src/config/global";
+import ParticipantInfo from "@/src/components/widgets/match/ParticipantInfo";
 import TeamItem from "@/src/components/item/TeamItem";
 import dayjs from "dayjs";
 import { formatDate } from "@/src/utils/utils";
@@ -100,8 +101,9 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-        <Box>
-          <Box textAlign={"center"}>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <ParticipantInfo item={myTeam} />
+          {/* <Box textAlign={"center"}>
             <Box
               component={"img"}
               sx={{
@@ -115,7 +117,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
             <Typography variant="body1" textAlign="center" fontSize="1.5rem" color="white">
               {myTeam?.name}
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
 
         <Box>
@@ -169,8 +171,9 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
           </Menu>
         </Box>
 
-        <Box>
-          <Box textAlign={"center"}>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <ParticipantInfo item={opTeam} reverse />
+          {/* <Box textAlign={"center"}>
             <Box
               component={"img"}
               sx={{
@@ -184,7 +187,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
             <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
               {opTeam?.name}
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
 

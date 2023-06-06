@@ -74,33 +74,33 @@ const Page = (props) => {
                 value="0"
               />
               <StyledTab
+                icon={<Home fontSize="large" />}
+                iconPosition="start"
+                label="Featured"
+                value="1"
+              />
+              <StyledTab
                 icon={<Explore fontSize="large" />}
                 iconPosition="start"
                 label="Discover"
-                value="1"
+                value="2"
               />
               <StyledTab
                 icon={<Notifications fontSize="large" />}
                 iconPosition="start"
                 label="Notifications"
-                value="2"
-              />
-              <StyledTab
-                icon={<Home fontSize="large" />}
-                iconPosition="start"
-                label="Featured"
                 value="3"
               />
               <StyledTab
                 icon={<People fontSize="large" />}
                 iconPosition="start"
-                label="My Teams"
+                label="My Team"
                 value="4"
               />
               <StyledTab
                 icon={<Groups fontSize="large" />}
                 iconPosition="start"
-                label="My Communities"
+                label="My Community"
                 value="5"
               />
               <StyledTab
@@ -133,8 +133,8 @@ const Page = (props) => {
         }}
       >
         <RightSidebar />
+        <Messages onClick={() => {}} />
       </Box>
-      <Messages onClick={() => {}} />
     </Box>
   );
 };
