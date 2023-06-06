@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
-import { Container, Tab, useTheme } from "@mui/material";
-import { useRouter } from "next/router";
+import { Box, Container, Tab, useTheme } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import _ from "lodash";
-
-import { useAppContext } from "@/src/context/app";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
-import { useStyleContext } from "@/src/context/StyleContext";
-import PublicLayout from "@/src/content/PublicLayout";
-import MatchSchedule from "@/src/components/widgets/rogue-social/MatchSchedule";
-import MatchShare from "@/src/components/widgets/rogue-social/MatchShare";
-import MapBans from "@/src/components/widgets/rogue-social/MapBans";
-import MatchScoreBoard from "@/src/components/widgets/rogue-social/MatchScoreBoard";
+import { useEffect, useState } from "react";
+
 import { MATCH_STATES } from "@/src/config/global";
+import MapBans from "@/src/components/widgets/rogue-social/MapBans";
+import MatchChatAnimation from "@/src/components/widgets/rogue-social/MatchChatAnimation";
+import MatchSchedule from "@/src/components/widgets/rogue-social/MatchSchedule";
+import MatchScoreBoard from "@/src/components/widgets/rogue-social/MatchScoreBoard";
+import MatchShare from "@/src/components/widgets/rogue-social/MatchShare";
+import PublicLayout from "@/src/content/PublicLayout";
+import _ from "lodash";
+import { useAppContext } from "@/src/context/app";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const Page = (props) => {
   const theme = useTheme();
@@ -152,8 +153,10 @@ const Page = (props) => {
 };
 
 Page.getLayout = (page) => {
+  const router = useRouter();
   return (
     <TournamentProvider>
+      <MatchChatAnimation mid={router?.query?.mid} />
       <PublicLayout>{page}</PublicLayout>
     </TournamentProvider>
   );

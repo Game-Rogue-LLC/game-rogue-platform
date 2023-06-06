@@ -113,6 +113,10 @@ input:-webkit-autofill {
   }
 }
 
+.opacity-0 {
+  opacity: 0;
+}
+
 @keyframes rogue-social-splash {
   0% {
     display: block;
@@ -473,34 +477,34 @@ input#search::placeholder {
   opacity: 1 !important;
 }
 
-#search-box .MuiSvgIcon-root {
+.search-box .MuiSvgIcon-root {
   transform: rotateY(0deg) translate(0, 0);
   transition: all 0.5s linear;
 }
 
-#search-box:hover .MuiSvgIcon-root {
+.search-box:hover .MuiSvgIcon-root {
   transform: rotateY(180deg);
 }
 
-#search-box .Mui-focused .MuiSvgIcon-root {
+.search-box .Mui-focused .MuiSvgIcon-root {
   transform: translate(-50px, 0);
   opacity: 0;
 }
 
-#search-box #search {
+.search-box #search {
   transform: translate(0, 0);
   transition: all 0.5s linear;
 }
 
-#search-box .Mui-focused #search {
+.search-box .Mui-focused #search {
   transform: translate(-30px, 0);
 }
 
-#search-box .Mui-focused #search::placeholder {
+.search-box .Mui-focused #search::placeholder {
   opacity: 0.5 !important;
 }
 
-#search-box {
+.search-box {
   overflow: hidden;
 }
 
@@ -522,6 +526,11 @@ input#search::placeholder {
   color: #f5831f;
 }
 
+.tweet-textedit {
+  position: relative;
+  z-index: inherit;
+}
+
 .tweet-textedit .ql-toolbar {
   background: transparent;
   border: none !important;
@@ -531,16 +540,151 @@ input#search::placeholder {
   transform: translateY(100%);
 }
 
+.tweet-textedit .ql-toolbar button {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.tweet-textedit .ql-header {
+  height: 36px;
+}
+
+.tweet-textedit .ql-picker-label {
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  height: 30px;
+}
+
+.tweet-textedit .ql-toolbar svg {
+  width: 30px !important;
+  height: 30px !important;
+}
+
 .tweet-textedit .ql-container {
+  border: none !important;
+  height: 150px;
+}
+
+.tweet-textedit .ql-container .ql-editor {
+  height: 150px;
+  min-height: 150px;
   font-size: 1.5rem;
+  overflow-y: auto;
   border: none !important;
 }
 
-.tweet-placeholder {
-  user-select: none;
-  position: absolute;
-  font-size: 2rem;
-  top: 0.5rem;
-  left: 1rem;
+.tweet-textedit .ql-container > .ql-editor.ql-blank::before {
+  z-index: 900;
+  font-style: normal;
   color: gray;
+}
+
+.tweet-container {
+  position: relative;
+  border: solid 1px rgb(255,255,255);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all ease-in-out .2s;
+  height: 150px;
+  margin-inline: 1rem;
+  z-index: 100;
+}
+
+.tweet-container * {
+  z-index: 100 !important;
+}
+
+.tweet-textedit .ql-picker.ql-expanded .ql-picker-options {
+  margin-top: 5px !important;
+  z-index: 10 !important;
+}
+
+.tweet-textedit .ql-picker:not(.ql-color-picker):not(.ql-icon-picker) svg {
+  margin-top: -12px !important;
+}
+
+@keyframes animate-tweet {
+  0% {
+    overflow: hidden;
+  }
+  99% {
+    overflow: hidden;
+  }
+  100% {
+    overflow: visible;
+  }
+}
+
+.tweet-container:focus-within {
+  height: 210px;
+  animation: forwards animate-tweet .2s;
+  padding-bottom: 50px;
+}
+
+.splash-hidden {
+  width: 0;
+  height: 0;
+  z-index: -1;
+  opacity: 0;
+  display: none;
+}
+
+@keyframes match-chat-team {
+  0% {
+    top: calc(100px + 50%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  20% {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  80% {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  100% {
+    top: calc(100px + 50%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+}
+
+.match-chat-team {
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  animation: match-chat-team 10s forwards;
+}
+
+@keyframes match-chat-anim {
+  0% {
+    display: block;
+    opacity: 1;
+    z-index: 9999;
+  }
+  99% {
+    display: block;
+    opacity: 1;
+    z-index: 9999;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    z-index: -2;
+  }
+}
+
+.match-chat-anim {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: black;
+  animation: match-chat-anim 10s forwards;
 }

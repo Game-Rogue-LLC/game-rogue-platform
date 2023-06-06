@@ -1,11 +1,13 @@
-import { Box, Tab, Typography, styled, useTheme } from "@mui/material";
+import { Box, Button, Tab, Typography, styled, useTheme } from "@mui/material";
 import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
+import { createPost, readPost } from "@/src/redux/features/postSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 import PostList from "@/src/components/widgets/rogue-social/PostList";
 import RichTextInput from "@/src/components/input/RichTextInput";
 import { htmlToMarkdown } from "@/src/utils/html-markdown";
 import { useAuthContext } from "@/src/context/AuthContext";
-import { useState } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const StyledTabList = styled(TabList)(({ theme }) => ({
@@ -22,9 +24,11 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
 const Home = () => {
   const { user } = useAuthContext();
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const post = useSelector((state) => state.post);
   const [content, setContent] = useState("");
   const [saving, setSaving] = useState(false);
-  const { post } = useTournamentContext();
+  const { post: postController } = useTournamentContext();
   const [tab, setTab] = useState("1");
 
   const onTabChange = (e, newTab) => {
@@ -37,7 +41,7 @@ const Home = () => {
 
   const onPost = async (e) => {
     setSaving(true);
-    await post.create({
+    await postController.create({
       uid: user.id,
       // title: user.userName,
       text: htmlToMarkdown(content),
@@ -46,11 +50,29 @@ const Home = () => {
       vote: 0,
       view: 0,
       replies: [],
+
       createdAt: new Date(),
       deleted: false
     });
+    // dispatch(
+    //   createPost({
+    //     uid: user.id,
+    //     text: htmlToMarkdown(content),
+    //     reply: 0,
+    //     reshare: 0,
+    //     vote: 0,
+    //     view: 0,
+    //     replies: [],
+    //     createdAt: new Date(),
+    //     deleted: false
+    //   })
+    // );
     setSaving(false);
   };
+
+  useEffect(() => {
+    dispatch(readPost());
+  }, []);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -72,22 +94,34 @@ const Home = () => {
         <Box
           sx={{
             position: "relative",
-            borderBlock: "solid 1px rgba(255,255,255,.2)",
             px: 0,
-            pb: 2
+            py: 2
           }}
         >
-          <RichTextInput
-            content={content}
-            className="tweet-textedit"
-            placeholder="What's happening?"
-            handleContentChange={onContentChange}
-          />
-          {(!content || !htmlToMarkdown(content)) && (
-            <Typography variant="body1" className="tweet-placeholder">
-              What's happening?
-            </Typography>
-          )}
+          <div className="tweet-container">
+            <RichTextInput
+              content={content}
+              className="tweet-textedit"
+              placeholder="What's happening?"
+              handleContentChange={onContentChange}
+            />
+            <Box
+              sx={{
+                position: "absolute",
+                right: "16px",
+                bottom: "12px"
+              }}
+            >
+              <LoadingButton
+                loading={saving}
+                variant="contained"
+                sx={{ borderRadius: 20, height: 40 }}
+                onClick={onPost}
+              >
+                Tweet
+              </LoadingButton>
+            </Box>
+          </div>
           {/* <TextField
             variant="outlined"
             placeholder="What's happening?"
@@ -107,24 +141,6 @@ const Home = () => {
               }
             }}
           /> */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row-reverse",
-              alignItems: "center",
-              justifyContent: "space-between",
-              px: 2
-            }}
-          >
-            <LoadingButton
-              loading={saving}
-              variant="contained"
-              sx={{ borderRadius: 20, height: 40 }}
-              onClick={onPost}
-            >
-              Tweet
-            </LoadingButton>
-          </Box>
         </Box>
         <TabPanel value="1" sx={{ p: 0 }}>
           <PostList />

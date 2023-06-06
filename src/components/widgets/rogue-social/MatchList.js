@@ -1,11 +1,12 @@
-import { useMemo, useEffect } from "react";
+import { useEffect, useMemo } from "react";
+
 import { Box } from "@mui/material";
-import { useAppContext } from "@/src/context/app";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import dayjs from "dayjs";
 import MatchItem from "@/src/components/widgets/rogue-social/MatchItem";
-import { useAuthContext } from "@/src/context/AuthContext";
+import dayjs from "dayjs";
 import { isMyMatch } from "@/src/utils/utils";
+import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const MatchList = () => {
   const { setTitle } = useAppContext();

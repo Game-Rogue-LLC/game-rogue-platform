@@ -1,17 +1,18 @@
-import team from "@/lib/firestore/collections/team";
-import PublicLayout from "@/src/content/PublicLayout";
-import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
-import { formatNumber } from "@/src/utils/utils";
 import { Box, Container, Grid, Skeleton, SvgIcon, Typography } from "@mui/material";
-import { YouTube, Twitter, Instagram } from "@mui/icons-material";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { useEffect, useState, useMemo } from "react";
-import CustomButton from "@/src/components/button/CustomButton";
-import TeamChat from "@/src/components/widgets/rogue-social/TeamChat";
-import { useAuthContext } from "@/src/context/AuthContext";
-import TeamMembers from "@/src/components/widgets/rogue-social/TeamMembers";
+import { Instagram, Twitter, YouTube } from "@mui/icons-material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { formatDate, sequenceNumber } from "@/src/utils/utils";
+import { useEffect, useMemo, useState } from "react";
+
+import CustomButton from "@/src/components/button/CustomButton";
+import Image from "next/image";
+import PublicLayout from "@/src/content/PublicLayout";
+import TeamChat from "@/src/components/widgets/rogue-social/TeamChat";
+import TeamMembers from "@/src/components/widgets/rogue-social/TeamMembers";
+import { formatNumber } from "@/src/utils/utils";
+import team from "@/lib/firestore/collections/team";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
 
 const Page = (props) => {
   const router = useRouter();
@@ -126,13 +127,21 @@ const Page = (props) => {
       </Box>
 
       <Box sx={{ marginTop: 3, minHeight: 50 }}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: "linear-gradient(to right, #321401 30%, #a84900)",
+            padding: 1
+          }}
+        >
           <Typography variant="h5" color="white">
             PLACEMENTS
           </Typography>
           <CustomButton>View All</CustomButton>
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} marginTop={1}>
           {Object.keys(placements).map((key) => {
             const val = placements[key];
             return (
@@ -160,30 +169,56 @@ const Page = (props) => {
       </Box>
 
       <Box sx={{ marginTop: 3, minHeight: 50 }}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: 1,
+            background: "linear-gradient(to right, #321401 30%, #a84900)"
+          }}
+        >
           <Typography variant="h5" color="white">
             UPCOMING GAMES
           </Typography>
           <CustomButton>View All</CustomButton>
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} marginTop={1}>
           {/* {upcomingGames.map((val) => (
             <Grid item xs={3}></Grid>
           ))} */}
+          <Grid item sm={12}>
+            <Typography variant="body1" color="white" textAlign="center">
+              No Upcoming Games
+            </Typography>
+          </Grid>
         </Grid>
       </Box>
 
       <Box sx={{ marginTop: 3, minHeight: 50 }}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: 1,
+            background: "linear-gradient(to right, #321401 30%, #a84900)"
+          }}
+        >
           <Typography variant="h5" color="white">
             TOP NEWS
           </Typography>
           <CustomButton>View All</CustomButton>
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} marginTop={1}>
           {/* {news.map((val) => (
             <Grid item xs={3}></Grid>
           ))} */}
+          <Grid item sm={12}>
+            <Typography variant="body1" color="white" textAlign="center">
+              No Top News.
+            </Typography>
+          </Grid>
         </Grid>
       </Box>
     </Container>

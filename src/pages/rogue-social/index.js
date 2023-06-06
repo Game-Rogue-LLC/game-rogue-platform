@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, Typography, styled } from "@mui/material";
+import { Box, ButtonBase, Tab, Tabs, Typography, styled } from "@mui/material";
 import {
   Explore,
   Groups,
@@ -14,10 +14,13 @@ import TournamentProvider, { useTournamentContext } from "@/src/context/Tourname
 import { useEffect, useState } from "react";
 
 import MatchHome from "@/src/components/widgets/rogue-social/Home";
+import Messages from "@/src/components/widgets/rogue-social/Messages";
 import MyTeams from "@/src/components/widgets/rogue-social/MyTeams";
 import PublicLayout from "@/src/content/PublicLayout";
 import RightSidebar from "@/src/components/widgets/rogue-social/RightSidebar";
 import TeamList from "@/src/components/list/TeamList";
+
+// import Messages from "@/lib/firestore/collections/messages";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontSize: "24px",
@@ -27,6 +30,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 
 const Page = (props) => {
   const [tab, setTab] = useState("0");
+  const [showMessages, setShowMessages] = useState(false);
 
   const onTabChange = (event, newTab) => {
     setTab(newTab);
@@ -70,33 +74,33 @@ const Page = (props) => {
                 value="0"
               />
               <StyledTab
+                icon={<Home fontSize="large" />}
+                iconPosition="start"
+                label="Featured"
+                value="1"
+              />
+              <StyledTab
                 icon={<Explore fontSize="large" />}
                 iconPosition="start"
                 label="Discover"
-                value="1"
+                value="2"
               />
               <StyledTab
                 icon={<Notifications fontSize="large" />}
                 iconPosition="start"
                 label="Notifications"
-                value="2"
-              />
-              <StyledTab
-                icon={<Home fontSize="large" />}
-                iconPosition="start"
-                label="Featured"
                 value="3"
               />
               <StyledTab
                 icon={<People fontSize="large" />}
                 iconPosition="start"
-                label="My Teams"
+                label="My Team"
                 value="4"
               />
               <StyledTab
                 icon={<Groups fontSize="large" />}
                 iconPosition="start"
-                label="My Communities"
+                label="My Community"
                 value="5"
               />
               <StyledTab
@@ -129,6 +133,7 @@ const Page = (props) => {
         }}
       >
         <RightSidebar />
+        <Messages onClick={() => {}} />
       </Box>
     </Box>
   );
@@ -145,11 +150,19 @@ Page.getLayout = (page) => {
           height: "100vh",
           top: 0,
           left: 0,
-          zIndex: 9999
+          zIndex: 9999,
+          backgroundImage: "url(/rogue_social.gif)",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          cursor: "pointer"
         }}
         className="rogue-social-splash"
+        onClick={(e) => {
+          e.currentTarget.classList.add("splash-hidden");
+        }}
       >
-        <Box
+        {/* <Box
           component="img"
           src="/rogue_social.gif"
           sx={{
@@ -161,7 +174,7 @@ Page.getLayout = (page) => {
             transform: "translate(-50%, -50%)",
             zIndex: 9999
           }}
-        ></Box>
+        ></Box> */}
       </Box>
 
       <PublicLayout>{page}</PublicLayout>

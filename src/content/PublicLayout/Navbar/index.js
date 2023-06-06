@@ -28,29 +28,13 @@ import {
   Search
 } from "@mui/icons-material";
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
+import SearchInput from "@/src/components/input/SearchInput";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-
-const SearchInput = styled(OutlinedInput)(({ theme }) => ({
-  ".MuiSvgIcon-root": {
-    transform: "rotateY(0deg) tranlate(0,0)",
-    transition: "all 0.5s linear"
-  },
-  "& :hover": {
-    ".MuiSvgIcon-root": {
-      transform: "rotateY(180deg)"
-    }
-  },
-  "& :focus": {
-    ".MuiSvgIcon-root": {
-      transform: "translate(-100px, 0px)"
-    }
-  }
-}));
 
 const PublicNavbar = ({ sx }) => {
   const user = useAuthContext();
@@ -61,6 +45,7 @@ const PublicNavbar = ({ sx }) => {
   const [fund, setFund] = useState("");
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(router?.pathname);
+  const logoRef = useRef();
   let currentHoverUser = false;
 
   useEffect(() => {
@@ -74,6 +59,14 @@ const PublicNavbar = ({ sx }) => {
       else if (pathname.substring(1, 5) === "tool") setCurrentPage("tool");
     }
   }, [router]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      logoRef.current.classList.toggle("opacity-0");
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [user.id]);
+
   const handle = {
     switchLogoNav: (e) => {
       setLogoNav((prev) => !prev);
@@ -123,7 +116,8 @@ const PublicNavbar = ({ sx }) => {
         backgroundImage: "none",
         zIndex: 8000,
         ...sx
-      }}>
+      }}
+    >
       <Container maxWidth="xxl" sx={{ borderBottom: "solid 3px #f5831f" }}>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box
@@ -131,9 +125,19 @@ const PublicNavbar = ({ sx }) => {
               display: { xs: "none", md: "flex" },
               gap: 3,
               alignItems: "center"
-            }}>
-            <img src="/GR_Letters.png" height={40} />
-            <Box id="search-box">
+            }}
+          >
+            <Box sx={{ position: "relative" }}>
+              <Box component="img" src="/GR_Letters.png" height={40} />
+              <Box
+                component="img"
+                src="/GR_Letters.png"
+                height={40}
+                ref={logoRef}
+                style={{ position: "absolute", left: 0, top: 0, filter: "brightness(10)" }}
+              />
+            </Box>
+            <Box className="search-box">
               <SearchInput
                 id="search"
                 name="search"
@@ -214,7 +218,8 @@ const PublicNavbar = ({ sx }) => {
                 display: { xs: "none", md: "flex" },
                 gap: 3,
                 alignItems: "center"
-              }}>
+              }}
+            >
               <NavItem
                 name="Organize"
                 active={currentPage === "organization"}
@@ -342,7 +347,8 @@ const PublicNavbar = ({ sx }) => {
                   display: "flex",
                   alignItems: "center",
                   cursor: "pointer"
-                }}>
+                }}
+              >
                 <Button
                   id="user-button"
                   aria-controls={anchorElUser ? "user-menu" : undefined}
@@ -360,7 +366,8 @@ const PublicNavbar = ({ sx }) => {
                     ":hover": {
                       background: "rgba(255,255,255,0.08)"
                     }
-                  }}>
+                  }}
+                >
                   <Avatar alt={user.user?.name} src={user.user?.profilePic} />
                   <ChevronRight
                     sx={{
@@ -376,7 +383,8 @@ const PublicNavbar = ({ sx }) => {
                 sx={{
                   display: "flex",
                   alignItems: "center"
-                }}>
+                }}
+              >
                 <IconButton
                   id="user-button"
                   aria-controls={anchorElUser ? "user-menu" : undefined}
@@ -387,7 +395,8 @@ const PublicNavbar = ({ sx }) => {
                   sx={{
                     zIndex: 8500,
                     cursor: "pointer"
-                  }}>
+                  }}
+                >
                   <img
                     src="/static/images/Profile_Picture.png"
                     style={{ width: "50px", height: "50px" }}
@@ -424,7 +433,8 @@ const PublicNavbar = ({ sx }) => {
                   horizontal: "right"
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUser}>
+                onClose={handleCloseUser}
+              >
                 <MenuItem onClick={handleCloseUser} key="signup" disableRipple>
                   <Link href={"/auth"}>Sign Up</Link>
                 </MenuItem>
@@ -453,7 +463,8 @@ const PublicNavbar = ({ sx }) => {
                   horizontal: "right"
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUser}>
+                onClose={handleCloseUser}
+              >
                 <MenuItem onClick={handleCloseUser} key="user-setting" disableRipple>
                   <Link href={"/user/" + user.user?.id}>Settings</Link>
                 </MenuItem>
@@ -474,7 +485,8 @@ const PublicNavbar = ({ sx }) => {
                     user.logout();
                   }}
                   key="logout-user"
-                  disableRipple>
+                  disableRipple
+                >
                   LOGOUT
                 </MenuItem>
               </StyledMenu>
