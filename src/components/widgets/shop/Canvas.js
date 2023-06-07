@@ -168,5 +168,4 @@ function Shirt(props) {
   );
 }
 
-useGLTF.preload("/models/HOODIE.glb");
-["/textures/react.png", "/textures/three2.png", "/textures/pmndrs.png"].forEach(useTexture.preload);
+useGLTF.preload("/static/models/HOODIE.glb");
