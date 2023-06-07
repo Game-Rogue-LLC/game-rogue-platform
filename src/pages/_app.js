@@ -1,5 +1,6 @@
 import "@/src/styles/nprogress.css";
 import "@/src/styles/globals.css";
+import "@/src/styles/styles.css";
 import "@/src/styles/fullCalendar.css";
 import "@/src/styles/colorpicker.css";
 
@@ -22,10 +23,6 @@ import store from "@/src/redux/store";
 import { useEffect } from "react";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
-
-
-
-
 
 const Noop = ({ children }) => <>{children}</>;
 
@@ -60,27 +57,24 @@ export default function MyApp(props) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         {!navigating ? (
-          <div
-            className={`navigating transition-container`}
-            id="navigating"
-          ></div>
+          <div className={`navigating transition-container`} id="navigating"></div>
         ) : transition ? (
           transition()
         ) : (
           <Splash content={"Loading..."} />
         )}
         <Provider store={store}>
-        <AppProvider>
-          <AuthContextProvider>
-            <StyleProvider>
-              {getLayout(
-                <ContextProvider>
-                  <Component {...pageProps} />
-                </ContextProvider>
-              )}
-            </StyleProvider>
-          </AuthContextProvider>
-        </AppProvider>
+          <AppProvider>
+            <AuthContextProvider>
+              <StyleProvider>
+                {getLayout(
+                  <ContextProvider>
+                    <Component {...pageProps} />
+                  </ContextProvider>
+                )}
+              </StyleProvider>
+            </AuthContextProvider>
+          </AppProvider>
         </Provider>
       </ThemeProvider>
     </CacheProvider>
