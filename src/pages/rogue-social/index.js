@@ -14,11 +14,10 @@ import TournamentProvider, { useTournamentContext } from "@/src/context/Tourname
 import { useEffect, useState } from "react";
 
 import MatchHome from "@/src/components/widgets/rogue-social/Home";
-import Messages from "@/src/components/widgets/rogue-social/Messages";
+import MyCommunity from "@/src/components/widgets/rogue-social/MyCommunity";
+import MyProfile from "@/src/components/widgets/rogue-social/MyProfile";
 import MyTeams from "@/src/components/widgets/rogue-social/MyTeams";
 import PublicLayout from "@/src/content/PublicLayout";
-import RightSidebar from "@/src/components/widgets/rogue-social/RightSidebar";
-import TeamList from "@/src/components/list/TeamList";
 
 // import Messages from "@/lib/firestore/collections/messages";
 
@@ -30,7 +29,6 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 
 const Page = (props) => {
   const [tab, setTab] = useState("0");
-  const [showMessages, setShowMessages] = useState(false);
 
   const onTabChange = (event, newTab) => {
     setTab(newTab);
@@ -123,17 +121,14 @@ const Page = (props) => {
           <TabPanel value="4" sx={{ flexGrow: 1, p: 1 }}>
             <MyTeams />
           </TabPanel>
+          <TabPanel value="5" sx={{ flexGrow: 1, p: 1 }}>
+            <MyCommunity />
+          </TabPanel>
+          <TabPanel value="6" sx={{ flexGrow: 1, p: 1 }}>
+            <MyProfile />
+          </TabPanel>
         </TabContext>
         {/* <MessagesField /> */}
-      </Box>
-      <Box
-        sx={{
-          borderLeft: "solid 1px rgba(255,255,255,.2)",
-          p: 1
-        }}
-      >
-        <RightSidebar />
-        <Messages onClick={() => {}} />
       </Box>
     </Box>
   );
@@ -161,21 +156,7 @@ Page.getLayout = (page) => {
         onClick={(e) => {
           e.currentTarget.classList.add("splash-hidden");
         }}
-      >
-        {/* <Box
-          component="img"
-          src="/rogue_social.gif"
-          sx={{
-            position: "fixed",
-            width: "100vw",
-            height: "100vh",
-            top: "50vh",
-            left: "50vw",
-            transform: "translate(-50%, -50%)",
-            zIndex: 9999
-          }}
-        ></Box> */}
-      </Box>
+      ></Box>
 
       <PublicLayout>{page}</PublicLayout>
     </TournamentProvider>

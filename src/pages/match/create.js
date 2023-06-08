@@ -326,7 +326,6 @@ const Page = (props) => {
         randomized
       );
 
-      console.info("newly built matches:", matches);
       setGames(matches);
     },
     save: async (e) => {
@@ -397,8 +396,6 @@ const Page = (props) => {
         participants.forEach((item, i) => {
           ranks[item.id] = i;
         });
-        console.log("Participants:", participants);
-        console.log("Ranks:", ranks);
         let temp = [];
         for (let i = 0; i < events.length; i++) {
           const item = events[i];

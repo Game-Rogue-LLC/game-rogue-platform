@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import Footer from "@/src/content/PublicLayout/Footer";
+import Messages from "@/src/components/widgets/rogue-social/Messages";
 import Navbar from "@/src/content/PublicLayout/Navbar";
 import { SnackbarProvider } from "notistack";
 
@@ -15,6 +16,7 @@ const PublicLayout = ({ overlay, children }) => {
 
         <Footer />
         {overlay ? overlay : <></>}
+        <Messages onClick={() => {}} />
       </Box>
     </SnackbarProvider>
   );

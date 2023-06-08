@@ -304,7 +304,6 @@ const Page = (props) => {
         randomized
       );
 
-      console.info("matches:", matches);
       setGames(matches);
     },
     close: (e) => {

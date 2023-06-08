@@ -12,6 +12,7 @@ import {
   Avatar,
   Box,
   ButtonBase,
+  Divider,
   Grid,
   IconButton,
   ListItemIcon,
@@ -29,8 +30,10 @@ import { useAuthContext } from "@/src/context/AuthContext";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import Image from "next/image";
+import _ from "lodash";
 
-const PostItem = ({ item, onEdit, onDelete, onReport }) => {
+const PostItem = ({ item, onEdit, onDelete, onReport, onReply }) => {
   const theme = useTheme();
   const { user } = useAuthContext();
   const { player, post } = useTournamentContext();
@@ -56,6 +59,23 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
   const onReportPost = (e) => {
     onReport(item.id);
     onCloseMenu(e);
+  };
+
+  const replied = (post, uid) => {
+    if (post && uid && _.findIndex(post.replies, (val) => val.uid === uid) >= 0) return true;
+    return false;
+  };
+  const reshared = (post, uid) => {
+    if (post && uid && _.findIndex(post.reshares, (val) => val === uid) >= 0) return true;
+    return false;
+  };
+  const voted = (post, uid) => {
+    if (post && uid && _.findIndex(post.votes, (val) => val === uid) >= 0) return true;
+    return false;
+  };
+  const viewed = (post, uid) => {
+    if (post && uid && _.findIndex(post.views, (val) => val === uid) >= 0) return true;
+    return false;
   };
 
   return (
@@ -92,14 +112,20 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
               __html: markdownToHtml(item?.text)
             }}
           ></div>
+
           <Box sx={{ marginTop: 2, display: "flex", gap: 4, color: "white" }}>
-            <ButtonBase onClick={(e) => {}}>
+            <ButtonBase
+              onClick={() => {
+                // if (replied(item, user.id)) return;
+                onReply(item.id);
+              }}
+            >
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
-                  color: item?.reply ? theme.palette.primary.main : "white"
+                  color: replied(item, user.id) ? theme.palette.primary.main : "white"
                 }}
               >
                 <Sms />
@@ -108,9 +134,30 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
             </ButtonBase>
             <ButtonBase
               onClick={(e) => {
-                const temp = item.reshare + 1;
-                post.update(item.id, { reshare: temp });
-                dispatch(setPost({ id: item.id, data: { reshare: temp } }));
+                if (reshared(item, user.id)) {
+                  const temp = item.reshare - 1;
+                  post.update(item.id, {
+                    reshare: temp,
+                    reshares: _.filter(item.reshares, (val) => val !== user.id)
+                  });
+                  dispatch(
+                    setPost({
+                      id: item.id,
+                      reshare: temp,
+                      reshares: _.filter(item.reshares, (val) => val !== user.id)
+                    })
+                  );
+                } else {
+                  const temp = item.reshare + 1;
+                  post.update(item.id, { reshare: temp, reshares: [...item.reshares, user.id] });
+                  dispatch(
+                    setPost({
+                      id: item.id,
+                      reshare: temp,
+                      reshares: [...item.reshares, user.id]
+                    })
+                  );
+                }
               }}
             >
               <Box
@@ -118,7 +165,7 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
-                  color: item?.reshare ? theme.palette.primary.main : "white"
+                  color: reshared(item, user.id) ? theme.palette.primary.main : "white"
                 }}
               >
                 <Autorenew />
@@ -127,9 +174,24 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
             </ButtonBase>
             <ButtonBase
               onClick={(e) => {
-                const temp = item.vote + 1;
-                post.update(item.id, { vote: temp });
-                dispatch(setPost({ id: item.id, data: { vote: temp } }));
+                if (voted(item, user.id)) {
+                  const temp = item.vote - 1;
+                  post.update(item.id, {
+                    vote: temp,
+                    votes: _.filter(item.votes, (val) => val !== user.id)
+                  });
+                  dispatch(
+                    setPost({
+                      id: item.id,
+                      vote: temp,
+                      votes: _.filter(item.votes, (val) => val !== user.id)
+                    })
+                  );
+                } else {
+                  const temp = item.vote + 1;
+                  post.update(item.id, { vote: temp, votes: [...item.votes, user.id] });
+                  dispatch(setPost({ id: item.id, vote: temp, votes: [...item.votes, user.id] }));
+                }
               }}
             >
               <Box
@@ -137,7 +199,7 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
-                  color: item?.vote ? theme.palette.primary.main : "white"
+                  color: voted(item, user.id) ? theme.palette.primary.main : "white"
                 }}
               >
                 <Favorite />
@@ -146,9 +208,24 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
             </ButtonBase>
             <ButtonBase
               onClick={(e) => {
-                const temp = item.view + 1;
-                post.update(item.id, { view: temp });
-                dispatch(setPost({ id: item.id, data: { view: temp } }));
+                if (viewed(item, user.id)) {
+                  const temp = item.view - 1;
+                  post.update(item.id, {
+                    view: temp,
+                    views: _.filter(item.views, (val) => val !== user.id)
+                  });
+                  dispatch(
+                    setPost({
+                      id: item.id,
+                      view: temp,
+                      views: _.filter(item.views, (val) => val !== user.id)
+                    })
+                  );
+                } else {
+                  const temp = item.view + 1;
+                  post.update(item.id, { view: temp, views: [...item.views, user.id] });
+                  dispatch(setPost({ id: item.id, view: temp, views: [...item.views, user.id] }));
+                }
               }}
             >
               <Box
@@ -156,7 +233,7 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
-                  color: item?.view ? theme.palette.primary.main : "white"
+                  color: viewed(item, user.id) ? theme.palette.primary.main : "white"
                 }}
               >
                 <BarChart />
@@ -164,6 +241,39 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
               </Box>
             </ButtonBase>
           </Box>
+
+          {/* Begin Replies */}
+          {item.replies?.length > 0 && (
+            <Box>
+              <Divider sx={{ marginTop: 2 }} />
+              <Box sx={{ mt: 1 }}>
+                {item.replies.map((val) => {
+                  return (
+                    <Box key={val.id} sx={{ display: "flex", gap: 2 }}>
+                      <Avatar src={player.players[val.uid]?.profilePic} width={20} height={20} />
+                      <Box>
+                        <Box>
+                          <Typography variant="h5" color="white">
+                            {player?.players[val.uid]?.userName || player?.players[val.uid]?.name}
+                          </Typography>
+                          <Typography style={{ color: "grey" }}>
+                            {player?.players[val.uid]?.name}
+                          </Typography>
+                        </Box>
+                        <div
+                          style={{ color: "white" }}
+                          dangerouslySetInnerHTML={{
+                            __html: markdownToHtml(val.text)
+                          }}
+                        ></div>
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+          )}
+          {/* End Replies */}
         </Grid>
         <Grid item xs="auto">
           <IconButton
@@ -186,7 +296,7 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
             }}
           >
             {item.uid === user.id ? (
-              <>
+              <Box>
                 <MenuItem onClick={onEditPost}>
                   <ListItemIcon>
                     <Edit fontSize="small" />
@@ -199,7 +309,7 @@ const PostItem = ({ item, onEdit, onDelete, onReport }) => {
                   </ListItemIcon>
                   <ListItemText>Delete</ListItemText>
                 </MenuItem>
-              </>
+              </Box>
             ) : (
               <MenuItem onClick={onReportPost}>
                 <ListItemIcon>

@@ -44,7 +44,6 @@ const TournamentProvider = (props) => {
         (data, active) => {
           setOrganizations(data);
           setActiveOrganizationCount(active);
-          console.info("organizations:", data, active);
         },
         () => setOrganizationLoading(false)
       );
@@ -85,7 +84,6 @@ const TournamentProvider = (props) => {
         (data, active) => {
           setEvents(data);
           setActiveEventCount(active);
-          console.info("events:", data, active);
         },
         () => setEventLoading(false)
       );
@@ -96,7 +94,6 @@ const TournamentProvider = (props) => {
         "",
         (data) => {
           setAllEvents(data);
-          console.info("all events:", data);
         },
         () => setEventLoading(false)
       );
@@ -163,7 +160,6 @@ const TournamentProvider = (props) => {
         uid,
         (data) => {
           setTickets(data);
-          console.info("tickets:", data);
         },
         () => setTicketLoading(false)
       );
@@ -195,7 +191,6 @@ const TournamentProvider = (props) => {
         uid,
         (data) => {
           setTeams(data);
-          console.info("teams:", data);
         },
         () => setTeamLoading(false)
       );
@@ -253,7 +248,6 @@ const TournamentProvider = (props) => {
       const res = await store.player.readAll(
         async (data) => {
           setPlayers(data);
-          console.info("players:", data);
         },
         () => setPlayerLoading(false)
       );
@@ -285,7 +279,6 @@ const TournamentProvider = (props) => {
       const res = await store.match.read(
         (data) => {
           setMatches(data);
-          console.info("matches:", data);
         },
         () => setMatchLoading(false)
       );
@@ -321,7 +314,6 @@ const TournamentProvider = (props) => {
       const res = await store.post.readAll(
         (data) => {
           setPosts(data);
-          console.info("posts:", data);
         },
         () => setPostLoading(false)
       );
@@ -348,7 +340,7 @@ const TournamentProvider = (props) => {
     posts,
     setPosts,
     create: async (newPost) => {
-      const res = await store.post.save(nanoid(), newPost);
+      const res = await store.post.save(null, newPost);
       return res;
     },
     read: async () => {
@@ -356,13 +348,12 @@ const TournamentProvider = (props) => {
       const res = await store.post.readAll(
         (data) => {
           setPosts(data);
-          console.info("posts:", data);
         },
         () => setPostLoading(false)
       );
     },
-    update: async (id, newPost) => {
-      const res = await store.post.save(id, newPost);
+    update: async (id, newPost, merge) => {
+      const res = await store.post.save(id, newPost, merge);
       return res;
     },
     delete: async (id) => {

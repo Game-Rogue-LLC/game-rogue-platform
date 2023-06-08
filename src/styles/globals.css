@@ -586,7 +586,7 @@ input#search::placeholder {
   border-radius: 10px;
   overflow: hidden;
   transition: all ease-in-out .2s;
-  height: 150px;
+  height: 210px;
   margin-inline: 1rem;
   z-index: 100;
 }

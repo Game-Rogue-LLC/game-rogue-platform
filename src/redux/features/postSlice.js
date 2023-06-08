@@ -25,7 +25,6 @@ export const createPost = createAsyncThunk("post/create", async (data) => {
     const res = await axios.post("/api/post/create", {
       ...data
     });
-    console.log("resdata", res.data);
     if (res.data.code === "failed") {
       console.error(res.data.message);
     }
@@ -49,9 +48,12 @@ export const postSlice = createSlice({
       };
     },
     setPost: (state, action) => {
-      state.posts[action.payload.id] = {
-        ...state.posts[action.payload.id],
-        ...action.payload.data
+      state.posts = {
+        ...state.posts,
+        [action.payload.id]: {
+          ...state.posts[action.payload.id],
+          ...action.payload
+        }
       };
     }
   },
@@ -62,7 +64,6 @@ export const postSlice = createSlice({
       })
       .addCase(readPost.fulfilled, (state, action) => {
         state.status = "read_succeed";
-        console.log(action.payload);
         if (action.payload.code === "succeed") {
           state.posts = { ...state.posts, ...action.payload.data };
         } else {
@@ -78,7 +79,6 @@ export const postSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = "read_succeed";
-        console.log(action.payload);
         state.posts = { ...state.posts, ...action.payload.data };
       })
       .addCase(createPost.rejected, (state, action) => {

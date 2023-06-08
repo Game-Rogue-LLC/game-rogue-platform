@@ -4,7 +4,6 @@ export default async function handler(req, res) {
   try {
     // const { offset, limit } = req.query;
     const result = await posts.read();
-    console.log(result);
     res.status(200).json(result);
   } catch (e) {
     res.status(200).json({ code: "failed", message: e.message });
