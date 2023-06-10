@@ -1,4 +1,3 @@
-import { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Button,
@@ -13,20 +12,22 @@ import {
   Tabs,
   Typography
 } from "@mui/material";
-import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
-import PublicLayout from "@/src/content/PublicLayout";
-import { useAppContext } from "@/src/context/app";
-import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from "@/src/config/global";
-import dayjs from "dayjs";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useAuthContext } from "@/src/context/AuthContext";
-import EventInfoPublic from "@/src/components/widgets/event/EventInfoPublic";
-import EventCoursePublic from "@/src/components/widgets/event/EventCoursePublic";
-import { useStyleContext } from "@/src/context/StyleContext";
-import SlantBanner from "@/src/components/widgets/SlantBanner";
+import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
 import StyledTabPanel, { tabProps } from "@/src/components/styled/StyledTabPanel";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useEffect, useMemo, useState } from "react";
+
+import EventCoursePublic from "@/src/components/widgets/event/EventCoursePublic";
+import EventInfoPublic from "@/src/components/widgets/event/EventInfoPublic";
+import Link from "next/link";
+import PublicLayout from "@/src/content/PublicLayout";
+import SlantBanner from "@/src/components/widgets/SlantBanner";
+import dayjs from "dayjs";
+import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const Page = (props) => {
   const router = useRouter();
@@ -47,7 +48,7 @@ const Page = (props) => {
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
       } else {
-        console.error("Invalid Event ID");
+        console.warn("Invalid Event ID");
         // Redirect to 404 page.
       }
     }
@@ -85,7 +86,8 @@ const Page = (props) => {
           paddingLeft: "10%",
           alignItems: "end",
           gap: 2
-        }}>
+        }}
+      >
         <img
           src={item?.darkLogo}
           width={200}
@@ -134,7 +136,8 @@ const Page = (props) => {
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList
               onChange={handle.changeTab}
-              TabIndicatorProps={{ sx: { backgroundColor: colors.primary } }}>
+              TabIndicatorProps={{ sx: { backgroundColor: colors.primary } }}
+            >
               <Tab label="Info" value="1" sx={{ "&.Mui-selected": { color: colors.primary } }} />
               <Tab label="Course" value="2" sx={{ "&.Mui-selected": { color: colors.primary } }} />
             </TabList>

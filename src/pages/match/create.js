@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,23 +11,24 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { LoadingButton } from "@mui/lab";
+import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
+import { EVENT_FORMATS, EVENT_STATES, MATCH_STATES } from "@/src/config/global";
 import _, { template } from "lodash";
+import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
-import { useAppContext } from "@/src/context/app";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { EVENT_FORMATS, EVENT_STATES, MATCH_STATES } from "@/src/config/global";
-import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
-import { nanoid } from "nanoid";
-import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
-import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
-import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
-import FullCalendar from "@/src/components/datetime/FullCalendar.js";
-import { useStyleContext } from "@/src/context/StyleContext";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
+import FullCalendar from "@/src/components/datetime/FullCalendar.js";
+import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
+import { LoadingButton } from "@mui/lab";
+import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
+import { nanoid } from "nanoid";
+import { useAppContext } from "@/src/context/app";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const Page = (props) => {
   const theme = useTheme();
@@ -59,7 +59,7 @@ const Page = (props) => {
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
       } else {
-        console.error("Invalid Event ID");
+        console.warn("Invalid Event ID");
         // TODO: Redirect to 404 page.
       }
     }

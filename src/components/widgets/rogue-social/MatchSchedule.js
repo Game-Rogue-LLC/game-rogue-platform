@@ -71,7 +71,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
 
     const res = await ticket.create(newTicket);
     if (res.code === "succeed") alert("Asked successfully!");
-    else console.error(res.message);
+    else console.warn(res.message);
     setAsking(false);
   };
 
@@ -86,7 +86,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
     if (res.code === "succeed") {
       alert("Scheduled Successfully!");
     } else {
-      console.error(res.message);
+      console.warn(res.message);
     }
   };
 

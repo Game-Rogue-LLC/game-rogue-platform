@@ -1,5 +1,6 @@
-import { alpha, createTheme, darken } from "@mui/material";
 import "@mui/lab/themeAugmentation";
+
+import { alpha, createTheme, darken } from "@mui/material";
 
 export const defaultDarkTheme = {
   palette: {
@@ -8,7 +9,8 @@ export const defaultDarkTheme = {
       main: "#f5831f"
     },
     secondary: {
-      main: "#440f06"
+      main: "#440f06",
+      bright: "#4d2400"
     },
     card: {
       main: "#180e05",
@@ -25,25 +27,32 @@ export const defaultDarkTheme = {
     color: "white",
     fontFamily: "ProximaNovaRegular, Industry",
     h1: {
-      fontFamily: "Industry"
+      fontFamily: "Industry",
+      color: "white"
     },
     h2: {
-      fontFamily: "Industry"
+      fontFamily: "Industry",
+      color: "white"
     },
     h3: {
-      fontFamily: "Industry"
+      fontFamily: "Industry",
+      color: "white"
     },
     h4: {
-      fontFamily: "Industry"
+      fontFamily: "Industry",
+      color: "white"
     },
     h5: {
-      fontFamily: "ProximaNovaRegular"
+      fontFamily: "ProximaNovaRegular",
+      color: "white"
     },
     h6: {
-      fontFamily: "ProximaNovaRegular"
+      fontFamily: "ProximaNovaRegular",
+      color: "white"
     },
     label: {
-      fontFamily: "ProximaNovaRegular"
+      fontFamily: "ProximaNovaRegular",
+      color: "white"
     },
     subtitle2: {
       color: "gray"

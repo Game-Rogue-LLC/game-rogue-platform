@@ -1,4 +1,3 @@
-import { useState, useEffect, useMemo } from "react";
 import {
   Button,
   Chip,
@@ -11,19 +10,21 @@ import {
   Typography,
   styled
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import dayjs from "dayjs";
-import { useAuthContext } from "@/src/context/AuthContext";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { games } from "@/src/components/dropdown/GameSelect";
 import { EVENT_FORMATS, EVENT_STATES } from "@/src/config/global";
-import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
-import TeamItem from "@/src/components/item/TeamItem";
-import { useRouter } from "next/router";
-import { markdownToHtml } from "@/src/utils/html-markdown";
-import { useStyleContext } from "@/src/context/StyleContext";
+import { useEffect, useMemo, useState } from "react";
+
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
+import { LoadingButton } from "@mui/lab";
+import TeamItem from "@/src/components/item/TeamItem";
+import dayjs from "dayjs";
+import { games } from "@/src/components/dropdown/GameSelect";
+import { markdownToHtml } from "@/src/utils/html-markdown";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const TeamSelectInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -96,7 +97,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
         router.push("/participant?event=" + eid);
       else alert("Registered Successfully!");
     } else if (res.code === "failed") {
-      console.error(res.message);
+      console.warn(res.message);
     }
   };
 
@@ -108,7 +109,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             p: 3,
             minHeight: "200px",
             backgroundColor: secondaryBackgroundColor
-          }}>
+          }}
+        >
           <Typography variant="h4" fontSize={24} color={colors.primary}>
             Description
           </Typography>
@@ -117,7 +119,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             style={{ marginTop: "16px" }}
             dangerouslySetInnerHTML={{
               __html: markdownToHtml(item?.description)
-            }}></div>
+            }}
+          ></div>
         </Paper>
       </Grid>
       <Grid item xs={12} lg={6} container spacing={2} rowSpacing={2}>
@@ -127,7 +130,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               p: 3,
               height: "100%",
               backgroundColor: secondaryBackgroundColor
-            }}>
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Registration
             </Typography>
@@ -149,7 +153,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               p: 3,
               height: "100%",
               backgroundColor: secondaryBackgroundColor
-            }}>
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Game
             </Typography>
@@ -164,7 +169,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               p: 3,
               height: "100%",
               backgroundColor: secondaryBackgroundColor
-            }}>
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Platform
             </Typography>
@@ -177,7 +183,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               p: 3,
               height: "100%",
               backgroundColor: secondaryBackgroundColor
-            }}>
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Format
             </Typography>
@@ -192,7 +199,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               p: 3,
               height: "100%",
               backgroundColor: secondaryBackgroundColor
-            }}>
+            }}
+          >
             <Typography variant="h4" fontSize={24} color={colors.primary}>
               Participants
             </Typography>
@@ -221,14 +229,16 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                   MenuProps: {
                     disableScrollLock: true
                   }
-                }}>
+                }}
+              >
                 {myTeams?.map((tid) => {
                   const item = team.teams[tid];
                   return (
                     <MenuItem
                       key={"team_" + tid}
                       value={tid}
-                      sx={{ display: "flex", alignItems: "center" }}>
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
                       <ListItemIcon>
                         <img
                           src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
@@ -258,7 +268,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                 onClick={handleRegister}
                 disabled={
                   dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
-                }>
+                }
+              >
                 Register to an event
               </CustomLoadingButton>
             )}

@@ -1,8 +1,7 @@
 import * as React from "react";
-import Link from "next/link";
-import { styled, useTheme } from "@mui/material/styles";
+
+import { ArrowRight, Home, Settings } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
   Divider,
   IconButton,
@@ -17,14 +16,16 @@ import {
   Tooltip,
   Typography
 } from "@mui/material";
-import { ArrowRight, Home, Settings } from "@mui/icons-material";
+import { styled, useTheme } from "@mui/material/styles";
 
+import Avatar from "@/src/components/Avatar";
+import Link from "next/link";
 import OrganizationMenu from "@/src/content/OrganizationSidebar/Menu";
 import TeamMenu from "@/src/content/OrganizationSidebar/TeamMenu";
-import { useAuthContext } from "@/src/context/AuthContext";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { useRouter } from "next/router";
 import _ from "lodash";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const FireNav = styled(List)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -107,8 +108,8 @@ export default function OrganizationSidebar(props) {
             >
               <Box>
                 <Avatar
-                  alt={player.players[user.id]?.name}
-                  src={player.players[user.id]?.profilePic}
+                  size="large"
+                  user={player.players[user.id]}
                   sx={{ width: 100, height: 100 }}
                 />
               </Box>
@@ -156,13 +157,12 @@ export default function OrganizationSidebar(props) {
               </Menu>
             </ListItem>
             <Divider />
-            {Object.keys(_.filter(organization.organizations, (val) => val.uid === user.id)).map(
-              (id) => {
-                const item = organization.organizations[id];
-                if (item.uid === user?.id)
-                  return <OrganizationMenu key={"organization_menu_" + id} organization={item} />;
-              }
-            )}
+            {_.filter(organization.organizations, (val) => val.uid === user.id).map((item) => {
+              if (item.uid === user?.id)
+                return (
+                  <OrganizationMenu key={"organization_menu_" + item.id} organization={item} />
+                );
+            })}
 
             {organization?.organizations &&
               _.filter(organization.organizations, (val) => val.uid === user.id).length < 3 && (

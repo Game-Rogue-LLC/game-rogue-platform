@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Container,
@@ -30,11 +29,13 @@ import {
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
 import { useEffect, useRef, useState } from "react";
 
+import Avatar from "@/src/components/Avatar";
 import Link from "next/link";
 import SearchInput from "@/src/components/input/SearchInput";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const PublicNavbar = ({ sx }) => {
   const user = useAuthContext();
@@ -47,6 +48,7 @@ const PublicNavbar = ({ sx }) => {
   const [currentPage, setCurrentPage] = useState(router?.pathname);
   const logoRef = useRef();
   let currentHoverUser = false;
+  const { player } = useTournamentContext();
 
   useEffect(() => {
     if (router?.pathname) {
@@ -65,7 +67,7 @@ const PublicNavbar = ({ sx }) => {
       logoRef.current.classList.toggle("opacity-0");
     }, 10000);
     return () => clearInterval(interval);
-  }, [user.id]);
+  }, [user.user?.id]);
 
   const handle = {
     switchLogoNav: (e) => {
@@ -368,7 +370,7 @@ const PublicNavbar = ({ sx }) => {
                     }
                   }}
                 >
-                  <Avatar alt={user.user?.name} src={user.user?.profilePic} />
+                  <Avatar user={player?.players[user.user?.id]} />
                   <ChevronRight
                     sx={{
                       color: theme.palette.primary.main,

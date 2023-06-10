@@ -139,7 +139,7 @@ const Home = () => {
           /> */}
           </Box>
           <TabPanel value="1" sx={{ p: 0 }}>
-            <PostList />
+            <PostList posts={post.posts} loading={post.status === "loading"} />
           </TabPanel>
           <TabPanel value="2"></TabPanel>
         </TabContext>

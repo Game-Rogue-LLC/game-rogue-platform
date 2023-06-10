@@ -16,7 +16,7 @@ export const readPost = createAsyncThunk("post/read", async (offset) => {
     const data = await res.json();
     return data;
   } catch (err) {
-    console.error(err);
+    console.warn(err);
   }
 });
 
@@ -26,10 +26,10 @@ export const createPost = createAsyncThunk("post/create", async (data) => {
       ...data
     });
     if (res.data.code === "failed") {
-      console.error(res.data.message);
+      console.warn(res.data.message);
     }
   } catch (err) {
-    console.error(err);
+    console.warn(err);
   }
 });
 
@@ -67,7 +67,7 @@ export const postSlice = createSlice({
         if (action.payload.code === "succeed") {
           state.posts = { ...state.posts, ...action.payload.data };
         } else {
-          console.error(action.payload);
+          console.warn(action.payload);
         }
       })
       .addCase(readPost.rejected, (state, action) => {

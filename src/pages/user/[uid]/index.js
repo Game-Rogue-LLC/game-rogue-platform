@@ -1,21 +1,13 @@
-import { useState, useEffect } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  Paper,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { useRouter } from "next/router";
+import { Avatar, Box, Button, Grid, Paper, Typography, useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
-import { useAppContext } from "@/src/context/app";
-import { useTournamentContext } from "@/src/context/TournamentContext";
 import TeamTable from "@/src/components/table/TeamTable";
 import UserInfo from "@/src/components/widgets/user/UserInfo";
+import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const Page = (props) => {
   const router = useRouter();
@@ -32,7 +24,7 @@ const Page = (props) => {
     },
     edit: (e) => {
       router.push("/user/" + uid + "/edit");
-    },
+    }
   };
 
   useEffect(() => {
@@ -45,7 +37,7 @@ const Page = (props) => {
       if (player.players[newUID]) {
         setUID(router.query.uid);
       } else {
-        console.error("Invalid User ID");
+        console.warn("Invalid User ID");
       }
     }
   }, [router]);
@@ -58,19 +50,14 @@ const Page = (props) => {
     <Paper sx={{ p: 4 }}>
       <Grid container spacing={2}>
         <Grid item sx={{ width: 300 }}>
-          <UserInfo
-            avatar={item?.profilePic}
-            item={item}
-            editable={false}
-            handle={handle.edit}
-          />
+          <UserInfo avatar={item?.profilePic} item={item} editable={false} handle={handle.edit} />
         </Grid>
         <Grid item xs container>
           <Box
             sx={{
               border: "solid 1px rgb(52, 43, 35)",
               width: "100%",
-              borderRadius: "5px",
+              borderRadius: "5px"
             }}
           >
             <TeamTable

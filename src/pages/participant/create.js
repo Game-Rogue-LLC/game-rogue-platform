@@ -1,44 +1,44 @@
-import { useEffect, useState, Fragment } from 'react';
-import Button from '@mui/material/Button';
 import {
+  Alert,
   Box,
   FormControl,
-  InputLabel,
   FormHelperText,
   Grid,
-  Paper,
-  useTheme,
-  Typography,
-  TextField,
-  Alert,
-  OutlinedInput,
-  Select,
+  InputLabel,
   MenuItem,
-  Stepper,
+  OutlinedInput,
+  Paper,
+  Select,
   Step,
-  StepLabel
-} from '@mui/material';
-import { STAFF_ROLES } from '@/src/config/global';
+  StepLabel,
+  Stepper,
+  TextField,
+  Typography,
+  useTheme
+} from "@mui/material";
+import { Fragment, useEffect, useState } from "react";
 
-import AdminLayout from '@/src/content/AdminLayout';
-import { useAppContext } from '@/src/context/app';
-import { useRouter } from 'next/router';
-import { useTournamentContext } from '@/src/context/TournamentContext';
-import { useAuthContext } from '@/src/context/AuthContext';
-import Validator from 'validatorjs';
-import { LoadingButton } from '@mui/lab';
+import AdminLayout from "@/src/content/AdminLayout";
+import Button from "@mui/material/Button";
+import { LoadingButton } from "@mui/lab";
+import { STAFF_ROLES } from "@/src/config/global";
+import Validator from "validatorjs";
+import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const initialInputs = {
-  tid: ''
-}
+  tid: ""
+};
 
 const rules = {
-  tid: 'required'
-}
+  tid: "required"
+};
 
 const customMessages = {
-  'required.tid': 'Team ID is required.'
-}
+  "required.tid": "Team ID is required."
+};
 
 const Page = (props) => {
   const theme = useTheme();
@@ -57,11 +57,11 @@ const Page = (props) => {
       event.setCurrent(newEID);
       organization.setCurrent(event.events[newEID].oid);
     }
-  }, [router])
+  }, [router]);
 
   useEffect(() => {
-    setTitle('ADD A PARTICIPANT');
-  }, [])
+    setTitle("ADD A PARTICIPANT");
+  }, []);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -71,13 +71,13 @@ const Page = (props) => {
     }
     if (!Object.keys(team.teams).includes(data.tid)) {
       setErrors({
-        tid: 'Team with the id does not exist.'
-      })
+        tid: "Team with the id does not exist."
+      });
       return false;
     }
     setErrors({});
     return true;
-  }
+  };
 
   const handle = {
     create: async (e) => {
@@ -85,52 +85,59 @@ const Page = (props) => {
       //   alert('You can\'t add more than ' + event.events[event.current].participantsCount + ' participants');
       //   return;
       // }
-      if (validate(inputs, rules, customMessages) === false)
-        return;
+      if (validate(inputs, rules, customMessages) === false) return;
 
       setSaving(true);
       const res = await event.addParticipant(event.current, inputs.tid);
-      if (res.code === 'succeed') {
-        router.push('/participant?event=' + event.current);
-      } else if (res.code === 'failed') {
-        console.error(res.message)
+      if (res.code === "succeed") {
+        router.push("/participant?event=" + event.current);
+      } else if (res.code === "failed") {
+        console.warn(res.message);
       }
       setSaving(false);
     },
     inputs: (e) => {
       let { name, type, value } = e.target;
-      if (type === 'number') value = Number(value);
+      if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
         [name]: value
-      })
+      });
     }
-  }
+  };
 
   return (
     <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
       <Box>
         <FormControl fullWidth error={errors.tid !== undefined}>
-          <OutlinedInput id="team-id" name="tid" value={inputs.tid} aria-describedby="team-id-helper"
-            onChange={handle.inputs} sx={{ mt: 1 }} fullWidth required />
-          {errors.tid !== undefined && <FormHelperText id="team-id-helper" sx={{ mt: 2 }}>{errors.tid}</FormHelperText>}
+          <OutlinedInput
+            id="team-id"
+            name="tid"
+            value={inputs.tid}
+            aria-describedby="team-id-helper"
+            onChange={handle.inputs}
+            sx={{ mt: 1 }}
+            fullWidth
+            required
+          />
+          {errors.tid !== undefined && (
+            <FormHelperText id="team-id-helper" sx={{ mt: 2 }}>
+              {errors.tid}
+            </FormHelperText>
+          )}
         </FormControl>
       </Box>
       <Box sx={{ mt: 2 }}>
-        <LoadingButton
-          loading={saving}
-          variant='contained'
-          onClick={handle.create}
-        >
+        <LoadingButton loading={saving} variant="contained" onClick={handle.create}>
           ADD
         </LoadingButton>
       </Box>
     </Paper>
-  )
-}
+  );
+};
 
 Page.getLayout = (page) => {
-  return <AdminLayout>{page}</AdminLayout>
-}
+  return <AdminLayout>{page}</AdminLayout>;
+};
 
 export default Page;

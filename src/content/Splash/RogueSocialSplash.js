@@ -1,37 +1,47 @@
-import Head from 'next/head'
-// import styles from 'styles/Home.module.css'
-import { InfinitySpin } from 'react-loader-spinner'
-import { useTheme } from '@mui/material'
+import { useDispatch, useSelector } from "react-redux";
 
-export default function RogueSocialSplash(props) {
-  const { content } = props;
-  const theme = useTheme();
-  return (
-    <div>
-      <Head>
-        <title>{content}</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
+import { Box } from "@mui/material";
+import { setRogueSocialSplash } from "@/src/redux/features/splashSlice";
+import { useEffect } from "react";
+
+const RogueSocialSplash = ({}) => {
+  const splash = useSelector((state) => state.splash);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (splash.rogueSocial === true) {
+      setTimeout(() => {
+        dispatch(setRogueSocialSplash(false));
+      }, 10000);
+    }
+  }, []);
+
+  if (splash && splash.rogueSocial === true) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: "black",
+          position: "fixed",
+          width: "100vw",
+          height: "100vh",
+          top: 0,
+          left: 0,
           zIndex: 9999,
-          transform: 'translate(-50%, -50%)'
-        }}>
-          {/* <InfinitySpin
-              width='200'
-              color={theme.palette.primary.main}
-            /> */}
-          <div style={{ position: 'relative', zIndex: 9999 }}>
-            <img src="/rogue_social.gif" />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', fontSize: "23px", fontWeight: 100 }}>
-            {content}
-          </div>
-        </div>
-      </main>
-    </div>
-  )
-}
+          backgroundImage: "url(/rogue_social.gif)",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          cursor: "pointer"
+        }}
+        className="rogue-social-splash"
+        onClick={(e) => {
+          e.currentTarget.classList.add("splash-hidden");
+        }}
+      ></Box>
+    );
+  }
+
+  return <></>;
+};
+
+export default RogueSocialSplash;

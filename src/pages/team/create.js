@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import {
+  Alert,
   Box,
   FormControl,
-  InputLabel,
   FormHelperText,
   Grid,
+  InputLabel,
+  OutlinedInput,
   Paper,
-  useTheme,
-  Typography,
   TextField,
-  Alert,
-  OutlinedInput
+  Typography,
+  useTheme
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import { customMessages, model, rules } from "@/lib/firestore/collections/team";
+import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
+import Button from "@mui/material/Button";
+import CountrySelect from "@/src/components/dropdown/CountrySelect";
+import { DEFAULT_LOGO } from "@/src/config/global";
+import GameSelect from "@/src/components/dropdown/GameSelect";
+import { LoadingButton } from "@mui/lab";
+import Validator from "validatorjs";
 import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import CountrySelect from "@/src/components/dropdown/CountrySelect";
-import GameSelect from "@/src/components/dropdown/GameSelect";
-import { useAuthContext } from "@/src/context/AuthContext";
-import Validator from "validatorjs";
-import { DEFAULT_LOGO } from "@/src/config/global";
-import { model, rules, customMessages } from "@/lib/firestore/collections/team";
 
 const initialInputs = {
   ...model
@@ -77,7 +77,7 @@ const Page = (props) => {
       if (res.code === "succeed") {
         router.push("/team/" + res.id);
       } else if (res.code === "failed") {
-        console.error(res.message);
+        console.warn(res.message);
       }
     },
     inputs: (e) => {

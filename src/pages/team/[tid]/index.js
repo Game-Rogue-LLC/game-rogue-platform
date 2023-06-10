@@ -1,34 +1,34 @@
-import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import {
+  Alert,
   Box,
   FormControl,
-  InputLabel,
   FormHelperText,
   Grid,
-  Paper,
-  useTheme,
-  Typography,
-  TextField,
-  Alert,
-  OutlinedInput,
   IconButton,
+  InputLabel,
+  OutlinedInput,
+  Paper,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
   TableCell,
-  Avatar
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+  useTheme
 } from "@mui/material";
-import dayjs from "dayjs";
+import { DEFAULT_LOGO, TEAM_POSITIONS } from "@/src/config/global";
+import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
+import Avatar from "@/src/components/Avatar";
+import Button from "@mui/material/Button";
+import Link from "next/link";
+import dayjs from "dayjs";
 import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { useAuthContext } from "@/src/context/AuthContext";
-import Link from "next/link";
-import { DEFAULT_LOGO, TEAM_POSITIONS } from "@/src/config/global";
 
 const initialInputs = {
   name: "",
@@ -60,7 +60,7 @@ const Page = (props) => {
           alert("Content copied successfully!");
         },
         () => {
-          console.error("Failed to copy");
+          console.warn("Failed to copy");
         }
       );
     }
@@ -155,7 +155,7 @@ const Page = (props) => {
                           justifyContent: "center"
                         }}
                       >
-                        <Avatar variant="circular" src={player.players[val.id].profilePic} />
+                        <Avatar variant="circular" user={player.players[val.id]} />
                         <Link href={"/user/" + val.id}>{player.players[val.id].name}</Link>
                       </Box>
                     </TableCell>

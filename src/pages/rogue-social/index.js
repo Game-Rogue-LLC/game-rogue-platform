@@ -11,6 +11,7 @@ import {
 } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import MatchHome from "@/src/components/widgets/rogue-social/Home";
@@ -18,6 +19,8 @@ import MyCommunity from "@/src/components/widgets/rogue-social/MyCommunity";
 import MyProfile from "@/src/components/widgets/rogue-social/MyProfile";
 import MyTeams from "@/src/components/widgets/rogue-social/MyTeams";
 import PublicLayout from "@/src/content/PublicLayout";
+import RogueSocialSplash from "@/src/content/Splash/RogueSocialSplash";
+import { useRouter } from "next/router";
 
 // import Messages from "@/lib/firestore/collections/messages";
 
@@ -28,11 +31,36 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 }));
 
 const Page = (props) => {
-  const [tab, setTab] = useState("0");
+  const router = useRouter();
+  const [tab, setTab] = useState(router.query.tab || "0");
+  const [profileTab, setProfileTab] = useState(router.query.option || "0");
+  console.log(tab);
 
   const onTabChange = (event, newTab) => {
     setTab(newTab);
   };
+  const onProfileTabChange = (e, newTab) => {
+    setProfileTab(newTab);
+  };
+
+  useEffect(() => {
+    if (router.query.tab && router.query.tab !== tab) setTab(router.query.tab);
+    if (router.query.option && router.query.option !== profileTab)
+      setProfileTab(router.query.option);
+  }, [router.query]);
+
+  useEffect(() => {
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: { tab: tab, option: profileTab }
+      },
+      undefined,
+      {
+        shallow: true
+      }
+    );
+  }, [tab, profileTab]);
 
   return (
     <Box
@@ -124,8 +152,8 @@ const Page = (props) => {
           <TabPanel value="5" sx={{ flexGrow: 1, p: 1 }}>
             <MyCommunity />
           </TabPanel>
-          <TabPanel value="6" sx={{ flexGrow: 1, p: 1 }}>
-            <MyProfile />
+          <TabPanel value="6" sx={{ flexGrow: 1, p: 0 }}>
+            <MyProfile tab={profileTab} onTabChange={onProfileTabChange} />
           </TabPanel>
         </TabContext>
         {/* <MessagesField /> */}
@@ -137,27 +165,7 @@ const Page = (props) => {
 Page.getLayout = (page) => {
   return (
     <TournamentProvider>
-      <Box
-        sx={{
-          backgroundColor: "black",
-          position: "fixed",
-          width: "100vw",
-          height: "100vh",
-          top: 0,
-          left: 0,
-          zIndex: 9999,
-          backgroundImage: "url(/rogue_social.gif)",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          cursor: "pointer"
-        }}
-        className="rogue-social-splash"
-        onClick={(e) => {
-          e.currentTarget.classList.add("splash-hidden");
-        }}
-      ></Box>
-
+      <RogueSocialSplash />
       <PublicLayout>{page}</PublicLayout>
     </TournamentProvider>
   );

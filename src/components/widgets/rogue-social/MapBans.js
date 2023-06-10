@@ -1,15 +1,16 @@
 import { Box, Button, Checkbox, Menu, MenuItem, Tooltip, Typography, styled } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { DEFAULT_LOGO } from "@/src/config/global";
 import { Check, CheckBoxOutlineBlank, Close, ExpandMore } from "@mui/icons-material";
-import { useAuthContext } from "@/src/context/AuthContext";
-import _ from "lodash";
-import { useStyleContext } from "@/src/context/StyleContext";
-import { LoadingButton } from "@mui/lab";
 import { SnackbarProvider, useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import { DEFAULT_LOGO } from "@/src/config/global";
+import { LoadingButton } from "@mui/lab";
+import _ from "lodash";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useStyleContext } from "@/src/context/StyleContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const maps = [
   {
@@ -123,14 +124,14 @@ const MapBans = ({ item }) => {
       if (res.code === "succeed") {
         alert("Saved successfully!");
       } else {
-        console.error(res.message);
+        console.warn(res.message);
       }
     } else if (isMyTeam(team2)) {
       const res = await match.update(item.id, { mapbans: { 1: banned2 } });
       if (res.code === "succeed") {
         alert("Saved successfully!");
       } else {
-        console.error(res.message);
+        console.warn(res.message);
       }
     }
     setSaving(false);
@@ -222,7 +223,8 @@ const MapBans = ({ item }) => {
               width: "150px",
               filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
             }}
-            src={team1?.darkLogo || DEFAULT_LOGO}></Box>
+            src={team1?.darkLogo || DEFAULT_LOGO}
+          ></Box>
           <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
             {team1?.name}
           </Typography>
@@ -236,7 +238,8 @@ const MapBans = ({ item }) => {
           gap: 4,
           flexDirection: "column",
           zIndex: 500
-        }}>
+        }}
+      >
         <Box>
           <CustomButton
             id="map-bans-btn"
@@ -244,7 +247,8 @@ const MapBans = ({ item }) => {
             aria-controls={open ? "map-bans-menu" : undefined}
             aria-haspopup="true"
             onClick={onOpen}
-            sx={{ width: "300px" }}>
+            sx={{ width: "300px" }}
+          >
             Map Bans
           </CustomButton>
           <MapMenu
@@ -262,7 +266,8 @@ const MapBans = ({ item }) => {
             disableScrollLock={true}
             open={open}
             MenuListProps={{ "aria-labelledby": "map-bans-btn" }}
-            onClose={onClose}>
+            onClose={onClose}
+          >
             {maps.map((img, i) => (
               <MenuItem key={`map_${i}`} onClick={(e) => onMapBan(e, i)}>
                 <Box
@@ -271,7 +276,8 @@ const MapBans = ({ item }) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center"
-                  }}>
+                  }}
+                >
                   {/* <ThreeStateCheckbox /> */}
                   {banned1[i] === 1 ? <Close /> : banned1[i] === 2 ? <Check /> : <></>}
                 </Box>
@@ -284,7 +290,8 @@ const MapBans = ({ item }) => {
                       backgroundImage: "url(" + img.image + ")",
                       backgroundSize: "cover",
                       backgroundPosition: "center"
-                    }}>
+                    }}
+                  >
                     {isMapBanned(i) && (
                       <Box
                         sx={{
@@ -294,11 +301,13 @@ const MapBans = ({ item }) => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center"
-                        }}>
+                        }}
+                      >
                         <Typography
                           variant="h5"
                           sx={{ color: "black", fontWeight: "bold" }}
-                          textTransform="uppercase">
+                          textTransform="uppercase"
+                        >
                           Banned
                         </Typography>
                       </Box>
@@ -312,7 +321,8 @@ const MapBans = ({ item }) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center"
-                  }}>
+                  }}
+                >
                   {/* <ThreeStateCheckbox /> */}
                   {banned2[i] === 1 ? <Close /> : banned2[i] === 2 ? <Check /> : <></>}
                 </Box>
@@ -325,7 +335,8 @@ const MapBans = ({ item }) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center"
-                }}>
+                }}
+              >
                 {item?.accepted && item.accepted[0] === true ? <Check /> : <></>}
               </Box>
               {isAccepted() === true ? (
@@ -343,7 +354,8 @@ const MapBans = ({ item }) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center"
-                }}>
+                }}
+              >
                 {item?.accepted && item.accepted[1] === true ? <Check /> : <></>}
               </Box>
             </Box>
@@ -364,7 +376,8 @@ const MapBans = ({ item }) => {
               width: "150px",
               filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
             }}
-            src={team2?.darkLogo || DEFAULT_LOGO}></Box>
+            src={team2?.darkLogo || DEFAULT_LOGO}
+          ></Box>
           <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
             {team2?.name}
           </Typography>

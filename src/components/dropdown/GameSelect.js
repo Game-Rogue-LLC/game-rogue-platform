@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
 import { MenuItem, Select } from "@mui/material";
+import { useEffect, useState } from "react";
 
 export const games = [
-  "Rainbow Six Siege"
+  {
+    id: 0,
+    name: "Rainbow Six Siege",
+    image: "/static/images/games/r6s.webp"
+  }
   // "Valorant",
   // "Counter-Strike: Global Offensive",
   // "Roller Champions",
@@ -37,8 +41,8 @@ export default function GameSelect(props) {
       onChange={handleChange}
     >
       {options.map((val) => (
-        <MenuItem value={val} key={"game_" + val}>
-          {val}
+        <MenuItem value={val.id} key={"game_" + val.id}>
+          {val.name}
         </MenuItem>
       ))}
     </Select>

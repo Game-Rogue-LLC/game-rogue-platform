@@ -1,33 +1,33 @@
-import { useEffect, useMemo, useState } from "react";
-import Button from "@mui/material/Button";
 import {
+  Alert,
   Box,
   FormControl,
-  InputLabel,
   FormHelperText,
   Grid,
+  InputLabel,
+  OutlinedInput,
   Paper,
-  useTheme,
-  Typography,
   TextField,
-  Alert,
-  OutlinedInput
+  Typography,
+  useTheme
 } from "@mui/material";
+// import ColorPicker from "@mapbox/react-colorpickr";
+import { ChromePicker, GooglePicker, SketchPicker } from "@hello-pangea/color-picker";
+import { brighterColor, isBrightColor } from "@/src/utils/utils";
+import { customMessages, model, rules } from "@/lib/firestore/collections/organization";
+import { useEffect, useMemo, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
-import { useAppContext } from "@/src/context/app";
-import { useRouter } from "next/router";
-import Validator from "validatorjs";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { useAuthContext } from "@/src/context/AuthContext";
-// import ColorPicker from "@mapbox/react-colorpickr";
-import { GooglePicker, SketchPicker, ChromePicker } from "@hello-pangea/color-picker";
+import Button from "@mui/material/Button";
 import ColorSelect from "@/src/components/dropdown/ColorSelect";
-import { model, rules, customMessages } from "@/lib/firestore/collections/organization";
-import colorConvert from "color-convert";
-import { brighterColor, isBrightColor } from "@/src/utils/utils";
-import { useStyleContext } from "@/src/context/StyleContext";
 import CustomButton from "@/src/components/button/CustomButton";
+import Validator from "validatorjs";
+import colorConvert from "color-convert";
+import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const initialInputs = {
   ...model
@@ -87,11 +87,11 @@ const Page = (props) => {
           if (res.code === "succeed") {
             router.push("/profile?organization=" + res.id);
           } else if (res.code === "failed") {
-            console.error(res.message);
+            console.warn(res.message);
           }
         })
         .catch((err) => {
-          console.error(err);
+          console.warn(err);
         });
     },
     inputs: (e) => {
