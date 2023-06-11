@@ -21,10 +21,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   }
 }));
 
-const MyProfile = ({ tab, onTabChange }) => {
-  const { user } = useAuthContext();
-  const { ticket } = useTournamentContext();
-
+const Settings = ({ tab, onTabChange }) => {
   return (
     <Box sx={{ display: "flex", height: "100%" }}>
       <TabContext value={tab}>
@@ -47,17 +44,35 @@ const MyProfile = ({ tab, onTabChange }) => {
             <StyledTab
               icon={<KeyboardArrowRight />}
               iconPosition="end"
-              label={<Typography>Account Settings</Typography>}
+              label={<Typography>Featured</Typography>}
               value="0"
+            />
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Security</Typography>}
+              value="1"
+            />
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Privacy</Typography>}
+              value="2"
             />
           </TabList>
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 0 }}>
-          <Account />
+          <Featured />
+        </TabPanel>
+        <TabPanel value="1" sx={{ flexGrow: 1, p: 0 }}>
+          <Security />
+        </TabPanel>
+        <TabPanel value="2" sx={{ flexGrow: 1, p: 0 }}>
+          <Privacy />
         </TabPanel>
       </TabContext>
     </Box>
   );
 };
 
-export default MyProfile;
+export default Settings;

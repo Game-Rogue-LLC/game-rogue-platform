@@ -156,7 +156,7 @@ const UserInfo = ({ item, editable, handle, avatar }) => {
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <Typography variant="body1" sx={{ fontWeight: "900" }}>
-              ACCOUNT ID
+              ROGUE ID
             </Typography>
           </Grid>
           <Grid item>
@@ -186,20 +186,22 @@ const UserInfo = ({ item, editable, handle, avatar }) => {
           </Grid>
         </Grid>
 
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <Typography variant="body1" sx={{ fontWeight: "900" }}>
-              AGE
-            </Typography>
+        {item?.showAge && (
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Typography variant="body1" sx={{ fontWeight: "900" }}>
+                AGE
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body1">
+                {dayjs(new Date()).diff(item?.birthday, "year")}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Typography variant="body1">
-              {dayjs(new Date()).diff(item?.birthday, "year")}
-            </Typography>
-          </Grid>
-        </Grid>
+        )}
 
-        <Grid container spacing={2}>
+        {/* <Grid container spacing={2}>
           <Grid item xs={6}>
             <Typography variant="body1" sx={{ fontWeight: "900" }}>
               GENDER
@@ -208,7 +210,7 @@ const UserInfo = ({ item, editable, handle, avatar }) => {
           <Grid item>
             <Typography variant="body1">{item?.gender == 0 ? <Man /> : <Woman />}</Typography>
           </Grid>
-        </Grid>
+        </Grid> */}
 
         <Grid container spacing={2}>
           <Grid item xs={6}>

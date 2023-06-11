@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   Grid,
   IconButton,
@@ -10,6 +11,7 @@ import {
   OutlinedInput,
   Paper,
   Select,
+  Switch,
   Typography,
   useTheme
 } from "@mui/material";
@@ -28,8 +30,9 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 export const initialInputs = {
   name: "",
   userName: "",
-  gender: 0,
+  // gender: 0,
   birthday: new Date(),
+  showAge: true,
   residency: {
     code: "US",
     label: "United States",
@@ -176,7 +179,7 @@ const Page = (props) => {
               )}
             </FormControl>
           </Grid>
-          <Grid item xs={12} lg={6}>
+          {/* <Grid item xs={12} lg={6}>
             <Typography variant="h6">Gender</Typography>
             <Select
               labelId="gender-select-label"
@@ -196,7 +199,7 @@ const Page = (props) => {
                 Female
               </MenuItem>
             </Select>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={6}>
             <Typography variant="h6">Birthday</Typography>
             <DatePicker
@@ -212,6 +215,19 @@ const Page = (props) => {
               sx={{ mt: 1, width: "100%" }}
               option={inputs?.residency}
               setOption={(val) => setInputs((prev) => ({ ...prev, residency: val }))}
+            />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <Typography variant="h6">Age</Typography>
+            <FormControlLabel
+              control={
+                <Switch
+                  name="showAge"
+                  checked={inputs?.showAge}
+                  onChange={(e) => setInputs((prev) => ({ ...prev, showAge: e.target.checked }))}
+                />
+              }
+              label="Show Age"
             />
           </Grid>
           <Grid item xs={12}>
