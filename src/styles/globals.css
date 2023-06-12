@@ -4,9 +4,9 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono",
+    "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono",
+    "Courier New", monospace;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -20,10 +20,7 @@
     #0071ff33 160deg,
     transparent 360deg
   );
-  --secondary-glow: radial-gradient(
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
+  --secondary-glow: radial-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
 
   --tile-start-rgb: 239, 245, 249;
   --tile-end-rgb: 228, 232, 233;
@@ -91,11 +88,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-image: linear-gradient(
-    to top,
-    #28160c,
-    rgb(var(--background-end-rgb))
-  );
+  background-image: linear-gradient(to top, #28160c, rgb(var(--background-end-rgb)));
 }
 
 a {
@@ -591,7 +584,7 @@ input#search::placeholder {
 
 .tweet-container {
   position: relative;
-  border: solid 1px rgb(255,255,255);
+  border: solid 1px rgb(255, 255, 255);
   border-radius: 10px;
   overflow: hidden;
   transition: all ease-in-out .2s;
@@ -627,7 +620,7 @@ input#search::placeholder {
 
 .tweet-container:focus-within {
   height: 210px;
-  animation: forwards animate-tweet .2s;
+  animation: forwards animate-tweet 0.2s;
   padding-bottom: 50px;
 }
 
@@ -696,4 +689,41 @@ input#search::placeholder {
   left: 0;
   background: black;
   animation: match-chat-anim 10s forwards;
+}
+
+@keyframes apparel-splash {
+  0% {
+    display: block;
+    opacity: 1;
+    z-index: 10000;
+  }
+
+  95% {
+    display: block;
+    opacity: 1;
+    z-index: 10000;
+  }
+
+  99% {
+    display: block;
+    opacity: 0;
+    z-index: 10000;
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+    z-index: -1;
+  }
+}
+
+.apparel-splash {
+  animation: apparel-splash 8s forwards;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
 }

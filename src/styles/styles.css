@@ -1,0 +1,264 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,600;1,900&display=swap");
+@import url("https://rsms.me/inter/inter.css");
+html {
+  font-family: "Inter", sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: "Inter var", sans-serif;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+canvas {
+  opacity: 0;
+  touch-action: none;
+  min-height: 500px;
+  width: 100%;
+  height: 100%;
+  animation: fade-in 1s ease 0.3s forwards;
+}
+
+.section--container {
+  margin-top: 5vh;
+  margin-left: 5vw;
+}
+
+.section--container.hidden {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.section--container h1 {
+  font-weight: 900;
+  font-size: 13rem;
+  letter-spacing: -6px;
+  font-style: italic;
+  width: 30%;
+  line-height: 10rem;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.support--content {
+  position: relative;
+  top: -25%;
+  left: 300px;
+}
+
+.support--content p {
+  width: 350px;
+  margin-bottom: 48px;
+  line-height: 1.5rem;
+}
+
+.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -100;
+}
+
+.filepicker-container {
+  position: relative;
+  display: flex;
+}
+
+/* CUSTOMIZER */
+
+.customizer {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.share {
+  bottom: 40px;
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
+}
+
+.zoom {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  color: #00000056;
+  font-size: 0.6rem;
+  border: 1px solid #00000000;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border, color 1s ease;
+}
+
+.zoom:hover {
+  color: black;
+}
+
+/* PICKER */
+
+.picker {
+  width: 120px !important;
+  height: 120px !important;
+}
+
+.color-options {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  gap: 20px;
+}
+
+.color-options-child {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
+.circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 3px solid rgb(255, 250, 250);
+  transition: transform 0.3s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.circle:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+.circle_colorPicker {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid white;
+  transition: transform 0.3s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.circle_colorPicker:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.circle_direction {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid white;
+  transition: transform 0.3s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.circle_direction:hover {
+  transform: scale(1.2);
+  background-color: #000000;
+  cursor: pointer;
+}
+
+.size_circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid white;
+  transition: transform 0.3s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.size_circle:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.logo-img {
+  width: 100px;
+  height: 120px;
+}
+
+.decals--position {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  color: #00000056;
+  font-size: 0.6rem;
+  border: 1px solid #00000000;
+  padding: 10px 10px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border 1s ease;
+}
+
+.decals--position:hover {
+  color: black;
+  border: 1px solid #00000056;
+}
+
+.upload {
+  margin-top: -5px;
+  cursor: pointer;
+}
+
+.upload:hover {
+  color: white;
+}
+
+.decals--container {
+  display: flex;
+  gap: 20px;
+}
+
+.exit {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  background-color: black;
+  box-shadow: inset 0 0 0 0.09px black;
+}
+
+.exit:hover {
+  box-shadow: inset -250px 0 0 0 black;
+}
+
+@media screen and (max-width: 600px) {
+  .section--container {
+    margin-left: 15vw;
+  }
+
+  .section--container h1 {
+    font-size: 8rem;
+    letter-spacing: -6px;
+    line-height: 6rem;
+  }
+
+  .color-options {
+    margin-bottom: 20px;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    right: 40px;
+    transform: translateY(-50%);
+  }
+
+  .support--content {
+    top: -10%;
+    left: 0;
+  }
+}

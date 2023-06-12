@@ -1,5 +1,6 @@
 import "@/src/styles/nprogress.css";
 import "@/src/styles/globals.css";
+import "@/src/styles/styles.css";
 import "@/src/styles/fullCalendar.css";
 import "@/src/styles/colorpicker.css";
 
@@ -17,7 +18,6 @@ import Splash from "@/src/content/Splash";
 import StyleProvider from "@/src/context/StyleContext";
 import ThemeProvider from "@/src/theme/ThemeProvider";
 import createEmotionCache from "../config/createEmotionCache";
-import nProgress from "nprogress";
 import store from "@/src/redux/store";
 import { useEffect } from "react";
 
