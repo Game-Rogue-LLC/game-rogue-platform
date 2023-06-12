@@ -103,10 +103,12 @@ export const EVENT_SEED_TYPES = {
 
 export const EVENT_REGIONS = [
   {
+    id: 0,
     value: 0,
     name: "North America"
   },
   {
+    id: 1,
     value: 1,
     name: "Europe"
   }
@@ -160,20 +162,28 @@ export const MATCH_STATES = {
 
 export const PLATFORMS = [
   {
+    id: 0,
     value: 0,
-    name: "XBox"
+    name: "XBox",
+    image: "/static/images/platforms/xbox.png"
   },
   {
+    id: 1,
     value: 1,
-    name: "PC"
+    name: "PC",
+    image: "/static/images/platforms/pc.png"
   },
   {
+    id: 2,
     value: 2,
-    name: "PS4"
+    name: "PS4",
+    image: "/static/images/platforms/playstation.png"
   },
   {
+    id: 3,
     value: 3,
-    name: "Cross-Platform"
+    name: "Cross-Platform",
+    image: "/static/images/platforms/cross-platform.png"
   }
 ];
 

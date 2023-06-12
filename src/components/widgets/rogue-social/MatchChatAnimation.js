@@ -19,7 +19,6 @@ const MatchChatAnimation = ({ mid }) => {
   };
 
   useEffect(() => {
-    console.log("mid", mid);
     if (match?.matches && match.matches.findIndex((val) => val.id === mid) >= 0)
       setItem(match.matches.find((val) => val.id === mid));
   }, [match?.matches, mid]);

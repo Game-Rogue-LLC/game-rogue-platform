@@ -1,34 +1,34 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  IconButton,
   FormControl,
   FormHelperText,
   Grid,
+  IconButton,
   MenuItem,
   OutlinedInput,
   Paper,
   Select,
+  TextField,
   Typography,
-  useTheme,
-  TextField
+  useTheme
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { LoadingButton } from "@mui/lab";
-
-import { Edit } from "@mui/icons-material";
-import AdminLayout from "@/src/content/AdminLayout";
-import { useAppContext } from "@/src/context/app";
-import DateTimePicker from "@/src/components/datetime/DateTimePicker";
-import Validator from "validatorjs";
-import { useTournamentContext } from "@/src/context/TournamentContext";
 import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO, EVENT_STATES } from "@/src/config/global";
-import EventInput from "@/src/components/widgets/event/EventInput";
-import { model, rules, customMessages } from "@/lib/firestore/collections/event";
-import { htmlToMarkdown } from "@/src/utils/html-markdown";
-import { useStyleContext } from "@/src/context/StyleContext";
+import { customMessages, model, rules } from "@/lib/firestore/collections/event";
+import { useEffect, useState } from "react";
+
+import AdminLayout from "@/src/content/AdminLayout";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import DateTimePicker from "@/src/components/datetime/DateTimePicker";
+import { Edit } from "@mui/icons-material";
+import EventInput from "@/src/components/widgets/event/EventInput";
+import { LoadingButton } from "@mui/lab";
+import Validator from "validatorjs";
+import { htmlToMarkdown } from "@/src/utils/html-markdown";
+import { useAppContext } from "@/src/context/app";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const initialInputs = {
   ...model
@@ -159,7 +159,7 @@ const Page = (props) => {
           alert("Saved successfully!");
         }
       } else if (data.code === "failed") {
-        console.error(data.message);
+        console.warn(data.message);
       }
       setSaving(false);
     },
@@ -243,7 +243,8 @@ const Page = (props) => {
             loading={saving}
             variant="contained"
             onClick={handle.create}
-            disabled={disabled}>
+            disabled={disabled}
+          >
             Register
           </CustomLoadingButton>
         </Grid>

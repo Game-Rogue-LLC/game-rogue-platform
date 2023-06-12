@@ -1,5 +1,6 @@
-import { Avatar, Box, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
+import Avatar from "@/src/components/Avatar";
 import CustomButton from "@/src/components/button/CustomButton";
 import Link from "next/link";
 import { TEAM_POSITIONS } from "@/src/config/global";
@@ -39,10 +40,7 @@ const ParticipantMembers = ({ item }) => {
                     justifyContent: "center"
                   }}
                 >
-                  <Avatar
-                    variant="circular"
-                    src={val.profilePic} //player.players[val.id].profilePic}
-                  />
+                  <Avatar user={val} variant="circular" />
                   <Link href={"/user/" + val.id}>
                     {/* {player.players[val.id].name} */}
                     {val.name}

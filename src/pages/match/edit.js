@@ -1,4 +1,3 @@
-import { useEffect, useState, useMemo } from "react";
 import {
   Box,
   Button,
@@ -12,15 +11,7 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { LoadingButton } from "@mui/lab";
-import _ from "lodash";
-
-import AdminLayout from "@/src/content/AdminLayout";
-import { useAppContext } from "@/src/context/app";
-import DatePicker from "@/src/components/datetime/DatePicker";
-import { useMatchContext } from "@/src/context/MatchContext";
-import { useTournamentContext } from "@/src/context/TournamentContext";
+import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
 import {
   EVENT_FORMATS,
   EVENT_STATES,
@@ -29,17 +20,26 @@ import {
   SCORE_LOSE,
   SCORE_WIN
 } from "@/src/config/global";
-import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
-import { nanoid } from "nanoid";
-import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
-import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
-import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
-import FullCalendar from "@/src/components/datetime/FullCalendar.js";
-import ScoresDialog from "@/src/components/dialog/ScoresDialog";
-import DatePickDialog from "@/src/components/dialog/DatePickDialog";
-import { NULL_FUNCTION } from "@/src/config/global";
-import { useStyleContext } from "@/src/context/StyleContext";
+import { useEffect, useMemo, useState } from "react";
+
+import AdminLayout from "@/src/content/AdminLayout";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import DatePickDialog from "@/src/components/dialog/DatePickDialog";
+import DatePicker from "@/src/components/datetime/DatePicker";
+import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
+import FullCalendar from "@/src/components/datetime/FullCalendar.js";
+import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
+import { LoadingButton } from "@mui/lab";
+import { NULL_FUNCTION } from "@/src/config/global";
+import ScoresDialog from "@/src/components/dialog/ScoresDialog";
+import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
+import _ from "lodash";
+import { nanoid } from "nanoid";
+import { useAppContext } from "@/src/context/app";
+import { useMatchContext } from "@/src/context/MatchContext";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const Page = (props) => {
   const theme = useTheme();
@@ -91,7 +91,7 @@ const Page = (props) => {
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
       } else {
-        console.error("Invalid Event ID");
+        console.warn("Invalid Event ID");
         // TODO: Redirect to 404 page.
       }
     }

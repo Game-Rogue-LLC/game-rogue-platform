@@ -1,43 +1,43 @@
-import { useEffect, useState, Fragment } from "react";
-import Button from "@mui/material/Button";
 import {
+  Alert,
   Box,
   FormControl,
-  InputLabel,
   FormHelperText,
   Grid,
-  Paper,
-  useTheme,
-  Typography,
-  TextField,
-  Alert,
-  OutlinedInput,
-  Select,
+  InputLabel,
   MenuItem,
-  Stepper,
+  OutlinedInput,
+  Paper,
+  Select,
   Step,
   StepLabel,
+  Stepper,
+  TextField,
+  Typography,
+  useTheme
 } from "@mui/material";
-import { STAFF_ROLES } from "@/src/config/global";
+import { Fragment, useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
+import Button from "@mui/material/Button";
+import { STAFF_ROLES } from "@/src/config/global";
+import Validator from "validatorjs";
 import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { useAuthContext } from "@/src/context/AuthContext";
-import Validator from "validatorjs";
 
 const initialInputs = {
   uid: "",
-  role: "",
+  role: ""
 };
 
 const rules = {
-  uid: "required",
+  uid: "required"
 };
 
 const customMessages = {
-  "required.uid": "Rogue ID is required.",
+  "required.uid": "Rogue ID is required."
 };
 
 const steps = ["Input Rogue ID", "Select staff position"];
@@ -72,7 +72,7 @@ const Page = (props) => {
     }
     if (!Object.keys(player.players).includes(data.uid)) {
       setErrors({
-        uid: "User with the id does not exist.",
+        uid: "User with the id does not exist."
       });
       return false;
     }
@@ -91,19 +91,19 @@ const Page = (props) => {
           role: inputs.role,
           deleted: false,
           lastLogin: new Date(),
-          createdAt: new Date(),
+          createdAt: new Date()
           // modifiedAt: new Date()
-        },
+        }
       ];
 
       const res = await organization.update(organization.current, {
-        staff: newStaff,
+        staff: newStaff
       });
 
       if (res.code === "succeed") {
         router.push("/staff?organization=" + organization.current);
       } else if (res.code === "failed") {
-        console.error(res.message);
+        console.warn(res.message);
       }
     },
     inputs: (e) => {
@@ -111,7 +111,7 @@ const Page = (props) => {
       if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
-        [name]: value,
+        [name]: value
       });
     },
     next: () => {
@@ -126,7 +126,7 @@ const Page = (props) => {
     },
     reset: () => {
       setActiveStep(0);
-    },
+    }
   };
 
   return (

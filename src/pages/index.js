@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import { useAppContext } from "@/src/context/app";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
-import Stepper from "@/src/components/carousel/Stepper";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import { Carousel } from "react-responsive-carousel";
-import { useAuthContext } from "@/src/context/AuthContext";
-import PublicLayout from "@/src/content/PublicLayout";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+
 import Benefits from "@/src/components/widgets/Benefits";
+import Button from "@mui/material/Button";
+import { Carousel } from "react-responsive-carousel";
 import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
+import PublicLayout from "@/src/content/PublicLayout";
+import Stepper from "@/src/components/carousel/Stepper";
+import TournamentProvider from "../context/TournamentContext";
+import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 
 const MyApp = (props) => {
@@ -33,7 +35,7 @@ const MyApp = (props) => {
         sx={{
           position: "relative",
           height: "57px",
-          backgroundColor: "transparent",
+          backgroundColor: "transparent"
         }}
       >
         <Box
@@ -46,13 +48,10 @@ const MyApp = (props) => {
             justifyContent: "center",
             alignItems: "center",
             opacity: banner % 2 == 0 ? 1 : 0,
-            transition: "all 0.5s",
+            transition: "all 0.5s"
           }}
         >
-          <img
-            src="/static/images/GRLOGO_O_B.webp"
-            style={{ height: "57px" }}
-          />
+          <img src="/static/images/GRLOGO_O_B.webp" style={{ height: "57px" }} />
         </Box>
         <Box
           sx={{
@@ -64,15 +63,11 @@ const MyApp = (props) => {
             justifyContent: "center",
             alignItems: "center",
             opacity: banner == 1 ? 1 : 0,
-            transition: "all 0.5s",
+            transition: "all 0.5s"
           }}
         >
-          <Typography
-            variant="h4"
-            sx={{ position: "absolute", color: "white", fontSize: "30px" }}
-          >
-            TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK
-            HERE!
+          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
+            TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK HERE!
           </Typography>
         </Box>
         <Box
@@ -85,15 +80,11 @@ const MyApp = (props) => {
             justifyContent: "center",
             alignItems: "center",
             opacity: banner == 3 ? 1 : 0,
-            transition: "all 0.5s",
+            transition: "all 0.5s"
           }}
         >
-          <Typography
-            variant="h4"
-            sx={{ position: "absolute", color: "white", fontSize: "30px" }}
-          >
-            GET 10 PIECES OF TEAM MERCH FOR A FRACTION OF THE COST, TAILORED FOR
-            YOU!
+          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
+            GET 10 PIECES OF TEAM MERCH FOR A FRACTION OF THE COST, TAILORED FOR YOU!
           </Typography>
         </Box>
         <Box
@@ -106,13 +97,10 @@ const MyApp = (props) => {
             justifyContent: "center",
             alignItems: "center",
             opacity: banner == 5 ? 1 : 0,
-            transition: "all 0.5s",
+            transition: "all 0.5s"
           }}
         >
-          <Typography
-            variant="h4"
-            sx={{ position: "absolute", color: "white", fontSize: "30px" }}
-          >
+          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
             LOOKING TO START A TEAM? LOOKING TO JOIN ONE? CLICK HERE!
           </Typography>
         </Box>
@@ -127,12 +115,12 @@ const MyApp = (props) => {
           display: "flex",
           justifyContent: "center",
           overflow: "hidden",
-          alignItems: "center",
+          alignItems: "center"
         }}
       >
         <video
           style={{
-            position: "absolute",
+            position: "absolute"
           }}
           autoPlay
           loop
@@ -153,16 +141,8 @@ const MyApp = (props) => {
           <br />
           AVAILABLE NOW
           <br />
-          <Button
-            variant="contained"
-            sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}
-          >
-            <Typography
-              variant="h1"
-              fontSize={"59px"}
-              color={"white"}
-              letterSpacing={"5.9px"}
-            >
+          <Button variant="contained" sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}>
+            <Typography variant="h1" fontSize={"59px"} color={"white"} letterSpacing={"5.9px"}>
               SUBSCRIBE
             </Typography>
           </Button>
@@ -177,20 +157,20 @@ const MyApp = (props) => {
           position: "relative",
           backgroundColor: "#101216",
           paddingTop: "80px",
-          paddingBottom: "175px",
+          paddingBottom: "175px"
         }}
       >
         <Box
           sx={{
             width: "80%",
-            mx: "auto",
+            mx: "auto"
           }}
         >
           <Grid
             container
             columnSpacing={{
               xs: 0,
-              xl: 28,
+              xl: 28
             }}
           >
             <Grid item xs={12} xl={6}>
@@ -201,7 +181,7 @@ const MyApp = (props) => {
                   backgroundColor: "black",
                   textAlign: "center",
                   px: "20px",
-                  minWidth: "500px",
+                  minWidth: "500px"
                 }}
               >
                 <Typography
@@ -209,7 +189,7 @@ const MyApp = (props) => {
                   sx={{
                     mt: "43px",
                     mb: "23px",
-                    fontSize: "30px",
+                    fontSize: "30px"
                   }}
                 >
                   THE NEXT GENERATION OF ESPORTS
@@ -217,41 +197,40 @@ const MyApp = (props) => {
                 <Typography
                   variant="body1"
                   sx={{
-                    fontSize: "23px",
+                    fontSize: "23px"
                   }}
                 >
-                  Are you an event-hoster looking for an all-in-one package to
-                  produce pro-league level events from structure to productions?
+                  Are you an event-hoster looking for an all-in-one package to produce pro-league
+                  level events from structure to productions?
                 </Typography>
                 <br />
                 <Typography
                   variant="body1"
                   sx={{
-                    fontSize: "23px",
+                    fontSize: "23px"
                   }}
                 >
-                  Or a team looking to build with the most influential tools to
-                  win and grow?
+                  Or a team looking to build with the most influential tools to win and grow?
                 </Typography>
                 <br />
                 <Typography
                   variant="body1"
                   sx={{
-                    fontSize: "23px",
+                    fontSize: "23px"
                   }}
                 >
-                  Maybe your just a player or content creator looking for casual
-                  play or professional development?
+                  Maybe your just a player or content creator looking for casual play or
+                  professional development?
                 </Typography>
                 <br />
                 <Typography
                   variant="body1"
                   sx={{
-                    fontSize: "23px",
+                    fontSize: "23px"
                   }}
                 >
-                  We have every feature bundled in low-cost packages with the
-                  most fundamental features always available for free!
+                  We have every feature bundled in low-cost packages with the most fundamental
+                  features always available for free!
                 </Typography>
                 <Button
                   variant="contained"
@@ -259,7 +238,7 @@ const MyApp = (props) => {
                     color: "white",
                     px: 5,
                     my: 3,
-                    borderRadius: 0,
+                    borderRadius: 0
                   }}
                 >
                   <Typography variant="h4" fontSize={"35px"}>
@@ -273,7 +252,7 @@ const MyApp = (props) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "center"
                 }}
               >
                 <img src="/static/images/laptop.png" />
@@ -285,7 +264,7 @@ const MyApp = (props) => {
       <Box
         sx={{
           position: "relative",
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: theme.palette.primary.main
         }}
       >
         <Benefits />
@@ -372,7 +351,7 @@ const MyApp = (props) => {
         component={"section"}
         sx={{
           pt: "70px",
-          background: "url(/static/images/about_us_bg.gif)",
+          background: "url(/static/images/about_us_bg.gif)"
         }}
       >
         <Box
@@ -384,21 +363,20 @@ const MyApp = (props) => {
             border: "solid 3px rgba(227, 81, 6, 0.73)",
             borderRadius: "30px",
             background: "black",
-            py: "30px",
+            py: "30px"
           }}
         >
           <Typography variant="h3" fontSize={"30px"}>
             WHAT IS GAME ROGUE?
           </Typography>
           <Typography variant="body1" fontSize={"23px"} sx={{ mt: 2 }}>
-            Don't know Game Rogue? We've been hosting tournaments since 2018 and
-            would love for you to join the experience! We tailor to our
-            community, fulfilling our obligations time-in and time-out since our
-            creation.
+            Don't know Game Rogue? We've been hosting tournaments since 2018 and would love for you
+            to join the experience! We tailor to our community, fulfilling our obligations time-in
+            and time-out since our creation.
           </Typography>
           <Typography variant="body1" fontSize={"23px"} sx={{ mt: 2 }}>
-            Thank you to our community for giving us the ability to host
-            tournaments and provide the next generation of esports globally.
+            Thank you to our community for giving us the ability to host tournaments and provide the
+            next generation of esports globally.
           </Typography>
           <Box
             component={"img"}
@@ -410,7 +388,7 @@ const MyApp = (props) => {
               mt: 2,
               mx: "auto",
               width: "auto",
-              display: "block",
+              display: "block"
             }}
           ></Box>
           <Button
@@ -419,7 +397,7 @@ const MyApp = (props) => {
               mt: 5,
               width: "275px",
               height: "65px",
-              borderRadius: 0,
+              borderRadius: 0
             }}
             onMouseOver={() => setAboutUsHover(true)}
             onMouseOut={() => setAboutUsHover(false)}
@@ -432,7 +410,7 @@ const MyApp = (props) => {
               sx={{
                 color: "white",
                 fontSize: aboutUsHover ? "35px" : "30px",
-                transition: "ease-in-out 0.2s",
+                transition: "ease-in-out 0.2s"
               }}
             >
               ABOUT US
@@ -446,7 +424,7 @@ const MyApp = (props) => {
             justifyContent: "center",
             pt: "60px",
             pb: "40px",
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           <Button
@@ -454,26 +432,23 @@ const MyApp = (props) => {
               document.scrollingElement.scroll({
                 left: 0,
                 top: 0,
-                behavior: "smooth",
+                behavior: "smooth"
               })
             }
             sx={{
               background: "none",
               ":hover": {
                 background: "none",
-                opacity: 0.7,
+                opacity: 0.7
               },
               mx: "auto",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 2,
+              gap: 2
             }}
           >
-            <img
-              src={"/static/images/back-to-top.svg"}
-              style={{ width: "73px", height: "56px" }}
-            />
+            <img src={"/static/images/back-to-top.svg"} style={{ width: "73px", height: "56px" }} />
             <Typography variant="body1" color="white" fontSize="23px">
               BACK TO TOP
             </Typography>
@@ -489,7 +464,7 @@ const MyApp = (props) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 2,
+            gap: 2
           }}
         >
           <img src="/static/images/sponsors/Tempr Esports Logo.webp" />
@@ -504,7 +479,11 @@ const MyApp = (props) => {
 };
 
 MyApp.getLayout = (page) => {
-  return <PublicLayout>{page}</PublicLayout>;
+  return (
+    <TournamentProvider>
+      <PublicLayout>{page}</PublicLayout>
+    </TournamentProvider>
+  );
 };
 
 MyApp.ignoreAuth = true;

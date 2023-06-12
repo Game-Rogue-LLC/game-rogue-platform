@@ -6,7 +6,7 @@ import Link from "next/link";
 const Footer = (props) => {
   const theme = useTheme();
   return (
-    <Box component={"footer"} sx={{ zIndex: 100, backgroundColor: "black" }}>
+    <Box component={"footer"} sx={{ backgroundColor: "black" }}>
       <Box
         component={"section"}
         sx={{

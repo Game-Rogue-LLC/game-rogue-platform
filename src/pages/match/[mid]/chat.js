@@ -73,7 +73,6 @@ const Page = (props) => {
   // };
 
   const onNext = (e) => {
-    console.log(step);
     setStep((val) => val + 1);
   };
 

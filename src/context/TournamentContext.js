@@ -1,9 +1,10 @@
-import { useState, useCallback, useContext, createContext, useEffect, useMemo } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+
+import Splash from "../content/Splash";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import store from "@/lib/firestore/collections";
 import { useAuthContext } from "./AuthContext";
-import Splash from "../content/Splash";
 
 const TournamentContext = createContext({});
 
@@ -44,7 +45,6 @@ const TournamentProvider = (props) => {
         (data, active) => {
           setOrganizations(data);
           setActiveOrganizationCount(active);
-          console.info("organizations:", data, active);
         },
         () => setOrganizationLoading(false)
       );
@@ -85,7 +85,6 @@ const TournamentProvider = (props) => {
         (data, active) => {
           setEvents(data);
           setActiveEventCount(active);
-          console.info("events:", data, active);
         },
         () => setEventLoading(false)
       );
@@ -96,7 +95,6 @@ const TournamentProvider = (props) => {
         "",
         (data) => {
           setAllEvents(data);
-          console.info("all events:", data);
         },
         () => setEventLoading(false)
       );
@@ -157,13 +155,11 @@ const TournamentProvider = (props) => {
       const res = await store.ticket.save(null, newTicket);
       return res;
     },
-    read: async (uid) => {
+    read: async () => {
       setTicketLoading(true);
       const res = await store.ticket.read(
-        uid,
         (data) => {
           setTickets(data);
-          console.info("tickets:", data);
         },
         () => setTicketLoading(false)
       );
@@ -195,7 +191,6 @@ const TournamentProvider = (props) => {
         uid,
         (data) => {
           setTeams(data);
-          console.info("teams:", data);
         },
         () => setTeamLoading(false)
       );
@@ -230,7 +225,7 @@ const TournamentProvider = (props) => {
     getPlacements: async (id) => {
       const res = await store.event.placements(id);
       if (res.code === "succeed") return res.data;
-      else console.error(res.message);
+      else console.warn(res.message);
     },
     getUpcomingGames: (id) => {},
     getNews: (id) => {},
@@ -253,13 +248,13 @@ const TournamentProvider = (props) => {
       const res = await store.player.readAll(
         async (data) => {
           setPlayers(data);
-          console.info("players:", data);
         },
         () => setPlayerLoading(false)
       );
     },
-    update: async (id, newTeam) => {
-      const res = await store.player.save(id, newTeam);
+    update: async (id, newPlayer) => {
+      console.log(id, newPlayer);
+      const res = await store.player.save(id, newPlayer);
       return res;
     },
     delete: async (id) => {
@@ -285,7 +280,6 @@ const TournamentProvider = (props) => {
       const res = await store.match.read(
         (data) => {
           setMatches(data);
-          console.info("matches:", data);
         },
         () => setMatchLoading(false)
       );
@@ -321,7 +315,6 @@ const TournamentProvider = (props) => {
       const res = await store.post.readAll(
         (data) => {
           setPosts(data);
-          console.info("posts:", data);
         },
         () => setPostLoading(false)
       );
@@ -348,7 +341,7 @@ const TournamentProvider = (props) => {
     posts,
     setPosts,
     create: async (newPost) => {
-      const res = await store.post.save(nanoid(), newPost);
+      const res = await store.post.save(null, newPost);
       return res;
     },
     read: async () => {
@@ -356,13 +349,12 @@ const TournamentProvider = (props) => {
       const res = await store.post.readAll(
         (data) => {
           setPosts(data);
-          console.info("posts:", data);
         },
         () => setPostLoading(false)
       );
     },
-    update: async (id, newPost) => {
-      const res = await store.post.save(id, newPost);
+    update: async (id, newPost, merge) => {
+      const res = await store.post.save(id, newPost, merge);
       return res;
     },
     delete: async (id) => {
@@ -384,7 +376,6 @@ const TournamentProvider = (props) => {
     if (user && user.id) {
       organization.read(user.id);
       team.read(user.id);
-      ticket.read(user.id);
     }
   }, [user]);
 
@@ -399,6 +390,7 @@ const TournamentProvider = (props) => {
     team.read("");
     match.read();
     post.read();
+    ticket.read();
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);

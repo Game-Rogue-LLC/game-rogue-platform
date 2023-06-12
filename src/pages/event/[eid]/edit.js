@@ -75,7 +75,6 @@ const Page = (props) => {
     if (event?.events[eid]) {
       event.setCurrent(eid);
       organization.setCurrent(event.events[eid].oid);
-      console.log(event.events[eid], eid);
       setInputs({
         ...event.events[eid],
         description: markdownToHtml(event.events[eid].description)
@@ -250,7 +249,8 @@ const Page = (props) => {
             loading={saving}
             variant="contained"
             onClick={handle.save}
-            disabled={disabled}>
+            disabled={disabled}
+          >
             Save
           </CustomLoadingButton>
         </Grid>

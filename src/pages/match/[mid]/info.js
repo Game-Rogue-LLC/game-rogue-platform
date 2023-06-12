@@ -61,7 +61,7 @@ const Page = (props) => {
         setEID(newItem.eid);
         setItem(newItem);
       } else {
-        console.error("Invalid Match ID");
+        console.warn("Invalid Match ID");
         // TODO: Redirect to 404 page.
       }
     }

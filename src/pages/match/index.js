@@ -1,25 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
-import Button from "@mui/material/Button";
+import { EVENT_STATES, MATCH_STATES } from "@/src/config/global";
 import {
   Paper,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
   TableCell,
   TableContainer,
   TableFooter,
+  TableHead,
+  TableRow,
   useTheme
 } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+
 import AdminLayout from "@/src/content/AdminLayout";
-import { useAppContext } from "@/src/context/app";
-import { useRouter } from "next/router";
-import { useMatchContext } from "@/src/context/MatchContext";
-import dayjs from "dayjs";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { EVENT_STATES, MATCH_STATES } from "@/src/config/global";
-import { useStyleContext } from "@/src/context/StyleContext";
+import Button from "@mui/material/Button";
 import CustomButton from "@/src/components/button/CustomButton";
+import dayjs from "dayjs";
+import { useAppContext } from "@/src/context/app";
+import { useMatchContext } from "@/src/context/MatchContext";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const Page = (props) => {
   const theme = useTheme();
@@ -43,7 +44,7 @@ const Page = (props) => {
         event.setCurrent(newEID);
         organization.setCurrent(event.events[newEID]?.oid);
       } else {
-        console.error("Invalid Event ID");
+        console.warn("Invalid Event ID");
         // Redirect to 404 page.
       }
     }

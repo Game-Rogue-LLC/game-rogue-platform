@@ -12,9 +12,10 @@ import { useEffect, useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
 import RichTextInput from "@/src/components/input/RichTextInput";
+import { nanoid } from "nanoid";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
-const PostDialog = ({ posting, open, onClose }) => {
+const PostDialog = ({ posting, open, onClose, onPost }) => {
   const { post } = useTournamentContext();
   const [content, setContent] = useState(markdownToHtml(posting?.text));
   const [saving, setSaving] = useState(false);
@@ -26,9 +27,9 @@ const PostDialog = ({ posting, open, onClose }) => {
   const onContentChange = (newContent) => {
     setContent(newContent);
   };
-  const onPost = async (e) => {
+  const onPostClick = async (e) => {
     setSaving(true);
-    await post.update(posting.id, {
+    await onPost({
       text: htmlToMarkdown(content)
     });
     setSaving(false);
@@ -46,7 +47,12 @@ const PostDialog = ({ posting, open, onClose }) => {
         />
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
-        <LoadingButton variant="contained" loading={saving} startIcon={<Save />} onClick={onPost}>
+        <LoadingButton
+          variant="contained"
+          loading={saving}
+          startIcon={<Save />}
+          onClick={onPostClick}
+        >
           Post
         </LoadingButton>
         <Button variant="contained" color="error" startIcon={<Close />} onClick={onClose}>

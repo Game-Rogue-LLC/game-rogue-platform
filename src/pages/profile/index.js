@@ -1,46 +1,46 @@
-import { useEffect, useState, useMemo } from "react";
 import {
+  Alert,
   Box,
   Button,
+  Checkbox,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
+  DialogTitle,
   FormControl,
-  InputLabel,
+  FormControlLabel,
+  FormGroup,
   FormHelperText,
   Grid,
-  Paper,
-  useTheme,
-  Typography,
-  TextField,
-  Alert,
-  OutlinedInput,
   InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Paper,
   SvgIcon,
-  FormGroup,
-  FormControlLabel,
   Switch,
-  Checkbox
+  TextField,
+  Typography,
+  useTheme
 } from "@mui/material";
+import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
+import { brighterColor, isBrightColor } from "@/src/utils/utils";
+import { customMessages, model, rules } from "@/lib/firestore/collections/organization";
+import { useEffect, useMemo, useState } from "react";
 
-import { LoadingButton } from "@mui/lab";
 import AdminLayout from "@/src/content/AdminLayout";
+import ColorSelect from "@/src/components/dropdown/ColorSelect";
+import Colors from "@/src/components/Colors";
+import ContentBlock from "@/src/components/widgets/ContentBlock";
+import CustomButton from "@/src/components/button/CustomButton";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import { LoadingButton } from "@mui/lab";
+import Validator from "validatorjs";
+import { htmlToMarkdown } from "@/src/utils/html-markdown";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
-import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
-import ContentBlock from "@/src/components/widgets/ContentBlock";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import Validator from "validatorjs";
-import { model, rules, customMessages } from "@/lib/firestore/collections/organization";
-import ColorSelect from "@/src/components/dropdown/ColorSelect";
-import { htmlToMarkdown } from "@/src/utils/html-markdown";
-import Colors from "@/src/components/Colors";
-import { brighterColor, isBrightColor } from "@/src/utils/utils";
 import { useStyleContext } from "@/src/context/StyleContext";
-import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
-import CustomButton from "@/src/components/button/CustomButton";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const initialInputs = {
   ...model
@@ -185,7 +185,7 @@ const Page = (props) => {
           newOrganization.contentBlock.image = res.url;
           uploaded = true;
         } else {
-          console.error(res.message);
+          console.warn(res.message);
         }
       }
       if (uploaded) {
@@ -193,7 +193,7 @@ const Page = (props) => {
         if (res.code === "succeed") {
           alert("Saved successfully!");
         } else {
-          console.error(res.message);
+          console.warn(res.message);
         }
       }
 
@@ -295,14 +295,16 @@ const Page = (props) => {
           loading={saving?.disband}
           variant="contained"
           sx={{ mt: 2 }}
-          onClick={handle.modalOpen}>
+          onClick={handle.modalOpen}
+        >
           Disband
         </CustomLoadingButton>
         <Dialog
           open={open}
           onClose={handle.modalClose}
           aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description">
+          aria-describedby="alert-dialog-description"
+        >
           <DialogTitle id="alert-dialog-title">{"Delete the organizer profile?"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
@@ -368,7 +370,8 @@ const Page = (props) => {
           loading={saving?.name}
           variant="contained"
           sx={{ mt: 2 }}
-          onClick={handle.saveName}>
+          onClick={handle.saveName}
+        >
           Save
         </CustomLoadingButton>
       </Paper>
@@ -482,7 +485,8 @@ const Page = (props) => {
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"
-                      viewBox="0 0 24 24">
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         fill="currentColor"
                         d="M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29l-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43Z"
@@ -498,7 +502,8 @@ const Page = (props) => {
           loading={saving?.social}
           variant="contained"
           sx={{ mt: 2 }}
-          onClick={handle.saveLink}>
+          onClick={handle.saveLink}
+        >
           Save
         </CustomLoadingButton>
       </Paper>
@@ -579,7 +584,8 @@ const Page = (props) => {
           loading={saving?.features}
           variant="contained"
           sx={{ mt: 2 }}
-          onClick={handle.saveFeatures}>
+          onClick={handle.saveFeatures}
+        >
           Save
         </CustomLoadingButton>
       </Paper>

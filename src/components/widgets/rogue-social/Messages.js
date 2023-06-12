@@ -11,15 +11,15 @@ const StyledButton = styled(Button)((theme) => ({
   minWidth: "416px",
   fontSize: "22px",
   alignItems: "center",
-  zIndex: 9999
+  zIndex: 8500
 }));
 
-const Messages = ({}) => {
+const Messages = ({ count = 3 }) => {
   return (
     <StyledButton
       variant="contained"
       startIcon={<Message />}
-      endIcon={<Badge color="error" badgeContent={3} sx={{ marginLeft: 5 }}></Badge>}
+      endIcon={<Badge color="error" badgeContent={count} sx={{ marginLeft: 5 }}></Badge>}
     >
       Messages
     </StyledButton>

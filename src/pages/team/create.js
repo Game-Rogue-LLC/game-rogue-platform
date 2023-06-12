@@ -1,33 +1,33 @@
-import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import {
+  Alert,
   Box,
   FormControl,
-  InputLabel,
   FormHelperText,
   Grid,
-  Paper,
-  useTheme,
-  Typography,
-  TextField,
-  Alert,
+  InputLabel,
   OutlinedInput,
+  Paper,
+  TextField,
+  Typography,
+  useTheme
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import { customMessages, model, rules } from "@/lib/firestore/collections/team";
+import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
+import Button from "@mui/material/Button";
+import CountrySelect from "@/src/components/dropdown/CountrySelect";
+import { DEFAULT_LOGO } from "@/src/config/global";
+import GameSelect from "@/src/components/dropdown/GameSelect";
+import { LoadingButton } from "@mui/lab";
+import Validator from "validatorjs";
 import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import CountrySelect from "@/src/components/dropdown/CountrySelect";
-import GameSelect from "@/src/components/dropdown/GameSelect";
-import { useAuthContext } from "@/src/context/AuthContext";
-import Validator from "validatorjs";
-import { DEFAULT_LOGO } from "@/src/config/global";
-import { model, rules, customMessages } from "@/lib/firestore/collections/team";
 
 const initialInputs = {
-  ...model,
+  ...model
 };
 
 const Page = (props) => {
@@ -65,9 +65,9 @@ const Page = (props) => {
           {
             id: user.id,
             position: 0, // Manager
-            joinedOn: new Date(),
-          },
-        ],
+            joinedOn: new Date()
+          }
+        ]
       };
 
       const res = await team.create(newTeam);
@@ -77,7 +77,7 @@ const Page = (props) => {
       if (res.code === "succeed") {
         router.push("/team/" + res.id);
       } else if (res.code === "failed") {
-        console.error(res.message);
+        console.warn(res.message);
       }
     },
     inputs: (e) => {
@@ -85,9 +85,9 @@ const Page = (props) => {
       if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
-        [name]: value,
+        [name]: value
       });
-    },
+    }
   };
 
   useEffect(() => {
@@ -143,12 +143,12 @@ const Page = (props) => {
             <OutlinedInput
               id="team-access-code"
               name="accessCode"
+              placeholder="####"
               value={inputs.accessCode}
               aria-describedby="team-access-code-helper"
               onChange={handle.inputs}
               sx={{ mt: 1 }}
               fullWidth
-              required
             />
             {errors.accessCode !== undefined && (
               <FormHelperText id="team-access-code-helper" sx={{ mt: 2 }}>
@@ -162,9 +162,7 @@ const Page = (props) => {
           <CountrySelect
             sx={{ mt: 1, width: "100%" }}
             option={inputs.residency}
-            setOption={(val) =>
-              setInputs((prev) => ({ ...prev, residency: val }))
-            }
+            setOption={(val) => setInputs((prev) => ({ ...prev, residency: val }))}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -176,11 +174,7 @@ const Page = (props) => {
           />
         </Grid>
         <Grid item>
-          <LoadingButton
-            loading={saving}
-            variant="contained"
-            onClick={handle.create}
-          >
+          <LoadingButton loading={saving} variant="contained" onClick={handle.create}>
             Register
           </LoadingButton>
         </Grid>
