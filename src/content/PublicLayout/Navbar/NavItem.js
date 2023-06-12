@@ -1,46 +1,35 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import {
-  Box,
-  Button,
-  Menu,
-  MenuItem,
-  Typography,
-  useTheme,
-  styled,
-  Divider,
-} from "@mui/material";
+import { Box, Button, Menu, MenuItem, Typography, useTheme, styled, Divider } from "@mui/material";
 
-export const StyledMenu = styled((props) => <Menu {...props} />)(
-  ({ theme }) => ({
-    "& .MuiPaper-root": {
-      // background: "linear-gradient(to top,#f5851f,#000)",
-      background: "linear-gradient(to top,#64370c,#2a0d00)",
-      borderRadius: 0,
-      // backgroundColor: '#000',
-      marginTop: theme.spacing(1),
-      padding: theme.spacing(1),
-      zIndex: 8500,
-      minWidth: 180,
-      boxShadow:
-        "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
-      "& .MuiMenu-list": {
-        padding: "0 10px",
-      },
-      "& .MuiMenuItem-root": {
-        color: "white",
-        // marginRight: theme.spacing(1.5),
-        justifyContent: "center",
-        textAlign: "center",
-        textTransform: "uppercase",
-        "&:hover": {
-          // color: theme.palette.primary.main,
-          backgroundColor: "rgba(255, 255, 255, 0.1)",
-        },
-      },
+export const StyledMenu = styled((props) => <Menu {...props} />)(({ theme }) => ({
+  "& .MuiPaper-root": {
+    // background: "linear-gradient(to top,#f5851f,#000)",
+    background: "linear-gradient(to top,#64370c,#2a0d00)",
+    borderRadius: 0,
+    // backgroundColor: '#000',
+    marginTop: theme.spacing(1),
+    padding: theme.spacing(1),
+    zIndex: 8500,
+    minWidth: 180,
+    boxShadow:
+      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    "& .MuiMenu-list": {
+      padding: "0 10px"
     },
-  })
-);
+    "& .MuiMenuItem-root": {
+      color: "white",
+      // marginRight: theme.spacing(1.5),
+      justifyContent: "center",
+      textAlign: "center",
+      textTransform: "uppercase",
+      "&:hover": {
+        // color: theme.palette.primary.main,
+        backgroundColor: "rgba(255, 255, 255, 0.1)"
+      }
+    }
+  }
+}));
 
 const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
   const theme = useTheme();
@@ -54,10 +43,10 @@ const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
       zIndex: 8500,
       ":hover": {
         // color: theme.palette.primary.main,
-        backgroundSize: "cover",
+        backgroundSize: "cover"
         // background: "url(/static/images/bg_anim.gif)",
         // backgroundSize: "contain",
-      },
+      }
     };
     if (active === true) {
       style.background = "url(/static/images/navitem_bg/16.png) !important";
@@ -71,7 +60,7 @@ const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
     fontSize: "1rem",
     ":hover": {
       // color: theme.palette.primary.main,
-    },
+    }
   };
 
   const handleOpen = (e) => {
@@ -117,7 +106,7 @@ const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
           MenuListProps={{
             "aria-labelledby": `${name}-button`,
             onMouseLeave: handleClose,
-            onMouseOver: handleMouseOver,
+            onMouseOver: handleMouseOver
           }}
           disablePortal={true}
           disableScrollLock={true}
@@ -125,11 +114,11 @@ const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
           anchorEl={anchorEl}
           anchorOrigin={{
             vertical: "bottom",
-            horizontal: "center",
+            horizontal: "center"
           }}
           transformOrigin={{
             vertical: "top",
-            horizontal: "center",
+            horizontal: "center"
           }}
           open={Boolean(anchorEl)}
           onClose={handleClose}
@@ -150,11 +139,12 @@ const NavItem = ({ name, items, isDropdown, handleClick, active }) => {
                   {item.isLink ? (
                     <Link
                       href={item.to}
+                      target={item.newTab === true ? "_blank" : "_self"}
                       sx={{
                         color: "white",
                         ":hover": {
                           // color: theme.palette.primary.main,
-                        },
+                        }
                       }}
                     >
                       {item.name}
