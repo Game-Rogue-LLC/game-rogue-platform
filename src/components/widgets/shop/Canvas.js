@@ -44,7 +44,11 @@ export default ({ position = [0, 0, -220], fov = 25, sx }) => {
         eventPrefix="client"
       >
         <ambientLight intensity={0.1} />
-        <Environment preset="city" />
+        <Environment
+          background={false} // Whether to affect scene.background
+          files={"HDR.hdr"}
+          path={"/"}
+        />
         <OrbitControls
           ref={orbitRef}
           target={[0, 0, 0]}
