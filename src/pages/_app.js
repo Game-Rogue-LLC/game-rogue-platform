@@ -18,7 +18,6 @@ import Splash from "@/src/content/Splash";
 import StyleProvider from "@/src/context/StyleContext";
 import ThemeProvider from "@/src/theme/ThemeProvider";
 import createEmotionCache from "../config/createEmotionCache";
-import nProgress from "nprogress";
 import store from "@/src/redux/store";
 import { useEffect } from "react";
 // Client-side cache, shared for the whole session of the user in the browser.

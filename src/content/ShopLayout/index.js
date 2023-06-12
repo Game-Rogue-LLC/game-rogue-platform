@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import Footer from "@/src/content/PublicLayout/Footer";
 import Navbar from "@/src/content/PublicLayout/Navbar";
 import { SnackbarProvider } from "notistack";
+import Splash from "@/src/content/Splash";
 
 const ShopLayout = ({ children }) => {
   return (
