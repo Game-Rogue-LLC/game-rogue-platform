@@ -210,7 +210,12 @@ const PublicNavbar = ({ sx }) => {
             />
             <NavItem name="ROGUE TV" handleClick={() => {}} />
             <NavItem name="ARTICLES" handleClick={() => {}} />
-            <NavItem name="SHOP" handleClick={() => {}} />
+            <NavItem
+              name="SHOP"
+              handleClick={() => {
+                router.push("/shop");
+              }}
+            />
           </Box>
           <Box sx={{ display: "flex", gap: 3 }}>
             <Box
