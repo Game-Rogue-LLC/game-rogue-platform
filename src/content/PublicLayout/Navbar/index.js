@@ -130,13 +130,22 @@ const PublicNavbar = ({ sx }) => {
             }}
           >
             <Box sx={{ position: "relative" }}>
-              <Box component="img" src="/GR_Letters.png" height={40} />
+              {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
+              <video autoPlay loop muted poster="/GR_Letters.png">
+                <source src="/static/animations/GR_Letters.webm" type="video/webm" />
+              </video>
               <Box
                 component="img"
                 src="/GR_Letters.png"
                 height={40}
                 ref={logoRef}
-                style={{ position: "absolute", left: 0, top: 0, filter: "brightness(10)" }}
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  filter: "brightness(10)",
+                  display: "none"
+                }}
               />
             </Box>
             <Box className="search-box">
@@ -290,7 +299,7 @@ const PublicNavbar = ({ sx }) => {
                     key: "video-editor",
                     isLink: true,
                     newTab: true,
-                    to: "https://game-rogue-video-editor.vercel.app"
+                    to: "https://game-rogue-creative-suite.vercel.app"
                   },
                   {
                     name: "Customize",
