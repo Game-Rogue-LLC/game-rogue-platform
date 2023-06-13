@@ -26,10 +26,11 @@ export const withOpacity = (hex, opacity) => {
 // * End: Color Util Functions
 
 export const formatDate = (date, format) => {
+  const dat = date ? new Date(date) : new Date();
   if (format) {
-    return dayjs(new Date(date)).format(format);
+    return dayjs(dat).format(format);
   }
-  return dayjs(date).format("DD.MM.YYYY");
+  return dayjs(dat).format("DD.MM.YYYY");
 };
 
 export const formatNumber = (number, precision) => {

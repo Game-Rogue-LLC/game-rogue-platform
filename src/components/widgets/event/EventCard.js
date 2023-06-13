@@ -103,7 +103,7 @@ const EventCard = ({ item }) => {
               sx={{ borderBottom: "solid 1px rgba(255,255,255,0.2)" }}
               textAlign="center"
             >
-              {formatDate(item?.start, "MMM")}
+              {formatDate(item?.startAt, "MMM")}
             </Typography>
             <Box
               sx={{
@@ -112,7 +112,7 @@ const EventCard = ({ item }) => {
                 justifyContent: "center"
               }}
             >
-              <Typography variant="h4">{formatDate(item?.start, "DD")}</Typography>
+              <Typography variant="h4">{formatDate(item?.startAt, "DD")}</Typography>
             </Box>
           </Box>
           {/* <Chip

@@ -159,7 +159,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               Game
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              {games[item?.game]}
+              {games[item?.game]?.name}
             </Typography>
           </Paper>
         </Grid>
@@ -250,7 +250,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                           }}
                         />
                       </ListItemIcon>
-                      {item.name}
+                      {item?.name}
                     </MenuItem>
                   );
                 })}

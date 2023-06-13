@@ -289,7 +289,8 @@ const PublicNavbar = ({ sx }) => {
                     name: "Video Editor",
                     key: "video-editor",
                     isLink: true,
-                    to: "/"
+                    newTab: true,
+                    to: "https://game-rogue-video-editor.vercel.app"
                   },
                   {
                     name: "Customize",
@@ -348,7 +349,7 @@ const PublicNavbar = ({ sx }) => {
                 ]}
               />
             </Box>
-            {user.user ? (
+            {user.user && user.user.id ? (
               <Box
                 sx={{
                   display: "flex",
