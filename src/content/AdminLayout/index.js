@@ -11,9 +11,7 @@ import MatchProvider, { useMatchContext } from "@/src/context/MatchContext";
 
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-import TournamentProvider, {
-  useTournamentContext,
-} from "@/src/context/TournamentContext";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 
 const AdminLayout = (props) => {
   const { children } = props;
@@ -28,7 +26,7 @@ const AdminLayout = (props) => {
         flexFlow: "column",
         minHeight: "100vh",
         width: "100vw",
-        justifyContent: "space-between",
+        justifyContent: "space-between"
       }}
     >
       {/* <Header /> */}
@@ -37,16 +35,16 @@ const AdminLayout = (props) => {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          flex: 1,
+          flex: 1
         }}
       >
-        {organization.activeCount > 0 ? <OrganizationSidebar /> : <></>}
+        <OrganizationSidebar />
         <div
           style={{
             flex: 1,
             flexFlow: "column",
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "space-between"
           }}
         >
           {organization.activeCount > 0 &&

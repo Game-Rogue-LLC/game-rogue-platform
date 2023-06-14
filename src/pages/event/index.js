@@ -1,20 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
-import Button from "@mui/material/Button";
-import { useAppContext } from "@/src/context/app";
 import { Box, Container, Typography, useTheme } from "@mui/material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useEffect, useMemo, useState } from "react";
+
+import Button from "@mui/material/Button";
+import EventContainer from "@/src/components/widgets/event/EventContainer";
+import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
+import MatchContainer from "@/src/components/widgets/match/MatchContainer";
 import PublicLayout from "@/src/content/PublicLayout";
 import dayjs from "dayjs";
-import EventContainer from "@/src/components/widgets/event/EventContainer";
-import MatchContainer from "@/src/components/widgets/match/MatchContainer";
-import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
 
 const Page = (props) => {
+  const { user } = useAuthContext();
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { event, match, currentTime, setCurrentTime } = useTournamentContext();
+  const { player, event, match, currentTime, setCurrentTime } = useTournamentContext();
 
   const moreButtonStyle = {
     fontWeight: 700,
@@ -376,9 +379,9 @@ const Page = (props) => {
 
 Page.getLayout = (page) => {
   return (
-    <PublicLayout>
-      <TournamentProvider>{page}</TournamentProvider>
-    </PublicLayout>
+    <TournamentProvider>
+      <PublicLayout>{page}</PublicLayout>
+    </TournamentProvider>
   );
 };
 

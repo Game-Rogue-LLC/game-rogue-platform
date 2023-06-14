@@ -1,9 +1,10 @@
-import { DEFAULT_LOGO } from "@/src/config/global";
-import { Box, Skeleton } from "@mui/material";
-import Link from "next/link";
-import Image from "next/image";
+import { Box, Skeleton, Typography } from "@mui/material";
 
-export default function ({ team, win, sx, disableLink }) {
+import { DEFAULT_LOGO } from "@/src/config/global";
+import Image from "next/image";
+import Link from "next/link";
+
+export default function ({ team, win, sx, width, height, fontSize, disableLink }) {
   if (!sx) sx = {};
   return (
     <Link href={"/rogue-social/my-team/" + team?.id} className="team-link">
@@ -24,12 +25,23 @@ export default function ({ team, win, sx, disableLink }) {
         }}
       >
         {team?.darkLogo ? (
-          <Image src={team.darkLogo} width={30} height={30} alt={team.darkLogo} />
+          <Image
+            src={team.darkLogo}
+            width={width ? width : 30}
+            height={height ? height : 30}
+            alt={team.darkLogo}
+          />
         ) : (
-          <Skeleton variant="rectangular" width={30} height={30} />
+          <Skeleton
+            variant="rectangular"
+            width={width ? width : 30}
+            height={height ? height : 30}
+          />
         )}
         &nbsp;
-        {team?.name}
+        <Typography sx={{ color: "white", fontSize: fontSize ? fontSize : "16px" }}>
+          {team?.name}
+        </Typography>
       </Box>
     </Link>
   );

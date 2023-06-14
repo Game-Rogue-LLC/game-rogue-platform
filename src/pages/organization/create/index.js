@@ -28,6 +28,7 @@ import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const initialInputs = {
   ...model
@@ -195,9 +196,9 @@ const Page = (props) => {
           </Grid>
         </Grid>
         <Grid item>
-          <CustomButton variant="contained" onClick={handle.create} disabled={disabled}>
+          <CustomLoadingButton variant="contained" onClick={handle.create} disabled={disabled}>
             Register
-          </CustomButton>
+          </CustomLoadingButton>
         </Grid>
       </Grid>
     </Paper>

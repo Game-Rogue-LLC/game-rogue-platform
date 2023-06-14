@@ -8,6 +8,7 @@ import { Logout } from "@mui/icons-material";
 import { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
 
 // const StyledMenu = styled((props) => (
 // 	<Menu
@@ -107,10 +108,7 @@ const Header = () => {
         }}
       >
         <Link href="/">
-          <img
-            src={"/Game_Rogue_Text_2_copy.png"}
-            style={{ height: "100%", visibility: "visible" }}
-          />
+          <img src={DEFAULT_CONTENTBLOCK_IMAGE} style={{ height: "100%", visibility: "visible" }} />
         </Link>
       </Box>
       <Box

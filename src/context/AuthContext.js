@@ -1,11 +1,12 @@
-import { createContext, useEffect, useState, useContext, useMemo } from 'react';
-import { useUser } from '@/lib/firebase/useUser';
-import Splash from '@/src/content/Splash';
-import { useRouter } from 'next/router';
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+
+import Splash from "@/src/content/Splash";
+import { useRouter } from "next/router";
+import { useUser } from "@/lib/firebase/useUser";
 
 const initialState = {
   loading: true,
-  user: null,
+  user: null
 };
 
 export const AuthContext = createContext(initialState);
@@ -23,31 +24,44 @@ export const AuthContextProvider = ({ children }) => {
   //     }
   // }
 
-  const ignoreAuthRouter = ['/', '/auth', '/event', '/event/upcoming', '/event/ongoing', '/event/completed', '/event/[eid]/info', '/team/[tid]', '/match/upcoming', '/match/[mid]/info', '/user/[uid]/info']
-  const ignoreAuthRegex = ['/event/[A-Za-z0-9_-]{21}/info']
+  const ignoreAuthRouter = [
+    "/",
+    "/auth",
+    "/event",
+    "/event/upcoming",
+    "/event/ongoing",
+    "/event/completed",
+    "/event/[eid]/info",
+    "/team/[tid]",
+    "/match/upcoming",
+    "/match/[mid]/info",
+    "/user/[uid]/info"
+  ];
+  const ignoreAuthRegex = ["/event/[A-Za-z0-9_-]{21}/info"];
 
   const ignoreAuth = useMemo(() => {
     if (ignoreAuthRouter.includes(router.pathname)) return true;
-    for (let i = 0; i < ignoreAuthRegex.length; i++) {
-      if (router.pathname.match(ignoreAuthRegex[i]) != null) return true;
-    }
+    // for (let i = 0; i < ignoreAuthRegex.length; i++) {
+    //   if (router.pathname.match(ignoreAuthRegex[i]) != null) return true;
+    // }
     return false;
-  }, [router])
+  }, [router]);
 
   useEffect(() => {
-    if (!user.loading && !user.user && (!ignoreAuth)) {
-      router.push('/auth')
+    if (!user.loading && !user.user && !ignoreAuth) {
+      router.push("/auth");
     }
-  }, [user.loading, user.user, router])
+  }, [user.loading, user.user, router, ignoreAuth]);
 
   return (
     <AuthContext.Provider value={user}>
-      {user.loading
-        ? <Splash content='Signing in. Please wait...'></Splash>
-        : (user.user || ignoreAuth)
-          ? children
-          : <Splash content='Signing in. Please wait...'></Splash>
-      }
+      {user.loading ? (
+        <Splash content="Signing in. Please wait..."></Splash>
+      ) : user.user || ignoreAuth ? (
+        children
+      ) : (
+        <Splash content="Signing in. Please wait..."></Splash>
+      )}
     </AuthContext.Provider>
-  )
-}
+  );
+};

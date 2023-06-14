@@ -6,6 +6,7 @@ export const defaultDarkTheme = {
   palette: {
     mode: "dark",
     primary: {
+      bright: "",
       main: "#f5831f"
     },
     secondary: {

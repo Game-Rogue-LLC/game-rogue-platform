@@ -166,15 +166,15 @@ const Page = (props) => {
                 value="3"
               />
               <StyledTab
-                icon={<People fontSize="large" />}
+                icon={<Groups fontSize="large" />}
                 iconPosition="start"
-                label="My Team"
+                label="Leaderboard"
                 value="4"
               />
               <StyledTab
-                icon={<Groups fontSize="large" />}
+                icon={<People fontSize="large" />}
                 iconPosition="start"
-                label="My Community"
+                label="My Team"
                 value="5"
               />
               <StyledTab
@@ -198,10 +198,10 @@ const Page = (props) => {
             <Notifications />
           </TabPanel>
           <TabPanel value="4" sx={{ flexGrow: 1, p: 1 }}>
-            <MyTeams />
+            <MyCommunity />
           </TabPanel>
           <TabPanel value="5" sx={{ flexGrow: 1, p: 1 }}>
-            <MyCommunity />
+            <MyTeams />
           </TabPanel>
           <TabPanel value="6" sx={{ flexGrow: 1, p: 0 }}>
             <MyProfile tab={profileTab} onTabChange={onProfileTabChange} />
