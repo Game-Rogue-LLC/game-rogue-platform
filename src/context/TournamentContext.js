@@ -1,11 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import Splash from "../content/Splash";
+import Splash from "@/src/content/Splash";
+import _ from "lodash";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import store from "@/lib/firestore/collections";
-import { useAuthContext } from "./AuthContext";
-import _ from "lodash";
+import { useAuthContext } from "@/src/context/AuthContext";
 
 const TournamentContext = createContext({});
 

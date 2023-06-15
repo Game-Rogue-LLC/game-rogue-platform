@@ -57,6 +57,7 @@ const PublicNavbar = ({ sx }) => {
     if (team?.teams && user.user && user.user.id) {
       return _.filter(team.teams, (val) => isMyTeam(val, user.user.id));
     }
+    return [];
   }, [team?.teams, user.user]);
 
   useEffect(() => {
@@ -255,7 +256,7 @@ const PublicNavbar = ({ sx }) => {
                     name: "My Organizer",
                     key: "my-organizer",
                     isLink: true,
-                    to: "/rogue-social/?tab=6&profileTab=1"
+                    to: "/rogue-social/organizer"
                   },
                   {
                     name: "Producer Dashboard",
@@ -462,10 +463,10 @@ const PublicNavbar = ({ sx }) => {
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-team" disableRipple>
-                  <Link href={"/rogue-social/team/" + _.last(myTeams).id}>My Team</Link>
+                  <Link href={"/rogue-social/team"}>My Team</Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUser} key="my-organizer" disableRipple>
-                  <Link href={"/rogue-social/?tab=6&profileTab=1"}>My Organizer</Link>
+                  <Link href={"/rogue-social/organizer"}>My Organizer</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-profile" disableRipple>
