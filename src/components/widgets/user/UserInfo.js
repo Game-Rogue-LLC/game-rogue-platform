@@ -1,5 +1,5 @@
-import { Box, Button, Grid, IconButton, Typography, useTheme } from "@mui/material";
-import { Edit, Female, Logout, Male, Man, Woman } from "@mui/icons-material";
+import { Box, Button, ButtonBase, Grid, IconButton, Typography, useTheme } from "@mui/material";
+import { AddAPhoto, Edit, Female, Logout, Male, Man, Woman } from "@mui/icons-material";
 import { useMemo, useState } from "react";
 
 import Avatar from "@/src/components/Avatar";
@@ -12,12 +12,14 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 
 // import { useUser } from "@/lib/firebase/useUser";
 
-const UserInfo = ({ item, editable, handle, avatar }) => {
+const UserInfo = ({ inputs, item, editable, handle }) => {
   const user = useAuthContext();
   const theme = useTheme();
   const { player, ticket } = useTournamentContext();
   const [following, setFollowing] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+
+  console.log(item);
 
   const isFollowing = useMemo(() => {
     if (user.user && item && player.players)
@@ -98,37 +100,81 @@ const UserInfo = ({ item, editable, handle, avatar }) => {
   return (
     <Box>
       <Box sx={{ textAlign: "center", position: "relative" }}>
-        <Avatar size="large" user={item} sx={{ width: 150, height: 150, mx: "auto" }} />
-        {user?.user &&
-          item?.id === user.user.id &&
-          (editable ? (
-            <IconButton
-              size="large"
-              sx={{
-                position: "absolute",
-                right: 0,
-                bottom: 0,
-                color: theme.palette.primary.main
-              }}
+        {editable && (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100px",
+              backgroundImage: `url(${inputs?.banner})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              borderTopLeftRadius: 5,
+              borderTopRightRadius: 5
+            }}
+          >
+            <ButtonBase
               component={"label"}
+              sx={{
+                width: "100%",
+                height: "100%",
+                opacity: 0,
+                padding: 1,
+                justifyContent: "end",
+                alignItems: "start",
+                cursor: "pointer",
+                ":hover": {
+                  background: "rgba(0,0,0,.2)",
+                  opacity: 1
+                },
+                borderTopLeftRadius: 5,
+                borderTopRightRadius: 5
+              }}
             >
-              <Edit />
+              <AddAPhoto />
               <input
                 type="file"
                 accept="image/*"
-                name="upload-image"
-                id="upload-image"
+                name="upload-banner"
+                id="upload-banner"
                 hidden
-                onChange={handle}
+                onChange={(e) => handle(e, "banner")}
               />
-            </IconButton>
-          ) : (
-            <Box sx={{ width: "100%", textAlign: "center" }}>
-              <Button variant="contained" sx={{ mt: 2, mx: "auto" }} onClick={handle}>
-                EDIT PROFILE
-              </Button>
-            </Box>
-          ))}
+            </ButtonBase>
+          </Box>
+        )}
+        <Avatar
+          size="large"
+          editable={editable}
+          src={inputs?.profilePic}
+          user={item}
+          ContainerProps={{
+            sx:
+              editable === true
+                ? {
+                    position: "absolute",
+                    top: "100px",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)"
+                  }
+                : {}
+          }}
+          sx={{
+            width: 150,
+            height: 150,
+            mx: "auto"
+          }}
+          onChange={(e) => handle(e, "profilePic")}
+        />
+      </Box>
+
+      <Box sx={{ mt: editable === true ? "100px" : 0 }}>
+        {user?.user && item?.id === user.user.id && !editable && (
+          <Box sx={{ width: "100%", textAlign: "center" }}>
+            <Button variant="contained" sx={{ mt: 2, mx: "auto" }} onClick={handle}>
+              EDIT PROFILE
+            </Button>
+          </Box>
+        )}
         {user?.user && item && item.id !== user.user.id && (
           <Box sx={{ width: "100%", textAlign: "center" }}>
             <LoadingButton
@@ -141,18 +187,17 @@ const UserInfo = ({ item, editable, handle, avatar }) => {
             </LoadingButton>
           </Box>
         )}
+        {user?.user && item?.id === user.user.id && (
+          <Box sx={{ textAlign: "center", position: "relative", mt: 2 }}>
+            <Button variant="contained" transform="uppercase" onClick={() => user.logout()}>
+              <Logout />
+              &nbsp; Log out
+            </Button>
+          </Box>
+        )}
       </Box>
 
-      {user?.user && item?.id === user.user.id && (
-        <Box sx={{ textAlign: "center", position: "relative", mt: 2 }}>
-          <Button variant="contained" transform="uppercase" onClick={() => user.logout()}>
-            <Logout />
-            &nbsp; Log out
-          </Button>
-        </Box>
-      )}
-
-      <Box sx={{ mt: 4 }}>
+      <Box sx={{ mt: 4, px: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <Typography variant="body1" sx={{ fontWeight: "900" }}>

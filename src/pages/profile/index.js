@@ -41,6 +41,7 @@ import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
 
 const initialInputs = {
   ...model
@@ -57,6 +58,8 @@ const Page = (props) => {
   const [oid, setOID] = useState(null);
   const [errors, setErrors] = useState({});
   const [contentImage, setContentImage] = useState(null);
+  const [darkLogo, setDarkLogo] = useState(null);
+  const [lightLogo, setLightLogo] = useState(null);
   const [saving, setSaving] = useState({
     disband: false,
     name: false,
@@ -124,16 +127,43 @@ const Page = (props) => {
         name: true
       }));
 
-      const res = await organization.update(oid, {
+      let newOrganization = {
         name: inputs?.name,
         tagline: inputs?.tagline,
         primary: inputs?.primary,
         secondary: inputs?.secondary,
         tertiary: inputs?.tertiary
-      });
+      };
+
+      let uploaded = true;
+      if (darkLogo) {
+        uploaded = false;
+        const res = await organization.upload(darkLogo, oid);
+        if (res.code === "succeed") {
+          newOrganization.darkLogo = res.url;
+          uploaded = true;
+        } else {
+          console.warn(res.message);
+        }
+      }
+      if (lightLogo) {
+        uploaded = false;
+        const res = await organization.upload(lightLogo, oid);
+        if (res.code === "succeed") {
+          newOrganization.lightLogo = res.url;
+          uploaded = true;
+        } else {
+          console.warn(res.message);
+        }
+      }
+
+      const res = await organization.update(oid, newOrganization);
 
       if (res.code == "succeed") {
-        alert(res.message);
+        const key = enqueueSnackbar("Saved Successfully!", {
+          variant: "success",
+          SnackbarProps: { onClick: () => closeSnackbar(key) }
+        });
       }
 
       setSaving((prev) => ({
@@ -272,6 +302,38 @@ const Page = (props) => {
         }
       }));
     },
+    upload: (e, name) => {
+      const file = e.target?.files[0];
+      const url = URL.createObjectURL(file);
+      switch (name) {
+        case "darkLogo":
+          setDarkLogo(file);
+          setInputs({
+            ...inputs,
+            darkLogo: url
+          });
+          break;
+        case "lightLogo":
+          setLightLogo(file);
+          setInputs({
+            ...inputs,
+            lightLogo: url
+          });
+          break;
+      }
+    },
+    removeDarkLogo: (e) => {
+      setInputs({
+        ...inputs,
+        darkLogo: DEFAULT_LOGO
+      });
+    },
+    removeLightLogo: (e) => {
+      setInputs({
+        ...inputs,
+        lightLogo: DEFAULT_LOGO
+      });
+    },
     uploadContentImageAction: (e, name) => {
       const img = e.target?.files[0];
       if (img.size > 2048000) return;
@@ -323,6 +385,76 @@ const Page = (props) => {
       <Paper sx={{ p: 4, mt: 4 }}>
         <Box>
           <Typography variant="h6">Organization Detail</Typography>
+
+          <Box display={"flex"} justifyContent={"center"} gap={4} alignItems={"center"} mt={2}>
+            <Box display={"flex"} justifyContent={"center"} gap={2}>
+              <Box display={"flex"} flexDirection={"column"} gap={2} alignItems={"baseline"}>
+                <CustomButton variant="contained" component="label" disabled={disabled}>
+                  UPLOAD DARK LOGO
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="upload-dark-logo"
+                    id="upload-dark-logo"
+                    hidden
+                    onChange={(e) => handle.upload(e, "darkLogo")}
+                  />
+                </CustomButton>
+                <CustomButton
+                  variant="contained"
+                  component="label"
+                  disabled={disabled}
+                  onClick={handle.removeDarkLogo}
+                >
+                  REMOVE DARK LOGO
+                </CustomButton>
+              </Box>
+              <Box width={"200px"} height={"200px"} textAlign={"center"}>
+                <img
+                  src={inputs.darkLogo || config.DEFAULT_LOGO}
+                  style={{
+                    height: "200px",
+                    maxWidth: "200px",
+                    objectFit: "contain"
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box display={"flex"} justifyContent={"center"} gap={2}>
+              <Box display={"flex"} flexDirection={"column"} gap={2} alignItems={"baseline"}>
+                <CustomButton variant="contained" component="label" disabled={disabled}>
+                  UPLOAD LIGHT LOGO
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="upload-light-logo"
+                    id="upload-light-logo"
+                    hidden
+                    onChange={(e) => handle.upload(e, "lightLogo")}
+                  />
+                </CustomButton>
+                <CustomButton
+                  variant="contained"
+                  component="label"
+                  disabled={disabled}
+                  onClick={handle.removeLightLogo}
+                >
+                  REMOVE LIGHT LOGO
+                </CustomButton>
+              </Box>
+              <Box width={"200px"} height={"200px"} textAlign={"center"}>
+                <img
+                  src={inputs.lightLogo || config.DEFAULT_LOGO}
+                  style={{
+                    height: "200px",
+                    maxWidth: "200px",
+                    objectFit: "contain"
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
+
           <InputLabel htmlFor="org-name" sx={{ mt: 2 }}>
             Organization Name
           </InputLabel>

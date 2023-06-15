@@ -1,9 +1,10 @@
+import { Box, Skeleton } from "@mui/material";
+
 import { DEFAULT_LOGO } from "@/src/config/global";
 import Image from "next/image";
-import { Box, Skeleton } from "@mui/material";
 import Link from "next/link";
 
-export default function ({ team, win, sx, disableLink }) {
+export default function ({ team, win, sx, width, height, fontSize, disableLink }) {
   if (!sx) sx = {};
   let color = "white";
   if (win == 2) color = "#00c106";
@@ -25,14 +26,14 @@ export default function ({ team, win, sx, disableLink }) {
         loading="lazy"
         src={team?.darkLogo ?? DEFAULT_LOGO}
         alt={team?.darkLogo}
-        width={30}
-        height={30}
+        width={width || 30}
+        height={height || 30}
       />
       &nbsp;
       {disableLink === true ? (
         team?.name
       ) : (
-        <Link href={"/team/" + team?.id} className="team-link">
+        <Link href={"/team/" + team?.id} className="team-link" style={{ fontSize: fontSize || 16 }}>
           {team?.name}
         </Link>
       )}

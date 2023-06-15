@@ -12,6 +12,7 @@ import _ from "lodash";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import MyOrganizers from "./profile/MyOrganizers";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   justifyContent: "space-between",
@@ -50,10 +51,19 @@ const MyProfile = ({ tab, onTabChange }) => {
               label={<Typography>Account Settings</Typography>}
               value="0"
             />
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Organizer</Typography>}
+              value="1"
+            />
           </TabList>
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 0 }}>
           <Account />
+        </TabPanel>
+        <TabPanel value="1" sx={{ flexGrow: 1, p: 1 }}>
+          <MyOrganizers />
         </TabPanel>
       </TabContext>
     </Box>

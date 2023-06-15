@@ -1,6 +1,7 @@
-import team from "@/lib/firestore/collections/team";
 import Color from "color";
+import { TEAM_POSITIONS } from "../config/global";
 import dayjs from "dayjs";
+import team from "@/lib/firestore/collections/team";
 
 // * Begin: Color Util Functions
 export const isBrightColor = (hex) => {
@@ -114,4 +115,8 @@ export const isMyMatch = (match, teams, uid) => {
     if (isMyTeam(teams[match.participants[i].id], uid)) return true;
   }
   return false;
+};
+
+export const getTeamPosition = (position) => {
+  return _.find(TEAM_POSITIONS, (val) => val.id === position).name;
 };

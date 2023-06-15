@@ -41,6 +41,10 @@ const Page = (props) => {
   const [tab, setTab] = useState("1");
 
   useEffect(() => {
+    setTitle("EVENT INFO");
+  });
+
+  useEffect(() => {
     if (router?.query?.eid) {
       const newEID = router.query.eid;
       if (event?.events && event.events[newEID]) {
@@ -156,9 +160,9 @@ const Page = (props) => {
 
 Page.getLayout = (page) => {
   return (
-    <PublicLayout>
-      <TournamentProvider>{page}</TournamentProvider>
-    </PublicLayout>
+    <TournamentProvider>
+      <PublicLayout>{page}</PublicLayout>
+    </TournamentProvider>
   );
 };
 

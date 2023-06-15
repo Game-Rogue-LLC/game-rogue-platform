@@ -27,11 +27,14 @@ import {
   Search
 } from "@mui/icons-material";
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import Avatar from "@/src/components/Avatar";
+import { DEFAULT_PROFILE_PICTURE } from "@/src/config/global";
 import Link from "next/link";
 import SearchInput from "@/src/components/input/SearchInput";
+import _ from "lodash";
+import { isMyTeam } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -48,7 +51,13 @@ const PublicNavbar = ({ sx }) => {
   const [currentPage, setCurrentPage] = useState(router?.pathname);
   const logoRef = useRef();
   let currentHoverUser = false;
-  const { player } = useTournamentContext();
+  const { player, team } = useTournamentContext();
+
+  const myTeams = useMemo(() => {
+    if (team?.teams && user.user && user.user.id) {
+      return _.filter(team.teams, (val) => isMyTeam(val, user.user.id));
+    }
+  }, [team?.teams, user.user]);
 
   useEffect(() => {
     if (router?.pathname) {
@@ -299,7 +308,7 @@ const PublicNavbar = ({ sx }) => {
                     key: "video-editor",
                     isLink: true,
                     newTab: true,
-                    to: "https://game-rogue-creative-suite.vercel.app"
+                    to: "/video-editor"
                   },
                   {
                     name: "Customize",
@@ -358,7 +367,7 @@ const PublicNavbar = ({ sx }) => {
                 ]}
               />
             </Box>
-            {user.user && user.user.id ? (
+            {user.user && user.user.id && player?.players[user.user.id] ? (
               <Box
                 sx={{
                   display: "flex",
@@ -414,10 +423,7 @@ const PublicNavbar = ({ sx }) => {
                     cursor: "pointer"
                   }}
                 >
-                  <img
-                    src="/static/images/Profile_Picture.png"
-                    style={{ width: "50px", height: "50px" }}
-                  />
+                  <img src={DEFAULT_PROFILE_PICTURE} style={{ width: "50px", height: "50px" }} />
                   <ChevronRight
                     sx={{
                       color: theme.palette.primary.main,
@@ -429,37 +435,7 @@ const PublicNavbar = ({ sx }) => {
               </Box>
             )}
             {/* Begin User Submenu */}
-            {!user.user ? (
-              <StyledMenu
-                id="user-menu"
-                MenuListProps={{
-                  "aria-labelledby": "user-button"
-                  // onMouseLeave: handleCloseUser,
-                  // onMouseOver: handleMouseOverUser,
-                }}
-                disablePortal={true}
-                disableScrollLock={true}
-                keepMounted
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right"
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUser}
-              >
-                <MenuItem onClick={handleCloseUser} key="signup" disableRipple>
-                  <Link href={"/auth"}>Sign Up</Link>
-                </MenuItem>
-                <MenuItem onClick={handleCloseUser} key="login" disableRipple>
-                  <Link href={"/auth"}>Log In</Link>
-                </MenuItem>
-              </StyledMenu>
-            ) : (
+            {user.user && user.user.id && player?.players[user.user.id] ? (
               <StyledMenu
                 id="user-menu"
                 MenuListProps={{
@@ -487,14 +463,14 @@ const PublicNavbar = ({ sx }) => {
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-team" disableRipple>
-                  <Link href={"/user/" + user.user?.id}>My Team</Link>
+                  <Link href={"/rogue-social/team/" + _.last(myTeams).id}>My Team</Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUser} key="my-organizer" disableRipple>
                   <Link href={"/user/" + user.user?.id}>My Organizer</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-profile" disableRipple>
-                  <Link href={"/user/" + user.user?.id}>My Profile</Link>
+                  <Link href={`/rogue-social/my-profile/${user.user?.id}`}>My Profile</Link>
                 </MenuItem>
                 <MenuItem
                   onClick={(e) => {
@@ -505,6 +481,36 @@ const PublicNavbar = ({ sx }) => {
                   disableRipple
                 >
                   LOGOUT
+                </MenuItem>
+              </StyledMenu>
+            ) : (
+              <StyledMenu
+                id="user-menu"
+                MenuListProps={{
+                  "aria-labelledby": "user-button"
+                  // onMouseLeave: handleCloseUser,
+                  // onMouseOver: handleMouseOverUser,
+                }}
+                disablePortal={true}
+                disableScrollLock={true}
+                keepMounted
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right"
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUser}
+              >
+                <MenuItem onClick={handleCloseUser} key="signup" disableRipple>
+                  <Link href={"/auth"}>Sign Up</Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUser} key="login" disableRipple>
+                  <Link href={"/auth"}>Log In</Link>
                 </MenuItem>
               </StyledMenu>
             )}

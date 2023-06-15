@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, Menu, MenuItem, Tooltip, Typography, styled } from "@mui/material";
 import { Check, CheckBoxOutlineBlank, Close, ExpandMore } from "@mui/icons-material";
-import { SnackbarProvider, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 
 import CustomButton from "@/src/components/button/CustomButton";
