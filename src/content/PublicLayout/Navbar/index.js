@@ -215,16 +215,16 @@ const PublicNavbar = ({ sx }) => {
               isDropdown={true}
               items={[
                 {
-                  name: "My Team",
-                  key: "my-team",
+                  name: "MANAGE ACCOUNTS",
+                  key: "manage-accounts",
                   isLink: true,
-                  to: "/team"
+                  to: "/rogue-social"
                 },
                 {
-                  name: "Scout Opponent",
-                  key: "scout-opponent",
+                  name: "LEADERBOARD",
+                  key: "leaderboard",
                   isLink: true,
-                  to: "/team"
+                  to: "/rogue-social"
                 }
               ]}
             />
@@ -255,7 +255,7 @@ const PublicNavbar = ({ sx }) => {
                     name: "My Organizer",
                     key: "my-organizer",
                     isLink: true,
-                    to: "/organization"
+                    to: "/rogue-social/?tab=6&profileTab=1"
                   },
                   {
                     name: "Producer Dashboard",
@@ -466,7 +466,7 @@ const PublicNavbar = ({ sx }) => {
                   <Link href={"/rogue-social/team/" + _.last(myTeams).id}>My Team</Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUser} key="my-organizer" disableRipple>
-                  <Link href={"/user/" + user.user?.id}>My Organizer</Link>
+                  <Link href={"/rogue-social/?tab=6&profileTab=1"}>My Organizer</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-profile" disableRipple>
