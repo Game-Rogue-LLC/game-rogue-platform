@@ -307,7 +307,6 @@ const PublicNavbar = ({ sx }) => {
                     name: "Video Editor",
                     key: "video-editor",
                     isLink: true,
-                    newTab: true,
                     to: "/video-editor"
                   },
                   {
