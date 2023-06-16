@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import Account from "@/src/components/widgets/rogue-social/profile/Account";
 import Featured from "@/src/components/widgets/rogue-social/profile/Featured";
 import { KeyboardArrowRight } from "@mui/icons-material";
+import ManageAccounts from "@/src/components/widgets/rogue-social/accounts/ManageAccounts";
 import Notifications from "@/src/components/widgets/rogue-social/profile/Notifications";
 import Privacy from "@/src/components/widgets/rogue-social/profile/Privacy";
 import Security from "@/src/components/widgets/rogue-social/profile/Security";
@@ -12,7 +13,6 @@ import _ from "lodash";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import MyOrganizers from "./profile/MyOrganizers";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   justifyContent: "space-between",
@@ -54,7 +54,7 @@ const MyProfile = ({ tab, onTabChange }) => {
             <StyledTab
               icon={<KeyboardArrowRight />}
               iconPosition="end"
-              label={<Typography>Organizer</Typography>}
+              label={<Typography>Manage Accounts</Typography>}
               value="1"
             />
           </TabList>
@@ -63,7 +63,7 @@ const MyProfile = ({ tab, onTabChange }) => {
           <Account />
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 1 }}>
-          <MyOrganizers />
+          <ManageAccounts isMainPage={false} />
         </TabPanel>
       </TabContext>
     </Box>

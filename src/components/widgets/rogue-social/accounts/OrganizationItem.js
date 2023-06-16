@@ -1,14 +1,15 @@
+import { Box, Skeleton, Typography } from "@mui/material";
+
 import { DEFAULT_LOGO } from "@/src/config/global";
-import { Box, Typography, Skeleton } from "@mui/material";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
 export default function ({ organization, win, sx, disableLink }) {
   const { player } = useTournamentContext();
   if (!sx) sx = {};
   return (
-    <Link href={"/rogue-social/my-organizer/" + organization?.id} className="organizer-link">
+    <Link href={"/rogue-social/organizer/" + organization?.id} className="organizer-link">
       <Box
         sx={{
           display: "flex",

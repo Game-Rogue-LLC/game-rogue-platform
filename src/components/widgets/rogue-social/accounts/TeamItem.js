@@ -1,13 +1,12 @@
 import { Box, Skeleton, Typography } from "@mui/material";
 
-import { DEFAULT_LOGO } from "@/src/config/global";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ({ team, win, sx, width, height, fontSize, disableLink }) {
   if (!sx) sx = {};
   return (
-    <Link href={"/rogue-social/my-team/" + team?.id} className="team-link">
+    <Link href={"/rogue-social/team/" + team?.id} className="team-link">
       <Box
         sx={{
           display: "flex",

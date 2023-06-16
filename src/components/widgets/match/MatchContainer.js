@@ -1,4 +1,5 @@
 import { Grid, Typography } from "@mui/material";
+
 import MatchCard from "@/src/components/widgets/match/MatchCard";
 
 const MatchContainer = ({ matches, limit }) => {
@@ -10,7 +11,7 @@ const MatchContainer = ({ matches, limit }) => {
           .map(
             (item) =>
               item.participants?.length == 2 && (
-                <Grid key={"match_" + item.id} item xs={12} sm={6} lg={4}>
+                <Grid key={"match_" + item.id} item xs={12} sm={12} md={6} lg={4}>
                   <MatchCard item={item} />
                 </Grid>
               )

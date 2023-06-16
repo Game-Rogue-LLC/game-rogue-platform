@@ -25,6 +25,7 @@ import Avatar from "@/src/components/Avatar";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 import dayjs from "dayjs";
+import { getTeamPosition } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -159,7 +160,7 @@ const Page = (props) => {
                         <Link href={"/user/" + val.id}>{player.players[val.id].name}</Link>
                       </Box>
                     </TableCell>
-                    <TableCell align="center">{TEAM_POSITIONS[val.position].name}</TableCell>
+                    <TableCell align="center">{getTeamPosition(val.position)}</TableCell>
                     <TableCell align="center">{val.residency?.label}</TableCell>
                     <TableCell align="center">
                       {dayjs(val.joinedOn.toDate()).format("DD. MMM. YYYY")}

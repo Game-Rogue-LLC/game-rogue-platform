@@ -122,7 +122,12 @@ const Page = (props) => {
       </Box>
       <Container sx={{ position: "relative" }}>
         <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
-          <CustomButton sx={{ paddingInline: "16px" }}>Edit Profile</CustomButton>
+          <CustomButton
+            sx={{ paddingInline: "16px" }}
+            onClick={() => router.push("/team/" + tid + "/edit")}
+          >
+            Edit Profile
+          </CustomButton>
         </Box>
 
         <Box sx={{ my: 2 }}>

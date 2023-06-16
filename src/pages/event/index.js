@@ -96,11 +96,11 @@ const Page = (props) => {
         component={"section"}
         sx={{
           position: "relative",
-          backgroundColor: "rgb(36, 35, 35)",
+          background: "linear-gradient(to right, #321401 30%, #a84900)",
           py: "10px"
         }}
       >
-        <Container sx={{ margin: "auto", display: "flex", alignItems: "center", gap: 1 }}>
+        <Box sx={{ marginInline: "7%", display: "flex", alignItems: "center", gap: 1 }}>
           <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
           <Typography
             variant="body1"
@@ -131,7 +131,7 @@ const Page = (props) => {
               CHANGE REGION
             </Button>
           </Box>
-        </Container>
+        </Box>
       </Box>
 
       <Box
@@ -142,7 +142,7 @@ const Page = (props) => {
           position: "relative"
         }}
       >
-        <Container sx={{ margin: "auto", pb: 5 }}>
+        <Box sx={{ marginInline: "7%", pb: 5 }}>
           <Box sx={{ mt: 8 }}>
             <Box
               sx={{
@@ -150,18 +150,22 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 // backgroundColor: "#140300",
-                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                background: "linear-gradient(to right, #fff, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
                 padding: 2
               }}
             >
-              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Box
+                component={"img"}
+                src="/static/images/games/r6s.webp"
+                sx={{ filter: "invert(1)" }}
+              ></Box>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 fontSize={25}
-                color="white"
+                color="black"
                 textTransform="uppercase"
               >
                 UPCOMING MATCHES
@@ -205,18 +209,22 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 // backgroundColor: "#000a14",
-                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                background: "linear-gradient(to right, #fff, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
                 padding: 2
               }}
             >
-              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Box
+                component={"img"}
+                src="/static/images/games/r6s.webp"
+                sx={{ filter: "invert(1)" }}
+              ></Box>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 fontSize={25}
-                color="white"
+                color="black"
                 textTransform="uppercase"
               >
                 ONGOING EVENTS
@@ -263,18 +271,22 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 // backgroundColor: "#140300",
-                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                background: "linear-gradient(to right, #fff, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
                 padding: 2
               }}
             >
-              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Box
+                component={"img"}
+                src="/static/images/games/r6s.webp"
+                sx={{ filter: "invert(1)" }}
+              ></Box>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 fontSize={25}
-                color="white"
+                color="black"
                 textTransform="uppercase"
               >
                 UPCOMING EVENTS
@@ -321,18 +333,22 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 // backgroundColor: "#140013",
-                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                background: "linear-gradient(to right, white, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
                 padding: 2
               }}
             >
-              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Box
+                component={"img"}
+                src="/static/images/games/r6s.webp"
+                sx={{ filter: "invert(1)" }}
+              ></Box>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 fontSize={25}
-                color="white"
+                color="black"
                 textTransform="uppercase"
               >
                 COMPLETED EVENTS
@@ -371,7 +387,7 @@ const Page = (props) => {
               />
             </Box>
           </Box>
-        </Container>
+        </Box>
       </Box>
     </>
   );

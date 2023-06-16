@@ -1,4 +1,4 @@
-import { Box, ButtonBase, Tab, Tabs, Typography, styled } from "@mui/material";
+import { Badge, Box, ButtonBase, Tab, Tabs, Typography, styled } from "@mui/material";
 import {
   Explore,
   Groups,
@@ -17,12 +17,13 @@ import { useEffect, useMemo, useState } from "react";
 import MatchHome from "@/src/components/widgets/rogue-social/Home";
 import MyCommunity from "@/src/components/widgets/rogue-social/MyCommunity";
 import MyProfile from "@/src/components/widgets/rogue-social/MyProfile";
-import MyTeams from "@/src/components/widgets/rogue-social/MyTeams";
 import Notifications from "@/src/components/widgets/rogue-social/profile/Notifications";
 import PublicLayout from "@/src/content/PublicLayout";
 import RogueSocialSplash from "@/src/content/Splash/RogueSocialSplash";
 import Settings from "@/src/components/widgets/rogue-social/Settings";
+import Teams from "@/src/components/widgets/rogue-social/accounts/Teams";
 import _ from "lodash";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 
 // import Messages from "@/lib/firestore/collections/messages";
@@ -34,6 +35,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 }));
 
 const Page = (props) => {
+  const { user } = useAuthContext();
   const router = useRouter();
   const { ticket } = useTournamentContext();
   const [tab, setTab] = useState(router.query.tab || "0");
@@ -152,8 +154,15 @@ const Page = (props) => {
                 icon={<NotificationsIcon fontSize="large" />}
                 iconPosition="start"
                 label={
-                  <Typography fontSize={24}>
-                    Notifications
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%"
+                    }}
+                  >
+                    <Typography fontSize={24}>Notifications</Typography>
                     {notifications.length > 0 && (
                       <Badge
                         badgeContent={notifications.length}
@@ -161,7 +170,7 @@ const Page = (props) => {
                         sx={{ ml: 2 }}
                       ></Badge>
                     )}
-                  </Typography>
+                  </Box>
                 }
                 value="3"
               />
@@ -201,7 +210,7 @@ const Page = (props) => {
             <MyCommunity />
           </TabPanel>
           <TabPanel value="5" sx={{ flexGrow: 1, p: 1 }}>
-            <MyTeams />
+            <Teams />
           </TabPanel>
           <TabPanel value="6" sx={{ flexGrow: 1, p: 0 }}>
             <MyProfile tab={profileTab} onTabChange={onProfileTabChange} />
