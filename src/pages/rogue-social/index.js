@@ -24,6 +24,7 @@ import RogueSocialSplash from "@/src/content/Splash/RogueSocialSplash";
 import Settings from "@/src/components/widgets/rogue-social/Settings";
 import _ from "lodash";
 import { useRouter } from "next/router";
+import { useAuthContext } from "@/src/context/AuthContext";
 
 // import Messages from "@/lib/firestore/collections/messages";
 
@@ -35,6 +36,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 
 const Page = (props) => {
   const router = useRouter();
+  const { user } = useAuthContext();
   const { ticket } = useTournamentContext();
   const [tab, setTab] = useState(router.query.tab || "0");
   const [profileTab, setProfileTab] = useState(router.query.profileTab || "0");

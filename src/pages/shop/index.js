@@ -147,9 +147,9 @@ const Page = (props) => {
                   },
                   ...moreButtonStyle
                 }}
-                // onClick={() => {
-                //   router.push("/match/upcoming");
-                // }}
+                onClick={() => {
+                  router.push("/shop/create");
+                }}
               >
                 OPEN SHOP
               </Button>

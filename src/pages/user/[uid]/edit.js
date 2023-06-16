@@ -139,6 +139,7 @@ const Page = (props) => {
       }));
     },
     upload: (e, name) => {
+      if (e.target.files.length === 0) return;
       const file = e.target?.files[0];
       const url = URL.createObjectURL(file);
       setAvatar(file);
