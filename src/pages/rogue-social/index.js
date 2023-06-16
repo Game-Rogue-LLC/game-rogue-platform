@@ -25,7 +25,6 @@ import Teams from "@/src/components/widgets/rogue-social/accounts/Teams";
 import _ from "lodash";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-import { useAuthContext } from "@/src/context/AuthContext";
 
 // import Messages from "@/lib/firestore/collections/messages";
 
