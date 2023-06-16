@@ -1,20 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
-import Button from "@mui/material/Button";
-import { useAppContext } from "@/src/context/app";
 import { Box, Container, Typography, useTheme } from "@mui/material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useEffect, useMemo, useState } from "react";
+
+import Button from "@mui/material/Button";
+import EventContainer from "@/src/components/widgets/event/EventContainer";
+import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
+import MatchContainer from "@/src/components/widgets/match/MatchContainer";
 import PublicLayout from "@/src/content/PublicLayout";
 import dayjs from "dayjs";
-import EventContainer from "@/src/components/widgets/event/EventContainer";
-import MatchContainer from "@/src/components/widgets/match/MatchContainer";
-import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
 
 const Page = (props) => {
+  const { user } = useAuthContext();
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { event, match, currentTime, setCurrentTime } = useTournamentContext();
+  const { player, event, match, currentTime, setCurrentTime } = useTournamentContext();
 
   const moreButtonStyle = {
     fontWeight: 700,
@@ -93,11 +96,11 @@ const Page = (props) => {
         component={"section"}
         sx={{
           position: "relative",
-          backgroundColor: "rgb(36, 35, 35)",
+          background: "linear-gradient(to right, #321401 30%, #a84900)",
           py: "10px"
         }}
       >
-        <Container sx={{ margin: "auto", display: "flex", alignItems: "center", gap: 1 }}>
+        <Box sx={{ marginInline: "7%", display: "flex", alignItems: "center", gap: 1 }}>
           <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
           <Typography
             variant="body1"
@@ -128,7 +131,7 @@ const Page = (props) => {
               CHANGE REGION
             </Button>
           </Box>
-        </Container>
+        </Box>
       </Box>
 
       <Box
@@ -139,7 +142,7 @@ const Page = (props) => {
           position: "relative"
         }}
       >
-        <Container sx={{ margin: "auto", pb: 5 }}>
+        <Box sx={{ marginInline: "7%", pb: 5 }}>
           <Box sx={{ mt: 8 }}>
             <Box
               sx={{
@@ -147,18 +150,22 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 // backgroundColor: "#140300",
-                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                background: "linear-gradient(to right, #fff, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
                 padding: 2
               }}
             >
-              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Box
+                component={"img"}
+                src="/static/images/games/r6s.webp"
+                sx={{ filter: "invert(1)" }}
+              ></Box>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 fontSize={25}
-                color="white"
+                color="black"
                 textTransform="uppercase"
               >
                 UPCOMING MATCHES
@@ -202,18 +209,22 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 // backgroundColor: "#000a14",
-                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                background: "linear-gradient(to right, #fff, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
                 padding: 2
               }}
             >
-              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Box
+                component={"img"}
+                src="/static/images/games/r6s.webp"
+                sx={{ filter: "invert(1)" }}
+              ></Box>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 fontSize={25}
-                color="white"
+                color="black"
                 textTransform="uppercase"
               >
                 ONGOING EVENTS
@@ -260,18 +271,22 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 // backgroundColor: "#140300",
-                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                background: "linear-gradient(to right, #fff, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
                 padding: 2
               }}
             >
-              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Box
+                component={"img"}
+                src="/static/images/games/r6s.webp"
+                sx={{ filter: "invert(1)" }}
+              ></Box>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 fontSize={25}
-                color="white"
+                color="black"
                 textTransform="uppercase"
               >
                 UPCOMING EVENTS
@@ -318,18 +333,22 @@ const Page = (props) => {
                 gap: 1,
                 alignItems: "center",
                 // backgroundColor: "#140013",
-                background: "linear-gradient(to right, #321401 30%, #a84900)",
+                background: "linear-gradient(to right, white, #a84900)",
                 border: "none",
                 borderLeft: "solid 5px #ed7606",
                 padding: 2
               }}
             >
-              <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+              <Box
+                component={"img"}
+                src="/static/images/games/r6s.webp"
+                sx={{ filter: "invert(1)" }}
+              ></Box>
               <Typography
                 variant="body1"
                 fontWeight={700}
                 fontSize={25}
-                color="white"
+                color="black"
                 textTransform="uppercase"
               >
                 COMPLETED EVENTS
@@ -368,7 +387,7 @@ const Page = (props) => {
               />
             </Box>
           </Box>
-        </Container>
+        </Box>
       </Box>
     </>
   );
@@ -376,9 +395,9 @@ const Page = (props) => {
 
 Page.getLayout = (page) => {
   return (
-    <PublicLayout>
-      <TournamentProvider>{page}</TournamentProvider>
-    </PublicLayout>
+    <TournamentProvider>
+      <PublicLayout>{page}</PublicLayout>
+    </TournamentProvider>
   );
 };
 

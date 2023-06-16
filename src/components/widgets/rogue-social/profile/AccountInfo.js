@@ -22,36 +22,29 @@ import UserInfo from "@/src/components/widgets/user/UserInfo";
 import Validator from "validatorjs";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import { model, rules, customMessages } from "@/lib/firestore/collections/player";
 
-export const initialInputs = {
-  name: "",
-  userName: "",
-  // gender: 0,
-  birthday: new Date(),
-  residency: {
-    code: "US",
-    label: "United States",
-    phone: "1"
-  }
-};
-
-export const rules = {
-  userName: "required"
-};
-
-export const customMessages = {
-  "required.userName": "User Name is required."
+const initialInputs = {
+  ...model
 };
 
 const AccountInfo = ({ item }) => {
   const user = useAuthContext();
   const theme = useTheme();
   const { player } = useTournamentContext();
-  const [inputs, setInputs] = useState({ ...item });
+  const [inputs, setInputs] = useState({ ...initialInputs });
+  const [banner, setBanner] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setInputs((prev) => ({
+      ...prev,
+      ...item
+    }));
+  }, [item]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -73,6 +66,12 @@ const AccountInfo = ({ item }) => {
   const handle = {
     save: async (e) => {
       if (validate(inputs, rules, customMessages) === false) return;
+      const playerExists = await player.exists(inputs?._id);
+      if (playerExists) {
+        setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
+        return;
+      } else setErrors((prev) => ({ ...prev, _id: undefined }));
+
       setSaving(true);
       let uploaded = true,
         newData = { ...inputs };
@@ -82,6 +81,17 @@ const AccountInfo = ({ item }) => {
         const res = await player.upload(avatar, item.id, "profilePic");
         if (res.code === "succeed") {
           newData.profilePic = res.url;
+          uploaded = true;
+        } else {
+          console.warn(res.message);
+        }
+      }
+
+      if (banner) {
+        uploaded = false;
+        const res = await player.upload(banner, item.id, "banner");
+        if (res.code === "succeed") {
+          newData.banner = res.url;
           uploaded = true;
         } else {
           console.warn(res.message);
@@ -108,7 +118,8 @@ const AccountInfo = ({ item }) => {
       if (e.target.files.length === 0) return;
       const file = e.target?.files[0];
       const url = URL.createObjectURL(file);
-      setAvatar(file);
+      if (name === "profilePic") setAvatar(file);
+      else if (name === "banner") setBanner(file);
       setInputs((prev) => ({
         ...prev,
         [name]: url
@@ -119,15 +130,28 @@ const AccountInfo = ({ item }) => {
   return (
     <Grid container spacing={2}>
       <Grid item sx={{ width: 300 }}>
-        <UserInfo
-          avatar={inputs?.profilePic}
-          item={item}
-          editable={true}
-          handle={(e) => handle.upload(e, "profilePic")}
-        />
+        <UserInfo inputs={inputs} item={item} editable={true} handle={handle.upload} />
       </Grid>
       <Grid item xs>
         <Grid container spacing={2} rowSpacing={2}>
+          <Grid item xs={12} lg={6}>
+            <Typography variant="h6">Rogue ID</Typography>
+            <FormControl sx={{ mt: 1 }} fullWidth error={errors._id !== undefined}>
+              <OutlinedInput
+                id="rogue-id"
+                name="_id"
+                aria-describedby="rogue-id-helper"
+                value={inputs?._id}
+                disabled={disabled}
+                onChange={handle.inputs}
+              />
+              {errors._id !== undefined && (
+                <FormHelperText id="user-name-helper" sx={{ mt: 2 }}>
+                  {errors._id}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
           <Grid item xs={12} lg={6}>
             <Typography variant="h6">User Name</Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors.userName !== undefined}>

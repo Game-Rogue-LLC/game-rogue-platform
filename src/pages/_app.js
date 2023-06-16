@@ -20,6 +20,19 @@ import ThemeProvider from "@/src/theme/ThemeProvider";
 import createEmotionCache from "../config/createEmotionCache";
 import store from "@/src/redux/store";
 import { useEffect } from "react";
+import { IconButton } from "@mui/material";
+import { Close as IconClose } from "@mui/icons-material";
+import { SnackbarProvider, useSnackbar } from "notistack";
+
+function SnackbarCloseButton({ snackbarKey }) {
+  const { closeSnackbar } = useSnackbar();
+
+  return (
+    <IconButton onClick={() => closeSnackbar(snackbarKey)}>
+      <IconClose sx={{ color: "white" }} />
+    </IconButton>
+  );
+}
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -48,34 +61,39 @@ export default function MyApp(props) {
 
   return (
     <CacheProvider value={emotionCache}>
-      <Head>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <link rel="manifest" href="/manifest.json" />
-      </Head>
-      <ThemeProvider>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        {!navigating ? (
-          <div className={`navigating transition-container`} id="navigating"></div>
-        ) : transition ? (
-          transition()
-        ) : (
-          <Splash content={"Loading..."} />
-        )}
-        <Provider store={store}>
-          <AppProvider>
-            <AuthContextProvider>
-              <StyleProvider>
-                {getLayout(
-                  <ContextProvider>
-                    <Component {...pageProps} />
-                  </ContextProvider>
-                )}
-              </StyleProvider>
-            </AuthContextProvider>
-          </AppProvider>
-        </Provider>
-      </ThemeProvider>
+      <SnackbarProvider
+        maxSnack={5}
+        action={(snackbarKey) => <SnackbarCloseButton snackbarKey={snackbarKey} />}
+      >
+        <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+          <link rel="manifest" href="/manifest.json" />
+        </Head>
+        <ThemeProvider>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          {!navigating ? (
+            <div className={`navigating transition-container`} id="navigating"></div>
+          ) : transition ? (
+            transition()
+          ) : (
+            <Splash content={"Loading..."} />
+          )}
+          <Provider store={store}>
+            <AppProvider>
+              <AuthContextProvider>
+                <StyleProvider>
+                  {getLayout(
+                    <ContextProvider>
+                      <Component {...pageProps} />
+                    </ContextProvider>
+                  )}
+                </StyleProvider>
+              </AuthContextProvider>
+            </AppProvider>
+          </Provider>
+        </ThemeProvider>
+      </SnackbarProvider>
     </CacheProvider>
   );
 }

@@ -1,4 +1,5 @@
-import { Badge, Box, Avatar as MuiAvatar, styled } from "@mui/material";
+import { Badge, Box, Avatar as MuiAvatar, IconButton, styled, useTheme } from "@mui/material";
+import { AddAPhoto, Edit } from "@mui/icons-material";
 
 import { useRouter } from "next/router";
 import { useTournamentContext } from "../context/TournamentContext";
@@ -18,71 +19,125 @@ export const StyledBadge = styled(Badge)(({ theme }) => ({
   }
 }));
 
-const Avatar = ({ variant, user, src, alt, sx, size, hideStatus, status, ...props }) => {
+const Avatar = ({
+  variant,
+  user,
+  src,
+  alt,
+  sx,
+  size,
+  hideStatus,
+  status,
+  editable,
+  onChange,
+  ContainerProps,
+  ...props
+}) => {
   const router = useRouter();
+  const theme = useTheme();
   const { player } = useTournamentContext();
-
-  if (hideStatus === true) {
-    return (
-      <Box
-        onClick={() => {
-          router.push("/user/" + user.id);
-        }}
-        sx={{
-          cursor: "pointer"
-        }}
-      >
-        <MuiAvatar
-          variant={variant}
-          src={user?.profilePic}
-          alt={user?.name}
-          sx={{ ...sx }}
-          {...props}
-        />
-      </Box>
-    );
-  }
 
   return (
     <Box
       onClick={() => {
-        router.push("/user/" + user.id);
+        if (editable === true) return;
+        else router.push("/user/" + user.id);
       }}
       sx={{
-        cursor: "pointer"
+        position: "relative",
+        cursor: "pointer",
+        ...ContainerProps?.sx
       }}
     >
-      <StyledBadge
-        overlap="circular"
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        badgeContent=" "
-        variant={size === "large" ? "" : "dot"}
-        color={
-          user?.onlineStatus === 0
-            ? "success"
-            : user?.onlineStatus === 1
-            ? "warning"
-            : user?.onlineStatus === 3
-            ? "error"
-            : "default"
-        }
-        sx={{
-          "& .MuiBadge-badge": {
-            backgroundColor:
-              user?.onlineStatus !== 0 && user?.onlineStatus !== 1 && user?.onlineStatus !== 3
-                ? "gray"
-                : ""
+      {hideStatus === true ? (
+        <>
+          <MuiAvatar variant={variant} src={src || user?.profilePic} alt={user?.name} {...props} sx={{ ...sx }} />
+          {editable === true && (
+            <IconButton
+              size="large"
+              sx={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "100%",
+                height: "100%",
+                // color: theme.palette.primary.main,
+                opacity: 0,
+                ":hover": {
+                  background: "rgba(0,0,0,.4)",
+                  opacity: 1
+                }
+              }}
+              component={"label"}
+            >
+              <AddAPhoto />
+              <input
+                type="file"
+                accept="image/*"
+                name="upload-image"
+                id="upload-image"
+                hidden
+                onChange={onChange}
+              />
+            </IconButton>
+          )}
+        </>
+      ) : (
+        <StyledBadge
+          overlap="circular"
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          badgeContent=" "
+          variant={size === "large" ? "" : "dot"}
+          color={
+            user?.onlineStatus === 0
+              ? "success"
+              : user?.onlineStatus === 1
+              ? "warning"
+              : user?.onlineStatus === 3
+              ? "error"
+              : "default"
           }
-        }}
-      >
-        <MuiAvatar
-          variant={variant}
-          src={user?.profilePic}
-          alt={user?.name}
-          sx={{ ...sx }}
-          {...props}
-        />
-      </StyledBadge>
+          sx={{
+            "& .MuiBadge-badge": {
+              backgroundColor:
+                user?.onlineStatus !== 0 && user?.onlineStatus !== 1 && user?.onlineStatus !== 3
+                  ? "gray"
+                  : ""
+            }
+          }}
+        >
+          <MuiAvatar variant={variant} src={src || user?.profilePic} alt={user?.name} {...props} sx={{ ...sx }} />
+          {editable === true && (
+            <IconButton
+              size="large"
+              sx={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "100%",
+                height: "100%",
+                // color: theme.palette.primary.main,
+                opacity: 0,
+                ":hover": {
+                  background: "rgba(0,0,0,.4)",
+                  opacity: 1
+                }
+              }}
+              component={"label"}
+            >
+              <AddAPhoto />
+              <input
+                type="file"
+                accept="image/*"
+                name="upload-image"
+                id="upload-image"
+                hidden
+                onChange={onChange}
+              />
+            </IconButton>
+          )}
+        </StyledBadge>
+      )}
     </Box>
   );
 };

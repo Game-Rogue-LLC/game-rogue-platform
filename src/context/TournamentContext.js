@@ -1,10 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import Splash from "../content/Splash";
+import Splash from "@/src/content/Splash";
+import _ from "lodash";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import store from "@/lib/firestore/collections";
-import { useAuthContext } from "./AuthContext";
+import { useAuthContext } from "@/src/context/AuthContext";
 
 const TournamentContext = createContext({});
 
@@ -26,14 +27,14 @@ const TournamentProvider = (props) => {
   const [organizations, setOrganizations] = useState({});
   const [currentOrganization, setCurrentOrganization] = useState(null);
   const [organizationLoading, setOrganizationLoading] = useState(false);
-  const [activeOrganizationCount, setActiveOrganizationCount] = useState(0);
   const organization = {
     organizations,
     setOrganizations,
     current: useMemo(() => currentOrganization, [currentOrganization]),
     setCurrent: setCurrentOrganization,
-    activeCount: useMemo(() => activeOrganizationCount, [activeOrganizationCount]),
-    setActiveCount: setActiveOrganizationCount,
+    activecount: (uid) => {
+      return _.filter(organizations, (val) => val.uid === uid).length;
+    },
     create: async (newOrganization) => {
       const res = await store.organization.save(null, newOrganization);
       return res;
@@ -44,7 +45,6 @@ const TournamentProvider = (props) => {
         uid,
         (data, active) => {
           setOrganizations(data);
-          setActiveOrganizationCount(active);
         },
         () => setOrganizationLoading(false)
       );
@@ -251,6 +251,11 @@ const TournamentProvider = (props) => {
         },
         () => setPlayerLoading(false)
       );
+    },
+    exists: async (id) => {
+      const res = await store.player.exists(id);
+      if (res.code === "succeed") return true;
+      return false;
     },
     update: async (id, newPlayer) => {
       console.log(id, newPlayer);

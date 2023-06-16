@@ -20,8 +20,7 @@ export const games = [
   // "Zula Global"
 ];
 
-export default function GameSelect(props) {
-  const { option, setOption, sx } = props;
+export default function GameSelect({ option, setOption, sx }) {
   const [options, setOptions] = useState([...games]);
 
   const handleChange = (e) => {
@@ -29,7 +28,7 @@ export default function GameSelect(props) {
   };
 
   useEffect(() => {
-    if (!option && options.length > 0) setOption(options[0]);
+    if (!option && options.length > 0) setOption(options[0].id);
   }, [options]);
 
   return (

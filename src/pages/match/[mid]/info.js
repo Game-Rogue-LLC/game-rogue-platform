@@ -165,13 +165,6 @@ const Page = (props) => {
                   height: "100px"
                 }}
               >
-                {/* <Box
-                  component="img"
-                  src={organization?.organizations[oid]?.contentBlock?.image}
-                  alt=""
-                  width={25}
-                  height={25}
-                ></Box> */}
                 <Box>
                   <Link href={`/profile/?organization=${oid}`}>
                     <Typography variant="h4" fontSize={18} color={colors.primary}>
@@ -231,14 +224,13 @@ const Page = (props) => {
                   component="img"
                   src={event?.events[eid]?.darkLogo}
                   alt=""
-                  width={25}
-                  height={25}
+                  width={50}
+                  height={50}
                 ></Box>
                 <Box sx={{ ml: "-10px" }}>
                   <Typography variant="h4" fontSize={18} color={colors.primary} marginLeft="5px">
                     EVENT
                   </Typography>
-                  {/* {event?.events[eid]?.name} */}
                   <Chip
                     label={
                       // "Round " + romanNumber(event?.events[eid]?.currentRound)
@@ -371,7 +363,7 @@ const Page = (props) => {
             <Grid item xs={12}>
               <Box
                 sx={{
-                  backgroundColor: style.primaryBackgroundColor /*"#9d4f12"*/
+                  backgroundColor: style.primaryBackgroundColor
                 }}
               >
                 <Typography
@@ -386,7 +378,7 @@ const Page = (props) => {
               </Box>
             </Grid>
             {_.range(0, 9, 1).map((val, i) => (
-              <Grid item xs key={`mapban_${i}`}>
+              <Grid item xs={3} lg key={`mapban_${i}`}>
                 <Box
                   sx={{
                     height: "15rem",
@@ -399,7 +391,7 @@ const Page = (props) => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      height: "100%"
+                      height: "190px"
                     }}
                   >
                     {i % 2 == 0 ? (
@@ -447,7 +439,7 @@ const Page = (props) => {
             <Grid item xs={12}>
               <Box
                 sx={{
-                  backgroundColor: style.primaryBackgroundColor /*"#9d4f12"*/
+                  backgroundColor: style.primaryBackgroundColor
                 }}
               >
                 <Typography variant="h4" sx={{ textAlign: "center", fontSize: "1.5rem" }}>
@@ -544,9 +536,9 @@ const Page = (props) => {
 
 Page.getLayout = (page) => {
   return (
-    <PublicLayout>
-      <TournamentProvider>{page}</TournamentProvider>
-    </PublicLayout>
+    <TournamentProvider>
+      <PublicLayout>{page}</PublicLayout>
+    </TournamentProvider>
   );
 };
 

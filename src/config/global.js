@@ -1,5 +1,10 @@
-export const DEFAULT_CONTENTBLOCK_IMAGE = "/Game_Rogue_Text_2_copy.png";
+export const DEFAULT_CONTENTBLOCK_IMAGE = "/Game_Rogue_Text_2.png";
 export const DEFAULT_LOGO = "/LOGO.png";
+export const DEFAULT_PROFILE_PICTURE = "/static/images/Profile_Picture.png";
+export const ORGANIZER_PROFILE_LIMIT = 1;
+export const ORGANIZATION_PROFILE_LIMIT = 1;
+export const TEAM_PROFILE_LIMIT = 10;
+
 export const STAFF_ROLES = [
   {
     id: 0,
@@ -215,10 +220,12 @@ export const PARTICIPANT_STATES = {
 
 export const TEAM_POSITIONS = [
   {
+    id: 0,
     val: 0,
     name: "Manager"
   },
   {
+    id: 1,
     val: 1,
     name: "Player"
   }

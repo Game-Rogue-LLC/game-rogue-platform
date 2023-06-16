@@ -26,6 +26,7 @@ import Validator from "validatorjs";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import AccountInfo from "@/src/components/widgets/rogue-social/profile/AccountInfo";
 
 export const initialInputs = {
   name: "",
@@ -50,22 +51,17 @@ export const customMessages = {
 
 const Page = (props) => {
   const router = useRouter();
-  const theme = useTheme();
   const [uid, setUID] = useState(null);
   const [item, setItem] = useState(null);
-  const [avatar, setAvatar] = useState(null);
   const [inputs, setInputs] = useState({ ...initialInputs });
-  const [disabled, setDisabled] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [saving, setSaving] = useState(false);
   const { setTitle } = useAppContext();
-  const { player, team } = useTournamentContext();
+  const { player } = useTournamentContext();
 
   useEffect(() => {
-    setInputs((prev) => ({
-      ...prev,
+    setInputs({
+      ...inputs,
       ...item
-    }));
+    });
   }, [item]);
 
   useEffect(() => {
@@ -81,7 +77,7 @@ const Page = (props) => {
         console.warn("Invalid User ID");
       }
     }
-  }, [router]);
+  }, [router, player.players]);
 
   useEffect(() => {
     setTitle("EDIT USER PROFILE");
@@ -151,93 +147,8 @@ const Page = (props) => {
   };
 
   return (
-    <Paper sx={{ p: 4 }}>
-      <Grid container spacing={2}>
-        <Grid item sx={{ width: 300 }}>
-          <UserInfo
-            avatar={inputs?.profilePic}
-            item={item}
-            editable={true}
-            handle={(e) => handle.upload(e, "profilePic")}
-          />
-        </Grid>
-        <Grid item xs container spacing={2}>
-          <Grid item xs={12} lg={6}>
-            <Typography variant="h6">User Name</Typography>
-            <FormControl sx={{ mt: 1 }} fullWidth error={errors.userName !== undefined}>
-              <OutlinedInput
-                id="user-name"
-                name="userName"
-                aria-describedby="user-name-helper"
-                value={inputs?.userName}
-                disabled={disabled}
-                onChange={handle.inputs}
-              />
-              {errors.userName !== undefined && (
-                <FormHelperText id="user-name-helper" sx={{ mt: 2 }}>
-                  {errors.userName}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
-          {/* <Grid item xs={12} lg={6}>
-            <Typography variant="h6">Gender</Typography>
-            <Select
-              labelId="gender-select-label"
-              id="gender-select"
-              value={inputs?.gender}
-              onChange={handle.inputs}
-              variant="outlined"
-              name="gender"
-              disabled={disabled}
-              sx={{ mt: 1 }}
-              fullWidth
-            >
-              <MenuItem key={0} value={0}>
-                Male
-              </MenuItem>
-              <MenuItem key={1} value={1}>
-                Female
-              </MenuItem>
-            </Select>
-          </Grid> */}
-          <Grid item xs={12} lg={6}>
-            <Typography variant="h6">Birthday</Typography>
-            <DatePicker
-              value={inputs?.birthday}
-              setValue={setDate}
-              sx={{ mt: 1, width: "100%" }}
-              disabled={disabled}
-            />
-          </Grid>
-          <Grid item xs={12} lg={6}>
-            <Typography variant="h6">Residency</Typography>
-            <CountrySelect
-              sx={{ mt: 1, width: "100%" }}
-              option={inputs?.residency}
-              setOption={(val) => setInputs((prev) => ({ ...prev, residency: val }))}
-            />
-          </Grid>
-          <Grid item xs={12} lg={6}>
-            <Typography variant="h6">Age</Typography>
-            <FormControlLabel
-              control={
-                <Switch
-                  name="showAge"
-                  checked={inputs?.showAge}
-                  onChange={(e) => setInputs((prev) => ({ ...prev, showAge: e.target.checked }))}
-                />
-              }
-              label="Show Age"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <LoadingButton loading={saving} variant="contained" onClick={handle.save}>
-              Save
-            </LoadingButton>
-          </Grid>
-        </Grid>
-      </Grid>
+    <Paper sx={{ p: 2 }}>
+      <AccountInfo item={item} />
     </Paper>
   );
 };
