@@ -37,7 +37,6 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 const Page = (props) => {
   const { user } = useAuthContext();
   const router = useRouter();
-  const { user } = useAuthContext();
   const { ticket } = useTournamentContext();
   const [tab, setTab] = useState(router.query.tab || "0");
   const [profileTab, setProfileTab] = useState(router.query.profileTab || "0");
