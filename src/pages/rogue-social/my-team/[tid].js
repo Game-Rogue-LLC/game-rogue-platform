@@ -15,7 +15,6 @@ import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 
 const Page = (props) => {
-  const { uesr } = useAuthContext();
   const router = useRouter();
   const { team } = useTournamentContext();
   const [tid, setTID] = useState(router?.query?.tid);

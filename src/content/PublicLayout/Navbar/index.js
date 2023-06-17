@@ -219,7 +219,7 @@ const PublicNavbar = ({ sx }) => {
                   name: "MANAGE ACCOUNTS",
                   key: "manage-accounts",
                   isLink: true,
-                  to: "/rogue-social"
+                  to: "/rogue-social/manage-accounts"
                 },
                 {
                   name: "LEADERBOARD",
