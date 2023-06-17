@@ -7,9 +7,11 @@ import dayjs from "dayjs";
 import { isMyTeam } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const Teams = ({ isMainPage }) => {
+  const router = useRouter();
   const { setTitle } = useAppContext();
   const { user } = useAuthContext();
   const { team } = useTournamentContext();
