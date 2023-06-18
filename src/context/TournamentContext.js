@@ -373,9 +373,51 @@ const TournamentProvider = (props) => {
   };
   /** End Posting Data / Functions */
 
+  /** Begin Shop Data / Functions */
+  const [shops, setShops] = useState([]);
+  const [shopLoading, setShopLoading] = useState(true);
+  const shop = {
+    shops,
+    setShops,
+    create: async (newShop) => {
+      const res = await store.shop.save(nanoid(5), newShop);
+      return res;
+    },
+    read: async () => {
+      setShopLoading(true);
+      const res = await store.shop.read(
+        (data) => {
+          setShops(data);
+        },
+        () => setShopLoading(false)
+      );
+    },
+    update: async (id, newShop) => {
+      const res = await store.shop.save(id, newShop);
+      return res;
+    },
+    delete: async (id) => {
+      await store.shop.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.shop.delete(id);
+      return res;
+    },
+    upload: store.shop.uploadFile
+  };
+  /** End Match Data / Functions */
+
   const isLoading = useMemo(() => {
-    return organizationLoading || eventLoading || teamLoading || playerLoading || ticketLoading;
-  }, [organizationLoading, eventLoading, teamLoading, playerLoading, ticketLoading]);
+    return (
+      organizationLoading ||
+      eventLoading ||
+      teamLoading ||
+      playerLoading ||
+      ticketLoading ||
+      shopLoading
+    );
+  }, [organizationLoading, eventLoading, teamLoading, playerLoading, ticketLoading, shopLoading]);
 
   const loadTournament = useCallback(() => {
     if (user && user.id) {
@@ -396,6 +438,7 @@ const TournamentProvider = (props) => {
     match.read();
     post.read();
     ticket.read();
+    shop.read();
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
@@ -417,6 +460,7 @@ const TournamentProvider = (props) => {
         match,
         ticket,
         post,
+        shop,
         message,
         organizationLoading,
         eventLoading,

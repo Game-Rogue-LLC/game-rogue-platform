@@ -1,20 +1,13 @@
-import { Logo } from "@pmndrs/branding";
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Box, Button, Grid, Tab, Typography, styled, Checkbox } from "@mui/material";
-import { IconButton } from "@mui/material";
-import {
-  AiFillCamera,
-  AiOutlineArrowLeft,
-  AiOutlineHighlight,
-  AiOutlineShopping
-} from "react-icons/ai";
-import { useSnapshot } from "valtio";
-import { state } from "@/src/store";
+import { AnimatePresence, motion } from "framer-motion";
+import { Box, Button, Checkbox, Grid, Tab, Typography, styled } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+
+import { AiFillCamera } from "react-icons/ai";
 import FilePicker from "@/src/components/widgets/shop/FilePicker";
-import { SwatchesPicker } from "react-color";
-import { LoadingButton, TabContext, TabPanel, TabList } from "@mui/lab";
-import { Close } from "@mui/icons-material";
+import { state } from "@/src/store";
+import { useRouter } from "next/router";
+import { useSnapshot } from "valtio";
 
 export function Overlay({ sx }) {
   const snap = useSnapshot(state);
@@ -58,6 +51,7 @@ const StyledTabList = styled(TabList)(({ theme }) => ({
 }));
 
 function Customizer() {
+  const router = useRouter();
   const snap = useSnapshot(state);
   const apparelSize = ["S", "M", "L", "XL", "XXL", "XXXL"];
   const [file, setFile] = useState("");
@@ -90,7 +84,7 @@ function Customizer() {
       <TabContext value={tab}>
         <StyledTabList onChange={handle.changeTab} aria-label="Tabs for games">
           <Tab label="LOGO" value="1" sx={{ fontSize: "17px" }} />
-          <Tab label="CHECKOUT" value="2" sx={{ fontSize: "17px" }} />
+          <Tab label="CONNECT" value="2" sx={{ fontSize: "17px" }} />
         </StyledTabList>
         <TabPanel value="1" sx={{ padding: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
@@ -266,6 +260,14 @@ function Customizer() {
                 </Typography>
               </Box>
             </Box>
+          </Box>
+          <Box
+            sx={{ mt: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}
+          >
+            <Button variant="contained">Connect to Shop</Button>
+            <Button variant="contained" onClick={() => router.push("/shop/create")}>
+              Create a Shop
+            </Button>
           </Box>
         </TabPanel>
       </TabContext>
