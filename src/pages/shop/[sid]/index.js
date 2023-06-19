@@ -94,6 +94,11 @@ const Page = (props) => {
   useEffect(() => {
     if (shop?.shops[sid]) {
       setItem(shop.shops[sid]);
+      setColors({
+        primary: shop.shops[sid].primary,
+        secondary: shop.shops[sid].secondary,
+        tertiary: shop.shops[sid].tertiary
+      });
     }
   }, [sid, shop?.shops]);
 
@@ -192,7 +197,7 @@ const Page = (props) => {
                   fontSize={24}
                   textAlign="center"
                   padding={2}
-                  color={theme.palette.primary.main}
+                  color={colors.primary}
                 >
                   Categories
                 </Typography>
@@ -224,13 +229,13 @@ const Page = (props) => {
                       onClose={onCloseNewProduct}
                     />
 
-                    <Button
+                    <CustomButton
                       variant="contained"
                       sx={{ position: "absolute", right: 10, top: 10 }}
                       onClick={onOpenNewProduct}
                     >
                       Add New Product
-                    </Button>
+                    </CustomButton>
                   </>
                 )}
 
@@ -239,7 +244,7 @@ const Page = (props) => {
                   fontSize={24}
                   textAlign="center"
                   padding={2}
-                  color={theme.palette.primary.main}
+                  color={colors.primary}
                 >
                   Products
                 </Typography>

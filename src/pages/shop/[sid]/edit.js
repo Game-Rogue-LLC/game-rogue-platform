@@ -16,6 +16,7 @@ import TournamentProvider, { useTournamentContext } from "@/src/context/Tourname
 import { customMessages, model, rules } from "@/lib/firestore/collections/shops";
 import { useEffect, useState } from "react";
 
+import ColorSelect from "@/src/components/dropdown/ColorSelect";
 import { Edit } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import ShopLayout from "@/src/content/ShopLayout";
@@ -24,6 +25,7 @@ import config from "@/src/config/global";
 import { enqueueSnackbar } from "notistack";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const initialInputs = {
   ...model
@@ -34,6 +36,7 @@ const Page = (props) => {
   const theme = useTheme();
   const { user } = useAuthContext();
   const { shop } = useTournamentContext();
+  const { colors, setColors } = useStyleContext();
   const [sid, setSID] = useState(router.query?.sid);
   const [banner, setBanner] = useState(null);
   const [inputs, setInputs] = useState({ ...initialInputs });
@@ -46,6 +49,14 @@ const Page = (props) => {
       setSID(router.query.sid);
     }
   }, [router, shop.shops]);
+
+  useEffect(() => {
+    setColors({
+      primary: inputs?.primary,
+      secondary: inputs?.secondary,
+      tertiary: inputs?.tertiary
+    });
+  }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
   useEffect(() => {
     if (shop.shops[sid]) setInputs({ ...shop.shops[sid] });
@@ -111,6 +122,13 @@ const Page = (props) => {
           break;
       }
     }
+  };
+
+  const onColorChange = (name, value) => {
+    setInputs({
+      ...inputs,
+      [name]: value?.hex
+    });
   };
 
   return (
@@ -185,6 +203,41 @@ const Page = (props) => {
                 </FormHelperText>
               )}
             </FormControl>
+          </Grid>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={12} lg={4}>
+              <InputLabel>Primary</InputLabel>
+              <ColorSelect
+                name="primary"
+                label="Primary"
+                value={inputs?.primary}
+                disabled={disabled}
+                onChange={(val) => onColorChange("primary", val)}
+                sx={{ mt: 1 }}
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <InputLabel>Secondary</InputLabel>
+              <ColorSelect
+                name="secondary"
+                label="Secondary"
+                disabled={disabled}
+                value={inputs?.secondary}
+                onChange={(val) => onColorChange("secondary", val)}
+                sx={{ mt: 1 }}
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <InputLabel>Tertiary</InputLabel>
+              <ColorSelect
+                name="tertiary"
+                label="Tertiary"
+                disabled={disabled}
+                value={inputs?.tertiary}
+                onChange={(val) => onColorChange("tertiary", val)}
+                sx={{ mt: 1 }}
+              />
+            </Grid>
           </Grid>
           <Grid item>
             <LoadingButton loading={saving} variant="contained" onClick={handle.save}>
