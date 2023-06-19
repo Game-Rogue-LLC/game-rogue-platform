@@ -1,9 +1,14 @@
+import { Box, Button, Container, Grid, IconButton, Typography } from "@mui/material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+
+import ShopContainer from "@/src/components/widgets/shop/ShopContainer";
 import ShopLayout from "@/src/content/ShopLayout";
-import { Box, IconButton, Typography, Button, Grid, Container } from "@mui/material";
 import { useRouter } from "next/router";
 
 const Page = (props) => {
   const router = useRouter();
+  const { shop } = useTournamentContext();
+
   const moreButtonStyle = {
     fontWeight: 700,
     textTransform: "uppercase",
@@ -69,6 +74,7 @@ const Page = (props) => {
           </Box>
         </Box>
       </Box>
+
       <Box sx={{ display: "flex", backgroundColor: "white", justifyContent: "center" }}>
         <Box sx={{ display: "flex", marginTop: "30px" }}>
           <Box textAlign="center">
@@ -93,12 +99,13 @@ const Page = (props) => {
             </Button>
           </Box>
         </Box>
-        <Box sx={{ margin: "20px" }}>
+        <Box sx={{ margin: "20px", overflow: "hidden" }}>
           <video
             style={{
               height: "80vh",
               width: "100%",
-              zIndex: 9999
+              zIndex: 9999,
+              marginTop: "-25px"
             }}
             muted={true}
             autoPlay={true}
@@ -108,58 +115,55 @@ const Page = (props) => {
           </video>
         </Box>
       </Box>
-      <Box sx={{ backgroundColor: "black", padding: "30px" }}>
-        <Container>
+
+      <Box sx={{ backgroundColor: "black", mt: 4, paddingInline: "10%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            alignItems: "center",
+            // backgroundColor: "#140300",
+            background: "linear-gradient(to right, #321401 30%, #a84900)",
+            border: "none",
+            borderLeft: "solid 5px #ed7606",
+            padding: 2
+          }}
+        >
+          <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+          <Typography
+            variant="body1"
+            fontWeight={700}
+            fontSize={25}
+            color="white"
+            textTransform="uppercase"
+          >
+            SHOPS
+          </Typography>
           <Box
             sx={{
-              display: "flex",
-              gap: 1,
-              alignItems: "center",
-              // backgroundColor: "#140300",
-              background: "linear-gradient(to right, #321401 30%, #a84900)",
-              border: "none",
-              borderLeft: "solid 5px #ed7606",
-              padding: 2
+              flex: 1,
+              textAlign: "right"
             }}
           >
-            <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
-            <Typography
-              variant="body1"
-              fontWeight={700}
-              fontSize={25}
-              color="white"
-              textTransform="uppercase"
-            >
-              SHOPS
-            </Typography>
-            <Box
+            <Button
+              variant="contained"
               sx={{
-                flex: 1,
-                textAlign: "right"
+                // backgroundColor: "#c2260a",
+                ":hover": {
+                  // backgroundColor: "#ff4929",
+                },
+                ...moreButtonStyle
+              }}
+              onClick={() => {
+                router.push("/shop/create");
               }}
             >
-              <Button
-                variant="contained"
-                sx={{
-                  // backgroundColor: "#c2260a",
-                  ":hover": {
-                    // backgroundColor: "#ff4929",
-                  },
-                  ...moreButtonStyle
-                }}
-                // onClick={() => {
-                //   router.push("/match/upcoming");
-                // }}
-              >
-                OPEN SHOP
-              </Button>
-            </Box>
+              OPEN SHOP
+            </Button>
           </Box>
-        </Container>
-        <Box textAlign="center" marginTop="30px">
-          <Typography variant="h6" textTransform="uppercase" color="white">
-            No Shops
-          </Typography>
+        </Box>
+        <Box textAlign="center" marginBlock="30px">
+          <ShopContainer items={_.map(shop?.shops, (val) => val)} />
         </Box>
       </Box>
     </Box>
@@ -167,7 +171,11 @@ const Page = (props) => {
 };
 
 Page.getLayout = (page) => {
-  return <ShopLayout>{page}</ShopLayout>;
+  return (
+    <TournamentProvider>
+      <ShopLayout>{page}</ShopLayout>
+    </TournamentProvider>
+  );
 };
 
 export default Page;

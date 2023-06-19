@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
-import { useStyleContext } from "@/src/context/StyleContext";
-import { numberLang } from "@/src/utils/utils";
 import { Box, Button, Divider, Tab, Tooltip, Typography, useTheme } from "@mui/material";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import TeamScoreBoard from "./TeamScoreBoard";
-import MatchChat from "./MatchChat";
-import { useAuthContext } from "@/src/context/AuthContext";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
 import CustomButton from "@/src/components/button/CustomButton";
+import MatchChat from "@/src/components/widgets/rogue-social/MatchChat";
+import TeamScoreBoard from "@/src/components/widgets/rogue-social/TeamScoreBoard";
+import { numberLang } from "@/src/utils/utils";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
+import { useStyleContext } from "@/src/context/StyleContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const MatchScoreBoard = ({ item }) => {
   const theme = useTheme();

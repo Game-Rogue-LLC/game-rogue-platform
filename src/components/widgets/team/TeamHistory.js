@@ -1,6 +1,6 @@
 import { Box, List } from "@mui/material";
 
-import TeamHistoryItem from "./TeamHistoryItem";
+import TeamHistoryItem from "@/src/components/widgets/team/TeamHistoryItem";
 import _ from "lodash";
 
 const TeamHistory = ({ items }) => {

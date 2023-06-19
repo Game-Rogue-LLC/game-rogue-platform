@@ -1,12 +1,12 @@
 import { Box, Skeleton, Typography } from "@mui/material";
 
-import Image from "next/image";
+import Avatar from "@/src/components/Avatar";
 import Link from "next/link";
 
-export default function ({ team, win, sx, width, height, fontSize }) {
+export default function ({ organizer, sx, width, height, fontSize }) {
   if (!sx) sx = {};
   return (
-    <Link href={"/rogue-social/team/" + team?.id} className="team-link">
+    <Link href={"/rogue-social/profile/" + organizer?.id}>
       <Box
         sx={{
           display: "flex",
@@ -23,12 +23,13 @@ export default function ({ team, win, sx, width, height, fontSize }) {
           ...sx
         }}
       >
-        {team?.darkLogo ? (
-          <Image
-            src={team.darkLogo}
+        {organizer?.profilePic ? (
+          <Avatar
+            src={organizer.profilePic}
             width={width ? width : 30}
             height={height ? height : 30}
-            alt={team.darkLogo}
+            alt={organizer.profilePic}
+            hideStatus={true}
           />
         ) : (
           <Skeleton
@@ -39,7 +40,7 @@ export default function ({ team, win, sx, width, height, fontSize }) {
         )}
         &nbsp;
         <Typography sx={{ color: "white", fontSize: fontSize ? fontSize : "16px" }}>
-          {team?.name}
+          {organizer?.name}
         </Typography>
       </Box>
     </Link>

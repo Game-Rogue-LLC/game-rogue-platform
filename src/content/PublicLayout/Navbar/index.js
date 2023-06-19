@@ -256,7 +256,7 @@ const PublicNavbar = ({ sx }) => {
                     name: "My Organizer",
                     key: "my-organizer",
                     isLink: true,
-                    to: "/rogue-social/organizer"
+                    to: "/rogue-social/organization"
                   },
                   {
                     name: "Producer Dashboard",
@@ -466,11 +466,11 @@ const PublicNavbar = ({ sx }) => {
                   <Link href={"/rogue-social/team"}>My Team</Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUser} key="my-organizer" disableRipple>
-                  <Link href={"/rogue-social/organizer"}>My Organizer</Link>
+                  <Link href={"/rogue-social/organization"}>My Organizer</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-profile" disableRipple>
-                  <Link href={`/rogue-social/my-profile/${user.user?.id}`}>My Profile</Link>
+                  <Link href={`/rogue-social/profile/${user.user?.id}`}>My Profile</Link>
                 </MenuItem>
                 <MenuItem
                   onClick={(e) => {
