@@ -2,9 +2,9 @@ import { Box, Paper, Tab, Typography, styled, useTheme } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import { KeyboardArrowRight } from "@mui/icons-material";
-import { TEAM_PROFILE_LIMIT } from "@/src/config/global";
-import TeamCreateForm from "@/src/components/widgets/team/TeamCreateForm";
-import TeamList from "@/src/components/widgets/rogue-social/accounts/TeamList";
+import { ORGANIZATION_PROFILE_LIMIT } from "@/src/config/global";
+import OrganizationCreateForm from "@/src/components/widgets/organization/OrganizationCreateForm";
+import OrganizerList from "@/src/components/widgets/rogue-social/accounts/OrganizerList";
 import { useState } from "react";
 
 const StyledTab = styled(Tab)(({ theme }) => ({
@@ -15,7 +15,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   }
 }));
 
-const Teams = ({ items }) => {
+const Organizers = ({ items }) => {
   const theme = useTheme();
   const [tab, setTab] = useState("0");
 
@@ -58,15 +58,15 @@ const Teams = ({ items }) => {
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1 }}>
           <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-            <TeamCreateForm disabled={items.length >= TEAM_PROFILE_LIMIT} />
+            {/* <OrganizerCreateForm disabled={items.length >= ORGANIZATION_PROFILE_LIMIT} /> */}
           </Paper>
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1 }}>
-          <TeamList items={items} />
+          <OrganizerList items={items} />
         </TabPanel>
       </TabContext>
     </Box>
   );
 };
 
-export default Teams;
+export default Organizers;

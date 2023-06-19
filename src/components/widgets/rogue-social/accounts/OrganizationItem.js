@@ -9,7 +9,7 @@ export default function ({ organization, win, sx, disableLink }) {
   const { player } = useTournamentContext();
   if (!sx) sx = {};
   return (
-    <Link href={"/rogue-social/organizer/" + organization?.id} className="organizer-link">
+    <Link href={"/rogue-social/organization/" + organization?.id}>
       <Box
         sx={{
           display: "flex",

@@ -12,19 +12,19 @@ import {
   Select,
   Typography
 } from "@mui/material";
+import { useMemo, useState } from "react";
 
 import { Edit } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { enqueueSnackbar } from "notistack";
+import { model } from "@/lib/firestore/collections/products";
 import { nanoid } from "nanoid";
-import { productModel } from "@/lib/firestore/collections/shops";
-import { useState } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const AddProductDialog = ({ sid, open, onClose }) => {
-  const { shop } = useTournamentContext();
+  const { shop, product, category } = useTournamentContext();
   const [saving, setSaving] = useState(false);
-  const [inputs, setInputs] = useState({ ...productModel });
+  const [inputs, setInputs] = useState({ ...model });
   const [banner, setBanner] = useState(null);
 
   const handle = {
@@ -39,22 +39,30 @@ const AddProductDialog = ({ sid, open, onClose }) => {
 
       if (banner) {
         uploaded = false;
-        const res = await shop.upload(banner, sid, "product_image_" + newProduct.id);
+        const res = await product.upload(banner, newProduct.id, "image");
         if (res.code === "succeed") {
           newProduct.banner = res.url;
           uploaded = true;
         }
       }
 
-      const res = await shop.update(sid, { products: [...shop.shops[sid].products, newProduct] });
+      const res1 = await product.update(newProduct.id, newProduct);
+
+      if (res1.code === "succeed") {
+        const res = await shop.update(sid, {
+          products: [...shop.shops[sid].products, res1.data.id]
+        });
+        if (res.code === "succeed") {
+          enqueueSnackbar("Saved successfully", { variant: "success" });
+        } else {
+          enqueueSnackbar(res.message, { variant: "error" });
+        }
+      } else {
+        enqueueSnackbar(res1.message, { variant: "error" });
+      }
       setSaving(false);
       onClose();
-      setInputs({ ...productModel });
-      if (res.code === "succeed") {
-        enqueueSnackbar("Saved successfully", { variant: "success" });
-      } else {
-        enqueueSnackbar(res.message, { variant: "error" });
-      }
+      setInputs({ ...model });
     },
     inputs: (e) => {
       let { name, type, value } = e.target;
@@ -79,6 +87,13 @@ const AddProductDialog = ({ sid, open, onClose }) => {
       }
     }
   };
+
+  const categories = useMemo(() => {
+    if (shop.shops && shop.shops[sid]) {
+      return _.map(shop.shops[sid].categories, (key) => category.categories[key]);
+    }
+    return [];
+  }, [sid, shop.shops]);
 
   return (
     <Dialog open={open} onClose={onClose} PaperProps={{ sx: { width: "50%", minWidth: 400 } }}>
@@ -122,7 +137,7 @@ const AddProductDialog = ({ sid, open, onClose }) => {
               label="Category"
               onChange={handle.inputs}
             >
-              {shop.shops[sid]?.categories.map((val) => (
+              {categories.map((val) => (
                 <MenuItem key={val.id} value={val.id}>
                   {val.name}
                 </MenuItem>

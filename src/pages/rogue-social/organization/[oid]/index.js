@@ -122,14 +122,16 @@ const Page = (props) => {
         </Box>
       </Box>
       <Container sx={{ position: "relative" }}>
-        <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
-          <CustomButton
-            sx={{ paddingInline: "16px" }}
-            onClick={(e) => router.push("/organization/" + oid + "/edit")}
-          >
-            Edit Profile
-          </CustomButton>
-        </Box>
+        {organization?.organizations[oid]?.uid === user.id && (
+          <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
+            <CustomButton
+              sx={{ paddingInline: "16px" }}
+              onClick={(e) => router.push("/organization/" + oid + "/edit")}
+            >
+              Edit Profile
+            </CustomButton>
+          </Box>
+        )}
 
         <Box sx={{ mt: 5 }}>
           <Typography variant="h4" sx={{ fontSize: "24px" }}>

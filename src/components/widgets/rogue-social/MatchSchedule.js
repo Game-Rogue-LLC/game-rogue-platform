@@ -202,56 +202,57 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(ticket?.tickets).map((key) => {
-              const val = ticket.tickets[key];
-              return (
-                <TableRow>
-                  <TableCell>
-                    <TeamItem team={team?.teams[val.data.senderTeam]} disableLink={true} />
-                  </TableCell>
-                  <TableCell>
-                    <TeamItem team={team?.teams[val.data.receiverTeam]} disableLink={true} />
-                  </TableCell>
-                  <TableCell align="center">
-                    {formatDate(val.data.time.toDate(), "YYYY-MM-DD HH:mm")}
-                  </TableCell>
-                  {val.sender === user.id ? (
+            {_.filter(ticket?.tickets, (val) => val.type === "MATCH_SCHEDULE_REQUEST").map(
+              (val) => {
+                return (
+                  <TableRow>
+                    <TableCell>
+                      <TeamItem team={team?.teams[val.data.senderTeam]} disableLink={true} />
+                    </TableCell>
+                    <TableCell>
+                      <TeamItem team={team?.teams[val.data.receiverTeam]} disableLink={true} />
+                    </TableCell>
                     <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        color="error"
-                        onClick={(e) => onDeny(key)}
-                      >
-                        Cancel
-                      </Button>
+                      {formatDate(val.data.time.toDate(), "YYYY-MM-DD HH:mm")}
                     </TableCell>
-                  ) : (
-                    <TableCell
-                      align="center"
-                      sx={{ display: "flex", gap: 1, justifyContent: "center" }}
-                    >
-                      <Button
-                        variant="contained"
-                        size="small"
-                        color="success"
-                        onClick={(e) => onAccept(val.data.time)}
+                    {val.sender === user.id ? (
+                      <TableCell align="center">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="error"
+                          onClick={(e) => onDeny(key)}
+                        >
+                          Cancel
+                        </Button>
+                      </TableCell>
+                    ) : (
+                      <TableCell
+                        align="center"
+                        sx={{ display: "flex", gap: 1, justifyContent: "center" }}
                       >
-                        Accept
-                      </Button>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        color="error"
-                        onClick={(e) => onDeny(key)}
-                      >
-                        Deny
-                      </Button>
-                    </TableCell>
-                  )}
-                </TableRow>
-              );
-            })}
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="success"
+                          onClick={(e) => onAccept(val.data.time)}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="error"
+                          onClick={(e) => onDeny(key)}
+                        >
+                          Deny
+                        </Button>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              }
+            )}
           </TableBody>
         </Table>
       </Box>

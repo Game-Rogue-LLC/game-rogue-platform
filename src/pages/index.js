@@ -8,7 +8,7 @@ import { Carousel } from "react-responsive-carousel";
 import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
 import PublicLayout from "@/src/content/PublicLayout";
 import Stepper from "@/src/components/carousel/Stepper";
-import TournamentProvider from "../context/TournamentContext";
+import TournamentProvider from "@/src/context/TournamentContext";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";

@@ -1,4 +1,13 @@
-import { Box, Button, InputAdornment, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputAdornment,
+  Typography
+} from "@mui/material";
+import { EVENT_REGIONS, PLATFORMS } from "@/src/config/global";
 import { useEffect, useMemo, useState } from "react";
 
 import CustomButton from "@/src/components/button/CustomButton";
@@ -6,6 +15,7 @@ import MatchItem from "@/src/components/widgets/rogue-social/MatchItem";
 import { Search } from "@mui/icons-material";
 import SearchInput from "@/src/components/input/SearchInput";
 import dayjs from "dayjs";
+import { games } from "@/src/components/dropdown/GameSelect";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -117,6 +127,57 @@ const RightSidebar = ({ sx }) => {
             </Button>
           </>
         )}
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "left",
+          gap: 1,
+          flexDirection: "column",
+          border: "solid 1px rgba(245,131,31,.6)",
+          borderRadius: "5px",
+          padding: 2
+        }}
+      >
+        <Box>
+          <Typography variant="h6" fontSize={24} fontWeight="bold">
+            Game
+          </Typography>
+          {games.map((item) => (
+            <FormControlLabel
+              key={"game_select_" + item.id}
+              control={<Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />}
+              label={item.name}
+            />
+          ))}
+        </Box>
+
+        <Box>
+          <Typography variant="h6" fontSize={24} fontWeight="bold">
+            Platform
+          </Typography>
+          {PLATFORMS.map((item) => (
+            <FormControlLabel
+              key={"platform_select_" + item.id}
+              control={<Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />}
+              label={item.name}
+            />
+          ))}
+        </Box>
+
+        <Box>
+          <Typography variant="h6" fontSize={24} fontWeight="bold">
+            Region
+          </Typography>
+          {EVENT_REGIONS.map((item) => (
+            <FormControlLabel
+              key={"region_select_" + item.id}
+              control={<Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />}
+              label={item.name}
+            />
+          ))}
+        </Box>
       </Box>
     </Box>
   );

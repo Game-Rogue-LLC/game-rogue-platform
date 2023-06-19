@@ -31,6 +31,7 @@ import ProductCard from "@/src/components/widgets/shop/ProductCard";
 import PublicLayout from "@/src/content/PublicLayout";
 import SlantBanner from "@/src/components/widgets/SlantBanner";
 import StreamContainer from "@/src/components/widgets/rogue-social/profile/StreamContainer";
+import _ from "lodash";
 import dayjs from "dayjs";
 import { markdownToHtml } from "@/src/utils/html-markdown";
 import { useAppContext } from "@/src/context/app";
@@ -44,7 +45,7 @@ const Page = (props) => {
   const theme = useTheme();
   const { setTitle } = useAppContext();
   const { setColors, colors } = useStyleContext();
-  const { organization, player, event, match, team, shop } = useTournamentContext();
+  const { shop, product, category } = useTournamentContext();
   const [sid, setSID] = useState(router?.query?.sid);
   const [item, setItem] = useState(null);
   const [newCategory, setNewCategory] = useState("");
@@ -96,6 +97,18 @@ const Page = (props) => {
     }
   }, [sid, shop?.shops]);
 
+  const categories = useMemo(() => {
+    if (item && item.categories && category.categories) {
+      return _.map(item.categories, (key) => category.categories[key]);
+    }
+    return [];
+  }, [item, category.categories]);
+  const products = useMemo(() => {
+    if (item && item.products && product.products)
+      return _.map(item.products, (key) => product.products[key]);
+    return [];
+  }, [item, product.products]);
+
   return (
     <Box sx={{ pb: 4 }}>
       <SlantBanner background={item?.banner} />
@@ -129,14 +142,16 @@ const Page = (props) => {
       </Box>
 
       <Container sx={{ position: "relative" }}>
-        <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
-          <CustomButton
-            sx={{ paddingInline: "16px" }}
-            onClick={(e) => router.push("/shop/" + sid + "/edit")}
-          >
-            Edit Profile
-          </CustomButton>
-        </Box>
+        {shop.shops[sid]?.uid === user.id && (
+          <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
+            <CustomButton
+              sx={{ paddingInline: "16px" }}
+              onClick={(e) => router.push("/shop/" + sid + "/edit")}
+            >
+              Edit Profile
+            </CustomButton>
+          </Box>
+        )}
 
         <Box sx={{ mt: 4, py: 2 }}>
           <Typography variant="body1" sx={{ fontSize: "16px" }}>
@@ -181,10 +196,13 @@ const Page = (props) => {
                   Categories
                 </Typography>
                 <List component="nav" sx={{ padding: 1 }}>
-                  {item && item.categories && item.categories.length > 0 ? (
-                    item?.categories.map((val) => (
+                  {categories && categories.length > 0 ? (
+                    categories.map((val) => (
                       <ListItemButton key={val.id} alignItems="flex-start" sx={{ padding: 0 }}>
-                        <ListItemText primary={val.name} sx={{ textAlign: "center" }} />
+                        <ListItemText
+                          primary={val.name}
+                          sx={{ textAlign: "center", color: "white" }}
+                        />
                       </ListItemButton>
                     ))
                   ) : (
@@ -226,11 +244,12 @@ const Page = (props) => {
                 </Typography>
 
                 <Grid container spacing={2} rowSpacing={2}>
-                  {shop.shops[sid]?.products.map((val) => (
-                    <Grid item xs={12} md={6} lg={4}>
-                      <ProductCard item={val} />
-                    </Grid>
-                  ))}
+                  {products &&
+                    products.map((val) => (
+                      <Grid item xs={12} md={6} lg={4} key={val.id}>
+                        <ProductCard item={val} />
+                      </Grid>
+                    ))}
                 </Grid>
               </Box>
             </Grid>

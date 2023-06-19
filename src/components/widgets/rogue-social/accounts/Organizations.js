@@ -1,62 +1,70 @@
-import { Box, Button } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { Box, Paper, Tab, Typography, styled, useTheme } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 
+import { KeyboardArrowRight } from "@mui/icons-material";
 import { ORGANIZATION_PROFILE_LIMIT } from "@/src/config/global";
-import OrganizationItem from "@/src/components/widgets/rogue-social/accounts/OrganizationItem";
-import { useAppContext } from "@/src/context/app";
-import { useAuthContext } from "@/src/context/AuthContext";
-import { useRouter } from "next/router";
-import { useTournamentContext } from "@/src/context/TournamentContext";
+import OrganizationCreateForm from "@/src/components/widgets/organization/OrganizationCreateForm";
+import OrganizationList from "@/src/components/widgets/rogue-social/accounts/OrganizationList";
+import { useState } from "react";
 
-const Organizations = ({ isMainPage }) => {
-  const router = useRouter();
-  const { user } = useAuthContext();
-  const { organization } = useTournamentContext();
+const StyledTab = styled(Tab)(({ theme }) => ({
+  justifyContent: "space-between",
+  paddingInline: theme.spacing(2),
+  ":hover": {
+    background: "rgba(0,0,0,.2)"
+  }
+}));
 
-  const myOrganizers = useMemo(() => {
-    if (organization?.organizations) {
-      return _.filter(organization.organizations, (val) => val.uid === user.id);
-    }
-    return [];
-  }, [organization?.organizations]);
+const Organizations = ({ items }) => {
+  const theme = useTheme();
+  const [tab, setTab] = useState("0");
+
+  const onTabChange = (e, newTab) => {
+    setTab(newTab);
+  };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "left",
-        gap: 1,
-        flexDirection: "column"
-      }}
-    >
-      {myOrganizers.length > 0
-        ? myOrganizers.map((item) => (
-            <OrganizationItem
-              key={"organization_" + item.id}
-              organization={item}
-              disableLink={true}
-            />
-          ))
-        : isMainPage === false && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                router.push("/rogue-social/manage-accounts");
-              }}
-            >
-              {isMainPage === true ? "CREATE NEW ACCOUNT" : "GO TO MANAGE ACCOUNTS PAGE"}
-            </Button>
-          )}
-      {isMainPage === true && myOrganizers.length < ORGANIZATION_PROFILE_LIMIT && (
-        <Button
-          variant="contained"
-          onClick={() => {
-            router.push("/organization/create");
+    <Box sx={{ display: "flex", height: "100%" }}>
+      <TabContext value={tab}>
+        <Box
+          sx={{
+            position: "static",
+            borderRight: 1,
+            borderColor: "divider"
           }}
         >
-          CREATE NEW ACCOUNT
-        </Button>
-      )}
+          <TabList
+            onChange={onTabChange}
+            orientation="vertical"
+            sx={{
+              width: "280px",
+              height: "100%",
+              background: "linear-gradient(to top,#28160c 60%,#000)"
+            }}
+          >
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Create Account</Typography>}
+              value="0"
+            />
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Manage Accounts</Typography>}
+              value="1"
+            />
+          </TabList>
+        </Box>
+        <TabPanel value="0" sx={{ flexGrow: 1 }}>
+          <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
+            <OrganizationCreateForm disabled={items.length >= ORGANIZATION_PROFILE_LIMIT} />
+          </Paper>
+        </TabPanel>
+        <TabPanel value="1" sx={{ flexGrow: 1 }}>
+          <OrganizationList items={items} />
+        </TabPanel>
+      </TabContext>
     </Box>
   );
 };

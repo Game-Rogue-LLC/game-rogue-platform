@@ -2,7 +2,7 @@ import { Box, Tooltip, Typography, styled, tooltipClasses, useTheme } from "@mui
 import { useDispatch, useSelector } from "react-redux";
 
 import Link from "next/link";
-import PostItem from "../PostItem";
+import PostItem from "@/src/components/widgets/rogue-social/PostItem";
 import dayjs from "dayjs";
 import { readPost } from "@/src/redux/features/postSlice";
 import { useAuthContext } from "@/src/context/AuthContext";

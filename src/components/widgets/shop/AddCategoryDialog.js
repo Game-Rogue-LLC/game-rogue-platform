@@ -16,23 +16,33 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
-const AddCategoryDialog = ({ sid, open, value, onChange, onClose }) => {
-  const { shop } = useTournamentContext();
+const AddCategoryDialog = ({ sid, open, onClose }) => {
+  const { shop, category } = useTournamentContext();
+  const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
+
+  const onNameChange = (e) => {
+    setName(e.target.value);
+  };
 
   const onSave = async (e) => {
     setSaving(true);
+    const res1 = await category.create({ name, sid, deleted: false, createdAt: new Date() });
+    if (res1.code === "succeed") {
+      const res = await shop.update(sid, {
+        categories: [...shop.shops[sid].categories, res1.data.id]
+      });
+      if (res.code === "succeed") {
+        enqueueSnackbar("Saved successfully", { variant: "success" });
+      } else {
+        enqueueSnackbar(res.message, { variant: "error" });
+      }
+    } else {
+      enqueueSnackbar(res1.message, { variant: "error" });
+    }
 
-    const res = await shop.update(sid, {
-      categories: [...shop.shops[sid].categories, { id: nanoid(5), name: value }]
-    });
     setSaving(false);
     onClose();
-    if (res.code === "succeed") {
-      enqueueSnackbar("Saved successfully", { variant: "success" });
-    } else {
-      enqueueSnackbar(res.message, { variant: "error" });
-    }
   };
 
   return (
@@ -47,8 +57,8 @@ const AddCategoryDialog = ({ sid, open, value, onChange, onClose }) => {
             <OutlinedInput
               id="category-name"
               label="Category Name"
-              value={value}
-              onChange={onChange}
+              value={name}
+              onChange={onNameChange}
               fullWidth
             />
           </FormControl>

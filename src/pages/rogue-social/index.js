@@ -35,8 +35,8 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 }));
 
 const Page = (props) => {
-  const { user } = useAuthContext();
   const router = useRouter();
+  const { user } = useAuthContext();
   const { ticket } = useTournamentContext();
   const [tab, setTab] = useState(router.query.tab || "0");
   const [profileTab, setProfileTab] = useState(router.query.profileTab || "0");
@@ -210,7 +210,7 @@ const Page = (props) => {
             <MyCommunity />
           </TabPanel>
           <TabPanel value="5" sx={{ flexGrow: 1, p: 1 }}>
-            <Teams />
+            {/* <Teams /> */}
           </TabPanel>
           <TabPanel value="6" sx={{ flexGrow: 1, p: 0 }}>
             <MyProfile tab={profileTab} onTabChange={onProfileTabChange} />

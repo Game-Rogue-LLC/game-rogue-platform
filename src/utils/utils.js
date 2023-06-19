@@ -1,5 +1,5 @@
 import Color from "color";
-import { TEAM_POSITIONS } from "../config/global";
+import { TEAM_POSITIONS } from "@/src/config/global";
 import dayjs from "dayjs";
 import team from "@/lib/firestore/collections/team";
 

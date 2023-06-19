@@ -51,19 +51,10 @@ const MyProfile = ({ tab, onTabChange }) => {
               label={<Typography>Account Settings</Typography>}
               value="0"
             />
-            <StyledTab
-              icon={<KeyboardArrowRight />}
-              iconPosition="end"
-              label={<Typography>Manage Accounts</Typography>}
-              value="1"
-            />
           </TabList>
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 0 }}>
           <Account />
-        </TabPanel>
-        <TabPanel value="1" sx={{ flexGrow: 1, p: 1 }}>
-          <ManageAccounts isMainPage={false} />
         </TabPanel>
       </TabContext>
     </Box>

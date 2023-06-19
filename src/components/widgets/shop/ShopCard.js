@@ -1,8 +1,10 @@
 import { Box, Typography } from "@mui/material";
 
 import Link from "next/link";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const ShopCard = ({ item }) => {
+  const { player } = useTournamentContext();
   return (
     <Link href={`/shop/${item?.id}`}>
       <Box
@@ -35,6 +37,11 @@ const ShopCard = ({ item }) => {
           <Box sx={{ mt: 1 }}>
             <Typography variant="body1" color="white">
               {item?.description}
+            </Typography>
+          </Box>
+          <Box sx={{ mt: 1 }}>
+            <Typography variant="subtitle2" color="gray">
+              {"Opened by " + player.players[item?.uid].name}
             </Typography>
           </Box>
         </Box>

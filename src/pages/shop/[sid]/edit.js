@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { customMessages, model, rules } from "@/lib/firestore/collections/shops";
+import { useEffect, useState } from "react";
 
 import { Edit } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
@@ -23,7 +24,6 @@ import config from "@/src/config/global";
 import { enqueueSnackbar } from "notistack";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 const initialInputs = {
   ...model
@@ -34,11 +34,22 @@ const Page = (props) => {
   const theme = useTheme();
   const { user } = useAuthContext();
   const { shop } = useTournamentContext();
+  const [sid, setSID] = useState(router.query?.sid);
   const [banner, setBanner] = useState(null);
   const [inputs, setInputs] = useState({ ...initialInputs });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    if (router.query?.sid && shop.shops[sid]) {
+      setSID(router.query.sid);
+    }
+  }, [router, shop.shops]);
+
+  useEffect(() => {
+    if (shop.shops[sid]) setInputs({ ...shop.shops[sid] });
+  }, [shop.shops]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -55,30 +66,25 @@ const Page = (props) => {
   };
 
   const handle = {
-    create: async (e) => {
+    save: async (e) => {
       if (validate(inputs, rules, customMessages) === false) {
         return;
       }
       let newShop = { ...inputs, uid: user.id };
       setSaving(true);
 
-      const res = await shop.create(newShop);
-      if (res.code === "succeed") {
-        if (banner) {
-          const res1 = await shop.upload(banner, res.data.id, "banner");
-          if (res1.code === "succeed") {
-            const res2 = await shop.update(res.data.id, { banner: res1.url });
-            if (res2.code === "succeed") {
-              enqueueSnackbar("Saved successfully!", { variant: "success" });
-            } else {
-              console.warn(res2.message);
-            }
+      if (banner) {
+        const res1 = await shop.upload(banner, sid, "product_banner_" + sid);
+        if (res1.code === "succeed") {
+          const res2 = await shop.update(sid, { banner: res1.url });
+          if (res2.code === "succeed") {
+            enqueueSnackbar("Saved successfully!", { variant: "success" });
           } else {
-            console.warn(res1.message);
+            console.warn(res2.message);
           }
+        } else {
+          console.warn(res1.message);
         }
-      } else {
-        console.warn(res.message);
       }
 
       setSaving(false);
@@ -181,8 +187,8 @@ const Page = (props) => {
             </FormControl>
           </Grid>
           <Grid item>
-            <LoadingButton loading={saving} variant="contained" onClick={handle.create}>
-              Register
+            <LoadingButton loading={saving} variant="contained" onClick={handle.save}>
+              Save
             </LoadingButton>
           </Grid>
         </Grid>

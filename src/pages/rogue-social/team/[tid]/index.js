@@ -7,7 +7,7 @@ import {
   PeopleOutline
 } from "@mui/icons-material";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
-import { formatDate, isMyMatch, isMyTeam } from "@/src/utils/utils";
+import { formatDate, isMyTeam } from "@/src/utils/utils";
 import { useEffect, useMemo, useState } from "react";
 
 import ArticleContainer from "@/src/components/widgets/rogue-social/ArticleContainer";
@@ -121,14 +121,16 @@ const Page = (props) => {
         </Box>
       </Box>
       <Container sx={{ position: "relative" }}>
-        <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
-          <CustomButton
-            sx={{ paddingInline: "16px" }}
-            onClick={() => router.push("/team/" + tid + "/edit")}
-          >
-            Edit Profile
-          </CustomButton>
-        </Box>
+        {isMyTeam(item, user.id) && (
+          <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
+            <CustomButton
+              sx={{ paddingInline: "16px" }}
+              onClick={() => router.push("/team/" + tid + "/edit")}
+            >
+              Edit Profile
+            </CustomButton>
+          </Box>
+        )}
 
         <Box sx={{ my: 2 }}>
           <Typography variant="h4" sx={{ fontSize: "24px" }}>
