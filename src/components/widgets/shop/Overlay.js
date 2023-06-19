@@ -264,8 +264,14 @@ function Customizer() {
           <Box
             sx={{ mt: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}
           >
-            <Button variant="contained">Connect to Shop</Button>
-            <Button variant="contained" onClick={() => router.push("/shop/create")}>
+            <Button variant="contained" sx={{ width: "180px" }}>
+              Connect to Shop
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ width: "180px" }}
+              onClick={() => router.push("/shop/create")}
+            >
               Create a Shop
             </Button>
           </Box>
@@ -274,7 +280,7 @@ function Customizer() {
       <div className="customizer">
         <Button
           variant="contained"
-          sx={{ width: "160px", fontWeight: 600 }}
+          sx={{ width: "180px", fontWeight: 600 }}
           endIcon={<AiFillCamera size="1.3em" />}
           onClick={() => {
             const link = document.createElement("a");

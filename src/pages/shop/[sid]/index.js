@@ -115,6 +115,7 @@ const Page = (props) => {
       <Box
         sx={{
           height: "100px",
+          mt: 1,
           display: "flex",
           justifyContent: "space-between",
           paddingInline: "10%",
