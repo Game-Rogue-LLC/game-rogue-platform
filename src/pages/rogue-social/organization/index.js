@@ -1,13 +1,13 @@
-import { Container } from "@mui/material";
+import { Box } from "@mui/material";
 import Organizations from "@/src/components/widgets/rogue-social/accounts/Organizations";
 import PublicLayout from "@/src/content/PublicLayout";
 import TournamentProvider from "@/src/context/TournamentContext";
 
 const Page = (props) => {
   return (
-    <Container sx={{ my: 4 }}>
+    <Box>
       <Organizations />
-    </Container>
+    </Box>
   );
 };
 

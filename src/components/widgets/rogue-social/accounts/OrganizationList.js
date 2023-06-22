@@ -21,7 +21,8 @@ const OrganizationList = ({ items }) => {
         flexDirection: "column"
       }}
     >
-      {items.length > 0 &&
+      {items &&
+        items.length > 0 &&
         items.map((item) => (
           <OrganizationItem
             key={"organization_" + item.id}
@@ -29,7 +30,7 @@ const OrganizationList = ({ items }) => {
             disableLink={true}
           />
         ))}
-      {items.length < ORGANIZATION_PROFILE_LIMIT && (
+      {items && items.length < ORGANIZATION_PROFILE_LIMIT && (
         <Button
           variant="contained"
           onClick={() => {
