@@ -230,7 +230,7 @@ const PublicNavbar = ({ sx }) => {
               ]}
             />
             <NavItem name="ROGUE TV" handleClick={() => {}} />
-            <NavItem name="ARTICLES" handleClick={() => {}} />
+            <NavItem name="ARTICLES" handleClick={() => router.push("/article")} />
             <NavItem
               name="SHOP"
               handleClick={() => {
