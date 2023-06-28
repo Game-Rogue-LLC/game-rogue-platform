@@ -140,8 +140,12 @@ export default function ArticleSidebar(props) {
           </Select>
         </DialogContent>
         <DialogActions sx={{ padding: 3 }}>
-          <Button variant="contained">OK</Button>
-          <Button variant="contained">Cancel</Button>
+          <Button variant="contained" onClick={onCreateArticleClick}>
+            OK
+          </Button>
+          <Button variant="contained" onClick={onCreateDialogClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
       {/* End Create Article Dialog */}
