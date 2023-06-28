@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 
 const CategoryCard = ({ banner, title, children, sx }) => {
   return (
@@ -11,6 +11,11 @@ const CategoryCard = ({ banner, title, children, sx }) => {
         <Typography variant="body1" sx={{ mt: 2 }}>
           {children}
         </Typography>
+        <Box textAlign="right" sx={{ mt: 1 }}>
+          <Button variant="contained" sx={{ color: "white" }}>
+            More
+          </Button>
+        </Box>
       </Box>
     </Paper>
   );
