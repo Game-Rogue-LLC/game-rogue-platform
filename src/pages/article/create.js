@@ -28,17 +28,14 @@ const Page = (props) => {
   const { organization, event } = useTournamentContext();
 
   useEffect(() => {
-    setTitle("ORGANIZATION");
-    if (Object.keys(organization.organizations).length === 0) router.push("/organization/create");
-    organization.setCurrent(null);
-    event.setCurrent(null);
+    setTitle("ARTICLE");
   }, []);
 
   return (
     <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
       <Grid container rowSpacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h6">Organization Dashboard</Typography>
+          <Typography variant="h6">CREATE ARTICLE</Typography>
         </Grid>
         <Grid item xs={12}></Grid>
       </Grid>
