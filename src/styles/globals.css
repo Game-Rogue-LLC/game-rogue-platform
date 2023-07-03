@@ -727,3 +727,18 @@ input#search::placeholder {
   width: 100vw;
   height: 100vh;
 }
+
+.ck-editor {
+  color: black;
+}
+
+.ck-content {
+  min-height: 400px;
+  height: 400px;
+  overflow: auto;
+}
+
+.se-wrapper-inner {
+  min-height: 500px !important;
+  height: 500px !important;
+}

@@ -115,6 +115,11 @@ export const EVENT_REGIONS = [
   {
     id: 1,
     value: 1,
+    name: "Latin America"
+  },
+  {
+    id: 2,
+    value: 2,
     name: "Europe"
   }
 ];

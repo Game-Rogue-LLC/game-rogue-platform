@@ -36,9 +36,11 @@ import { useMemo, useState } from "react";
 
 import Avatar from "@/src/components/Avatar";
 import Link from "next/link";
+import { LoadingButton } from "@mui/lab";
 import OrganizationMenu from "@/src/content/OrganizationSidebar/Menu";
 import TeamMenu from "@/src/content/OrganizationSidebar/TeamMenu";
 import _ from "lodash";
+import { model } from "@/lib/firestore/collections/articles";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
@@ -70,16 +72,30 @@ export default function ArticleSidebar(props) {
   const router = useRouter();
   const { article, player } = useTournamentContext();
   const { user } = useAuthContext();
-  const [type, setType] = useState();
+  const [type, setType] = useState("");
   const [draftOpen, setDraftOpen] = useState(false);
   const [publishedOpen, setPublishedOpen] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [collaborationsOpen, setCollaborationsOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
 
   const onArticleTypeChange = (e) => {
     setType(e.target.value);
   };
-  const onCreateArticleClick = () => {
+  const onCreateArticleClick = async () => {
+    setCreating(true);
+    const res = await article.create({
+      ...model,
+      uid: user.id,
+      title: "New Article",
+      text: "",
+      createdAt: new Date()
+    });
+
+    setCreating(false);
+    setCreateDialogOpen(false);
+  };
+  const onCreateDialogOpen = () => {
     setCreateDialogOpen(true);
   };
   const onCreateDialogClose = () => {
@@ -95,15 +111,26 @@ export default function ArticleSidebar(props) {
     setCollaborationsOpen((prev) => !prev);
   };
 
+  const onArticleClick = (val) => {
+    router.push("/article/" + val.id);
+  };
+
   const drafts = useMemo(() => {
     if (article.articles)
-      return _.filter(article.articles, (val) => val.opened === true && val.published === false);
+      return _.filter(
+        article.articles,
+        (val) =>
+          val.published === false && (val.uid === user.id || _.includes(val.collabs, user.id))
+      );
     return [];
   }, [article.articles]);
 
   const published = useMemo(() => {
     if (article.articles)
-      return _.filter(article.articles, (val) => val.opened === true && val.published === true);
+      return _.filter(
+        article.articles,
+        (val) => val.published === true && (val.uid === user.id || _.includes(val.collabs, user.id))
+      );
     return [];
   }, [article.articles]);
 
@@ -126,9 +153,7 @@ export default function ArticleSidebar(props) {
         onClose={onCreateDialogClose}
         PaperProps={{ sx: { minWidth: "400px" } }}
       >
-        <DialogTitle>
-          <Typography variant="h4">Article Type</Typography>
-        </DialogTitle>
+        <DialogTitle>Article Type</DialogTitle>
         <DialogContent sx={{ paddingBlock: 0 }}>
           <Typography variant="body1">What type of article are you writing?</Typography>
           <Select value={type} onChange={onArticleTypeChange} sx={{ marginTop: 1 }} fullWidth>
@@ -140,9 +165,9 @@ export default function ArticleSidebar(props) {
           </Select>
         </DialogContent>
         <DialogActions sx={{ padding: 3 }}>
-          <Button variant="contained" onClick={onCreateArticleClick}>
+          <LoadingButton loading={creating} variant="contained" onClick={onCreateArticleClick}>
             OK
-          </Button>
+          </LoadingButton>
           <Button variant="contained" onClick={onCreateDialogClose}>
             Cancel
           </Button>
@@ -190,7 +215,7 @@ export default function ArticleSidebar(props) {
             </ListItem>
             <Divider />
             <ListItem key={"profile_menu_container"} component="div" disablePadding>
-              <ListItemButton sx={{ height: 56 }} onClick={onCreateArticleClick}>
+              <ListItemButton sx={{ height: 56 }} onClick={onCreateDialogOpen}>
                 <ListItemIcon>
                   <Edit />
                 </ListItemIcon>
@@ -205,6 +230,7 @@ export default function ArticleSidebar(props) {
               </ListItemButton>
             </ListItem>
             <Divider />
+
             {/* Begin Drafts */}
             <ListItem
               key={"draft_menu_container"}
@@ -229,7 +255,7 @@ export default function ArticleSidebar(props) {
             {draftOpen &&
               (drafts && drafts.length > 0 ? (
                 _.map(drafts, (val, i) => (
-                  <ListItemButton key={"article_" + val.id}>
+                  <ListItemButton key={"article_" + val.id} onClick={() => onArticleClick(val)}>
                     <ListItemText primary={val.title} />
                   </ListItemButton>
                 ))
@@ -239,7 +265,9 @@ export default function ArticleSidebar(props) {
                 </Typography>
               ))}
             {/* End Drafts */}
+
             <Divider />
+
             {/* Begin Published */}
             <ListItem
               key={"published_menu_container"}
@@ -264,7 +292,7 @@ export default function ArticleSidebar(props) {
             {publishedOpen &&
               (published && published.length > 0 ? (
                 _.map(published, (val, i) => (
-                  <ListItemButton key={"article_" + val.id}>
+                  <ListItemButton key={"article_" + val.id} onClick={() => onArticleClick(val)}>
                     <ListItemText primary={val.title} />
                   </ListItemButton>
                 ))
