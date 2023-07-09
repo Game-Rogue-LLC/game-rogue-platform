@@ -40,6 +40,7 @@ import { LoadingButton } from "@mui/lab";
 import OrganizationMenu from "@/src/content/OrganizationSidebar/Menu";
 import TeamMenu from "@/src/content/OrganizationSidebar/TeamMenu";
 import _ from "lodash";
+import { isMyArticle } from "../utils/utils";
 import { model } from "@/lib/firestore/collections/articles";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -119,8 +120,7 @@ export default function ArticleSidebar(props) {
     if (article.articles)
       return _.filter(
         article.articles,
-        (val) =>
-          val.published === false && (val.uid === user.id || _.includes(val.collabs, user.id))
+        (val) => val.published === false && isMyArticle(val, user.id)
       );
     return [];
   }, [article.articles]);
@@ -129,7 +129,7 @@ export default function ArticleSidebar(props) {
     if (article.articles)
       return _.filter(
         article.articles,
-        (val) => val.published === true && (val.uid === user.id || _.includes(val.collabs, user.id))
+        (val) => val.published === true && isMyArticle(val, user.id)
       );
     return [];
   }, [article.articles]);
@@ -223,7 +223,7 @@ export default function ArticleSidebar(props) {
                   primary={`Create Article`}
                   primaryTypographyProps={{
                     fontWeight: "medium",
-                    variant: "body2",
+                    variant: "h6",
                     textTransform: "uppercase"
                   }}
                 />
@@ -245,6 +245,7 @@ export default function ArticleSidebar(props) {
                 primary="DRAFT"
                 primaryTypographyProps={{
                   fontWeight: "medium",
+                  variant: "h6",
                   textTransform: "uppercase"
                 }}
               />
@@ -282,6 +283,7 @@ export default function ArticleSidebar(props) {
                 primary="Published"
                 primaryTypographyProps={{
                   fontWeight: "medium",
+                  variant: "h6",
                   textTransform: "uppercase"
                 }}
               />
@@ -317,6 +319,7 @@ export default function ArticleSidebar(props) {
                 primary="Collaborations"
                 primaryTypographyProps={{
                   fontWeight: "medium",
+                  variant: "h6",
                   textTransform: "uppercase"
                 }}
               />
@@ -348,6 +351,7 @@ export default function ArticleSidebar(props) {
                   primary="Endorsements"
                   primaryTypographyProps={{
                     fontWeight: "medium",
+                    variant: "h6",
                     textTransform: "uppercase"
                   }}
                 />
@@ -365,6 +369,7 @@ export default function ArticleSidebar(props) {
                   primary="Settings"
                   primaryTypographyProps={{
                     fontWeight: "medium",
+                    variant: "h6",
                     textTransform: "uppercase"
                   }}
                 />

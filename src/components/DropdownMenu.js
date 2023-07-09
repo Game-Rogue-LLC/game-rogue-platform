@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+import { KeyboardArrowDown } from "@mui/icons-material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import _ from "lodash";
@@ -24,6 +25,7 @@ export default function DropdownMenu({ name, title, items, onChange, sx }) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        endIcon={<KeyboardArrowDown />}
       >
         {title}
       </Button>

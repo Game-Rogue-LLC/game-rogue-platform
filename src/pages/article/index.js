@@ -9,14 +9,15 @@ import {
   useTheme
 } from "@mui/material";
 import { EVENT_REGIONS, PLATFORMS } from "@/src/config/global";
+import { KeyboardArrowDown, Search } from "@mui/icons-material";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { useEffect, useMemo, useState } from "react";
 
+import ArticleCollection from "@/src/components/widgets/article/ArticleCollection";
 import CategoryCard from "@/src/components/widgets/article/CategoryCard";
 import DropdownMenu from "@/src/components/DropdownMenu";
 import PostCard from "@/src/components/widgets/article/PostCard";
 import PublicLayout from "@/src/content/PublicLayout";
-import { Search } from "@mui/icons-material";
 import { games } from "@/src/components/dropdown/GameSelect";
 import { useRouter } from "next/router";
 
@@ -49,6 +50,7 @@ const platforms = [
 const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
+  const { article } = useTournamentContext();
   const [filter, setFilter] = useState("");
   const [game, setGame] = useState(games[0]);
   const [platform, setPlatform] = useState(platforms[0]);
@@ -161,6 +163,9 @@ const Page = (props) => {
           <Box sx={{ textAlign: "center", mt: 2 }}>
             <Button
               variant="contained"
+              sx={{
+                color: "white"
+              }}
               onClick={() => {
                 router.push("/article/create");
               }}
@@ -300,73 +305,9 @@ const Page = (props) => {
           </Box>
         </Box>
 
-        <Grid container spacing={2} rowSpacing={2} sx={{ mt: 2 }}>
-          <Grid item xs={12} md={4} lg={2}>
-            <PostCard
-              item={{
-                banner: "/static/images/post_back/2.webp",
-                title: "NEW YEARS sLAM",
-                uid: "t1KQ33hm4aflQluIwnv1VlIkZ4e2",
-                text: "2023 started off with a CLASSIC, featuring top performances from HK Rebels...",
-                view: 3,
-                reply: 0,
-                vote: 1
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={4} lg={2}>
-            <PostCard
-              item={{
-                banner: "/static/images/post_back/4.webp",
-                title: "WEEKEND REMIX",
-                uid: "t1KQ33hm4aflQluIwnv1VlIkZ4e2",
-                text: "On September 10th, teams came back to double the prize pool of the Weekend Bawl,...",
-                view: 3,
-                reply: 0,
-                vote: 1
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={4} lg={2}>
-            <PostCard
-              item={{
-                banner: "/static/images/post_back/4.webp",
-                title: "WEEKEND BRAWL",
-                uid: "t1KQ33hm4aflQluIwnv1VlIkZ4e2",
-                text: "In the week leading up to the Weekend Brawl Tournament, the defending champions'...",
-                view: 0,
-                reply: 0,
-                vote: 1
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={4} lg={2}>
-            <PostCard
-              item={{
-                banner: "/static/images/post_back/1.webp",
-                title: "SUMMER THROWBACK",
-                uid: "t1KQ33hm4aflQluIwnv1VlIkZ4e2",
-                text: "Lycus Empire faced off against E7 Esports for their second matchup in the Grand Finals o...",
-                view: 0,
-                reply: 0,
-                vote: 1
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={4} lg={2}>
-            <PostCard
-              item={{
-                banner: "/static/images/post_back/3.webp",
-                title: "FIRST EVENT SINCE 601 DAYS",
-                uid: "t1KQ33hm4aflQluIwnv1VlIkZ4e2",
-                text: "Game Rogue recently released their new rebrand from Esports Global League, also formerly...",
-                view: 3,
-                reply: 0,
-                vote: 1
-              }}
-            />
-          </Grid>
-        </Grid>
+        {/* Begin Article Collection */}
+        <ArticleCollection items={article?.articles} />
+        {/* End Article Collection */}
       </Box>
     </Box>
   );

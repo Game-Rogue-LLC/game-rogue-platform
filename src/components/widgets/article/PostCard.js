@@ -4,12 +4,18 @@ import { Sms, VisibilityOutlined } from "@mui/icons-material";
 import Avatar from "@/src/components/Avatar";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
-const PostCard = ({ item }) => {
+const PostCard = ({ item, sx, onClick }) => {
   const theme = useTheme();
   const { player } = useTournamentContext();
   return (
     <Paper
-      sx={{ position: "relative", overflow: "hidden", border: "solid 1px rgba(255,255,255,.2)" }}
+      sx={{
+        position: "relative",
+        overflow: "hidden",
+        border: "solid 1px rgba(255,255,255,.2)",
+        ...sx
+      }}
+      onClick={() => onClick(item)}
     >
       <Box
         component="img"
@@ -32,13 +38,25 @@ const PostCard = ({ item }) => {
           <Box></Box>
         </Box>
 
-        <Box sx={{ mt: 2, minHeight: "150px" }}>
+        <Box
+          sx={{
+            mt: 2,
+            minHeight: "150px",
+            maxHeight: "300px",
+            overflow: "hidden",
+            textOrientation: "mixed",
+            textOverflow: "ellipsis"
+          }}
+        >
           <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
             {item?.title}
           </Typography>
-          <Typography variant="body1" sx={{ mt: 1 }}>
-            {item?.text}
-          </Typography>
+          <div
+            style={{ marginTop: 1 }}
+            dangerouslySetInnerHTML={{
+              __html: item?.text
+            }}
+          ></div>
         </Box>
 
         <Box

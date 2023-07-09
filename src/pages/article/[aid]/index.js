@@ -1,3 +1,4 @@
+import { Paper, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import ArticleLayout from "@/src/content/ArticleLayout";
@@ -5,7 +6,6 @@ import ArticlePreview from "@/src/components/widgets/article/ArticlePreview";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-import { useTheme } from "@mui/material";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const Page = (props) => {
@@ -31,7 +31,11 @@ const Page = (props) => {
     }
   }, [aid, article?.articles]);
 
-  return <ArticlePreview item={item} />;
+  return (
+    <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
+      <ArticlePreview item={item} />
+    </Paper>
+  );
 };
 
 Page.getLayout = (page) => {

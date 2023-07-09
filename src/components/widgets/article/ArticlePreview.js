@@ -14,7 +14,7 @@ const ArticlePreview = ({ item }) => {
   const onCloseClick = () => {};
 
   return (
-    <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
+    <>
       <Box sx={{ pb: 1, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Typography variant="h4" fontSize={24}>
           {item?.title}
@@ -47,7 +47,7 @@ const ArticlePreview = ({ item }) => {
           }}
         ></div>
       </Box>
-    </Paper>
+    </>
   );
 };
 
