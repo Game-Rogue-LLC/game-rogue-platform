@@ -17,7 +17,6 @@ import Button from "@mui/material/Button";
 import CustomButton from "@/src/components/button/CustomButton";
 import dayjs from "dayjs";
 import { useAppContext } from "@/src/context/app";
-import { useMatchContext } from "@/src/context/MatchContext";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
@@ -28,7 +27,6 @@ const Page = (props) => {
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
   const { organization, event, player, match } = useTournamentContext();
-  // const { match } = useMatchContext();
   const [eid, setEID] = useState(router?.query?.event);
   const [matches, setMatches] = useState([]);
 
