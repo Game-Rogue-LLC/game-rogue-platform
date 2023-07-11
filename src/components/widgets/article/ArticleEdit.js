@@ -1,3 +1,5 @@
+import * as config from "@/src/config/global";
+
 import {
   Box,
   Button,
@@ -25,6 +27,7 @@ import AddCollabDialog from "./AddCollabDialog";
 import AddCollabTool from "./AddCollabTool";
 import CategoryTool from "@/src/components/widgets/article/CategoryTool";
 import ContentsBlockTool from "@/src/components/widgets/article/ContentsBlockTool";
+import { Edit } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import TemplateTool from "@/src/components/widgets/article/TemplateTool";
 import dynamic from "next/dynamic";
@@ -189,6 +192,21 @@ const ArticleEdit = ({ item }) => {
   const [open, setOpen] = useState(false); // True if SideToolbar is Opened
   const [selected, setSelected] = useState(0); // Selected Toolbar Item
   const [openAddCollabDialog, setOpenAddCollabDialog] = useState(false);
+  const [banner, setBanner] = useState(null);
+
+  const onUploadBanner = (e, name) => {
+    const file = e.target?.files[0];
+    const url = URL.createObjectURL(file);
+    switch (name) {
+      case "banner":
+        setBanner(file);
+        setInput({
+          ...input,
+          banner: url
+        });
+        break;
+    }
+  };
 
   const getSunEditorInstance = (sunEditor) => {
     editorRef.current = sunEditor;
@@ -211,12 +229,25 @@ const ArticleEdit = ({ item }) => {
   };
 
   const onSave = async (e) => {
+    let uploaded = true;
     setSaving(true);
+    let newArticle = { ...input };
+
+    if (banner) {
+      uploaded = false;
+      const res = await article.upload(banner, item?.id, "banner");
+      if (res.code === "succeed") {
+        newArticle.banner = res.url;
+        uploaded = true;
+      }
+    }
+
     const res = await article.update(item?.id, {
-      ...input,
+      ...newArticle,
       published: true,
       modifiedAt: new Date()
     });
+
     if (res.code === "succeed") {
       enqueueSnackbar("Saved Successfully!", { variant: "success" });
     } else {
@@ -428,6 +459,32 @@ const ArticleEdit = ({ item }) => {
 
         {/* Begin Article Input */}
         <Grid item xs container spacing={2} rowSpacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h6">Article Graphic</Typography>
+            <Box sx={{ textAlign: "center", position: "relative", mt: 3 }}>
+              <IconButton sx={{ position: "absolute", right: 0, bottom: 0 }} component="label">
+                <Edit />
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="upload-banner"
+                  id="upload-banner"
+                  hidden
+                  onChange={(e) => onUploadBanner(e, "banner")}
+                />
+              </IconButton>
+              <img
+                src={input?.banner || config.DEFAULT_CONTENTBLOCK_IMAGE}
+                style={{
+                  height: "200px",
+                  maxWidth: "600px",
+                  objectFit: "cover",
+                  border: "solid 1px rgba(255, 255, 255, 0.2)",
+                  borderRadius: "4px"
+                }}
+              />
+            </Box>
+          </Grid>
           <Grid item xs={12}>
             <OutlinedInput name="title" value={input?.title} onChange={onArticleChange} fullWidth />
           </Grid>

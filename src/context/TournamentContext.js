@@ -403,7 +403,8 @@ const TournamentProvider = (props) => {
     fullDelete: async (id) => {
       const res = await store.article.delete(id);
       return res;
-    }
+    },
+    upload: store.article.uploadFile
   };
   /** End Posting Data / Functions */
 
