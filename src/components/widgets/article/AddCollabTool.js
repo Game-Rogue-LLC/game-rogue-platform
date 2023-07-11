@@ -1,8 +1,8 @@
 import { ButtonBase, Typography } from "@mui/material";
 
-import { Dataset } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 
-export default function ContentsBlockTool({ onClick }) {
+export default function AddCollabTool({ onClick }) {
   return (
     <ButtonBase
       onClick={onClick}
@@ -16,8 +16,8 @@ export default function ContentsBlockTool({ onClick }) {
         ":hover": { backgroundColor: "rgba(255,255,255,.2)" }
       }}
     >
-      <Dataset />
-      <Typography variant="body2">Contents Block</Typography>
+      <Add />
+      <Typography variant="body2">Add a collab</Typography>
     </ButtonBase>
   );
 }

@@ -742,3 +742,11 @@ input#search::placeholder {
   min-height: 500px !important;
   height: 500px !important;
 }
+
+.sun-editor .se-wrapper {
+  overflow: auto !important;
+}
+
+.se-wrapper-inner.se-wrapper-wysiwyg.sun-editor-editable {
+  transform-origin: top left;
+}

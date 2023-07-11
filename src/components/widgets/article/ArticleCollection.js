@@ -17,6 +17,7 @@ const ArticleCollection = ({ items }) => {
     setOpenArticle(false);
   };
   const onEditArticle = (item) => {
+    setOpenArticle(false);
     router.push("/article/" + item.id);
   };
 

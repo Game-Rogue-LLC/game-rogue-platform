@@ -2,6 +2,9 @@ import {
   Box,
   Button,
   ButtonBase,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -11,14 +14,17 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  TextField,
   Tooltip,
   Typography,
   useTheme
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-import CategoryTool from "./CategoryTool";
-import ContentsBlockTool from "./ContentsBlockTool";
+import AddCollabDialog from "./AddCollabDialog";
+import AddCollabTool from "./AddCollabTool";
+import CategoryTool from "@/src/components/widgets/article/CategoryTool";
+import ContentsBlockTool from "@/src/components/widgets/article/ContentsBlockTool";
 import { LoadingButton } from "@mui/lab";
 import TemplateTool from "@/src/components/widgets/article/TemplateTool";
 import dynamic from "next/dynamic";
@@ -31,6 +37,148 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false
 });
 
+const zoomPlugin = {
+  // @Required @Unique
+  // plugin name
+  name: "zoom",
+  // @Required
+  // data display
+  display: "Zoom",
+
+  // @Options
+  title: "Zoom",
+  buttonClass: "",
+  innerHTML: "<p>Auto</p>",
+
+  // @Required
+  // add function - It is called only once when the plugin is first run.
+  // This function generates HTML to append and register the event.
+  // arguments - (core : core object, targetElement : clicked button element)
+  add: function (core, targetElement) {
+    const context = core.context;
+
+    context.zoom = {
+      targetButton: targetElement,
+      scale: 1
+    };
+
+    targetElement.addEventListener("click", this.onClick.bind(core));
+  },
+
+  active: function (element) {
+    if (!element) {
+      this.util.removeClass(this.context.zoom.targetButton, "active");
+    } else if (/^mark$/i.test(element.nodeName) && element.style.backgroundColor.length > 0) {
+      this.util.addClass(this.context.zoom.targetButton, "active");
+      return true;
+    }
+
+    return false;
+  },
+  onClick: function () {
+    this.context.zoom.scale = 1;
+    this.util.setStyle(
+      this.context.element.wysiwyg,
+      "transform",
+      "scale(" + this.context.zoom.scale + ")"
+    );
+  }
+};
+
+const zoomInPlugin = {
+  // @Required @Unique
+  // plugin name
+  name: "zoomin",
+  // @Required
+  // data display
+  display: "Zoom In",
+
+  // @Options
+  title: "Zoom In",
+  buttonClass: "",
+  innerHTML: "<i class='fa-solid fa-magnifying-glass-plus'></i>",
+
+  // @Required
+  // add function - It is called only once when the plugin is first run.
+  // This function generates HTML to append and register the event.
+  // arguments - (core : core object, targetElement : clicked button element)
+  add: function (core, targetElement) {
+    const context = core.context;
+
+    context.zoomin = {
+      targetButton: targetElement
+    };
+
+    targetElement.addEventListener("click", this.onClick.bind(core));
+  },
+
+  active: function (element) {
+    if (!element) {
+      this.util.removeClass(this.context.zoomin.targetButton, "active");
+    } else if (/^mark$/i.test(element.nodeName) && element.style.backgroundColor.length > 0) {
+      this.util.addClass(this.context.zoomin.targetButton, "active");
+      return true;
+    }
+
+    return false;
+  },
+  onClick: function () {
+    this.context.zoom.scale += 0.1;
+    this.util.setStyle(
+      this.context.element.wysiwyg,
+      "transform",
+      "scale(" + this.context.zoom.scale + ")"
+    );
+  }
+};
+
+const zoomOutPlugin = {
+  // @Required @Unique
+  // plugin name
+  name: "zoomout",
+  // @Required
+  // data display
+  display: "Zoom Out",
+
+  // @Options
+  title: "Zoom Out",
+  buttonClass: "",
+  innerHTML: "<i class='fa-solid fa-magnifying-glass-minus'></i>",
+
+  // @Required
+  // add function - It is called only once when the plugin is first run.
+  // This function generates HTML to append and register the event.
+  // arguments - (core : core object, targetElement : clicked button element)
+  add: function (core, targetElement) {
+    const context = core.context;
+
+    context.zoomout = {
+      targetButton: targetElement
+    };
+
+    targetElement.addEventListener("click", this.onClick.bind(core));
+  },
+
+  active: function (element) {
+    if (!element) {
+      this.util.removeClass(this.context.zoomout.targetButton, "active");
+    } else if (/^mark$/i.test(element.nodeName) && element.style.backgroundColor.length > 0) {
+      this.util.addClass(this.context.zoomout.targetButton, "active");
+      return true;
+    }
+
+    return false;
+  },
+  onClick: function () {
+    this.context.zoom.scale -= 0.1;
+    this.util.setStyle(
+      this.context.element.wysiwyg,
+      "transform",
+      "scale(" + this.context.zoom.scale + ")"
+    );
+  }
+};
+
 const ArticleEdit = ({ item }) => {
   const theme = useTheme();
   const router = useRouter();
@@ -40,6 +188,7 @@ const ArticleEdit = ({ item }) => {
   const [saving, setSaving] = useState(false); // True if Article is being saved
   const [open, setOpen] = useState(false); // True if SideToolbar is Opened
   const [selected, setSelected] = useState(0); // Selected Toolbar Item
+  const [openAddCollabDialog, setOpenAddCollabDialog] = useState(false);
 
   const getSunEditorInstance = (sunEditor) => {
     editorRef.current = sunEditor;
@@ -80,11 +229,25 @@ const ArticleEdit = ({ item }) => {
     router.back();
   };
 
+  const onOpenAddCollabDialog = () => {
+    setOpenAddCollabDialog(true);
+  };
+  const onCloseAddCollabDialog = () => {
+    setOpenAddCollabDialog(false);
+  };
+
   return (
     <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
       <Grid container spacing={2} rowSpacing={2}>
         {/* Begin Side Toolbar */}
         <Grid item sx={{ width: "100px", zIndex: 4000 }}>
+          {open && (
+            <Box
+              sx={{ position: "fixed", zIndex: 3000, width: "100vw", height: "100vh" }}
+              onClick={() => setOpen(false)}
+            ></Box>
+          )}
+
           <Box
             sx={{
               position: "relative",
@@ -116,6 +279,11 @@ const ArticleEdit = ({ item }) => {
               onClick={() => {
                 setOpen(!open || selected !== 2);
                 setSelected(2);
+              }}
+            />
+            <AddCollabTool
+              onClick={() => {
+                onOpenAddCollabDialog();
               }}
             />
             {/* End Toolbar Items */}
@@ -244,6 +412,14 @@ const ArticleEdit = ({ item }) => {
                 </Box>
               )}
               {/* End Contents Block Panel */}
+
+              {/* Begin Add Collab Modal */}
+              <AddCollabDialog
+                open={openAddCollabDialog}
+                onClose={onCloseAddCollabDialog}
+                aid={item?.id}
+              />
+              {/* End Add Collab Modal */}
             </Box>
             {/* End Toolbar Panel */}
           </Box>
@@ -258,9 +434,9 @@ const ArticleEdit = ({ item }) => {
           <Grid item xs={12}>
             <SunEditor
               setOptions={{
+                plugins: [zoomInPlugin, zoomOutPlugin, zoomPlugin],
                 resizingBar: false,
                 buttonList: [
-                  ["undo", "redo"],
                   [
                     "formatBlock",
                     "font",
@@ -288,12 +464,14 @@ const ArticleEdit = ({ item }) => {
                     "image",
                     "video"
                   ],
+                  "/",
+                  ["undo", "redo"],
+                  ["zoomin", "zoom", "zoomout"],
                   ["preview"]
                 ]
               }}
               defaultValue={input?.text}
               onChange={(content) => {
-                console.log(content);
                 setInput((prev) => ({
                   ...prev,
                   text: content

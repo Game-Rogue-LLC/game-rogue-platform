@@ -3,6 +3,7 @@ import "@/src/styles/globals.css";
 import "@/src/styles/styles.css";
 import "@/src/styles/fullCalendar.css";
 import "@/src/styles/colorpicker.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 
 import * as React from "react";
