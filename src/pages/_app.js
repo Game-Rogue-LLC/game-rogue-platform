@@ -3,16 +3,21 @@ import "@/src/styles/globals.css";
 import "@/src/styles/styles.css";
 import "@/src/styles/fullCalendar.css";
 import "@/src/styles/colorpicker.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 
 import * as React from "react";
 
 import Router, { useRouter } from "next/router";
+import { SnackbarProvider, useSnackbar } from "notistack";
 
 import AppProvider from "@/src/context/app.js";
 import { AuthContextProvider } from "@/src/context/AuthContext";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Head from "next/head";
+import { IconButton } from "@mui/material";
+import { Close as IconClose } from "@mui/icons-material";
 import { Provider } from "react-redux";
 import Splash from "@/src/content/Splash";
 import StyleProvider from "@/src/context/StyleContext";
@@ -20,9 +25,6 @@ import ThemeProvider from "@/src/theme/ThemeProvider";
 import createEmotionCache from "../config/createEmotionCache";
 import store from "@/src/redux/store";
 import { useEffect } from "react";
-import { IconButton } from "@mui/material";
-import { Close as IconClose } from "@mui/icons-material";
-import { SnackbarProvider, useSnackbar } from "notistack";
 
 function SnackbarCloseButton({ snackbarKey }) {
   const { closeSnackbar } = useSnackbar();

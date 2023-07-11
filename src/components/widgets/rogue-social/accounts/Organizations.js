@@ -37,6 +37,7 @@ const Organizations = ({ items }) => {
             onChange={onTabChange}
             orientation="vertical"
             sx={{
+              minHeight: "400px",
               width: "280px",
               height: "100%",
               background: "linear-gradient(to top,#28160c 60%,#000)"
@@ -58,7 +59,7 @@ const Organizations = ({ items }) => {
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1 }}>
           <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-            <OrganizationCreateForm disabled={items.length >= ORGANIZATION_PROFILE_LIMIT} />
+            <OrganizationCreateForm disabled={items?.length >= ORGANIZATION_PROFILE_LIMIT} />
           </Paper>
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1 }}>

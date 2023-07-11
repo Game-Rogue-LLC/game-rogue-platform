@@ -123,18 +123,22 @@ const Page = (props) => {
             gap: 1,
             alignItems: "center",
             // backgroundColor: "#140300",
-            background: "linear-gradient(to right, #321401 30%, #a84900)",
+            background: "linear-gradient(to right, #fff, #a84900)",
             border: "none",
             borderLeft: "solid 5px #ed7606",
             padding: 2
           }}
         >
-          <Box component={"img"} src="/static/images/games/r6s.webp"></Box>
+          <Box
+            component={"img"}
+            src="/static/images/games/r6s.webp"
+            sx={{ filter: "invert(1)" }}
+          ></Box>
           <Typography
             variant="body1"
             fontWeight={700}
             fontSize={25}
-            color="white"
+            color="black"
             textTransform="uppercase"
           >
             SHOPS

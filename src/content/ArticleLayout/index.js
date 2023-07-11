@@ -1,17 +1,17 @@
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 
-import Footer from "./Footer";
-import Header from "./Header";
-import Navbar from "./Navbar";
-import OrganizationSidebar from "@/src/content/OrganizationSidebar";
-import PageContainer from "./PageContainer";
-import PageHeader from "./PageHeader";
+import ArticleSidebar from "@/src/content/ArticleSidebar";
+import Footer from "@/src/content/AdminLayout/Footer";
+import Header from "@/src/content/AdminLayout/Header";
+import Navbar from "@/src/content/AdminLayout/Navbar";
+import PageContainer from "@/src/content/AdminLayout/PageContainer";
+import PageHeader from "@/src/content/AdminLayout/PageHeader";
 import PublicNavbar from "@/src/content/PublicLayout/Navbar";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-const AdminLayout = (props) => {
+const ArticleLayout = (props) => {
   const { children } = props;
   const { user } = useAuthContext();
   const router = useRouter();
@@ -36,7 +36,7 @@ const AdminLayout = (props) => {
           flex: 1
         }}
       >
-        <OrganizationSidebar />
+        <ArticleSidebar />
         <div
           style={{
             flex: 1,
@@ -64,7 +64,7 @@ const ContextProvider = (props) => {
   return (
     <TournamentProvider>
       {/* <MatchProvider> */}
-      <AdminLayout {...props} />
+      <ArticleLayout {...props} />
       {/* </MatchProvider> */}
     </TournamentProvider>
   );

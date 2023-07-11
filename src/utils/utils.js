@@ -117,6 +117,11 @@ export const isMyMatch = (match, teams, uid) => {
   return false;
 };
 
+export const isMyArticle = (article, uid) => {
+  if (!article || !uid) return false;
+  return article.uid === uid || _.includes(article.collabs, uid);
+};
+
 export const getTeamPosition = (position) => {
   return _.find(TEAM_POSITIONS, (val) => val.id === position).name;
 };

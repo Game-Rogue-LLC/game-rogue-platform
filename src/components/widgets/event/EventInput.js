@@ -1,26 +1,28 @@
-import { useEffect, useState } from "react";
+import * as config from "@/src/config/global";
+
 import {
   Box,
   Button,
-  IconButton,
   FormControl,
   FormHelperText,
   Grid,
+  IconButton,
+  InputAdornment,
   MenuItem,
   OutlinedInput,
-  InputAdornment,
   Select,
-  Typography,
-  TextField
+  TextField,
+  Typography
 } from "@mui/material";
-import { Edit } from "@mui/icons-material";
-import DateTimePicker from "@/src/components/datetime/DateTimePicker";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import RichTextInput from "@/src/components/input/RichTextInput";
-import SelectInput from "@/src/components/input/SelectInput";
-import * as config from "@/src/config/global";
+import { useEffect, useState } from "react";
+
 import Colors from "@/src/components/Colors";
 import CustomButton from "@/src/components/button/CustomButton";
+import DateTimePicker from "@/src/components/datetime/DateTimePicker";
+import { Edit } from "@mui/icons-material";
+import RichTextInput from "@/src/components/input/RichTextInput";
+import SelectInput from "@/src/components/input/SelectInput";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 // import DateRangePicker from "@/src/components/datetime/DateRangePicker";
 
 const EventInput = ({ handle, inputs, disabled, errors }) => {
@@ -29,6 +31,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
     <>
       <Grid container spacing={2} rowSpacing={4}>
         <Grid item xs={12}>
+          <Typography variant="h6">Event Logo</Typography>
           <Box display={"flex"} justifyContent={"center"} gap={4} alignItems={"center"} mt={2}>
             <Box display={"flex"} justifyContent={"center"} gap={2}>
               <Box display={"flex"} flexDirection={"column"} gap={2} alignItems={"baseline"}>
@@ -47,7 +50,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   variant="contained"
                   component="label"
                   disabled={disabled}
-                  onClick={handle.removeDarkLogo}>
+                  onClick={handle.removeDarkLogo}
+                >
                   REMOVE DARK LOGO
                 </CustomButton>
               </Box>
@@ -79,7 +83,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   variant="contained"
                   component="label"
                   disabled={disabled}
-                  onClick={handle.removeLightLogo}>
+                  onClick={handle.removeLightLogo}
+                >
                   REMOVE LIGHT LOGO
                 </CustomButton>
               </Box>
@@ -96,11 +101,13 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             </Box>
           </Box>
 
+          <Typography variant="h6">Event Graphic</Typography>
           <Box sx={{ textAlign: "center", position: "relative", mt: 3 }}>
             <IconButton
               sx={{ position: "absolute", right: 0, bottom: 0 }}
               component="label"
-              disabled={disabled}>
+              disabled={disabled}
+            >
               <Edit />
               <input
                 type="file"
@@ -135,7 +142,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             name="oid"
             disabled={disabled}
             sx={{ mt: 1 }}
-            fullWidth>
+            fullWidth
+          >
             {Object.keys(organization.organizations).map((key, i) => {
               const item = organization.organizations[key];
               return (
@@ -210,7 +218,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                 onChange={handle.inputs}
                 variant="outlined"
                 disabled={disabled}
-                fullWidth>
+                fullWidth
+              >
                 <MenuItem key="single-elimination" value={0}>
                   Single Elimination
                 </MenuItem>
@@ -233,7 +242,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                 onChange={handle.inputs}
                 variant="outlined"
                 disabled={disabled}
-                fullWidth>
+                fullWidth
+              >
                 <MenuItem key="straight-round-robin" value={4}>
                   Straight Round Robin
                 </MenuItem>
@@ -379,7 +389,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             variant="outlined"
             disabled={disabled}
             sx={{ mt: 1 }}
-            fullWidth>
+            fullWidth
+          >
             <MenuItem key="rainbow-six-siege" value={0}>
               Rainbow Six Siege
             </MenuItem>
@@ -421,7 +432,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             variant="outlined"
             disabled={disabled}
             sx={{ mt: 1 }}
-            fullWidth>
+            fullWidth
+          >
             <MenuItem key="ast" value={0}>
               Atlantic Standard Time (AST)
             </MenuItem>
@@ -453,7 +465,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between"
-          }}>
+          }}
+        >
           <Box>
             <Typography variant="h6">Add a Rulebook</Typography>
             <Typography variant="subtitle2">
@@ -469,7 +482,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               sx={{ mt: 1 }}
               component="label"
               fullWidth
-              disabled={disabled}>
+              disabled={disabled}
+            >
               + Upload
               <input
                 type="file"
@@ -492,7 +506,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between"
-          }}>
+          }}
+        >
           <Box>
             <Typography variant="h6">Add Terms and Conditions</Typography>
             <Typography variant="subtitle2">
@@ -508,7 +523,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               sx={{ mt: 1 }}
               component="label"
               fullWidth
-              disabled={disabled}>
+              disabled={disabled}
+            >
               + Upload
               <input
                 type="file"
@@ -531,7 +547,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between"
-          }}>
+          }}
+        >
           <Box>
             <Typography variant="h6">Add Privacy Policy</Typography>
             <Typography variant="subtitle2">
@@ -548,7 +565,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               sx={{ mt: 1 }}
               component="label"
               fullWidth
-              disabled={disabled}>
+              disabled={disabled}
+            >
               + Upload
               <input
                 type="file"
