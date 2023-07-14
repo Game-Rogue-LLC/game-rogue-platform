@@ -16,9 +16,9 @@ import { useEffect, useMemo, useState } from "react";
 import ArticleCollection from "@/src/components/widgets/article/ArticleCollection";
 import CategoryCard from "@/src/components/widgets/article/CategoryCard";
 import DropdownMenu from "@/src/components/DropdownMenu";
+import { GAMES } from "@/src/config/global";
 import PostCard from "@/src/components/widgets/article/PostCard";
 import PublicLayout from "@/src/content/PublicLayout";
-import { games } from "@/src/components/dropdown/GameSelect";
 import { useRouter } from "next/router";
 
 const regions = [
@@ -52,7 +52,7 @@ const Page = (props) => {
   const router = useRouter();
   const { article } = useTournamentContext();
   const [filter, setFilter] = useState("");
-  const [game, setGame] = useState(games[0]);
+  const [game, setGame] = useState(GAMES[0]);
   const [platform, setPlatform] = useState(platforms[0]);
   const [region, setRegion] = useState(regions[0]);
 
@@ -82,6 +82,7 @@ const Page = (props) => {
           <Box component="img" src="/static/images/Game Rogue Text 3 copy.webp"></Box>
         </Box>
 
+        {/* Begin Search Field */}
         <Container
           gap={4}
           sx={{ display: "flex", alignItems: "stretch", mt: 5 }}
@@ -113,6 +114,7 @@ const Page = (props) => {
             <Search fontSize="large" />
           </Button>
         </Container>
+        {/* End Search Field */}
 
         <Container sx={{ mt: 5 }}>
           <Grid container sx={{ justifyContent: "center" }} spacing={2} rowSpacing={2}>
@@ -206,7 +208,7 @@ const Page = (props) => {
               flexDirection: "row-reverse"
             }}
           >
-            <DropdownMenu name="game" title="Change Game" items={games} onChange={onGameChange} />
+            <DropdownMenu name="game" title="Change Game" items={GAMES} onChange={onGameChange} />
             <DropdownMenu
               name="region"
               title="Change Region"

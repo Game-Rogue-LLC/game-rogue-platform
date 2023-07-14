@@ -1,8 +1,8 @@
 import { Box, Grid, Typography } from "@mui/material";
 
+import { GAMES } from "@/src/config/global";
 import GameItem from "@/src/components/item/GameItem";
 import _ from "lodash";
-import { games } from "@/src/components/dropdown/GameSelect";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useMemo } from "react";
 import { useTournamentContext } from "@/src/context/TournamentContext";
@@ -12,14 +12,14 @@ const GamesInterested = ({ uid }) => {
 
   const interested = useMemo(() => {
     if (player.players[uid] && player.players[uid].interestedGames) {
-      return _.filter(games, (val) => _.includes(player.players[uid].interestedGames, val.id));
+      return _.filter(GAMES, (val) => _.includes(player.players[uid].interestedGames, val.id));
     }
     return [];
   }, [player.players[uid]?.interestedGames]);
 
   const notInterested = useMemo(() => {
     if (player.players[uid] && player.players[uid].notInterestedGames) {
-      return _.filter(games, (val) => _.includes(player.players[uid].notInterestedGames, val.id));
+      return _.filter(GAMES, (val) => _.includes(player.players[uid].notInterestedGames, val.id));
     }
     return [];
   }, [player.players[uid]?.notInterestedGames]);

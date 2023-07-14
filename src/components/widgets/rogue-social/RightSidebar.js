@@ -11,11 +11,11 @@ import { EVENT_REGIONS, PLATFORMS } from "@/src/config/global";
 import { useEffect, useMemo, useState } from "react";
 
 import CustomButton from "@/src/components/button/CustomButton";
+import { GAMES } from "@/src/config/global";
 import MatchItem from "@/src/components/widgets/rogue-social/MatchItem";
 import { Search } from "@mui/icons-material";
 import SearchInput from "@/src/components/input/SearchInput";
 import dayjs from "dayjs";
-import { games } from "@/src/components/dropdown/GameSelect";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -144,7 +144,7 @@ const RightSidebar = ({ sx }) => {
           <Typography variant="h6" fontSize={24} fontWeight="bold">
             Game
           </Typography>
-          {games.map((item) => (
+          {GAMES.map((item) => (
             <FormControlLabel
               key={"game_select_" + item.id}
               control={<Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />}

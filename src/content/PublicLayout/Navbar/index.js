@@ -4,28 +4,13 @@ import {
   Button,
   Container,
   Divider,
-  FormControl,
   IconButton,
   InputAdornment,
-  Menu,
   MenuItem,
-  OutlinedInput,
   Toolbar,
-  Typography,
-  styled,
   useTheme
 } from "@mui/material";
-import {
-  ArrowRight,
-  ArrowRightAlt,
-  ArrowRightOutlined,
-  ArrowRightSharp,
-  ChevronRight,
-  Login,
-  Logout,
-  Person,
-  Search
-} from "@mui/icons-material";
+import { ChevronRight, Search } from "@mui/icons-material";
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -44,13 +29,10 @@ const PublicNavbar = ({ sx }) => {
   const user = useAuthContext();
   const router = useRouter();
   const theme = useTheme();
-  const [logoNav, setLogoNav] = useState(true);
   const [search, setSearch] = useState("");
-  const [fund, setFund] = useState("");
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(router?.pathname);
   const logoRef = useRef();
-  let currentHoverUser = false;
   const { player, team } = useTournamentContext();
 
   const myTeams = useMemo(() => {
@@ -80,14 +62,8 @@ const PublicNavbar = ({ sx }) => {
   }, [user.user?.id]);
 
   const handle = {
-    switchLogoNav: (e) => {
-      setLogoNav((prev) => !prev);
-    },
     changeSearch: (e) => {
       setSearch(e.target.value);
-    },
-    changeFund: (e) => {
-      setFund(e.target.value);
     }
   };
 
@@ -132,6 +108,7 @@ const PublicNavbar = ({ sx }) => {
     >
       <Container maxWidth="xxl" sx={{ borderBottom: "solid 3px #f5831f" }}>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
+          {/* Begin Left menus */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -139,7 +116,7 @@ const PublicNavbar = ({ sx }) => {
               alignItems: "center"
             }}
           >
-            <Box sx={{ position: "relative" }}>
+            <Box sx={{ position: "relative", height: "40px" }}>
               {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
               <video autoPlay loop muted poster="/GR_Letters.png">
                 <source src="/static/animations/GR_Letters.webm" type="video/webm" />
@@ -229,7 +206,7 @@ const PublicNavbar = ({ sx }) => {
                 }
               ]}
             />
-            <NavItem name="ROGUE TV" handleClick={() => {}} />
+            <NavItem name="ROGUE TV" handleClick={() => router.push("/rogue-tv")} />
             <NavItem name="ARTICLES" handleClick={() => router.push("/article")} />
             <NavItem
               name="SHOP"
@@ -238,6 +215,9 @@ const PublicNavbar = ({ sx }) => {
               }}
             />
           </Box>
+          {/* End Left menus */}
+
+          {/* Begin Right menus */}
           <Box sx={{ display: "flex", gap: 3 }}>
             <Box
               sx={{
@@ -266,38 +246,6 @@ const PublicNavbar = ({ sx }) => {
                   }
                 ]}
               />
-              {/* <NavItem
-                name="Play"
-                active={currentPage === "event"}
-                handleClick={handleClickTools}
-                isDropdown={true}
-                items={[
-                  {
-                    name: "Upcoming Matches",
-                    key: "upcoming-matches",
-                    isLink: true,
-                    to: "/match/upcoming",
-                  },
-                  {
-                    name: "Upcoming Events",
-                    key: "upcoming-events",
-                    isLink: true,
-                    to: "/event/upcoming",
-                  },
-                  {
-                    name: "Ongoing Events",
-                    key: "ongoing-events",
-                    isLink: true,
-                    to: "/event/ongoing",
-                  },
-                  {
-                    name: "Completed Events",
-                    key: "completed-events",
-                    isLink: true,
-                    to: "/event/completed",
-                  },
-                ]}
-              /> */}
               <NavItem
                 name="Tools"
                 active={currentPage === "tool"}
@@ -367,6 +315,8 @@ const PublicNavbar = ({ sx }) => {
                 ]}
               />
             </Box>
+
+            {/* Begin User Menu */}
             {user.user && user.user.id && player?.players[user.user.id] ? (
               <Box
                 sx={{
@@ -434,6 +384,7 @@ const PublicNavbar = ({ sx }) => {
                 </IconButton>
               </Box>
             )}
+            {/* Begin User Menu */}
             {/* Begin User Submenu */}
             {user.user && user.user.id && player?.players[user.user.id] ? (
               <StyledMenu

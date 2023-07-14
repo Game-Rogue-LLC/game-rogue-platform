@@ -13,6 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import ArticleContainer from "@/src/components/widgets/rogue-social/ArticleContainer";
 import Avatar from "@/src/components/Avatar";
 import CustomButton from "@/src/components/button/CustomButton";
+import { GAMES } from "@/src/config/global";
 import GameSelect from "@/src/components/dropdown/GameSelect";
 import MatchContainer from "@/src/components/widgets/match/MatchContainer";
 import PlayerPortrait from "@/src/components/widgets/player/PlayerPortrait";
@@ -22,7 +23,6 @@ import TeamHistory from "@/src/components/widgets/team/TeamHistory";
 import TeamItem from "@/src/components/item/TeamItem";
 import _ from "lodash";
 import dayjs from "dayjs";
-import { games } from "@/src/components/dropdown/GameSelect";
 import { markdownToHtml } from "@/src/utils/html-markdown";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -168,7 +168,7 @@ const Page = (props) => {
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <GamepadOutlined />
-            {games[item?.game] ? games[item?.game].name : games[0].name}
+            {GAMES[item?.game] ? GAMES[item?.game].name : GAMES[0].name}
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <CalendarMonthOutlined />

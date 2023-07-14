@@ -5,6 +5,25 @@ export const ORGANIZER_PROFILE_LIMIT = 1;
 export const ORGANIZATION_PROFILE_LIMIT = 1;
 export const TEAM_PROFILE_LIMIT = 10;
 
+export const GAMES = [
+  {
+    id: 0,
+    name: "Rainbow Six Siege",
+    image: "/static/images/games/r6s.webp"
+  }
+  // "Valorant",
+  // "Counter-Strike: Global Offensive",
+  // "Roller Champions",
+  // "Rocket League",
+  // "League of Legends",
+  // "Trackmania",
+  // "Magic: The Gathering",
+  // "Overwatch 2",
+  // "Modern Warfare 2",
+  // "FIFA",
+  // "Zula Global"
+];
+
 export const STAFF_ROLES = [
   {
     id: 0,
@@ -174,7 +193,7 @@ export const PLATFORMS = [
   {
     id: 0,
     value: 0,
-    name: "XBox",
+    name: "Xbox",
     image: "/static/images/platforms/xbox.png"
   },
   {

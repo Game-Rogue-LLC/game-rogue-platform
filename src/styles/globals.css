@@ -750,3 +750,7 @@ input#search::placeholder {
 .se-wrapper-inner.se-wrapper-wysiwyg.sun-editor-editable {
   transform-origin: top left;
 }
+
+.MuiChip-label {
+  line-height: 1;
+}

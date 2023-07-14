@@ -16,10 +16,10 @@ import { useEffect, useMemo, useState } from "react";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
+import { GAMES } from "@/src/config/global";
 import { LoadingButton } from "@mui/lab";
 import TeamItem from "@/src/components/item/TeamItem";
 import dayjs from "dayjs";
-import { games } from "@/src/components/dropdown/GameSelect";
 import { markdownToHtml } from "@/src/utils/html-markdown";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -159,7 +159,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               Game
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              {games[item?.game]?.name}
+              {GAMES[item?.game]?.name}
             </Typography>
           </Paper>
         </Grid>

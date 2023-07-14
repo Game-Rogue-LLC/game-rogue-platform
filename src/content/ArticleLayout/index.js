@@ -1,6 +1,6 @@
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 
-import ArticleSidebar from "@/src/content/ArticleSidebar";
+import ArticleSidebar from "@/src/content/ArticleLayout/ArticleSidebar";
 import Footer from "@/src/content/AdminLayout/Footer";
 import Header from "@/src/content/AdminLayout/Header";
 import Navbar from "@/src/content/AdminLayout/Navbar";
