@@ -58,7 +58,7 @@ const Teams = ({ items }) => {
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1 }}>
           <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-            <TeamCreateForm disabled={items.length >= TEAM_PROFILE_LIMIT} />
+            <TeamCreateForm disabled={items?.length >= TEAM_PROFILE_LIMIT} />
           </Paper>
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1 }}>

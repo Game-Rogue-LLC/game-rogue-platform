@@ -25,6 +25,19 @@ export const withOpacity = (hex, opacity) => {
   return Color(hex).alpha(opacity).hexa();
 };
 // * End: Color Util Functions
+export const buttonStyle = (color) => {
+  const hover = hoverColor(color),
+    isBright = isBrightColor(color);
+  return {
+    backgroundColor: color,
+    // color: isBright ? "black" : "white",
+    color: "white",
+    "&:hover": {
+      // color: isBright ? "black" : "white",
+      backgroundColor: hover
+    }
+  };
+};
 
 export const formatDate = (date, format) => {
   const dat = date ? new Date(date) : new Date();

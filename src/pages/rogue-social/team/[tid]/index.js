@@ -19,6 +19,7 @@ import MatchContainer from "@/src/components/widgets/match/MatchContainer";
 import PlayerPortrait from "@/src/components/widgets/player/PlayerPortrait";
 import PublicLayout from "@/src/content/PublicLayout";
 import SlantBanner from "@/src/components/widgets/SlantBanner";
+import TeamChat from "@/src/components/widgets/rogue-social/TeamChat";
 import TeamHistory from "@/src/components/widgets/team/TeamHistory";
 import TeamItem from "@/src/components/item/TeamItem";
 import _ from "lodash";
@@ -178,23 +179,41 @@ const Page = (props) => {
 
         <Divider />
 
-        <Box sx={{ my: 2, textAlign: "center" }}>
-          <Typography variant="h4" textAlign="center">
-            Poster
-          </Typography>
+        <Grid container spacing={2} rowSpacing={2}>
+          <Grid item xs container spacing={2} rowSpacing={2}>
+            <Grid item xs={12}>
+              <Box sx={{ mt: 2 }}>
+                <TeamChat item={item} sx={{ width: "100%" }} />
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box sx={{ mt: 2, p: 2, border: "solid 1px rgba(255,255,255,.2)" }}>
+                <Typography variant="h4" fontSize={24}>
+                  {item?.name + "'s "}Roster
+                </Typography>
 
-          <Grid container sx={{ mt: 2, color: "white" }}>
-            {_.map(item?.players, (val) => (
-              <Grid item xs={6} sm={4} md={3}>
-                <PlayerPortrait key={"player_" + val.id} item={player?.players[val.id]} />
-              </Grid>
-            ))}
+                <Grid container sx={{ mt: 2, color: "white", textAlign: "center" }}>
+                  {_.map(item?.players, (val) => (
+                    <Grid item xs={12}>
+                      <PlayerPortrait key={"player_" + val.id} item={player?.players[val.id]} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </Grid>
           </Grid>
-        </Box>
+          <Grid item sx={{ width: "300px" }}>
+            <Box sx={{ mt: 2, p: 2, border: "solid 1px rgba(255,255,255,.2)" }}>
+              <Typography variant="h4" fontSize={24}>
+                SCHEDULE
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
 
-        <Divider />
+        {/* <Divider /> */}
 
-        <Box sx={{ my: 2, textAlign: "center" }}>
+        {/* <Box sx={{ my: 2, textAlign: "center" }}>
           <Typography variant="h4" textAlign="center">
             Team Statistics
           </Typography>
@@ -296,9 +315,9 @@ const Page = (props) => {
           </Grid>
         </Box>
 
-        <Divider />
+        <Divider /> */}
 
-        <Box sx={{ my: 2, textAlign: "center" }}>
+        {/* <Box sx={{ my: 2, textAlign: "center" }}>
           <Box
             sx={{
               position: "relative",
@@ -316,8 +335,8 @@ const Page = (props) => {
             </Box>
           </Box>
           <Box sx={{ mt: 5 }}>
-            <Grid container spacing={2} marginTop={1}>
-              {/* {_.map(placements, (val) => {
+            <Grid container spacing={2} marginTop={1}> */}
+        {/* {_.map(placements, (val) => {
             return (
               <Grid key={key} item xs={12} md={6}>
                 <Box sx={{ border: "solid 1px rgba(255,255,255,.2)" }}>
@@ -339,13 +358,13 @@ const Page = (props) => {
               </Grid>
             );
           })} */}
-            </Grid>
+        {/* </Grid>
           </Box>
-        </Box>
+        </Box> */}
 
-        <Divider />
+        {/* <Divider /> */}
 
-        <Box sx={{ my: 2, textAlign: "center" }}>
+        {/* <Box sx={{ my: 2, textAlign: "center" }}>
           <Box
             sx={{
               position: "relative",
@@ -391,7 +410,7 @@ const Page = (props) => {
           <Box sx={{ mt: 2 }}>
             <ArticleContainer items={articles} />
           </Box>
-        </Box>
+        </Box> */}
       </Container>
     </Box>
   );

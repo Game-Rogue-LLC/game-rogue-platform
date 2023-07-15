@@ -1,6 +1,5 @@
 import { Box, Skeleton, Typography } from "@mui/material";
 
-import { DEFAULT_LOGO } from "@/src/config/global";
 import Image from "next/image";
 import Link from "next/link";
 import { useTournamentContext } from "@/src/context/TournamentContext";

@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Autocomplete,
   Box,
   Button,
   Container,
@@ -7,7 +8,11 @@ import {
   IconButton,
   InputAdornment,
   MenuItem,
+  OutlinedInput,
+  TextField,
   Toolbar,
+  Typography,
+  styled,
   useTheme
 } from "@mui/material";
 import { ChevronRight, Search } from "@mui/icons-material";
@@ -24,6 +29,12 @@ import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+
+const StyledAutoComplete = styled(Autocomplete)((theme) => ({
+  ".MuiFormControl-root": {
+    display: "none"
+  }
+}));
 
 const PublicNavbar = ({ sx }) => {
   const user = useAuthContext();
@@ -64,6 +75,11 @@ const PublicNavbar = ({ sx }) => {
   const handle = {
     changeSearch: (e) => {
       setSearch(e.target.value);
+    },
+    typeSearch: (e) => {
+      if (e.key === "Enter") {
+        router.push("/search?uid=" + search);
+      }
     }
   };
 
@@ -116,7 +132,15 @@ const PublicNavbar = ({ sx }) => {
               alignItems: "center"
             }}
           >
-            <Box sx={{ position: "relative", height: "40px" }}>
+            <Box
+              sx={{
+                position: "relative",
+                display: "flex",
+                alignItems: "end",
+                gap: 2,
+                height: "40px"
+              }}
+            >
               {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
               <video autoPlay loop muted poster="/GR_Letters.png">
                 <source src="/static/animations/GR_Letters.webm" type="video/webm" />
@@ -134,7 +158,11 @@ const PublicNavbar = ({ sx }) => {
                   display: "none"
                 }}
               />
+              <Typography variant="h4" sx={{ lineHeight: 1, fontSize: 16 }}>
+                OB1.0
+              </Typography>
             </Box>
+            <Box sx={{ display: "flex", alignItems: "end" }}></Box>
             <Box className="search-box">
               <SearchInput
                 id="search"
@@ -142,6 +170,7 @@ const PublicNavbar = ({ sx }) => {
                 placeholder="Search"
                 value={search}
                 onChange={handle.changeSearch}
+                onKeyUp={handle.typeSearch}
                 sx={{
                   height: "40px"
                 }}

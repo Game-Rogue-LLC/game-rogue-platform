@@ -12,7 +12,8 @@ import {
   OutlinedInput,
   Select,
   TextField,
-  Typography
+  Typography,
+  useTheme
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -23,9 +24,11 @@ import { Edit } from "@mui/icons-material";
 import RichTextInput from "@/src/components/input/RichTextInput";
 import SelectInput from "@/src/components/input/SelectInput";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+
 // import DateRangePicker from "@/src/components/datetime/DateRangePicker";
 
 const EventInput = ({ handle, inputs, disabled, errors }) => {
+  const theme = useTheme();
   const { organization } = useTournamentContext();
   return (
     <>
@@ -57,7 +60,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.darkLogo || config.DEFAULT_LOGO}
+                  src={inputs.darkLogo || config.DEFAULT_DARK_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -90,7 +93,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.lightLogo || config.DEFAULT_LOGO}
+                  src={inputs.lightLogo || config.DEFAULT_LIGHT_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -358,7 +361,12 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Entry Fee</Typography>
+          <Typography variant="h6">
+            {"Entry Fee "}
+            <span style={{ color: theme.palette.primary.main, fontSize: 16 }}>
+              Setup where the money goes
+            </span>
+          </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.entryFee !== undefined}>
             <OutlinedInput
               id="entry-fee"

@@ -1,5 +1,5 @@
-import { Box, Button, ButtonBase, Grid, IconButton, Typography, useTheme } from "@mui/material";
 import { AddAPhoto, Edit, Female, Logout, Male, Man, Woman } from "@mui/icons-material";
+import { Box, Button, ButtonBase, Grid, IconButton, Typography, useTheme } from "@mui/material";
 import { useMemo, useState } from "react";
 
 import Avatar from "@/src/components/Avatar";
@@ -18,8 +18,6 @@ const UserInfo = ({ inputs, item, editable, handle }) => {
   const { player, ticket } = useTournamentContext();
   const [following, setFollowing] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
-  console.log(item);
 
   const isFollowing = useMemo(() => {
     if (user.user && item && player.players)

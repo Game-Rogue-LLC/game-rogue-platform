@@ -1,14 +1,19 @@
-import { useMemo } from "react";
-import Link from "next/link";
-import { Box, Typography, Grid, Chip } from "@mui/material";
-import dayjs from "dayjs";
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from "@/src/config/global";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import TeamItem from "@/src/components/item/TeamItem";
+import { Box, Chip, Grid, Typography } from "@mui/material";
+import {
+  DEFAULT_CONTENTBLOCK_IMAGE,
+  DEFAULT_DARK_LOGO,
+  DEFAULT_LIGHT_LOGO
+} from "@/src/config/global";
+
 import GameChip from "@/src/components/chip/GameChip";
+import Link from "next/link";
 import PlatformChip from "@/src/components/chip/PlatformChip";
 import RegionChip from "@/src/components/chip/RegionChip";
+import TeamItem from "@/src/components/item/TeamItem";
+import dayjs from "dayjs";
 import { formatDate } from "@/src/utils/utils";
+import { useMemo } from "react";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const MatchCard = ({ item }) => {
   const { event, team, currentTime } = useTournamentContext();
@@ -59,7 +64,7 @@ const MatchCard = ({ item }) => {
           <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <img
-                src={event?.events[item?.eid]?.darkLogo || DEFAULT_LOGO}
+                src={event?.events[item?.eid]?.darkLogo || DEFAULT_DARK_LOGO}
                 width={40}
                 height={40}
                 style={{ objectFit: "cover" }}

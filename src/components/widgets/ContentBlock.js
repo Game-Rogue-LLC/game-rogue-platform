@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Edit } from "@mui/icons-material";
 import { Box, IconButton, InputLabel, OutlinedInput, Paper, Typography } from "@mui/material";
+
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
-import { useEffect } from "react";
+import { Edit } from "@mui/icons-material";
 import RichTextInput from "@/src/components/input/RichTextInput";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const ContentBlock = ({ contentBlock, handleChange, handleUpload, save, saving }) => {
   const handleInputs = (e) => {
@@ -26,12 +27,13 @@ const ContentBlock = ({ contentBlock, handleChange, handleUpload, save, saving }
 
   return (
     <Paper sx={{ p: 4, mt: 4 }}>
-      <Typography variant="h6">Content Block</Typography>
+      <Typography variant="h5">Content Block</Typography>
       <Box sx={{ textAlign: "center", position: "relative" }}>
         <IconButton
           sx={{ position: "absolute", right: 0, bottom: 0 }}
           color="primary"
-          component="label">
+          component="label"
+        >
           <Edit />
           <input
             type="file"
@@ -48,7 +50,7 @@ const ContentBlock = ({ contentBlock, handleChange, handleUpload, save, saving }
         />
       </Box>
       <Box>
-        <InputLabel htmlFor="content-url" sx={{ mt: 2 }}>
+        <InputLabel htmlFor="content-url" sx={{ mt: 2, color: "white" }}>
           URL
         </InputLabel>
         <OutlinedInput
@@ -62,7 +64,7 @@ const ContentBlock = ({ contentBlock, handleChange, handleUpload, save, saving }
         />
       </Box>
       <Box>
-        <InputLabel htmlFor="content-title" sx={{ mt: 2 }}>
+        <InputLabel htmlFor="content-title" sx={{ mt: 2, color: "white" }}>
           Title
         </InputLabel>
         <OutlinedInput
@@ -76,7 +78,7 @@ const ContentBlock = ({ contentBlock, handleChange, handleUpload, save, saving }
         />
       </Box>
       <Box>
-        <InputLabel htmlFor="content-text" sx={{ mt: 2 }}>
+        <InputLabel htmlFor="content-text" sx={{ mt: 2, color: "white" }}>
           Text
         </InputLabel>
         {/* <OutlinedInput id="content-text" name="text" value={contentBlock?.text || ''} onChange={handleInputs} aria-describedby="content-text-helper" sx={{ mt: 1 }} inputProps={{ maxLength: 50 }} fullWidth /> */}

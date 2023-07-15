@@ -54,7 +54,7 @@ const TournamentProvider = (props) => {
       return res;
     },
     delete: async (id) => {
-      res = await store.organization.save(id, { deleted: true });
+      const res = await store.organization.save(id, { deleted: true });
       return res;
     },
     upload: store.organization.uploadFile
@@ -104,7 +104,7 @@ const TournamentProvider = (props) => {
       return res;
     },
     delete: async (id) => {
-      res = await store.event.save(id, { deleted: true });
+      const res = await store.event.save(id, { deleted: true });
       return res;
     },
     upload: store.event.uploadFile,

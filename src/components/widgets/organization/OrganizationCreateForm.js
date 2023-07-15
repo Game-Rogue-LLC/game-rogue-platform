@@ -85,7 +85,7 @@ const OrganizationCreateForm = ({ disabled: _disabled }) => {
         .create(newOrg)
         .then((res) => {
           if (res.code === "succeed") {
-            router.push("/profile?organization=" + res.id);
+            router.push("/organization/" + res.id + "/edit");
           } else if (res.code === "failed") {
             console.warn(res.message);
           }

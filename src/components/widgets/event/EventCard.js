@@ -1,13 +1,20 @@
-import Link from "next/link";
-import { Box, Button, Typography, Grid, SvgIcon } from "@mui/material";
-import dayjs from "dayjs";
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from "@/src/config/global";
+import { Box, Button, Grid, SvgIcon, Typography } from "@mui/material";
+import {
+  DEFAULT_CONTENTBLOCK_IMAGE,
+  DEFAULT_DARK_LOGO,
+  DEFAULT_LIGHT_LOGO
+} from "@/src/config/global";
+import { buttonStyle, formatDate, formatNumber, withOpacity } from "@/src/utils/utils";
+import { useEffect, useMemo } from "react";
+
 import GameChip from "@/src/components/chip/GameChip";
+import Link from "next/link";
 import PlatformChip from "@/src/components/chip/PlatformChip";
 import RegionChip from "@/src/components/chip/RegionChip";
-import { useEffect, useMemo } from "react";
+import dayjs from "dayjs";
+import numeral from "numeral";
+import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { formatNumber, formatDate } from "@/src/utils/utils";
 
 const EventCard = ({ item }) => {
   const { currentTime, setCurrentTime, organization } = useTournamentContext();
@@ -25,12 +32,12 @@ const EventCard = ({ item }) => {
     <Link href={`/event/${item?.id}/info`}>
       <Box
         sx={{
-          border: "solid 1px rgba(255, 255, 255, 0.2)",
+          border: "solid 1px " + item?.primary,
           // minHeight: "280px",
           background: "black",
           ":hover": {
             cursor: "pointer",
-            background: "rgba(245, 131, 31, 0.1)"
+            background: withOpacity(item?.primary, 0.1)
           }
         }}
       >
@@ -60,7 +67,7 @@ const EventCard = ({ item }) => {
           <Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <img
-                src={item?.darkLogo || DEFAULT_LOGO}
+                src={item?.darkLogo || DEFAULT_DARK_LOGO}
                 width={40}
                 height={40}
                 style={{ objectFit: "cover" }}
@@ -71,6 +78,7 @@ const EventCard = ({ item }) => {
                 textOverflow="ellipsis"
                 whiteSpace="nowrap"
                 overflow="hidden"
+                color={item?.primary}
               >
                 {item?.name}
               </Typography>
@@ -94,7 +102,7 @@ const EventCard = ({ item }) => {
               flexGrow: 1,
               maxWidth: "80px",
               borderRadius: "10px",
-              backgroundColor: "#1c0a00",
+              backgroundColor: withOpacity(item?.primary, 0.2),
               border: "solid 2px rgba(255,255,255,0.3)"
             }}
           >
@@ -138,14 +146,21 @@ const EventCard = ({ item }) => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container color="lightgray" sx={{ mt: 2 }}>
+          <Grid container color="lightgray" sx={{ mt: 2, alignItems: "center" }}>
             <Grid item xs>
               {isUpcoming ? (
-                <Button variant="contained">${formatNumber(item?.entryFee, 2)}</Button>
+                <Button variant="contained" sx={{ ...buttonStyle(item?.primary), color: "white" }}>
+                  ${formatNumber(item?.entryFee, 2)}
+                </Button>
               ) : (
                 <>
-                  <Button variant="contained">View now</Button>
                   <Button
+                    variant="contained"
+                    sx={{ ...buttonStyle(item?.primary), color: "white" }}
+                  >
+                    View now
+                  </Button>
+                  {/* <Button
                     variant="contained"
                     sx={{ backgroundColor: "#9146ff", color: "white", ml: 2 }}
                     disabled={!organization?.organizations[item?.oid]?.twitch}
@@ -164,9 +179,25 @@ const EventCard = ({ item }) => {
                       </svg>
                     </SvgIcon>{" "}
                     &nbsp; LIVE NOW
-                  </Button>
+                  </Button> */}
                 </>
               )}
+            </Grid>
+            <Grid item xs>
+              <Typography variant="body1" textAlign="center">
+                Teams
+              </Typography>
+              <Typography variant="h6" textAlign="center">
+                {_.size(item?.participants)}
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <Typography variant="body1" textAlign="center">
+                Prize Pool
+              </Typography>
+              <Typography variant="h6" textAlign="center">
+                ${numeral(item?.prize).format("0,0")}
+              </Typography>
             </Grid>
           </Grid>
         </Box>

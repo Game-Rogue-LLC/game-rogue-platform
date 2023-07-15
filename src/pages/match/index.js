@@ -1,5 +1,6 @@
-import { EVENT_STATES, MATCH_STATES } from "@/src/config/global";
 import {
+  Box,
+  Button,
   Paper,
   Table,
   TableBody,
@@ -8,12 +9,13 @@ import {
   TableFooter,
   TableHead,
   TableRow,
+  Typography,
   useTheme
 } from "@mui/material";
+import { EVENT_STATES, MATCH_STATES } from "@/src/config/global";
 import { useEffect, useMemo, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
-import Button from "@mui/material/Button";
 import CustomButton from "@/src/components/button/CustomButton";
 import dayjs from "dayjs";
 import { useAppContext } from "@/src/context/app";
@@ -98,83 +100,95 @@ const Page = (props) => {
   };
 
   return (
-    <TableContainer component={Paper} variant="elevation">
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">MATCH ID</TableCell>
-            <TableCell align="center">STATUS</TableCell>
-            <TableCell align="center">ADMIN</TableCell>
-            <TableCell align="center">CREATED</TableCell>
-            <TableCell align="center">CATEGORY</TableCell>
-            <TableCell align="center">SCHEDULE</TableCell>
-            <TableCell align="center">SOCIAL POST</TableCell>
-            <TableCell align="center">HIGHLIGHTS</TableCell>
-            <TableCell align="center">STREAM NOW</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {matches && matches.length > 0 ? (
-            matches.map((item, i) => (
-              <TableRow key={item.id}>
-                <TableCell align="center">{item.id}</TableCell>
-                <TableCell align="center">{getStatus(item)}</TableCell>
-                <TableCell align="center">
-                  {
-                    player.players[organization.organizations[event.events[item.eid].oid].uid]
-                      .userName
-                  }
-                </TableCell>
-                <TableCell align="center">{dayjs(item.createdAt).format("MMM DD")}</TableCell>
-                <TableCell align="center">{"ROUND" + item.round}</TableCell>
-                <TableCell align="center">
-                  {item.status == MATCH_STATES.NOT_STARTED_SCHEDULING.value
-                    ? "NOT_STARTED"
-                    : item.status == MATCH_STATES.SCHEDULING.value
-                    ? "ONGOING"
-                    : dayjs(item.start).format("MMM D, h:mm A")}
-                </TableCell>
-                <TableCell align="center" sx={{ color: "#F5831F" }}>
-                  UPGRADE
-                </TableCell>
-                <TableCell align="center" sx={{ color: "#F5831F" }}>
-                  UPGRADE
-                </TableCell>
-                <TableCell align="center" sx={{ color: "#F5831F" }}>
-                  UPGRADE
+    <Box>
+      <TableContainer component={Paper} variant="elevation">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">MATCH ID</TableCell>
+              <TableCell align="center">STATUS</TableCell>
+              <TableCell align="center">ADMIN</TableCell>
+              <TableCell align="center">CREATED</TableCell>
+              <TableCell align="center">CATEGORY</TableCell>
+              <TableCell align="center">SCHEDULE</TableCell>
+              <TableCell align="center">SOCIAL POST</TableCell>
+              <TableCell align="center">HIGHLIGHTS</TableCell>
+              <TableCell align="center">STREAM NOW</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {matches && matches.length > 0 ? (
+              matches.map((item, i) => (
+                <TableRow key={item.id}>
+                  <TableCell align="center">{item.id}</TableCell>
+                  <TableCell align="center">{getStatus(item)}</TableCell>
+                  <TableCell align="center">
+                    {
+                      player.players[organization.organizations[event.events[item.eid].oid].uid]
+                        .userName
+                    }
+                  </TableCell>
+                  <TableCell align="center">{dayjs(item.createdAt).format("MMM DD")}</TableCell>
+                  <TableCell align="center">{"ROUND" + item.round}</TableCell>
+                  <TableCell align="center">
+                    {item.status == MATCH_STATES.NOT_STARTED_SCHEDULING.value
+                      ? "NOT_STARTED"
+                      : item.status == MATCH_STATES.SCHEDULING.value
+                      ? "ONGOING"
+                      : dayjs(item.start).format("MMM D, h:mm A")}
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#F5831F" }}>
+                    UPGRADE
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#F5831F" }}>
+                    UPGRADE
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#F5831F" }}>
+                    UPGRADE
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell align="center" colSpan={9}>
+                  NO MATCHES
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
+            )}
             <TableRow>
-              <TableCell align="center" colSpan={9}>
-                NO MATCHES
+              <TableCell sx={{ border: "none" }} colSpan={9}>
+                {event?.events[eid]?.status ? (
+                  <CustomButton
+                    variant="contained"
+                    onClick={handle.show}
+                    // sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
+                  >
+                    VIEW MATCHES
+                  </CustomButton>
+                ) : (
+                  <CustomButton variant="contained" onClick={handle.create}>
+                    CREATE MATCHES
+                  </CustomButton>
+                )}
+                <CustomButton variant="contained" sx={{ ml: 2 }}>
+                  PAST MATCHES
+                </CustomButton>
               </TableCell>
             </TableRow>
-          )}
-          <TableRow>
-            <TableCell sx={{ border: "none" }} colSpan={9}>
-              {event?.events[eid]?.status ? (
-                <CustomButton
-                  variant="contained"
-                  onClick={handle.show}
-                  // sx={{ borderRadius: 0, color: 'white', background: 'black', ':hover': { background: theme.palette.primary.main } }}
-                >
-                  VIEW MATCHES
-                </CustomButton>
-              ) : (
-                <CustomButton variant="contained" onClick={handle.create}>
-                  CREATE MATCHES
-                </CustomButton>
-              )}
-              <CustomButton variant="contained" sx={{ ml: 2 }}>
-                PAST MATCHES
-              </CustomButton>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Paper sx={{ mt: 4, p: 2 }}>
+        <Typography variant="h5">NEXT STAGE</Typography>
+        <Typography variant="subtitle1">
+          Automatically generate the next state of match chats.
+        </Typography>
+        <Button variant="contained" sx={{ mt: 2 }}>
+          GENERATE
+        </Button>
+      </Paper>
+    </Box>
   );
 };
 

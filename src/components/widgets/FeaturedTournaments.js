@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material";
-import Stepper from "@/src/components/carousel/Stepper";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
+
+import Stepper from "@/src/components/carousel/Stepper";
 
 const featuredTournaments = [
   {
@@ -20,7 +21,7 @@ const featuredTournaments = [
           border: "solid 2px white",
           display: "flex",
           alignItems: "center",
-          gap: 2,
+          gap: 2
         }}
       >
         <Typography
@@ -29,20 +30,16 @@ const featuredTournaments = [
             textAlign: "left",
             color: "black",
             fontSize: "40px",
-            fontWeight: "bold",
+            fontWeight: "bold"
           }}
         >
           $1,500 2023 GAME ROGUE MAJORS
         </Typography>
-        <Typography
-          variant="body1"
-          sx={{ textAlign: "left", color: "white", fontSize: "25px" }}
-        >
-          PC - Rainbow Six Siege 3/1,12,18,19/22, 7:00 PM EST 1st - 4th Place
-          Prizes
+        <Typography variant="body1" sx={{ textAlign: "left", color: "white", fontSize: "25px" }}>
+          PC - Rainbow Six Siege 3/1,12,18,19/22, 7:00 PM EST 1st - 4th Place Prizes
         </Typography>
       </Box>
-    ),
+    )
   },
   {
     src: "/static/images/back2.png",
@@ -61,7 +58,7 @@ const featuredTournaments = [
           border: "solid 2px white",
           display: "flex",
           alignItems: "center",
-          gap: 2,
+          gap: 2
         }}
       >
         <Typography
@@ -70,24 +67,20 @@ const featuredTournaments = [
             textAlign: "left",
             color: "black",
             fontSize: "40px",
-            fontWeight: "bold",
+            fontWeight: "bold"
           }}
         >
           $1,500 2023 GAME ROGUE MAJORS
         </Typography>
-        <Typography
-          variant="body1"
-          sx={{ textAlign: "left", color: "white", fontSize: "25px" }}
-        >
-          PC - Rainbow Six Siege 3/1,12,18,19/22, 7:00 PM EST 1st - 4th Place
-          Prizes
+        <Typography variant="body1" sx={{ textAlign: "left", color: "white", fontSize: "25px" }}>
+          PC - Rainbow Six Siege 3/1,12,18,19/22, 7:00 PM EST 1st - 4th Place Prizes
         </Typography>
       </Box>
-    ),
-  },
+    )
+  }
 ];
 
-const FeaturedTournaments = () => {
+const FeaturedTournaments = ({ sx }) => {
   return (
     <Box
       component={"section"}
@@ -96,6 +89,7 @@ const FeaturedTournaments = () => {
         backgroundColor: "black",
         paddingBottom: "50px",
         borderBottom: "solid 3px #f5831f",
+        ...sx
       }}
     >
       <Box
@@ -103,7 +97,7 @@ const FeaturedTournaments = () => {
           position: "relative",
           width: "85%",
           mt: 1,
-          mx: "auto",
+          mx: "auto"
         }}
       >
         <Typography variant="h1" fontSize={"40px"} fontStyle={"italic"}>
@@ -115,7 +109,7 @@ const FeaturedTournaments = () => {
           sx={{
             marginTop: "29px",
             position: "relative",
-            boxShadow: "rgba(255,255,255,0.6) 0px 0px 50px 9px",
+            boxShadow: "rgba(255,255,255,0.6) 0px 0px 50px 9px"
           }}
           config={{
             swipeable: false,
@@ -141,7 +135,7 @@ const FeaturedTournaments = () => {
                 msTransitionTimingFunction: transitionTimingFunction,
                 MozTransitionTimingFunction: transitionTimingFunction,
                 WebkitTransitionTimingFunction: transitionTimingFunction,
-                OTransitionTimingFunction: transitionTimingFunction,
+                OTransitionTimingFunction: transitionTimingFunction
               };
 
               if (!state.swiping) {
@@ -151,7 +145,7 @@ const FeaturedTournaments = () => {
                   MozTransitionDuration: transitionTime,
                   OTransitionDuration: transitionTime,
                   transitionDuration: transitionTime,
-                  msTransitionDuration: transitionTime,
+                  msTransitionDuration: transitionTime
                 };
               }
 
@@ -160,9 +154,9 @@ const FeaturedTournaments = () => {
                 selectedStyle: {
                   ...slideStyle,
                   opacity: 1,
-                  position: "relative",
+                  position: "relative"
                 },
-                prevStyle: { ...slideStyle },
+                prevStyle: { ...slideStyle }
               };
             },
             renderArrowPrev: (clickHandler) => (
@@ -180,12 +174,10 @@ const FeaturedTournaments = () => {
                   backgroundColor: "transparent",
                   cursor: "pointer",
                   border: "none",
-                  zIndex: 20,
+                  zIndex: 20
                 }}
               >
-                <ArrowBackIos
-                  sx={{ fontSize: "60px", ":hover": { opacity: 0.7 } }}
-                ></ArrowBackIos>
+                <ArrowBackIos sx={{ fontSize: "60px", ":hover": { opacity: 0.7 } }}></ArrowBackIos>
               </button>
             ),
             renderArrowNext: (clickHandler) => (
@@ -203,7 +195,7 @@ const FeaturedTournaments = () => {
                   backgroundColor: "transparent",
                   cursor: "pointer",
                   border: "none",
-                  zIndex: 20,
+                  zIndex: 20
                 }}
               >
                 <ArrowForwardIos
@@ -221,18 +213,17 @@ const FeaturedTournaments = () => {
                   borderRadius: "50%",
                   outline: "solid 2px white",
                   outlineOffset: "1px",
-                  backgroundColor:
-                    isSelected === true ? "white" : "transparent",
+                  backgroundColor: isSelected === true ? "white" : "transparent",
                   cursor: "pointer",
                   border: "none",
                   zIndex: 20,
                   dropShadow: "0,0,5px,white",
                   ":hover": {
-                    backgroundColor: "white",
-                  },
+                    backgroundColor: "white"
+                  }
                 }}
               ></button>
-            ),
+            )
           }}
         />
       </Box>

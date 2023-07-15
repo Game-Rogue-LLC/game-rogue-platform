@@ -14,6 +14,7 @@ import TournamentProvider, { useTournamentContext } from "@/src/context/Tourname
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 
+import FeaturedSocial from "@/src/components/widgets/rogue-social/FeaturedSocial";
 import MatchHome from "@/src/components/widgets/rogue-social/Home";
 import MyCommunity from "@/src/components/widgets/rogue-social/MyCommunity";
 import MyProfile from "@/src/components/widgets/rogue-social/MyProfile";
@@ -23,6 +24,7 @@ import RogueSocialSplash from "@/src/content/Splash/RogueSocialSplash";
 import Settings from "@/src/components/widgets/rogue-social/Settings";
 import Teams from "@/src/components/widgets/rogue-social/accounts/Teams";
 import _ from "lodash";
+import { isMyTeam } from "@/src/utils/utils";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 
@@ -37,7 +39,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 const Page = (props) => {
   const router = useRouter();
   const { user } = useAuthContext();
-  const { ticket } = useTournamentContext();
+  const { ticket, team } = useTournamentContext();
   const [tab, setTab] = useState(router.query.tab || "0");
   const [profileTab, setProfileTab] = useState(router.query.profileTab || "0");
   const [settingsTab, setSettingsTab] = useState(router.query.settingsTab || "0");
@@ -100,6 +102,10 @@ const Page = (props) => {
   const notifications = useMemo(() => {
     return _.filter(ticket.tickets, (val) => _.includes(val.users, user.id));
   }, [ticket.tickets]);
+
+  const myTeams = useMemo(() => {
+    return _.filter(team.teams, (val) => isMyTeam(val, user.id));
+  }, [team.teams, user]);
 
   return (
     <Box
@@ -203,14 +209,17 @@ const Page = (props) => {
           <TabPanel value="0" sx={{ flexGrow: 1, p: 0 }}>
             <MatchHome />
           </TabPanel>
+          <TabPanel value="1" sx={{ flexGrow: 1, p: 0 }}>
+            <FeaturedSocial />
+          </TabPanel>
           <TabPanel value="3" sx={{ flexGrow: 1, p: 0 }}>
             <Notifications />
           </TabPanel>
           <TabPanel value="4" sx={{ flexGrow: 1, p: 1 }}>
             <MyCommunity />
           </TabPanel>
-          <TabPanel value="5" sx={{ flexGrow: 1, p: 1 }}>
-            {/* <Teams /> */}
+          <TabPanel value="5" sx={{ flexGrow: 1, p: 0 }}>
+            <Teams items={myTeams} />
           </TabPanel>
           <TabPanel value="6" sx={{ flexGrow: 1, p: 0 }}>
             <MyProfile tab={profileTab} onTabChange={onProfileTabChange} />

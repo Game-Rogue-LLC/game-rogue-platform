@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
 import { brighterColor, isBrightColor } from "@/src/utils/utils";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { customMessages, model, rules } from "@/lib/firestore/collections/organization";
 import { useEffect, useMemo, useState } from "react";
 
@@ -34,6 +35,7 @@ import Colors from "@/src/components/Colors";
 import ContentBlock from "@/src/components/widgets/ContentBlock";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import { DEFAULT_LIGHT_LOGO } from "@/src/config/global";
 import { LoadingButton } from "@mui/lab";
 import Validator from "validatorjs";
 import { htmlToMarkdown } from "@/src/utils/html-markdown";
@@ -41,7 +43,6 @@ import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { closeSnackbar, enqueueSnackbar } from "notistack";
 
 const initialInputs = {
   ...model
@@ -325,13 +326,13 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO
+        darkLogo: DEFAULT_DARK_LOGO
       });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO
+        lightLogo: DEFAULT_LIGHT_LOGO
       });
     },
     uploadContentImageAction: (e, name) => {
@@ -411,7 +412,7 @@ const Page = (props) => {
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.darkLogo || config.DEFAULT_LOGO}
+                  src={inputs.darkLogo || config.DEFAULT_DARK_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -444,7 +445,7 @@ const Page = (props) => {
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.lightLogo || config.DEFAULT_LOGO}
+                  src={inputs.lightLogo || config.DEFAULT_LIGHT_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -670,45 +671,49 @@ const Page = (props) => {
             label="Twitch streams"
           />
         </FormGroup>
-        <Grid container spacing={2} sx={{ alignItems: "center" }}>
-          <Grid item>
-            <FormControlLabel control={<Switch defaultChecked />} label="Crowdfund" />
+
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h6">Payment Information</Typography>
+          <Grid container spacing={2} sx={{ alignItems: "center", mt: 0 }}>
+            <Grid item>
+              <FormControlLabel control={<Switch defaultChecked />} label="Crowdfund" />
+            </Grid>
+            <Grid item>
+              <OutlinedInput
+                size="small"
+                name="actualFund"
+                value={Number(inputs?.actualFund).toFixed(2)}
+                disabled
+              />
+            </Grid>
+            <Grid item>
+              <span style={{ fontSize: "30px" }}>/</span>
+            </Grid>
+            <Grid item>
+              <OutlinedInput
+                size="small"
+                name="crowdFund"
+                value={inputs?.crowdFund}
+                onChange={handle.input}
+              />
+            </Grid>
           </Grid>
-          <Grid item>
-            <OutlinedInput
-              size="small"
-              name="actualFund"
-              value={Number(inputs?.actualFund).toFixed(2)}
-              disabled
-            />
-          </Grid>
-          <Grid item>
-            <span style={{ fontSize: "30px" }}>/</span>
-          </Grid>
-          <Grid item>
-            <OutlinedInput
-              size="small"
-              name="crowdFund"
-              value={inputs?.crowdFund}
-              onChange={handle.input}
-            />
-          </Grid>
-        </Grid>
-        <Box display="flex" sx={{ pl: 5 }}>
-          <Box>
-            <Box display="flex" alignItems="center">
-              <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
-              <CreditCard />
-              <Typography variant="body2" sx={{ ml: 2 }}>
-                Credit/Debit Card
-              </Typography>
+          <Box display="flex" sx={{ pl: 5 }}>
+            <Box>
+              <Box display="flex" alignItems="center">
+                <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
+                <CreditCard />
+                <Typography variant="body2" sx={{ ml: 2 }}>
+                  Credit/Debit Card
+                </Typography>
+              </Box>
+              <Box></Box>
             </Box>
-            <Box></Box>
-          </Box>
-          <Box>
-            <Box display="flex" alignItems="center">
-              <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
-              <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
+            <Box>
+              <Box display="flex" alignItems="center">
+                <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
+                <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
+              </Box>
             </Box>
           </Box>
         </Box>

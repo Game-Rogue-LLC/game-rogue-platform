@@ -1,4 +1,7 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Checkbox,
@@ -8,12 +11,12 @@ import {
   Typography
 } from "@mui/material";
 import { EVENT_REGIONS, PLATFORMS } from "@/src/config/global";
+import { ExpandMore, Search } from "@mui/icons-material";
 import { useEffect, useMemo, useState } from "react";
 
 import CustomButton from "@/src/components/button/CustomButton";
 import { GAMES } from "@/src/config/global";
 import MatchItem from "@/src/components/widgets/rogue-social/MatchItem";
-import { Search } from "@mui/icons-material";
 import SearchInput from "@/src/components/input/SearchInput";
 import dayjs from "dayjs";
 import { useAppContext } from "@/src/context/app";
@@ -136,48 +139,58 @@ const RightSidebar = ({ sx }) => {
           gap: 1,
           flexDirection: "column",
           border: "solid 1px rgba(245,131,31,.6)",
-          borderRadius: "5px",
-          padding: 2
+          borderRadius: "5px"
         }}
       >
-        <Box>
-          <Typography variant="h6" fontSize={24} fontWeight="bold">
-            Game
-          </Typography>
-          {GAMES.map((item) => (
-            <FormControlLabel
-              key={"game_select_" + item.id}
-              control={<Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />}
-              label={item.name}
-            />
-          ))}
-        </Box>
+        <Accordion sx={{ background: "none" }}>
+          <AccordionSummary expandIcon={<ExpandMore />}>Select Categories</AccordionSummary>
+          <AccordionDetails>
+            <Box>
+              <Typography variant="h6" fontSize={24} fontWeight="bold">
+                Game
+              </Typography>
+              {GAMES.map((item) => (
+                <FormControlLabel
+                  key={"game_select_" + item.id}
+                  control={
+                    <Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />
+                  }
+                  label={item.name}
+                />
+              ))}
+            </Box>
 
-        <Box>
-          <Typography variant="h6" fontSize={24} fontWeight="bold">
-            Platform
-          </Typography>
-          {PLATFORMS.map((item) => (
-            <FormControlLabel
-              key={"platform_select_" + item.id}
-              control={<Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />}
-              label={item.name}
-            />
-          ))}
-        </Box>
+            <Box>
+              <Typography variant="h6" fontSize={24} fontWeight="bold">
+                Platform
+              </Typography>
+              {PLATFORMS.map((item) => (
+                <FormControlLabel
+                  key={"platform_select_" + item.id}
+                  control={
+                    <Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />
+                  }
+                  label={item.name}
+                />
+              ))}
+            </Box>
 
-        <Box>
-          <Typography variant="h6" fontSize={24} fontWeight="bold">
-            Region
-          </Typography>
-          {EVENT_REGIONS.map((item) => (
-            <FormControlLabel
-              key={"region_select_" + item.id}
-              control={<Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />}
-              label={item.name}
-            />
-          ))}
-        </Box>
+            <Box>
+              <Typography variant="h6" fontSize={24} fontWeight="bold">
+                Region
+              </Typography>
+              {EVENT_REGIONS.map((item) => (
+                <FormControlLabel
+                  key={"region_select_" + item.id}
+                  control={
+                    <Checkbox sx={{ border: "none", borderRadius: "none", color: "white" }} />
+                  }
+                  label={item.name}
+                />
+              ))}
+            </Box>
+          </AccordionDetails>
+        </Accordion>
       </Box>
     </Box>
   );

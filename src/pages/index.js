@@ -139,7 +139,7 @@ const MyApp = (props) => {
         >
           PLUS PLANS
           <br />
-          AVAILABLE NOW
+          AVAILABLE JULY 21st
           <br />
           <Button variant="contained" sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}>
             <Typography variant="h1" fontSize={"59px"} color={"white"} letterSpacing={"5.9px"}>
@@ -255,7 +255,14 @@ const MyApp = (props) => {
                   justifyContent: "center"
                 }}
               >
-                <img src="/static/images/laptop.png" />
+                <video
+                  poster="/static/images/laptop.png"
+                  autoPlay={true}
+                  muted={true}
+                  style={{ width: "100%", height: "100%" }}
+                >
+                  <source src="/static/animations/Laptop.webm" type="video/webm" />
+                </video>
               </Box>
             </Grid>
           </Grid>

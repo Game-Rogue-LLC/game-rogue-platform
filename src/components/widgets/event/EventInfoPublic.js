@@ -1,8 +1,11 @@
 import {
+  Box,
   Button,
   Chip,
+  FormControl,
   Grid,
   InputBase,
+  InputLabel,
   ListItemIcon,
   MenuItem,
   Paper,
@@ -19,6 +22,7 @@ import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
 import { GAMES } from "@/src/config/global";
 import { LoadingButton } from "@mui/lab";
 import TeamItem from "@/src/components/item/TeamItem";
+import { buttonStyle } from "@/src/utils/utils";
 import dayjs from "dayjs";
 import { markdownToHtml } from "@/src/utils/html-markdown";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -65,6 +69,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     return [];
   }, [team?.teams, user]);
 
+  // <a href="https://link.clover.com/urlshortener/8ZGvTs" style="background-color:#f5831f;border:1px solid #f5831f;min-height:50px;color:#000;padding:10px 20px;text-decoration:none;border-radius:4px;">REGISTER  $30.00</a>
   useEffect(() => {
     if (currentTime) {
       if (dayjs(currentTime).isAfter(dayjs(endTime))) setRegistrationStatus(2);
@@ -73,11 +78,11 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     }
   }, [currentTime]);
 
-  useEffect(() => {
-    if (myTeams.length > 0) {
-      setMyTeam(myTeams[0]);
-    }
-  }, [myTeams]);
+  // useEffect(() => {
+  //   if (myTeams.length > 0) {
+  //     setMyTeam(myTeams[0]);
+  //   }
+  // }, [myTeams]);
 
   const handleSelectTeam = (e) => {
     const { value } = e.target;
@@ -89,6 +94,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   };
 
   const handleRegister = async (e) => {
+    router.push("https://link.clover.com/urlshortener/8ZGvTs");
     setRegistering(true);
     const res = await event.addParticipant(eid, myTeam);
     setRegistering(false);
@@ -101,27 +107,54 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     }
   };
 
+  const onCreateTeam = () => {
+    router.push("/team/create");
+  };
+
   return (
     <Grid container spacing={2} rowSpacing={3} sx={{ mt: 2 }}>
       <Grid item xs={12} lg={6}>
-        <Paper
-          sx={{
-            p: 3,
-            minHeight: "200px",
-            backgroundColor: secondaryBackgroundColor
-          }}
-        >
-          <Typography variant="h4" fontSize={24} color={colors.primary}>
-            Description
-          </Typography>
-          <div
-            className="html-wrapper"
-            style={{ marginTop: "16px" }}
-            dangerouslySetInnerHTML={{
-              __html: markdownToHtml(item?.description)
-            }}
-          ></div>
-        </Paper>
+        <Grid container spacing={2} rowSpacing={2}>
+          <Grid item xs={12}>
+            <Paper
+              sx={{
+                p: 3,
+                minHeight: "200px",
+                backgroundColor: secondaryBackgroundColor
+              }}
+            >
+              <Typography variant="h4" fontSize={24} color={colors.primary}>
+                Description
+              </Typography>
+              <div
+                className="html-wrapper"
+                style={{ marginTop: "16px" }}
+                dangerouslySetInnerHTML={{
+                  __html: markdownToHtml(item?.description)
+                }}
+              ></div>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper
+              sx={{
+                p: 3,
+                minHeight: "200px",
+                backgroundColor: secondaryBackgroundColor
+              }}
+            >
+              <Typography variant="h4" fontSize={24} color={colors.primary}>
+                Contribute
+              </Typography>
+              <Typography variant="h6">
+                CROWDFUND GOAL: {organization.organizations[event.events[eid]?.oid]?.crowdFund}
+              </Typography>
+              <Button variant="contained" sx={{ ...buttonStyle(colors.primary), mt: 3 }}>
+                Contribute
+              </Button>
+            </Paper>
+          </Grid>
+        </Grid>
       </Grid>
       <Grid item xs={12} lg={6} container spacing={2} rowSpacing={2}>
         <Grid item xs={12}>
@@ -212,66 +245,73 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
         <Grid item xs={12}>
           <Paper sx={{ p: 3, backgroundColor: secondaryBackgroundColor }}>
             {user && (
-              <TeamSelect
-                labelId="team-select-label"
-                id="team-select"
-                value={myTeam}
-                name="team"
-                size="small"
-                onChange={handleSelectTeam}
-                variant="outlined"
-                sx={{
-                  mt: 1
-                }}
-                fullWidth
-                input={<TeamSelectInput />}
-                inputProps={{
-                  MenuProps: {
-                    disableScrollLock: true
-                  }
-                }}
-              >
-                {myTeams?.map((tid) => {
-                  const item = team.teams[tid];
-                  return (
-                    <MenuItem
-                      key={"team_" + tid}
-                      value={tid}
-                      sx={{ display: "flex", alignItems: "center" }}
-                    >
-                      <ListItemIcon>
-                        <img
-                          src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
-                          height={30}
-                          width={30}
-                          style={{
-                            objectFit: "cover",
-                            objectPosition: "center"
-                          }}
-                        />
-                      </ListItemIcon>
-                      {item?.name}
-                    </MenuItem>
-                  );
-                })}
-              </TeamSelect>
+              <>
+                <InputLabel id="team-select-label">Select your team</InputLabel>
+                <TeamSelect
+                  labelId="team-select-label"
+                  id="team-select"
+                  value={myTeam}
+                  name="team"
+                  // size="small"
+                  onChange={handleSelectTeam}
+                  variant="outlined"
+                  sx={{
+                    mt: 1
+                  }}
+                  fullWidth
+                  input={<TeamSelectInput />}
+                  inputProps={{
+                    MenuProps: {
+                      disableScrollLock: true
+                    }
+                  }}
+                >
+                  {myTeams?.map((tid) => {
+                    const item = team.teams[tid];
+                    return (
+                      <MenuItem
+                        key={"team_" + tid}
+                        value={tid}
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        <ListItemIcon>
+                          <img
+                            src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
+                            height={30}
+                            width={30}
+                            style={{
+                              objectFit: "cover",
+                              objectPosition: "center"
+                            }}
+                          />
+                        </ListItemIcon>
+                        {item?.name}
+                      </MenuItem>
+                    );
+                  })}
+                </TeamSelect>
+              </>
             )}
             {!user ? (
               <CustomButton variant="contained" sx={{ width: "100%", mt: 1 }} onClick={handleLogin}>
                 Login to Register
               </CustomButton>
             ) : (
-              <CustomLoadingButton
-                loading={registering}
-                variant="contained"
-                sx={{ width: "100%", mt: 1 }}
-                onClick={handleRegister}
-                disabled={
-                  dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
-                }
-              >
-                Register to an event
-              </CustomLoadingButton>
+              <Box sx={{ display: "flex", alignItems: "center", mt: 1, gap: 1 }}>
+                <CustomLoadingButton
+                  loading={registering}
+                  variant="contained"
+                  sx={{ flex: 1 }}
+                  onClick={handleRegister}
+                  disabled={
+                    dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
+                  }
+                >
+                  Register
+                </CustomLoadingButton>
+
+                <CustomButton onClick={onCreateTeam}>Create Team</CustomButton>
+              </Box>
             )}
           </Paper>
         </Grid>

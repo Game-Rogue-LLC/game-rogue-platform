@@ -1,13 +1,24 @@
-import { Container } from "@mui/material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+
+import { Box } from "@mui/material";
 import PublicLayout from "@/src/content/PublicLayout";
 import Teams from "@/src/components/widgets/rogue-social/accounts/Teams";
-import TournamentProvider from "@/src/context/TournamentContext";
+import _ from "lodash";
+import { isMyTeam } from "@/src/utils/utils";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useMemo } from "react";
 
 const Page = (props) => {
+  const { user } = useAuthContext();
+  const { team } = useTournamentContext();
+
+  const myTeams = useMemo(() => {
+    return _.filter(team.teams, (val) => isMyTeam(val, user?.id));
+  }, [user, team.teams]);
   return (
-    <Container sx={{ my: 4 }}>
-      <Teams />
-    </Container>
+    <Box>
+      <Teams items={myTeams} />
+    </Box>
   );
 };
 Page.getLayout = (page) => {

@@ -1,5 +1,3 @@
-import { DEFAULT_LOGO } from "@/src/config/global";
-import { useStyleContext } from "@/src/context/StyleContext";
 import {
   Box,
   Button,
@@ -11,7 +9,10 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
+import { DEFAULT_DARK_LOGO, DEFAULT_LIGHT_LOGO } from "@/src/config/global";
+
 import CustomButton from "@/src/components/button/CustomButton";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const scoreStyles = {
   win: {
@@ -62,7 +63,8 @@ const ScoresDialog = ({
           backgroundImage: "linear-gradient(0deg, #ab013875, transparent)",
           padding: "20px"
         }
-      }}>
+      }}
+    >
       <DialogTitle variant="h2" fontSize={"3rem"} textAlign={"center"} textTransform={"uppercase"}>
         {title}
       </DialogTitle>
@@ -74,13 +76,15 @@ const ScoresDialog = ({
             justifyContent: "space-between",
             alignItems: "center",
             gap: 2
-          }}>
+          }}
+        >
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               gap: 2
-            }}>
+            }}
+          >
             <Box textAlign={"center"}>
               <Box
                 component={"img"}
@@ -90,7 +94,8 @@ const ScoresDialog = ({
                   width: "150px",
                   filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
                 }}
-                src={team1?.darkLogo || DEFAULT_LOGO}></Box>
+                src={team1?.darkLogo || DEFAULT_DARK_LOGO}
+              ></Box>
               <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"}>
                 {team1?.name}
               </Typography>
@@ -112,7 +117,8 @@ const ScoresDialog = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "center"
-            }}>
+            }}
+          >
             <img src="/static/images/vs.png" height={80} />
           </Box>
           <Box
@@ -121,7 +127,8 @@ const ScoresDialog = ({
               alignItems: "center",
               justifyContent: "right",
               gap: 2
-            }}>
+            }}
+          >
             <Box textAlign={"center"}>
               <Box
                 component={"img"}
@@ -131,7 +138,8 @@ const ScoresDialog = ({
                   width: "150px",
                   filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
                 }}
-                src={team2?.darkLogo || DEFAULT_LOGO}></Box>
+                src={team2?.darkLogo || DEFAULT_DARK_LOGO}
+              ></Box>
               <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"}>
                 {team2?.name}
               </Typography>

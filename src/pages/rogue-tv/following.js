@@ -69,21 +69,23 @@ const Page = ({}) => {
   const theme = useTheme();
 
   return (
-    <Container sx={{ py: 2 }}>
+    <Container>
       {/* Begin Live Channels */}
-      <Box sx={{ py: 2 }}>
-        <Typography variant="h5" sx={{ px: 1 }}>
+      <Box sx={{ py: 4 }}>
+        <Typography variant="h4" fontSize={26} sx={{ px: 1 }}>
           Live Channels
         </Typography>
-        <LiveChannels items={channels} />
+        <Box sx={{ mt: 2 }}>
+          <LiveChannels items={channels} />
+        </Box>
       </Box>
       {/* End Live Channels */}
 
       <Divider sx={{ background: theme.palette.primary.main }} />
 
       {/* Begin Upcoming Games */}
-      <Box sx={{ py: 2 }}>
-        <Typography variant="h5" sx={{ px: 1 }}>
+      <Box sx={{ py: 4 }}>
+        <Typography variant="h4" fontSize={26}>
           Upcoming Streams
         </Typography>
         <Box sx={{ mt: 2 }}>

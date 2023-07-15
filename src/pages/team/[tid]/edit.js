@@ -14,13 +14,13 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
+import { DEFAULT_DARK_LOGO, DEFAULT_LIGHT_LOGO } from "@/src/config/global";
 import { customMessages, model, rules } from "@/lib/firestore/collections/team";
 import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
 import Button from "@mui/material/Button";
 import CountrySelect from "@/src/components/dropdown/CountrySelect";
-import { DEFAULT_LOGO } from "@/src/config/global";
 import { Edit } from "@mui/icons-material";
 import GameSelect from "@/src/components/dropdown/GameSelect";
 import { LoadingButton } from "@mui/lab";
@@ -136,13 +136,13 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs((prev) => ({
         ...prev,
-        darkLogo: DEFAULT_LOGO
+        darkLogo: DEFAULT_DARK_LOGO
       }));
     },
     removeLightLogo: (e) => {
       setInputs((prev) => ({
         ...prev,
-        lightLogo: DEFAULT_LOGO
+        lightLogo: DEFAULT_LIGHT_LOGO
       }));
     },
     upload: (e, name) => {
@@ -233,7 +233,7 @@ const Page = (props) => {
                 </Box>
                 <Box width={"200px"} height={"200px"} textAlign={"center"}>
                   <img
-                    src={inputs.darkLogo || DEFAULT_LOGO}
+                    src={inputs.darkLogo || DEFAULT_DARK_LOGO}
                     style={{ height: "200px", maxWidth: "200px", objectFit: "contain" }}
                   />
                 </Box>
@@ -257,7 +257,7 @@ const Page = (props) => {
                 </Box>
                 <Box width={"200px"} height={"200px"} textAlign={"center"}>
                   <img
-                    src={inputs.lightLogo || DEFAULT_LOGO}
+                    src={inputs.lightLogo || DEFAULT_LIGHT_LOGO}
                     style={{ height: "200px", maxWidth: "200px", objectFit: "contain" }}
                   />
                 </Box>

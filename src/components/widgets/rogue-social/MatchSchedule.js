@@ -13,7 +13,6 @@ import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
 import CustomDateTimePicker from "@/src/components/datetime/DateTimePicker";
-import { DEFAULT_LOGO } from "@/src/config/global";
 import Link from "next/link";
 import { LoadingButton } from "@mui/lab";
 import { MATCH_STATES } from "@/src/config/global";
@@ -112,7 +111,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
                 width: "150px",
                 filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
               }}
-              src={myTeam?.darkLogo || DEFAULT_LOGO}
+              src={myTeam?.darkLogo || DEFAULT_DARK_LOGO}
             ></Box>
             <Typography variant="body1" textAlign="center" fontSize="1.5rem" color="white">
               {myTeam?.name}
@@ -182,7 +181,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
                 width: "150px",
                 filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
               }}
-              src={opTeam?.darkLogo || DEFAULT_LOGO}
+              src={opTeam?.darkLogo || DEFAULT_DARK_LOGO}
             ></Box>
             <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
               {opTeam?.name}
