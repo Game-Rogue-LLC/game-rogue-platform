@@ -13,6 +13,7 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
+import { customMessages, model, rules } from "@/lib/firestore/collections/player";
 import { useEffect, useState } from "react";
 
 import CountrySelect from "@/src/components/dropdown/CountrySelect";
@@ -22,7 +23,6 @@ import UserInfo from "@/src/components/widgets/user/UserInfo";
 import Validator from "validatorjs";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { model, rules, customMessages } from "@/lib/firestore/collections/player";
 
 const initialInputs = {
   ...model
@@ -66,8 +66,8 @@ const AccountInfo = ({ item }) => {
   const handle = {
     save: async (e) => {
       if (validate(inputs, rules, customMessages) === false) return;
-      const playerExists = await player.exists(inputs?._id);
-      if (playerExists) {
+      const rogueIdExists = await player.rogueIdExists(inputs?._id);
+      if (rogueIdExists) {
         setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
         return;
       } else setErrors((prev) => ({ ...prev, _id: undefined }));
@@ -145,7 +145,7 @@ const AccountInfo = ({ item }) => {
                 onChange={handle.inputs}
               />
               {errors._id !== undefined && (
-                <FormHelperText id="user-name-helper" sx={{ mt: 2 }}>
+                <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>
                   {errors._id}
                 </FormHelperText>
               )}

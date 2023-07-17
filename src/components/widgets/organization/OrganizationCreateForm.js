@@ -81,6 +81,12 @@ const OrganizationCreateForm = ({ disabled: _disabled }) => {
         uid: user.id
       };
 
+      const rogueIdExists = await organization.rogueIdExists(inputs?._id);
+      if (rogueIdExists) {
+        setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
+        return;
+      } else setErrors((prev) => ({ ...prev, _id: undefined }));
+
       organization
         .create(newOrg)
         .then((res) => {
@@ -157,6 +163,30 @@ const OrganizationCreateForm = ({ disabled: _disabled }) => {
           {errors.tagline !== undefined && (
             <FormHelperText id="org-tag-helper" sx={{ mt: 2 }}>
               {errors.tagline}
+            </FormHelperText>
+          )}
+        </FormControl>
+      </Grid>
+      <Grid item xs={12}>
+        <InputLabel htmlFor="org-name" sx={{ color: "white" }}>
+          Rogue ID
+        </InputLabel>
+        <FormHelperText>Controls the publically visible name of this organizer.</FormHelperText>
+        <FormControl fullWidth error={errors._id !== undefined}>
+          <OutlinedInput
+            id="rogue-id"
+            name="_id"
+            aria-describedby="rogue-id-helper"
+            value={inputs?._id || ""}
+            onChange={handle.inputs}
+            disabled={disabled}
+            sx={{ mt: 1 }}
+            fullWidth
+            required
+          />
+          {errors._id !== undefined && (
+            <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>
+              {errors._id}
             </FormHelperText>
           )}
         </FormControl>

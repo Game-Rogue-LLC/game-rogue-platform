@@ -57,6 +57,12 @@ const TournamentProvider = (props) => {
       const res = await store.organization.save(id, { deleted: true });
       return res;
     },
+    rogueIdExists: async (id) => {
+      const res = await store.organization.rogueIdExists(id);
+      console.log(res);
+      if (res.code === "succeed") return true;
+      return false;
+    },
     upload: store.organization.uploadFile
   };
   /** End Organization Data / Functions */
@@ -254,6 +260,11 @@ const TournamentProvider = (props) => {
     },
     exists: async (id) => {
       const res = await store.player.exists(id);
+      if (res.code === "succeed") return true;
+      return false;
+    },
+    rogueIdExists: async (id) => {
+      const res = await store.player.rogueIdExists(id);
       if (res.code === "succeed") return true;
       return false;
     },

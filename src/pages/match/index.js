@@ -184,9 +184,9 @@ const Page = (props) => {
         <Typography variant="subtitle1">
           Automatically generate the next state of match chats.
         </Typography>
-        <Button variant="contained" sx={{ mt: 2 }}>
+        <CustomButton variant="contained" sx={{ mt: 2 }}>
           GENERATE
-        </Button>
+        </CustomButton>
       </Paper>
     </Box>
   );

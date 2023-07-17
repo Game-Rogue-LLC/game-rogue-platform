@@ -37,8 +37,9 @@ export default function ({ team, win, sx, width, height, fontSize }) {
             height={height ? height : 30}
           />
         )}
-        &nbsp;
-        <Typography sx={{ color: "white", fontSize: fontSize ? fontSize : "16px" }}>
+        <Typography
+          sx={{ color: "white", fontWeight: 700, fontSize: fontSize ? fontSize : "20px" }}
+        >
           {team?.name}
         </Typography>
       </Box>

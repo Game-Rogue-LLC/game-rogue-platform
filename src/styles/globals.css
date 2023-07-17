@@ -516,16 +516,16 @@ input#search::placeholder {
 
 .ql-toolbar .ql-stroke {
   fill: none;
-  stroke: #f5831f;
+  /* stroke: #f5831f !important; */
 }
 
 .ql-toolbar .ql-fill {
-  fill: #f5831f;
+  /* fill: #f5831f !important; */
   stroke: none;
 }
 
 .ql-toolbar .ql-picker {
-  color: #f5831f;
+  /* color: #f5831f !important; */
 }
 
 .tweet-textedit {

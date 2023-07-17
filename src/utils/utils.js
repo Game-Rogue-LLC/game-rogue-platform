@@ -30,10 +30,10 @@ export const buttonStyle = (color) => {
     isBright = isBrightColor(color);
   return {
     backgroundColor: color,
-    // color: isBright ? "black" : "white",
-    color: "white",
+    color: isBright ? "black" : "white",
+    // color: "white",
     "&:hover": {
-      // color: isBright ? "black" : "white",
+      color: isBright ? "black" : "white",
       backgroundColor: hover
     }
   };

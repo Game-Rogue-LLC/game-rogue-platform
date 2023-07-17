@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
 import Button from "@mui/material/Button";
+import Colors from "@/src/components/Colors";
 import CountrySelect from "@/src/components/dropdown/CountrySelect";
 import { Edit } from "@mui/icons-material";
 import GameSelect from "@/src/components/dropdown/GameSelect";
@@ -154,6 +155,13 @@ const Page = (props) => {
         [name]: url
       }));
     }
+  };
+
+  const onColorChange = (name, value) => {
+    setInputs({
+      ...inputs,
+      [name]: value?.hex
+    });
   };
 
   useEffect(() => {
@@ -375,7 +383,13 @@ const Page = (props) => {
             />
           </FormControl>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
+          <Box sx={{ mt: 3 }}>
+            <Typography variant="h5">Colors</Typography>
+            <Colors colors={inputs} onColorChange={onColorChange} />
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
           <LoadingButton loading={saving} sx={{ mr: 2 }} variant="contained" onClick={handle.save}>
             Save
           </LoadingButton>

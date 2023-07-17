@@ -17,7 +17,8 @@ import {
   Paper,
   SvgIcon,
   Switch,
-  Typography
+  Typography,
+  useTheme
 } from "@mui/material";
 import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
@@ -41,6 +42,7 @@ const initialInputs = {
 };
 
 const Page = (props) => {
+  const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
@@ -77,7 +79,7 @@ const Page = (props) => {
   }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
   useEffect(() => {
-    setTitle("ORGANIZER PROFILE");
+    setTitle("ORGANIZER SETTINGS");
   }, []);
 
   useEffect(() => {
@@ -117,12 +119,19 @@ const Page = (props) => {
     saveName: async (e) => {
       if (validate(inputs, rules, customMessages) === false) return;
 
+      const rogueIdExists = await organization.rogueIdExists(inputs?._id);
+      if (rogueIdExists) {
+        setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
+        return;
+      } else setErrors((prev) => ({ ...prev, _id: undefined }));
+
       setSaving((prev) => ({
         ...prev,
         name: true
       }));
 
       let newOrganization = {
+        _id: inputs?._id,
         name: inputs?.name,
         tagline: inputs?.tagline,
         primary: inputs?.primary,
@@ -240,6 +249,7 @@ const Page = (props) => {
           youtube: inputs?.youtube,
           twitch: inputs?.twitch,
           discord: inputs?.discord,
+          crowd: inputs?.crowd,
           crowdFund: inputs?.crowdFund,
           actualFund: inputs?.actualFund,
           credit: inputs?.credit,
@@ -347,7 +357,11 @@ const Page = (props) => {
   return (
     <Box>
       <Paper sx={{ p: 4 }}>
-        <Typography variant="h5">Disband/Delete Profile</Typography>
+        <Typography variant="h5">Disband & Delete Organization Profile</Typography>
+        <FormHelperText>
+          The Organizer's Rogue ID name will be made publicly available until the name is taken
+          again. Controls the publically visible name of this organizer.
+        </FormHelperText>
         <CustomLoadingButton
           loading={saving?.disband}
           variant="contained"
@@ -379,8 +393,8 @@ const Page = (props) => {
 
       <Paper sx={{ p: 4, mt: 4 }}>
         <Box>
-          <Typography variant="h5" textTransform="uppercase">
-            Organization Details
+          <Typography variant="h4" textTransform="uppercase" sx={{ fontStyle: "italic" }}>
+            Branding
           </Typography>
 
           <Box display={"flex"} justifyContent={"center"} gap={4} alignItems={"center"} mt={2}>
@@ -453,11 +467,9 @@ const Page = (props) => {
           </Box>
 
           <InputLabel htmlFor="org-name" sx={{ mt: 2, color: "white" }}>
-            Organization Name
+            Organizer Display Name
           </InputLabel>
-          <FormHelperText>
-            Controls the publically visible name of this organization.
-          </FormHelperText>
+          <FormHelperText>Controls the publically visible name of this organizer.</FormHelperText>
           <FormControl fullWidth error={false}>
             <OutlinedInput
               id="org-name"
@@ -472,9 +484,33 @@ const Page = (props) => {
             />
           </FormControl>
 
+          <InputLabel htmlFor="org-name" sx={{ mt: 2, color: "white" }}>
+            Rogue ID
+          </InputLabel>
+          <FormHelperText>Controls the publically visible name of this organizer.</FormHelperText>
+          <FormControl fullWidth error={errors._id !== undefined}>
+            <OutlinedInput
+              id="rogue-id"
+              name="_id"
+              aria-describedby="rogue-id-helper"
+              value={inputs?._id || ""}
+              onChange={handle.input}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              required
+            />
+            {errors._id !== undefined && (
+              <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>
+                {errors._id}
+              </FormHelperText>
+            )}
+          </FormControl>
+
           <InputLabel htmlFor="org-tag" sx={{ mt: 2, color: "white" }}>
             Tagline
           </InputLabel>
+          <FormHelperText>What does your organization stand for?</FormHelperText>
           <FormControl fullWidth sx={{ mt: 1 }}>
             <OutlinedInput
               id="org-tag"
@@ -491,7 +527,9 @@ const Page = (props) => {
         </Box>
 
         <Box sx={{ mt: 3 }}>
-          <Typography variant="h5">Colors</Typography>
+          <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+            Colors
+          </Typography>
           <Colors colors={inputs} onColorChange={onColorChange} />
         </Box>
 
@@ -514,7 +552,9 @@ const Page = (props) => {
       />
 
       <Paper sx={{ p: 4, mt: 4 }}>
-        <Typography variant="h5">Social Accounts</Typography>
+        <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+          Social Accounts
+        </Typography>
         <Box sx={{ mt: 2 }}>
           <InputLabel htmlFor="org-twitter" sx={{ color: "white" }}>
             Twitter
@@ -648,78 +688,84 @@ const Page = (props) => {
       </Paper>
 
       <Paper sx={{ p: 4, mt: 4 }}>
-        <Typography variant="h5">Turn on/off features</Typography>
+        <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+          On/off features
+        </Typography>
         <FormGroup sx={{ mt: 2 }}>
           <FormControlLabel
             control={<Switch checked={inputs?.signup} name="signup" onChange={handle.switch} />}
-            label="Sign-up"
+            label="Only accept Event sign-ups when this option is marked."
           />
           <FormControlLabel
             control={<Switch checked={inputs?.discord} name="discord" onChange={handle.switch} />}
-            label="Discord community preview"
+            label="Display a preview of the linked Discord on Rogue Social."
           />
           <FormControlLabel
             control={<Switch checked={inputs?.twitter} name="twitter" onChange={handle.switch} />}
-            label="Show recent Twitter activity"
+            label="Display the linked Twitter activity on Rogue Social."
           />
           <FormControlLabel
             control={
               <Switch checked={inputs?.instagram} name="instagram" onChange={handle.switch} />
             }
-            label="Show recent Instagram activity"
+            label="Display the linked Instagram activity on Rogue Social."
           />
           <FormControlLabel
             control={<Switch checked={inputs?.youtube} name="youtube" onChange={handle.switch} />}
-            label="Show recent YouTube videos"
+            label="Display the linked YouTube activity on Rogue TV."
           />
           <FormControlLabel
             control={<Switch checked={inputs?.twitch} name="twitch" onChange={handle.switch} />}
             label="Twitch streams"
           />
+          <Box>
+            <FormControlLabel
+              control={<Switch checked={inputs?.crowd} name="crowd" onChange={handle.switch} />}
+              label="Crowdfund"
+            />
+            {inputs?.crowd && (
+              <Box sx={{ pl: 6 }}>
+                <Box>
+                  <Typography variant="body1" sx={{ width: 200, display: "inline-block" }}>
+                    AMOUNT RAISED
+                  </Typography>
+                  <OutlinedInput size="small" name="actualFund" value={inputs?.actualFund} />
+                </Box>
+                <Box sx={{ mt: 1 }}>
+                  <Typography variant="body1" sx={{ width: 200, display: "inline-block" }}>
+                    THE GOAL
+                  </Typography>
+                  <OutlinedInput
+                    size="small"
+                    name="crowdFund"
+                    value={inputs?.crowdFund}
+                    onChange={handle.input}
+                  />
+                </Box>
+              </Box>
+            )}
+          </Box>
         </FormGroup>
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h5">Payment Information</Typography>
-          <Grid container spacing={2} sx={{ alignItems: "center", mt: 1 }}>
-            <Grid item>
-              <FormControlLabel control={<Switch defaultChecked />} label="Crowdfund" />
-            </Grid>
-            <Grid item>
-              <OutlinedInput
-                size="small"
-                name="actualFund"
-                value={Number(inputs?.actualFund).toFixed(2)}
-                disabled
-              />
-            </Grid>
-            <Grid item>
-              <span style={{ fontSize: "30px" }}>/</span>
-            </Grid>
-            <Grid item>
-              <OutlinedInput
-                size="small"
-                name="crowdFund"
-                value={inputs?.crowdFund}
-                onChange={handle.input}
-              />
-            </Grid>
-          </Grid>
-          <Box display="flex" sx={{ pl: 5 }}>
-            <Box>
-              <Box display="flex" alignItems="center">
-                <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
-                <CreditCard />
-                <Typography variant="body2" sx={{ ml: 2 }}>
-                  Credit/Debit Card
-                </Typography>
-              </Box>
-              <Box></Box>
-            </Box>
-            <Box>
-              <Box display="flex" alignItems="center">
-                <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
-                <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
-              </Box>
-            </Box>
+      </Paper>
+
+      <Paper sx={{ p: 4, mt: 4 }}>
+        <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+          Payment Information
+        </Typography>
+        <Box>
+          <Box display="flex" alignItems="center">
+            <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
+            <CreditCard />
+            <Typography variant="body2" sx={{ ml: 2 }}>
+              Credit/Debit Card
+            </Typography>
+          </Box>
+          <Box></Box>
+        </Box>
+        <Box>
+          <Box display="flex" alignItems="center">
+            <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
+            <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
           </Box>
         </Box>
 

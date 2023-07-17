@@ -12,6 +12,7 @@ const PostCard = ({ item, sx, onClick }) => {
       sx={{
         position: "relative",
         overflow: "hidden",
+        height: "500px",
         border: "solid 1px rgba(255,255,255,.2)",
         ...sx
       }}
@@ -24,39 +25,51 @@ const PostCard = ({ item, sx, onClick }) => {
         width="100%"
         sx={{ objectFit: "cover" }}
       ></Box>
-      <Box sx={{ p: 2, position: "relative" }}>
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Avatar
-            editable={false}
-            src={player.players[item?.uid]?.profilePic}
-            sx={{ width: 30, height: 30 }}
-            hideStatus={true}
-          />
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="subtitle1">{player.players[item?.uid]?.name}</Typography>
+      <Box
+        sx={{
+          p: 2,
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: 380,
+          gap: 2
+        }}
+      >
+        <Box sx={{ flex: 1, overflow: "hidden" }}>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Avatar
+              editable={false}
+              src={player.players[item?.uid]?.profilePic}
+              sx={{ width: 30, height: 30 }}
+              hideStatus={true}
+            />
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography variant="subtitle1">{player.players[item?.uid]?.name}</Typography>
+            </Box>
+            <Box></Box>
           </Box>
-          <Box></Box>
-        </Box>
 
-        <Box
-          sx={{
-            mt: 2,
-            minHeight: "150px",
-            maxHeight: "300px",
-            overflow: "hidden",
-            textOrientation: "mixed",
-            textOverflow: "ellipsis"
-          }}
-        >
-          <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
-            {item?.title}
-          </Typography>
-          <div
-            style={{ marginTop: 1 }}
-            dangerouslySetInnerHTML={{
-              __html: item?.text
+          <Box
+            sx={{
+              mt: 2,
+              minHeight: "150px",
+              maxHeight: "300px",
+              overflow: "hidden",
+              textOrientation: "mixed",
+              textOverflow: "ellipsis"
             }}
-          ></div>
+          >
+            <Typography variant="h6" sx={{ color: theme.palette.primary.main }}>
+              {item?.title}
+            </Typography>
+            <div
+              style={{ marginTop: 1 }}
+              dangerouslySetInnerHTML={{
+                __html: item?.text
+              }}
+            ></div>
+          </Box>
         </Box>
 
         <Box

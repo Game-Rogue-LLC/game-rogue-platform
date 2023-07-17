@@ -27,7 +27,9 @@ const ContentBlock = ({ contentBlock, handleChange, handleUpload, save, saving }
 
   return (
     <Paper sx={{ p: 4, mt: 4 }}>
-      <Typography variant="h5">Content Block</Typography>
+      <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+        Content Block
+      </Typography>
       <Box sx={{ textAlign: "center", position: "relative" }}>
         <IconButton
           sx={{ position: "absolute", right: 0, bottom: 0 }}

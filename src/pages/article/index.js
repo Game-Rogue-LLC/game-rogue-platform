@@ -9,7 +9,7 @@ import {
   useTheme
 } from "@mui/material";
 import { EVENT_REGIONS, PLATFORMS } from "@/src/config/global";
-import { KeyboardArrowDown, Search } from "@mui/icons-material";
+import { KeyboardArrowDown, Search, SettingsRemoteOutlined } from "@mui/icons-material";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { useEffect, useMemo, useState } from "react";
 
@@ -52,9 +52,11 @@ const Page = (props) => {
   const router = useRouter();
   const { article } = useTournamentContext();
   const [filter, setFilter] = useState("");
-  const [game, setGame] = useState(GAMES[0]);
-  const [platform, setPlatform] = useState(platforms[0]);
-  const [region, setRegion] = useState(regions[0]);
+  const [game, setGame] = useState(null);
+  const [platform, setPlatform] = useState(null);
+  const [region, setRegion] = useState(null);
+  const [sort, setSort] = useState(null);
+  const [category, setCategory] = useState(null);
 
   const onFilterChange = (e, inv) => {
     setFilter(inv);
@@ -68,6 +70,12 @@ const Page = (props) => {
   };
   const onRegionChange = (newRegion) => {
     setRegion(newRegion);
+  };
+  const onSortChange = (newSort) => {
+    setSort(newSort);
+  };
+  const onCategoryChange = (newCategory) => {
+    setCategory(newCategory);
   };
 
   return (
@@ -126,10 +134,10 @@ const Page = (props) => {
                   boxShadow: "rgba(245, 131, 31, 0.6)"
                 }}
               >
-                2023 Majors Qualifier II <br />
+                {/* 2023 Majors Qualifier II <br />
                 2023 Majors Qualifier I <br />
                 New Year's Slam Online Tournament <br />
-                Weekend Brawl Online Tournament
+                Weekend Brawl Online Tournament */}
               </CategoryCard>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -140,10 +148,10 @@ const Page = (props) => {
                   boxShadow: "rgba(245, 131, 31, 0.6)"
                 }}
               >
-                The Premier League: Season 7 <br />
+                {/* The Premier League: Season 7 <br />
                 SCS Esports: Season 7 <br />
                 SFCL: Season 7 Regular Season <br />
-                SFCL: Season 7 Closed Qualifiers
+                SFCL: Season 7 Closed Qualifiers */}
               </CategoryCard>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -154,10 +162,10 @@ const Page = (props) => {
                   boxShadow: "rgba(245, 131, 31, 0.6)"
                 }}
               >
-                $10,000 Game Rogue LAN Invitational <br />
+                {/* $10,000 Game Rogue LAN Invitational <br />
                 How to Add New Articles <br />
                 Plus Plans Release Notes <br />
-                1.1. Release & Patch Notes <br />
+                1.1. Release & Patch Notes <br /> */}
               </CategoryCard>
             </Grid>
           </Grid>
@@ -208,16 +216,21 @@ const Page = (props) => {
               flexDirection: "row-reverse"
             }}
           >
-            <DropdownMenu name="game" title="Change Game" items={GAMES} onChange={onGameChange} />
+            <DropdownMenu
+              name="game"
+              title={game ? game.name : "Change Game"}
+              items={GAMES}
+              onChange={onGameChange}
+            />
             <DropdownMenu
               name="region"
-              title="Change Region"
+              title={region ? region.name : "Change Region"}
               items={regions}
               onChange={onRegionChange}
             />
             <DropdownMenu
               name="platform"
-              title="Change Platform"
+              title={platform ? platform.name : "Change Platform"}
               items={platforms}
               onChange={onPlatformChange}
             />
@@ -255,7 +268,7 @@ const Page = (props) => {
           >
             <DropdownMenu
               name="sort"
-              title="Sort"
+              title={sort ? sort.name : "Sort"}
               items={[
                 {
                   id: 0,
@@ -274,10 +287,11 @@ const Page = (props) => {
                   name: "Trending"
                 }
               ]}
+              onChange={onSortChange}
             />
             <DropdownMenu
               name="category"
-              title="Category"
+              title={category ? category.name : "Category"}
               sx={{
                 marginLeft: 2
               }}
@@ -303,6 +317,7 @@ const Page = (props) => {
                   name: "Events"
                 }
               ]}
+              onChange={onCategoryChange}
             />
           </Box>
         </Box>

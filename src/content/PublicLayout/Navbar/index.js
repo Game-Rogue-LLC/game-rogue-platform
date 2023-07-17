@@ -122,7 +122,7 @@ const PublicNavbar = ({ sx }) => {
         ...sx
       }}
     >
-      <Box sx={{ px: 2, borderBottom: "solid 3px #f5831f" }}>
+      <Box sx={{ px: 1, borderBottom: "solid 3px #f5831f" }}>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
           {/* Begin Left menus */}
           <Box
@@ -132,58 +132,61 @@ const PublicNavbar = ({ sx }) => {
               alignItems: "center"
             }}
           >
-            {/* Begin Logo */}
-            <Box
-              sx={{
-                position: "relative",
-                display: "flex",
-                alignItems: "end",
-                gap: 1,
-                height: "40px"
-              }}
-            >
-              {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
-              <video autoPlay loop muted poster="/GR_Letters.png">
-                <source src="/static/animations/GR_Letters.webm" type="video/webm" />
-              </video>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {/* Begin Logo */}
               <Box
-                component="img"
-                src="/GR_Letters.png"
-                height={40}
-                ref={logoRef}
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  filter: "brightness(10)",
-                  display: "none"
-                }}
-              />
-              <Typography variant="h4" sx={{ lineHeight: 1, fontSize: 16 }}>
-                OB 1.0
-              </Typography>
-            </Box>
-            {/* End Logo */}
-            {/* Begin Search Box */}
-            <Box className="search-box">
-              <SearchInput
-                id="search"
-                name="search"
-                placeholder="Search"
-                value={search}
-                onChange={handle.changeSearch}
-                onKeyUp={handle.typeSearch}
                 sx={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "end",
+                  gap: 1,
                   height: "40px"
                 }}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <Search fontSize="large" />
-                  </InputAdornment>
-                }
-              />
+              >
+                {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
+                <video autoPlay loop muted poster="/GR_Letters.png">
+                  <source src="/static/animations/GR_Letters.webm" type="video/webm" />
+                </video>
+                <Box
+                  component="img"
+                  src="/GR_Letters.png"
+                  height={40}
+                  ref={logoRef}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    filter: "brightness(10)",
+                    display: "none"
+                  }}
+                />
+                <Typography variant="h4" sx={{ lineHeight: 1, fontSize: 16 }}>
+                  OB 1.0
+                </Typography>
+              </Box>
+              {/* End Logo */}
+              {/* Begin Search Box */}
+              <Box className="search-box">
+                <SearchInput
+                  id="search"
+                  name="search"
+                  placeholder="Search"
+                  value={search}
+                  onChange={handle.changeSearch}
+                  onKeyUp={handle.typeSearch}
+                  sx={{
+                    height: "40px"
+                  }}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <Search fontSize="large" />
+                    </InputAdornment>
+                  }
+                />
+              </Box>
+              {/* End Search Box */}
             </Box>
-            {/* End Search Box */}
+
             <NavItem name="HOME" active={currentPage === "home"} handleClick={handleClickHome} />
             <NavItem
               name="Events"

@@ -11,7 +11,7 @@ const Page = (props) => {
   const { setTitle } = useAppContext();
 
   useEffect(() => {
-    setTitle("REGISTER AN ORGANIZATION");
+    setTitle("REGISTER AN ORGANIZER");
   }, []);
 
   return (
