@@ -14,6 +14,7 @@ import TournamentProvider, { useTournamentContext } from "@/src/context/Tourname
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 
+import Discover from "@/src/components/widgets/rogue-social/Discover";
 import FeaturedSocial from "@/src/components/widgets/rogue-social/FeaturedSocial";
 import MatchHome from "@/src/components/widgets/rogue-social/Home";
 import MyCommunity from "@/src/components/widgets/rogue-social/MyCommunity";
@@ -211,6 +212,9 @@ const Page = (props) => {
           </TabPanel>
           <TabPanel value="1" sx={{ flexGrow: 1, p: 0 }}>
             <FeaturedSocial />
+          </TabPanel>
+          <TabPanel value="2" sx={{ flexGrow: 1, p: 0 }}>
+            <Discover />
           </TabPanel>
           <TabPanel value="3" sx={{ flexGrow: 1, p: 0 }}>
             <Notifications />
