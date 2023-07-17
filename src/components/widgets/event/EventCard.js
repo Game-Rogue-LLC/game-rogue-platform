@@ -35,6 +35,7 @@ const EventCard = ({ item }) => {
           border: "solid 1px " + item?.primary,
           // minHeight: "280px",
           background: "black",
+          overflow: "hidden",
           ":hover": {
             cursor: "pointer",
             background: withOpacity(item?.primary, 0.1)
@@ -54,76 +55,80 @@ const EventCard = ({ item }) => {
             gap: 1
           }}
         ></Box>
-        <Box
-          sx={{
-            p: 2,
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 1
-          }}
-        >
-          <Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <img
-                src={item?.darkLogo || DEFAULT_DARK_LOGO}
-                width={40}
-                height={40}
-                style={{ objectFit: "cover" }}
-              />
-              <Typography
-                variant="h4"
-                fontSize={24}
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
-                overflow="hidden"
-                color={item?.primary}
+        <Box sx={{ p: 2 }}>
+          <Grid container spacing={1}>
+            <Grid item xs sx={{ overflow: "hidden" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  overflow: "hidden"
+                }}
               >
-                {item?.name}
-              </Typography>
-            </Box>
-            <Box
+                <img
+                  src={item?.darkLogo || DEFAULT_DARK_LOGO}
+                  width={40}
+                  height={40}
+                  style={{ objectFit: "cover" }}
+                />
+                <Box sx={{ overflow: "hidden" }}>
+                  <Typography
+                    variant="h4"
+                    fontSize={24}
+                    color={item?.primary}
+                    sx={{ whiteSpace: "nowrap", textOverflow: "hidden" }}
+                  >
+                    {item?.name}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  mt: 1,
+                  gap: 1,
+                  flexWrap: true
+                }}
+              >
+                <GameChip />
+                <PlatformChip type={item?.platform} />
+                <RegionChip type={item?.region} />
+              </Box>
+            </Grid>
+            <Grid
+              item
               sx={{
-                display: "flex",
-                alignItems: "center",
-                mt: 1,
-                gap: 1,
-                flexWrap: true
+                width: "80px"
               }}
             >
-              <GameChip />
-              <PlatformChip type={item?.platform} />
-              <RegionChip type={item?.region} />
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              flexGrow: 1,
-              maxWidth: "80px",
-              borderRadius: "10px",
-              backgroundColor: withOpacity(item?.primary, 0.2),
-              border: "solid 2px rgba(255,255,255,0.3)"
-            }}
-          >
-            <Typography
-              variant="h6"
-              sx={{ borderBottom: "solid 1px rgba(255,255,255,0.2)" }}
-              textAlign="center"
-            >
-              {formatDate(item?.startAt, "MMM")}
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              <Typography variant="h4">{formatDate(item?.startAt, "DD")}</Typography>
-            </Box>
-          </Box>
-          {/* <Chip
+              <Box
+                sx={{
+                  borderRadius: "10px",
+                  backgroundColor: withOpacity(item?.primary, 0.2),
+                  border: "solid 2px rgba(255,255,255,0.3)"
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{ borderBottom: "solid 1px rgba(255,255,255,0.2)" }}
+                  textAlign="center"
+                >
+                  {formatDate(item?.startAt, "MMM")}
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Typography variant="h4">{formatDate(item?.startAt, "DD")}</Typography>
+                </Box>
+              </Box>
+            </Grid>
+            {/* <Chip
             label={getStatus(item?.start, currentTime)}
             sx={{
               backgroundColor: "#393D40",
@@ -132,6 +137,7 @@ const EventCard = ({ item }) => {
               mt: 1,
             }}
           /> */}
+          </Grid>
         </Box>
         <Box sx={{ p: 2, background: "transparent" }}>
           <Grid container color="lightgray">

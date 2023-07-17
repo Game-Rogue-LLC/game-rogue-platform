@@ -69,9 +69,11 @@ const r6schannels = [
 
 const Page = (props) => {
   const theme = useTheme();
+  const router = useRouter();
   const { setTitle } = useAppContext();
 
   useEffect(() => {
+    router.push("/locked?page=rogue-tv");
     setTitle("Rogue TV");
   }, []);
 

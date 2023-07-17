@@ -122,7 +122,7 @@ const PublicNavbar = ({ sx }) => {
         ...sx
       }}
     >
-      <Container maxWidth="xxl" sx={{ borderBottom: "solid 3px #f5831f" }}>
+      <Box sx={{ px: 2, borderBottom: "solid 3px #f5831f" }}>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
           {/* Begin Left menus */}
           <Box
@@ -132,12 +132,13 @@ const PublicNavbar = ({ sx }) => {
               alignItems: "center"
             }}
           >
+            {/* Begin Logo */}
             <Box
               sx={{
                 position: "relative",
                 display: "flex",
                 alignItems: "end",
-                gap: 2,
+                gap: 1,
                 height: "40px"
               }}
             >
@@ -159,10 +160,11 @@ const PublicNavbar = ({ sx }) => {
                 }}
               />
               <Typography variant="h4" sx={{ lineHeight: 1, fontSize: 16 }}>
-                OB1.0
+                OB 1.0
               </Typography>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "end" }}></Box>
+            {/* End Logo */}
+            {/* Begin Search Box */}
             <Box className="search-box">
               <SearchInput
                 id="search"
@@ -181,6 +183,7 @@ const PublicNavbar = ({ sx }) => {
                 }
               />
             </Box>
+            {/* End Search Box */}
             <NavItem name="HOME" active={currentPage === "home"} handleClick={handleClickHome} />
             <NavItem
               name="Events"
@@ -497,7 +500,7 @@ const PublicNavbar = ({ sx }) => {
             {/* End User Submenu */}
           </Box>
         </Toolbar>
-      </Container>
+      </Box>
     </AppBar>
   );
 };

@@ -14,7 +14,7 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { DEFAULT_DARK_LOGO, DEFAULT_LIGHT_LOGO } from "@/src/config/global";
+import { DEFAULT_DARK_LOGO, DEFAULT_LIGHT_LOGO, TEAM_TYPES } from "@/src/config/global";
 import { customMessages, model, rules } from "@/lib/firestore/collections/team";
 import { useEffect, useState } from "react";
 
@@ -353,8 +353,11 @@ const Page = (props) => {
             onChange={handle.inputs}
             fullWidth
           >
-            <MenuItem value={0}>Casual</MenuItem>
-            <MenuItem value={1}>Major</MenuItem>
+            {TEAM_TYPES.map((val) => (
+              <MenuItem key={`team-type-${val.id}`} value={val.value}>
+                {val.name}
+              </MenuItem>
+            ))}
           </Select>
         </Grid>
         <Grid item xs={12}>

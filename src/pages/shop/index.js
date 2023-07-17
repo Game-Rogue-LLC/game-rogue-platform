@@ -3,6 +3,7 @@ import TournamentProvider, { useTournamentContext } from "@/src/context/Tourname
 
 import ShopContainer from "@/src/components/widgets/shop/ShopContainer";
 import ShopLayout from "@/src/content/ShopLayout";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 const Page = (props) => {
@@ -19,6 +20,10 @@ const Page = (props) => {
       color: "white"
     }
   };
+
+  useEffect(() => {
+    router.push("/locked?page=rogue-tv");
+  }, []);
 
   return (
     <Box>

@@ -288,7 +288,7 @@ const Footer = (props) => {
           mt: 2,
           borderTop: "solid 3px white",
           pt: "40px",
-          pb: "80px"
+          pb: "20px"
         }}
       >
         <Box
@@ -421,6 +421,18 @@ const Footer = (props) => {
               <img src="/static/images/tiktok.svg" style={{ height: "30px" }} />
             </Link>
           </Box>
+        </Box>
+
+        <Box
+          sx={{
+            mt: 2,
+            textAlign: "center",
+            width: "100%"
+          }}
+        >
+          <Typography variant="subtitle1" textTransform="uppercase" fontSize={20}>
+            Open Beta 1.0
+          </Typography>
         </Box>
       </Box>
     </Box>

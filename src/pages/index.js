@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import { Carousel } from "react-responsive-carousel";
 import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
 import PublicLayout from "@/src/content/PublicLayout";
-import Stepper from "@/src/components/carousel/Stepper";
 import TournamentProvider from "@/src/context/TournamentContext";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -139,7 +138,7 @@ const MyApp = (props) => {
         >
           PLUS PLANS
           <br />
-          AVAILABLE JULY 21st
+          AVAILABLE JULY 21ST
           <br />
           <Button variant="contained" sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}>
             <Typography variant="h1" fontSize={"59px"} color={"white"} letterSpacing={"5.9px"}>
@@ -251,12 +250,14 @@ const MyApp = (props) => {
               <Box
                 sx={{
                   display: "flex",
+                  height: "100%",
                   alignItems: "center",
                   justifyContent: "center"
                 }}
               >
                 <video
                   poster="/static/images/laptop.png"
+                  loop={true}
                   autoPlay={true}
                   muted={true}
                   style={{ width: "100%", height: "100%" }}

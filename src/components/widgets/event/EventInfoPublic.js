@@ -6,6 +6,7 @@ import {
   Grid,
   InputBase,
   InputLabel,
+  LinearProgress,
   ListItemIcon,
   MenuItem,
   Paper,
@@ -147,8 +148,19 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                 Contribute
               </Typography>
               <Typography variant="h6">
-                CROWDFUND GOAL: {organization.organizations[event.events[eid]?.oid]?.crowdFund}
+                CROWDFUND GOAL:{" $"}
+                {organization.organizations[event.events[eid]?.oid]?.crowdFund}
               </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={
+                  organization.organizations[event.events[eid]?.oid]?.crowdFund
+                    ? (organization.organizations[event.events[eid]?.oid]?.actualFund * 100.0) /
+                        organization.organizations[event.events[eid]?.oid]?.crowdFund +
+                      5
+                    : 0
+                }
+              />
               <Button variant="contained" sx={{ ...buttonStyle(colors.primary), mt: 3 }}>
                 Contribute
               </Button>
@@ -298,17 +310,22 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               </CustomButton>
             ) : (
               <Box sx={{ display: "flex", alignItems: "center", mt: 1, gap: 1 }}>
-                <CustomLoadingButton
+                <LoadingButton
                   loading={registering}
                   variant="contained"
-                  sx={{ flex: 1 }}
+                  sx={{
+                    flex: 1,
+                    ...buttonStyle(organization.organizations[event.events[eid]?.oid]?.primary)
+                  }}
                   onClick={handleRegister}
                   disabled={
-                    dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
+                    myTeam === ""
+
+                    // dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
                   }
                 >
                   Register
-                </CustomLoadingButton>
+                </LoadingButton>
 
                 <CustomButton onClick={onCreateTeam}>Create Team</CustomButton>
               </Box>

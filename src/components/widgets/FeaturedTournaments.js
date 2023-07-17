@@ -33,47 +33,10 @@ const featuredTournaments = [
             fontWeight: "bold"
           }}
         >
-          $1,500 2023 GAME ROGUE MAJORS
+          $10,000 R6 SUMMER SERIES
         </Typography>
         <Typography variant="body1" sx={{ textAlign: "left", color: "white", fontSize: "25px" }}>
-          PC - Rainbow Six Siege 3/1,12,18,19/22, 7:00 PM EST 1st - 4th Place Prizes
-        </Typography>
-      </Box>
-    )
-  },
-  {
-    src: "/static/images/back2.png",
-    name: "",
-    content: (
-      <Box
-        sx={{
-          position: "relative",
-          bottom: "0",
-          left: "0",
-          width: "100%",
-          background: "#f5831f",
-          color: "#fff",
-          padding: "10px",
-          fontSize: "12px",
-          border: "solid 2px white",
-          display: "flex",
-          alignItems: "center",
-          gap: 2
-        }}
-      >
-        <Typography
-          variant="h4"
-          sx={{
-            textAlign: "left",
-            color: "black",
-            fontSize: "40px",
-            fontWeight: "bold"
-          }}
-        >
-          $1,500 2023 GAME ROGUE MAJORS
-        </Typography>
-        <Typography variant="body1" sx={{ textAlign: "left", color: "white", fontSize: "25px" }}>
-          PC - Rainbow Six Siege 3/1,12,18,19/22, 7:00 PM EST 1st - 4th Place Prizes
+          PC - R6 - OPEN QUALIFIERS I
         </Typography>
       </Box>
     )

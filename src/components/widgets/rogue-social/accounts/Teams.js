@@ -45,13 +45,13 @@ const Teams = ({ items }) => {
             <StyledTab
               icon={<KeyboardArrowRight />}
               iconPosition="end"
-              label={<Typography>Create Account</Typography>}
+              label={<Typography>Create Team</Typography>}
               value="0"
             />
             <StyledTab
               icon={<KeyboardArrowRight />}
               iconPosition="end"
-              label={<Typography>Manage Accounts</Typography>}
+              label={<Typography>Manage Teams</Typography>}
               value="1"
             />
           </TabList>

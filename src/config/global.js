@@ -26,6 +26,29 @@ export const GAMES = [
   // "Zula Global"
 ];
 
+export const TEAM_TYPES = [
+  {
+    id: 0,
+    value: 0,
+    name: "Pro Team"
+  },
+  {
+    id: 1,
+    value: 1,
+    name: "Challenger Team"
+  },
+  {
+    id: 2,
+    value: 2,
+    name: "Semi-Professional Team"
+  },
+  {
+    id: 3,
+    value: 3,
+    name: "Casual Team"
+  }
+];
+
 export const STAFF_ROLES = [
   {
     id: 0,
