@@ -5,7 +5,7 @@ import Link from "next/link";
 import _ from "lodash";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
-const Section = ({ title, items, viewAll, onToggleViewAll }) => {
+const Section = ({ title, basePath, items, viewAll, onToggleViewAll }) => {
   const theme = useTheme();
 
   return (
@@ -28,7 +28,7 @@ const Section = ({ title, items, viewAll, onToggleViewAll }) => {
       <Box sx={{ py: 1, display: "flex", flexDirection: "column", gap: 1 }}>
         {_.map(items, (val, i) => (
           <Box key={`item-${i}`}>
-            <Link href={"#"}>
+            <Link href={basePath + "/" + val.id}>
               <Typography
                 variant="body1"
                 sx={{
@@ -95,19 +95,28 @@ export default function Discover({}) {
     <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
       <Section
         title="Event"
+        basePath="/event"
         items={events}
         viewAll={eventShow}
         onToggleViewAll={onToggleEventShow}
       />
-      <Section title="Team" items={teams} viewAll={teamShow} onToggleViewAll={onToggleTeamShow} />
+      <Section
+        title="Team"
+        basePath="/rogue-social/team"
+        items={teams}
+        viewAll={teamShow}
+        onToggleViewAll={onToggleTeamShow}
+      />
       <Section
         title="Organizer"
+        basePath="/rogue-social/profile"
         items={organizers}
         viewAll={organizerShow}
         onToggleViewAll={onToggleOrganizerShow}
       />
       <Section
         title="Player"
+        basePath="/rogue-social/profile"
         items={players}
         viewAll={playerShow}
         onToggleViewAll={onTogglePlayerShow}

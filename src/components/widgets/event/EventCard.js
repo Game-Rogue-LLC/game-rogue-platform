@@ -29,7 +29,7 @@ const EventCard = ({ item }) => {
   }, [item?.startAt]);
 
   return (
-    <Link href={`/event/${item?.id}/info`}>
+    <Link href={`/event/${item?.id}`}>
       <Box
         sx={{
           border: "solid 1px " + item?.primary,
