@@ -41,7 +41,7 @@ const Footer = (props) => {
                 variant="h4"
                 sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
               >
-                <Link href="/about">ABOUT US</Link>
+                ABOUT US
               </Typography>
             </Link>
             <Link href="/">
