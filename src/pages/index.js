@@ -1,13 +1,13 @@
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Container, Grid, Typography, useTheme } from "@mui/material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useEffect, useMemo, useState } from "react";
 
 import Benefits from "@/src/components/widgets/Benefits";
 import Button from "@mui/material/Button";
 import { Carousel } from "react-responsive-carousel";
 import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
 import PublicLayout from "@/src/content/PublicLayout";
-import TournamentProvider from "@/src/context/TournamentContext";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -15,7 +15,6 @@ import { useRouter } from "next/router";
 const MyApp = (props) => {
   const theme = useTheme();
   const router = useRouter();
-  const user = useAuthContext();
   const { setTitle } = useAppContext();
   const [banner, setBanner] = useState(0);
   const [aboutUsHover, setAboutUsHover] = useState(false);
@@ -277,84 +276,7 @@ const MyApp = (props) => {
       >
         <Benefits />
       </Box>
-      {/* <Box component={"section"}>
-        <Carousel
-          sx={{
-            position: "relative",
-          }}
-          showThumbs={false}
-          showStatus={false}
-          infiniteLoop={true}
-          showIndicators={false}
-          renderArrowPrev={(clickHandler) => (
-            <button
-              onClick={clickHandler}
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                display: "flex",
-                padding: 30,
-                justifyContent: "center",
-                alignItems: "center",
-                color: theme.palette.primary.main,
-                backgroundColor: "transparent",
-                cursor: "pointer",
-                border: "none",
-                zIndex: 20,
-              }}
-            >
-              <ArrowBackIos
-                sx={{ fontSize: "60px", ":hover": { opacity: 0.7 } }}
-              ></ArrowBackIos>
-            </button>
-          )}
-          renderArrowNext={(clickHandler) => (
-            <button
-              onClick={clickHandler}
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                right: 0,
-                display: "flex",
-                padding: 30,
-                justifyContent: "center",
-                alignItems: "center",
-                color: theme.palette.primary.main,
-                backgroundColor: "transparent",
-                cursor: "pointer",
-                border: "none",
-                zIndex: 20,
-              }}
-            >
-              <ArrowForwardIos
-                sx={{ fontSize: "60px", ":hover": { opacity: 0.7 } }}
-              ></ArrowForwardIos>
-            </button>
-          )}
-        >
-          <Box
-            sx={{
-              backgroundImage: "url(/static/images/carousel1.png)",
-              height: "478px",
-            }}
-          ></Box>
-          <Box
-            sx={{
-              backgroundImage: "url(/static/images/carousel2.png)",
-              height: "478px",
-            }}
-          ></Box>
-          <Box
-            sx={{
-              backgroundImage: "url(/static/images/carousel3.png)",
-              height: "478px",
-            }}
-          ></Box>
-        </Carousel>
-      </Box> */}
+
       <Box
         component={"section"}
         sx={{

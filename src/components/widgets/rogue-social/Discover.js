@@ -11,7 +11,7 @@ const Section = ({ title, basePath, items, viewAll, onToggleViewAll }) => {
   return (
     <Box
       component="section"
-      sx={{ borderRadius: 2, border: "solid 1px rgba(255,255,255,.2)", p: 1 }}
+      sx={{ borderRadius: 2, border: "solid 1px rgba(255,255,255,.2)", px: 1 }}
     >
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 1 }}>
         <Typography
