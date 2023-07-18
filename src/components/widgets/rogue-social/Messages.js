@@ -1,14 +1,30 @@
 import {
   AddComment,
+  ArrowLeft,
   KeyboardDoubleArrowDown,
   KeyboardDoubleArrowUp,
   Message,
   QuestionAnswer,
   Sell
 } from "@mui/icons-material";
-import { Badge, Box, Button, IconButton, Typography, styled, useTheme } from "@mui/material";
+import {
+  Badge,
+  Box,
+  Button,
+  ButtonBase,
+  IconButton,
+  Tooltip,
+  Typography,
+  styled,
+  useTheme
+} from "@mui/material";
+import { isMyTeam, withOpacity } from "@/src/utils/utils";
+import { useMemo, useState } from "react";
 
-import { useState } from "react";
+import Image from "next/image";
+import TeamChat from "./TeamChat";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const StyledButton = styled(Button)((theme) => ({
   borderBottomLeftRadius: 0,
@@ -23,10 +39,48 @@ const StyledButton = styled(Button)((theme) => ({
   zIndex: 8500
 }));
 
+const TeamItem = ({ item, width, height, onClick }) => {
+  const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 2,
+        py: 1,
+        px: 2,
+        cursor: "pointer",
+        ":hover": {
+          background: withOpacity(theme.palette.primary.main, 0.2)
+        }
+      }}
+      onClick={onClick}
+    >
+      <Image
+        loading="lazy"
+        src={item?.darkLogo ?? DEFAULT_DARK_LOGO}
+        alt={item?.darkLogo}
+        width={width || 30}
+        height={height || 30}
+      />
+      {item?.name}
+    </Box>
+  );
+};
+
 const Messages = ({ count = 3 }) => {
   const theme = useTheme();
+  const { user } = useAuthContext();
+  const { team } = useTournamentContext();
   const [open, setOpen] = useState(false);
   const [chatting, setChatting] = useState(0);
+  const [opponent, setOpponent] = useState(null);
+
+  const myTeams = useMemo(() => {
+    if (user) return _.filter(team.teams, (val) => isMyTeam(val, user.id));
+    return _.map(team.teams, (val) => val);
+  }, [team, user]);
 
   const onToggleOpen = () => {
     setOpen((prev) => !prev);
@@ -62,15 +116,21 @@ const Messages = ({ count = 3 }) => {
           <Typography variant="h6">Messages</Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <IconButton>
-            <Sell fontSize="small" />
-          </IconButton>
-          <IconButton>
-            <QuestionAnswer fontSize="small" />
-          </IconButton>
-          <IconButton>
-            <AddComment fontSize="small" />
-          </IconButton>
+          <Tooltip title="Tickets">
+            <IconButton>
+              <Sell fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Requests">
+            <IconButton>
+              <QuestionAnswer fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Create ">
+            <IconButton>
+              <AddComment fontSize="small" />
+            </IconButton>
+          </Tooltip>
           <IconButton onClick={onToggleOpen}>
             {open === true ? (
               <KeyboardDoubleArrowDown fontSize="small" />
@@ -82,8 +142,64 @@ const Messages = ({ count = 3 }) => {
       </Box>
 
       {open && (
-        <Box sx={{ height: 400, backgroundColor: "white" }}>
-          {chatting === true ? <Box></Box> : <Box></Box>}
+        <Box
+          sx={{
+            height: 500,
+            backgroundColor: "black",
+            overflow: "auto"
+          }}
+        >
+          {chatting === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column"
+              }}
+            >
+              {myTeams &&
+                myTeams?.length > 0 &&
+                myTeams?.map((item) => (
+                  <TeamItem
+                    key={"team_" + item.id}
+                    item={item}
+                    onClick={() => {
+                      setChatting(1);
+                      setOpponent({
+                        type: "TEAM",
+                        value: item
+                      });
+                    }}
+                  />
+                ))}
+            </Box>
+          ) : (
+            <Box sx={{ height: 500 }}>
+              <ButtonBase
+                sx={{
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "start",
+                  fontSize: 20,
+                  height: 40,
+                  borderBottom: "solid 1px rgba(255,255,255,.2)"
+                }}
+                onClick={() => {
+                  setChatting(0);
+                }}
+              >
+                <ArrowLeft />
+                Back
+              </ButtonBase>
+              {opponent && opponent.type === "TEAM" ? (
+                <TeamChat
+                  item={opponent.value}
+                  sx={{ width: "100%", height: 460, border: "none" }}
+                />
+              ) : (
+                <></>
+              )}
+            </Box>
+          )}
         </Box>
       )}
     </Box>
