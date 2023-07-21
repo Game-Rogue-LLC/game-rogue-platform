@@ -48,7 +48,7 @@ const TeamItem = ({ item, width, height, onClick }) => {
         display: "flex",
         alignItems: "center",
         gap: 2,
-        py: 1,
+        py: 2,
         px: 2,
         cursor: "pointer",
         ":hover": {

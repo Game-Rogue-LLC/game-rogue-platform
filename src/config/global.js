@@ -136,6 +136,11 @@ export const EVENT_FORMATS = [
     key: "round-robin-semi-split",
     value: 8,
     name: "Semi Round Robin"
+  },
+  {
+    key: "baku-pairing",
+    value: 9,
+    name: "Baku pairing System"
   }
 ];
 
@@ -279,3 +284,9 @@ export const TEAM_POSITIONS = [
     name: "Player"
   }
 ];
+
+export const TICKET_TYPES = {
+  FOLLOW_USER: "FOLLOW_USER",
+  TEAM_REGISTER_REQUEST: "TEAM_REGISTER_REQUEST",
+  MATCH_SCHEDULE_REQUEST: "MATCH_SCHEDULE_REQUEST"
+};

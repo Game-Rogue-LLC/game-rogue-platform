@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import Avatar from "@/src/components/Avatar";
 import { LoadingButton } from "@mui/lab";
+import { TICKET_TYPES } from "@/src/config/global";
 import dayjs from "dayjs";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -44,7 +45,7 @@ const UserInfo = ({ inputs, item, editable, handle }) => {
         return;
       }
       res = await ticket.create({
-        type: "FOLLOW_USER",
+        type: TICKET_TYPES.FOLLOW_USER,
         meta: {},
         users: [user.user.id, item.id],
         createdBy: user.user.id,

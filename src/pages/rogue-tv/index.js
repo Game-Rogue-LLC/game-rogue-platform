@@ -73,7 +73,7 @@ const Page = (props) => {
   const { setTitle } = useAppContext();
 
   useEffect(() => {
-    router.push("/locked?page=rogue-tv");
+    // router.push("/locked?page=rogue-tv");
     setTitle("Rogue TV");
   }, []);
 

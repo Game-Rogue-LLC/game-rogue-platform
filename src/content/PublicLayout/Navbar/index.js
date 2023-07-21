@@ -22,19 +22,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Avatar from "@/src/components/Avatar";
 import { DEFAULT_PROFILE_PICTURE } from "@/src/config/global";
 import Link from "next/link";
-import SearchInput from "@/src/components/input/SearchInput";
+import SearchBox from "@/src/components/input/SearchBox";
 import _ from "lodash";
 import { isMyTeam } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-
-const StyledAutoComplete = styled(Autocomplete)((theme) => ({
-  ".MuiFormControl-root": {
-    display: "none"
-  }
-}));
 
 const PublicNavbar = ({ sx }) => {
   const user = useAuthContext();
@@ -52,6 +46,12 @@ const PublicNavbar = ({ sx }) => {
     }
     return [];
   }, [team?.teams, user.user]);
+
+  const totalPlayers = useMemo(() => {
+    if (player.players)
+      return _.map(player.players, (val) => ({ label: val.userName || val.name, id: val.id }));
+    return [];
+  }, [player.players]);
 
   useEffect(() => {
     if (router?.pathname) {
@@ -73,8 +73,9 @@ const PublicNavbar = ({ sx }) => {
   }, [user.user?.id]);
 
   const handle = {
-    changeSearch: (e) => {
-      setSearch(e.target.value);
+    changeSearch: (e, val) => {
+      router.push("/rogue-social/profile/" + val.id);
+      setSearch(val);
     },
     typeSearch: (e) => {
       if (e.key === "Enter") {
@@ -167,7 +168,7 @@ const PublicNavbar = ({ sx }) => {
               {/* End Logo */}
               {/* Begin Search Box */}
               <Box className="search-box">
-                <SearchInput
+                <SearchBox
                   id="search"
                   name="search"
                   placeholder="Search"
@@ -177,11 +178,7 @@ const PublicNavbar = ({ sx }) => {
                   sx={{
                     height: "40px"
                   }}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <Search fontSize="large" />
-                    </InputAdornment>
-                  }
+                  options={totalPlayers}
                 />
               </Box>
               {/* End Search Box */}

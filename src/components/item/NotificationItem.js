@@ -2,6 +2,7 @@ import { Box, IconButton, Paper, Typography, useTheme } from "@mui/material";
 
 import { Close } from "@mui/icons-material";
 import Link from "next/link";
+import { TICKET_TYPES } from "@/src/config/global";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
@@ -11,10 +12,10 @@ const NotificationItem = ({ item }) => {
   const { player, ticket } = useTournamentContext();
 
   const getTitle = (type) => {
-    if (type === "FOLLOW_USER") return "Followed User";
+    if (type === TICKET_TYPES.FOLLOW_USER) return "Followed User";
   };
   const getContent = () => {
-    if (item.type === "FOLLOW_USER")
+    if (item.type === TICKET_TYPES.FOLLOW_USER)
       return (
         <>
           <Link

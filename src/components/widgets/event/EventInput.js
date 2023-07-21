@@ -235,6 +235,9 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                 <MenuItem key="pyramid-elimination" value={3}>
                   Pyramid Elimination
                 </MenuItem>
+                <MenuItem key="baku-system" value={9}>
+                  Baku Tournament
+                </MenuItem>
               </Select>
             ) : (
               <Select

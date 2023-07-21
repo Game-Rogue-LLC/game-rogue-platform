@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -9,15 +10,20 @@ import {
   TableFooter,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
   useTheme
 } from "@mui/material";
-import { EVENT_STATES, MATCH_STATES } from "@/src/config/global";
+import { Check, Close, Visibility } from "@mui/icons-material";
+import { EVENT_STATES, MATCH_STATES, TICKET_TYPES } from "@/src/config/global";
 import { useEffect, useMemo, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
 import CustomButton from "@/src/components/button/CustomButton";
+import RequestViewDialog from "@/src/components/widgets/event/RequestViewDialog";
 import dayjs from "dayjs";
+import { enqueueSnackbar } from "notistack";
+import { register } from "validatorjs";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
@@ -28,13 +34,54 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
-  const { organization, event, player, match } = useTournamentContext();
+  const { organization, event, team, player, match, ticket } = useTournamentContext();
   const [eid, setEID] = useState(router?.query?.event);
   const [matches, setMatches] = useState([]);
+  const [openView, setOpenView] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
     setTitle("MATCHES");
   }, []);
+
+  const registerRequests = useMemo(() => {
+    console.log(ticket.tickets);
+    if (ticket.tickets)
+      return _.filter(
+        ticket.tickets,
+        (val) => val.type === TICKET_TYPES.TEAM_REGISTER_REQUEST && val.data?.event === eid
+      );
+    return [];
+  }, [ticket.tickets]);
+
+  const onViewRequest = (val) => {
+    setSelectedRequest(val);
+    setOpenView(true);
+  };
+  const onCloseView = (val) => {
+    setOpenView(false);
+  };
+  const onAcceptRequest = async (ticketId, id, tid) => {
+    const res = await event.addParticipant(id, tid);
+    if (res.code === "succeed") {
+      await ticket.update(ticketId, { closedAt: new Date(), deleted: true, result: "accepted" });
+      enqueueSnackbar("Accepted successfully!", { variant: "success" });
+    } else {
+      enqueueSnackbar(res.message, { variant: "error" });
+    }
+  };
+  const onDenyRequest = async (ticketId) => {
+    const res = await ticket.update(ticketId, {
+      closedAt: new Date(),
+      deleted: true,
+      result: "denied"
+    });
+    if (res.code === "succeed") {
+      enqueueSnackbar("Denied successfully!", { variant: "success" });
+    } else {
+      enqueueSnackbar(res.message, { variant: "error" });
+    }
+  };
 
   useEffect(() => {
     if (router?.query?.event) {
@@ -187,6 +234,79 @@ const Page = (props) => {
         <CustomButton variant="contained" sx={{ mt: 2 }}>
           GENERATE
         </CustomButton>
+      </Paper>
+
+      <Paper sx={{ mt: 4, p: 2 }}>
+        <RequestViewDialog
+          open={openView}
+          onClose={onCloseView}
+          onAccept={() =>
+            onAcceptRequest(
+              selectedRequest.id,
+              selectedRequest.data.event,
+              selectedRequest.data.team
+            )
+          }
+          item={selectedRequest}
+          onDeny={() =>
+            onDenyRequest(selectedRequest.id, selectedRequest.data.event, selectedRequest.data.team)
+          }
+        />
+        <Typography variant="h5">REGISTER REQUESTS</Typography>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>User</TableCell>
+              <TableCell>Team ID</TableCell>
+              <TableCell>Team Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {registerRequests &&
+              registerRequests.map((val, i) => (
+                <TableRow hover key={`request-${i}`}>
+                  <TableCell>{player.players[val.sender]?.userName}</TableCell>
+                  <TableCell>{val.data.team}</TableCell>
+                  <TableCell>{team.teams[val.data.team]?.name}</TableCell>
+                  <TableCell>{val.data.text}</TableCell>
+                  <TableCell sx={{ maxWidth: 100 }}>
+                    <Tooltip title="View">
+                      <IconButton
+                        variant="contained"
+                        onClick={() => {
+                          onViewRequest(val);
+                        }}
+                      >
+                        <Visibility />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Accept">
+                      <IconButton
+                        variant="contained"
+                        onClick={() => {
+                          onAcceptRequest(val.id, val.data.event, val.data.team);
+                        }}
+                      >
+                        <Check />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Deny">
+                      <IconButton
+                        variant="contained"
+                        onClick={() => {
+                          onDenyRequest(val.id, val.data.event, val.data.team);
+                        }}
+                      >
+                        <Close />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
       </Paper>
     </Box>
   );

@@ -19,7 +19,7 @@ import Avatar from "@/src/components/Avatar";
 import { DEFAULT_PROFILE_PICTURE } from "@/src/config/global";
 import Link from "next/link";
 import NavItem from "@/src/content/TVLayout/Navbar/NavItem";
-import SearchInput from "@/src/components/input/SearchInput";
+import SearchInput from "@/src/components/input/SearchBox";
 import { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
 import _ from "lodash";
 import { isMyTeam } from "@/src/utils/utils";
@@ -243,7 +243,12 @@ const TVNavbar = ({ sx }) => {
                 onClose={onCloseUser}
               >
                 <MenuItem onClick={onCloseUser} key="user-setting" disableRipple>
-                  <Link href={"/user/" + user.user?.id}>Settings</Link>
+                  <Link href={"/user/" + user.user?.id}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Avatar src={user.user?.profilePic} sx={{ width: 30, height: 30 }} />
+                      {player.players[user.user?.id]?.userName}
+                    </Box>
+                  </Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={onCloseUser} key="my-team" disableRipple>

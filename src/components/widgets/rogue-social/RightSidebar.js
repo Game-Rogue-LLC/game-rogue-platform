@@ -17,7 +17,7 @@ import { useEffect, useMemo, useState } from "react";
 import CustomButton from "@/src/components/button/CustomButton";
 import { GAMES } from "@/src/config/global";
 import MatchItem from "@/src/components/widgets/rogue-social/MatchItem";
-import SearchInput from "@/src/components/input/SearchInput";
+import SearchBox from "@/src/components/input/SearchBox";
 import dayjs from "dayjs";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -46,8 +46,8 @@ const RightSidebar = ({ sx }) => {
     return [];
   }, [match?.matches, currentTime, team?.teams]);
 
-  const onSearchChange = (e) => {
-    setSearch(e.target.value);
+  const onSearchChange = (e, newValue) => {
+    setSearch(newValue);
   };
 
   return (
@@ -62,21 +62,16 @@ const RightSidebar = ({ sx }) => {
       }}
     >
       <Box className="search-box">
-        <SearchInput
+        <SearchBox
           id="search"
           name="search"
-          placeholder="Search for Rogue ID..."
+          placeholder="Search"
           value={search}
           onChange={onSearchChange}
           sx={{
-            height: "40px",
-            width: "100%"
+            height: "40px"
           }}
-          startAdornment={
-            <InputAdornment position="start">
-              <Search fontSize="large" />
-            </InputAdornment>
-          }
+          options={totalPlayers}
         />
       </Box>
       <Box

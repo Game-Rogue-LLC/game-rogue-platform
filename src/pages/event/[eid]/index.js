@@ -32,6 +32,7 @@ import { useStyleContext } from "@/src/context/StyleContext";
 
 const Page = (props) => {
   const router = useRouter();
+  const { user } = useAuthContext();
   const { setTitle } = useAppContext();
   const { setColors, colors } = useStyleContext();
   const { organization, event, team } = useTournamentContext();
@@ -87,34 +88,49 @@ const Page = (props) => {
         sx={{
           height: "100px",
           display: "flex",
-          justifyContent: "left",
-          paddingLeft: "10%",
+          justifyContent: "space-between",
+          paddingInline: "10%",
           alignItems: "end",
           gap: 2
         }}
       >
-        <img
-          src={item?.darkLogo}
-          width={200}
-          height={200}
-          style={{
-            // borderRadius: '50%',
-            // outline: '2px solid rgba(245, 131, 31, 0.5)',
-            objectFit: "cover"
-            // outlineOffset: '2px'
-          }}
-        />
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" color={colors.primary}>
-            {item?.name}
-          </Typography>
-          <Typography variant="h5" fontWeight="bold" color={colors.secondary}>
-            {organization.organizations[item?.oid]?.name}
-          </Typography>
+        <Box sx={{ display: "flex", alignItems: "end", gap: 2 }}>
+          <img
+            src={item?.darkLogo}
+            width={200}
+            height={200}
+            style={{
+              // borderRadius: '50%',
+              // outline: '2px solid rgba(245, 131, 31, 0.5)',
+              objectFit: "cover"
+              // outlineOffset: '2px'
+            }}
+          />
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="h4" color={colors.primary}>
+              {item?.name}
+            </Typography>
+            <Typography variant="h5" fontWeight="bold" color={colors.secondary}>
+              {organization.organizations[item?.oid]?.name}
+            </Typography>
+          </Box>
+          {/* Begin Display Social Links */}
+          <Box sx={{ mb: 3 }}></Box>
+          {/* End Display Social Links */}
         </Box>
-        {/* Begin Display Social Links */}
-        <Box sx={{ mb: 4 }}></Box>
-        {/* End Display Social Links */}
+
+        {organization.organizations[item?.oid]?.uid === user.id && (
+          <Box sx={{ mb: 3 }}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                router.push(`/event/${eid}/edit`);
+              }}
+            >
+              Edit
+            </Button>
+          </Box>
+        )}
       </Box>
       <Container sx={{ mt: "100px" }}>
         {/* <Tabs

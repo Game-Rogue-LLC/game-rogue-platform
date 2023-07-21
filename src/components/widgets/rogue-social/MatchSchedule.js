@@ -10,12 +10,12 @@ import {
   Typography
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { MATCH_STATES, TICKET_TYPES } from "@/src/config/global";
 import { useEffect, useState } from "react";
 
 import CustomDateTimePicker from "@/src/components/datetime/DateTimePicker";
 import Link from "next/link";
 import { LoadingButton } from "@mui/lab";
-import { MATCH_STATES } from "@/src/config/global";
 import ParticipantInfo from "@/src/components/widgets/match/ParticipantInfo";
 import TeamItem from "@/src/components/item/TeamItem";
 import dayjs from "dayjs";
@@ -56,7 +56,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
   const onAsk = async () => {
     setAsking(true);
     const newTicket = {
-      type: "MATCH_SCHEDULE_REQUEST",
+      type: TICKET_TYPES.MATCH_SCHEDULE_REQUEST,
       sender: myTeam.uid,
       receiver: opTeam.uid,
       data: {
