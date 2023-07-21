@@ -31,7 +31,7 @@ export const AuthContextProvider = ({ children }) => {
     "/event/upcoming",
     "/event/ongoing",
     "/event/completed",
-    "/event/[eid]/info",
+    "/event/[eid]",
     "/team/[tid]",
     "/match/upcoming",
     "/match/[mid]/info",

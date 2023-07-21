@@ -12,7 +12,7 @@ import {
   Tabs,
   Typography
 } from "@mui/material";
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from "@/src/config/global";
+import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_DARK_LOGO } from "@/src/config/global";
 import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
 import StyledTabPanel, { tabProps } from "@/src/components/styled/StyledTabPanel";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
@@ -23,6 +23,7 @@ import EventInfoPublic from "@/src/components/widgets/event/EventInfoPublic";
 import Link from "next/link";
 import PublicLayout from "@/src/content/PublicLayout";
 import SlantBanner from "@/src/components/widgets/SlantBanner";
+import TeamTable from "@/src/components/table/TeamTable";
 import dayjs from "dayjs";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -33,7 +34,7 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors, colors } = useStyleContext();
-  const { organization, event, team, match, matchLoading } = useTournamentContext();
+  const { organization, event, team } = useTournamentContext();
   const [eid, setEID] = useState(router?.query?.eid);
   const [item, setItem] = useState(null);
   const [startTime, setStartTime] = useState(new Date());
@@ -111,6 +112,9 @@ const Page = (props) => {
             {organization.organizations[item?.oid]?.name}
           </Typography>
         </Box>
+        {/* Begin Display Social Links */}
+        <Box sx={{ mb: 4 }}></Box>
+        {/* End Display Social Links */}
       </Box>
       <Container sx={{ mt: "100px" }}>
         {/* <Tabs
@@ -144,6 +148,11 @@ const Page = (props) => {
             >
               <Tab label="Info" value="1" sx={{ "&.Mui-selected": { color: colors.primary } }} />
               <Tab label="Course" value="2" sx={{ "&.Mui-selected": { color: colors.primary } }} />
+              <Tab
+                label="Participants"
+                value="3"
+                sx={{ "&.Mui-selected": { color: colors.primary } }}
+              />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -151,6 +160,12 @@ const Page = (props) => {
           </TabPanel>
           <TabPanel value="2">
             <EventCoursePublic eid={eid} />
+          </TabPanel>
+          <TabPanel value="3">
+            <TeamTable
+              teams={_.map(item?.participants, (val) => team.teams[val.tid])}
+              showMine={false}
+            />
           </TabPanel>
         </TabContext>
       </Container>

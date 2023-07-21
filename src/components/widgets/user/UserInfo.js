@@ -1,9 +1,10 @@
-import { Box, Button, ButtonBase, Grid, IconButton, Typography, useTheme } from "@mui/material";
 import { AddAPhoto, Edit, Female, Logout, Male, Man, Woman } from "@mui/icons-material";
+import { Box, Button, ButtonBase, Grid, IconButton, Typography, useTheme } from "@mui/material";
 import { useMemo, useState } from "react";
 
 import Avatar from "@/src/components/Avatar";
 import { LoadingButton } from "@mui/lab";
+import { TICKET_TYPES } from "@/src/config/global";
 import dayjs from "dayjs";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -18,8 +19,6 @@ const UserInfo = ({ inputs, item, editable, handle }) => {
   const { player, ticket } = useTournamentContext();
   const [following, setFollowing] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
-  console.log(item);
 
   const isFollowing = useMemo(() => {
     if (user.user && item && player.players)
@@ -46,7 +45,7 @@ const UserInfo = ({ inputs, item, editable, handle }) => {
         return;
       }
       res = await ticket.create({
-        type: "FOLLOW_USER",
+        type: TICKET_TYPES.FOLLOW_USER,
         meta: {},
         users: [user.user.id, item.id],
         createdBy: user.user.id,

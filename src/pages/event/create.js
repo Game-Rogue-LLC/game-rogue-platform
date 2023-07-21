@@ -13,7 +13,12 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO, EVENT_STATES } from "@/src/config/global";
+import {
+  DEFAULT_CONTENTBLOCK_IMAGE,
+  DEFAULT_DARK_LOGO,
+  DEFAULT_LIGHT_LOGO,
+  EVENT_STATES
+} from "@/src/config/global";
 import { customMessages, model, rules } from "@/lib/firestore/collections/event";
 import { useEffect, useState } from "react";
 
@@ -216,13 +221,13 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO
+        darkLogo: DEFAULT_DARK_LOGO
       });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO
+        lightLogo: DEFAULT_LIGHT_LOGO
       });
     },
     colorChange: (name, value) => {

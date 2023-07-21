@@ -1,9 +1,53 @@
 export const DEFAULT_CONTENTBLOCK_IMAGE = "/Game_Rogue_Text_2.png";
-export const DEFAULT_LOGO = "/LOGO.png";
+export const DEFAULT_LOGO = "/static/images/dark_logo.png";
+export const DEFAULT_LIGHT_LOGO = "/static/images/light_logo.png";
+export const DEFAULT_DARK_LOGO = "/static/images/dark_logo.png";
 export const DEFAULT_PROFILE_PICTURE = "/static/images/Profile_Picture.png";
 export const ORGANIZER_PROFILE_LIMIT = 1;
 export const ORGANIZATION_PROFILE_LIMIT = 1;
 export const TEAM_PROFILE_LIMIT = 10;
+
+export const GAMES = [
+  {
+    id: 0,
+    name: "Rainbow Six Siege",
+    image: "/static/images/games/r6s.webp"
+  }
+  // "Valorant",
+  // "Counter-Strike: Global Offensive",
+  // "Roller Champions",
+  // "Rocket League",
+  // "League of Legends",
+  // "Trackmania",
+  // "Magic: The Gathering",
+  // "Overwatch 2",
+  // "Modern Warfare 2",
+  // "FIFA",
+  // "Zula Global"
+];
+
+export const TEAM_TYPES = [
+  {
+    id: 0,
+    value: 0,
+    name: "Pro Team"
+  },
+  {
+    id: 1,
+    value: 1,
+    name: "Challenger Team"
+  },
+  {
+    id: 2,
+    value: 2,
+    name: "Semi-Professional Team"
+  },
+  {
+    id: 3,
+    value: 3,
+    name: "Casual Team"
+  }
+];
 
 export const STAFF_ROLES = [
   {
@@ -92,6 +136,11 @@ export const EVENT_FORMATS = [
     key: "round-robin-semi-split",
     value: 8,
     name: "Semi Round Robin"
+  },
+  {
+    key: "baku-pairing",
+    value: 9,
+    name: "Baku pairing System"
   }
 ];
 
@@ -115,6 +164,11 @@ export const EVENT_REGIONS = [
   {
     id: 1,
     value: 1,
+    name: "Latin America"
+  },
+  {
+    id: 2,
+    value: 2,
     name: "Europe"
   }
 ];
@@ -169,7 +223,7 @@ export const PLATFORMS = [
   {
     id: 0,
     value: 0,
-    name: "XBox",
+    name: "Xbox",
     image: "/static/images/platforms/xbox.png"
   },
   {
@@ -230,3 +284,9 @@ export const TEAM_POSITIONS = [
     name: "Player"
   }
 ];
+
+export const TICKET_TYPES = {
+  FOLLOW_USER: "FOLLOW_USER",
+  TEAM_REGISTER_REQUEST: "TEAM_REGISTER_REQUEST",
+  MATCH_SCHEDULE_REQUEST: "MATCH_SCHEDULE_REQUEST"
+};

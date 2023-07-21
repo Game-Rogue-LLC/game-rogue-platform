@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import AdminLayout from "@/src/content/AdminLayout";
 import Button from "@mui/material/Button";
 import CountrySelect from "@/src/components/dropdown/CountrySelect";
-import { DEFAULT_LOGO } from "@/src/config/global";
+import { DEFAULT_DARK_LOGO } from "@/src/config/global";
 import GameSelect from "@/src/components/dropdown/GameSelect";
 import { LoadingButton } from "@mui/lab";
 import Validator from "validatorjs";

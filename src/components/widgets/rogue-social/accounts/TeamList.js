@@ -27,9 +27,9 @@ const TeamList = ({ items }) => {
       }}
     >
       {items &&
-        items.length > 0 &&
-        items.map((item) => <TeamItem key={"team_" + item.id} team={item} />)}
-      {items.length < TEAM_PROFILE_LIMIT && (
+        items?.length > 0 &&
+        items?.map((item) => <TeamItem key={"team_" + item.id} team={item} />)}
+      {items?.length < TEAM_PROFILE_LIMIT && (
         <Button
           variant="outlined"
           onClick={() => {

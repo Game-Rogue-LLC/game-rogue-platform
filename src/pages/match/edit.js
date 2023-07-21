@@ -36,7 +36,6 @@ import SingleEliminationBracket from "@/src/components/tournament-bracket/Single
 import _ from "lodash";
 import { nanoid } from "nanoid";
 import { useAppContext } from "@/src/context/app";
-import { useMatchContext } from "@/src/context/MatchContext";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";

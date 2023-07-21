@@ -124,7 +124,7 @@ export default function OrganizationSidebar(props) {
                   <Home color="primary" />
                 </ListItemIcon>
                 <ListItemText
-                  primary={`My Organizations`}
+                  primary={`My Organizer`}
                   primaryTypographyProps={{
                     color: "primary",
                     fontWeight: "medium",
@@ -133,28 +133,6 @@ export default function OrganizationSidebar(props) {
                   }}
                 />
               </ListItemButton>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElMenu}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left"
-                }}
-                open={Boolean(anchorElMenu)}
-                onClose={handleCloseMenu}
-              >
-                <MenuItem onClick={handleCloseMenu} key="organization-create">
-                  <Link href="/organization/create">
-                    <Typography textAlign="center">Add Organization</Typography>
-                  </Link>
-                </MenuItem>
-              </Menu>
             </ListItem>
             <Divider />
             {_.filter(organization.organizations, (val) => val.uid === user.id).map((item) => {
@@ -176,7 +154,6 @@ export default function OrganizationSidebar(props) {
                     >
                       <ListItemText
                         sx={{
-                          textAlign: "center",
                           color: theme.palette.primary.main
                         }}
                       >

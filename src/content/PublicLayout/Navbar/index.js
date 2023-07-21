@@ -1,38 +1,28 @@
 import {
   AppBar,
+  Autocomplete,
   Box,
   Button,
   Container,
   Divider,
-  FormControl,
   IconButton,
   InputAdornment,
-  Menu,
   MenuItem,
   OutlinedInput,
+  TextField,
   Toolbar,
   Typography,
   styled,
   useTheme
 } from "@mui/material";
-import {
-  ArrowRight,
-  ArrowRightAlt,
-  ArrowRightOutlined,
-  ArrowRightSharp,
-  ChevronRight,
-  Login,
-  Logout,
-  Person,
-  Search
-} from "@mui/icons-material";
+import { ChevronRight, Search } from "@mui/icons-material";
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import Avatar from "@/src/components/Avatar";
 import { DEFAULT_PROFILE_PICTURE } from "@/src/config/global";
 import Link from "next/link";
-import SearchInput from "@/src/components/input/SearchInput";
+import SearchBox from "@/src/components/input/SearchBox";
 import _ from "lodash";
 import { isMyTeam } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
@@ -44,13 +34,10 @@ const PublicNavbar = ({ sx }) => {
   const user = useAuthContext();
   const router = useRouter();
   const theme = useTheme();
-  const [logoNav, setLogoNav] = useState(true);
   const [search, setSearch] = useState("");
-  const [fund, setFund] = useState("");
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(router?.pathname);
   const logoRef = useRef();
-  let currentHoverUser = false;
   const { player, team } = useTournamentContext();
 
   const myTeams = useMemo(() => {
@@ -59,6 +46,12 @@ const PublicNavbar = ({ sx }) => {
     }
     return [];
   }, [team?.teams, user.user]);
+
+  const totalPlayers = useMemo(() => {
+    if (player.players)
+      return _.map(player.players, (val) => ({ label: val.userName || val.name, id: val.id }));
+    return [];
+  }, [player.players]);
 
   useEffect(() => {
     if (router?.pathname) {
@@ -80,14 +73,14 @@ const PublicNavbar = ({ sx }) => {
   }, [user.user?.id]);
 
   const handle = {
-    switchLogoNav: (e) => {
-      setLogoNav((prev) => !prev);
+    changeSearch: (e, val) => {
+      router.push("/rogue-social/profile/" + val.id);
+      setSearch(val);
     },
-    changeSearch: (e) => {
-      setSearch(e.target.value);
-    },
-    changeFund: (e) => {
-      setFund(e.target.value);
+    typeSearch: (e) => {
+      if (e.key === "Enter") {
+        router.push("/search?uid=" + search);
+      }
     }
   };
 
@@ -130,8 +123,9 @@ const PublicNavbar = ({ sx }) => {
         ...sx
       }}
     >
-      <Container maxWidth="xxl" sx={{ borderBottom: "solid 3px #f5831f" }}>
+      <Box sx={{ px: 1, borderBottom: "solid 3px #f5831f" }}>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
+          {/* Begin Left menus */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -139,42 +133,57 @@ const PublicNavbar = ({ sx }) => {
               alignItems: "center"
             }}
           >
-            <Box sx={{ position: "relative" }}>
-              {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
-              <video autoPlay loop muted poster="/GR_Letters.png">
-                <source src="/static/animations/GR_Letters.webm" type="video/webm" />
-              </video>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {/* Begin Logo */}
               <Box
-                component="img"
-                src="/GR_Letters.png"
-                height={40}
-                ref={logoRef}
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  filter: "brightness(10)",
-                  display: "none"
-                }}
-              />
-            </Box>
-            <Box className="search-box">
-              <SearchInput
-                id="search"
-                name="search"
-                placeholder="Search"
-                value={search}
-                onChange={handle.changeSearch}
                 sx={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "end",
+                  gap: 1,
                   height: "40px"
                 }}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <Search fontSize="large" />
-                  </InputAdornment>
-                }
-              />
+              >
+                {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
+                <video autoPlay loop muted poster="/GR_Letters.png">
+                  <source src="/static/animations/GR_Letters.webm" type="video/webm" />
+                </video>
+                <Box
+                  component="img"
+                  src="/GR_Letters.png"
+                  height={40}
+                  ref={logoRef}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    filter: "brightness(10)",
+                    display: "none"
+                  }}
+                />
+                <Typography variant="h4" sx={{ lineHeight: 1, fontSize: 16 }}>
+                  OB 1.0
+                </Typography>
+              </Box>
+              {/* End Logo */}
+              {/* Begin Search Box */}
+              <Box className="search-box">
+                <SearchBox
+                  id="search"
+                  name="search"
+                  placeholder="Search"
+                  value={search}
+                  onChange={handle.changeSearch}
+                  onKeyUp={handle.typeSearch}
+                  sx={{
+                    height: "40px"
+                  }}
+                  options={totalPlayers}
+                />
+              </Box>
+              {/* End Search Box */}
             </Box>
+
             <NavItem name="HOME" active={currentPage === "home"} handleClick={handleClickHome} />
             <NavItem
               name="Events"
@@ -229,8 +238,8 @@ const PublicNavbar = ({ sx }) => {
                 }
               ]}
             />
-            <NavItem name="ROGUE TV" handleClick={() => {}} />
-            <NavItem name="ARTICLES" handleClick={() => {}} />
+            <NavItem name="ROGUE TV" handleClick={() => router.push("/rogue-tv")} />
+            <NavItem name="ARTICLES" handleClick={() => router.push("/article")} />
             <NavItem
               name="SHOP"
               handleClick={() => {
@@ -238,6 +247,9 @@ const PublicNavbar = ({ sx }) => {
               }}
             />
           </Box>
+          {/* End Left menus */}
+
+          {/* Begin Right menus */}
           <Box sx={{ display: "flex", gap: 3 }}>
             <Box
               sx={{
@@ -266,38 +278,6 @@ const PublicNavbar = ({ sx }) => {
                   }
                 ]}
               />
-              {/* <NavItem
-                name="Play"
-                active={currentPage === "event"}
-                handleClick={handleClickTools}
-                isDropdown={true}
-                items={[
-                  {
-                    name: "Upcoming Matches",
-                    key: "upcoming-matches",
-                    isLink: true,
-                    to: "/match/upcoming",
-                  },
-                  {
-                    name: "Upcoming Events",
-                    key: "upcoming-events",
-                    isLink: true,
-                    to: "/event/upcoming",
-                  },
-                  {
-                    name: "Ongoing Events",
-                    key: "ongoing-events",
-                    isLink: true,
-                    to: "/event/ongoing",
-                  },
-                  {
-                    name: "Completed Events",
-                    key: "completed-events",
-                    isLink: true,
-                    to: "/event/completed",
-                  },
-                ]}
-              /> */}
               <NavItem
                 name="Tools"
                 active={currentPage === "tool"}
@@ -367,6 +347,8 @@ const PublicNavbar = ({ sx }) => {
                 ]}
               />
             </Box>
+
+            {/* Begin User Menu */}
             {user.user && user.user.id && player?.players[user.user.id] ? (
               <Box
                 sx={{
@@ -434,6 +416,7 @@ const PublicNavbar = ({ sx }) => {
                 </IconButton>
               </Box>
             )}
+            {/* Begin User Menu */}
             {/* Begin User Submenu */}
             {user.user && user.user.id && player?.players[user.user.id] ? (
               <StyledMenu
@@ -517,7 +500,7 @@ const PublicNavbar = ({ sx }) => {
             {/* End User Submenu */}
           </Box>
         </Toolbar>
-      </Container>
+      </Box>
     </AppBar>
   );
 };

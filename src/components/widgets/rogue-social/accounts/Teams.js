@@ -45,20 +45,20 @@ const Teams = ({ items }) => {
             <StyledTab
               icon={<KeyboardArrowRight />}
               iconPosition="end"
-              label={<Typography>Create Account</Typography>}
+              label={<Typography>Create Team</Typography>}
               value="0"
             />
             <StyledTab
               icon={<KeyboardArrowRight />}
               iconPosition="end"
-              label={<Typography>Manage Accounts</Typography>}
+              label={<Typography>Manage Teams</Typography>}
               value="1"
             />
           </TabList>
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1 }}>
           <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-            <TeamCreateForm disabled={items.length >= TEAM_PROFILE_LIMIT} />
+            <TeamCreateForm disabled={items?.length >= TEAM_PROFILE_LIMIT} />
           </Paper>
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1 }}>

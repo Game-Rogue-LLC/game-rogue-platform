@@ -1,11 +1,12 @@
-import { Grid, InputLabel, Box, Button } from "@mui/material";
+import { Box, Button, Grid, InputLabel } from "@mui/material";
+
 import ColorSelect from "@/src/components/dropdown/ColorSelect";
 
 const Colors = ({ colors, onColorChange, sx }) => {
   return (
     <Grid container spacing={2} sx={sx}>
       <Grid item xs={12} lg={4}>
-        <InputLabel>Primary</InputLabel>
+        <InputLabel sx={{ color: "white" }}>Primary</InputLabel>
         <ColorSelect
           name="primary"
           label="Primary"
@@ -15,7 +16,7 @@ const Colors = ({ colors, onColorChange, sx }) => {
         />
       </Grid>
       <Grid item xs={12} lg={4}>
-        <InputLabel>Secondary</InputLabel>
+        <InputLabel sx={{ color: "white" }}>Secondary</InputLabel>
         <ColorSelect
           name="secondary"
           label="Secondary"
@@ -25,7 +26,7 @@ const Colors = ({ colors, onColorChange, sx }) => {
         />
       </Grid>
       <Grid item xs={12} lg={4}>
-        <InputLabel>Tertiary</InputLabel>
+        <InputLabel sx={{ color: "white" }}>Tertiary</InputLabel>
         <ColorSelect
           name="tertiary"
           label="Tertiary"

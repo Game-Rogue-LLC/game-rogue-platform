@@ -11,7 +11,7 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
+import { DoubleElimination, SingleElimination, Stepladder, Swiss } from "tournament-pairings";
 import { EVENT_FORMATS, EVENT_STATES, MATCH_STATES } from "@/src/config/global";
 import _, { template } from "lodash";
 import { useEffect, useState } from "react";
@@ -311,6 +311,70 @@ const Page = (props) => {
         }
       });
       return newGames;
+    } else if (type === 9) {
+      const players = _.map(participants, (val, i) => ({
+        id: i,
+        score: val.score + (i < 8 ? 1 : 0)
+      }));
+      let newGames = [],
+        gameIDs = [];
+      const matches = Swiss(players, event.events[eid]?.currentRound);
+      console.log(matches);
+      matches.forEach((val, i) => {
+        let newParticipants = [];
+
+        newParticipants.push({
+          id: participants[val.player1].id,
+          resultText: "",
+          isWinner: false,
+          status: null,
+          score: players[val.player1].score || 0,
+          wins: participants[val.player1].wins || 0,
+          loses: participants[val.player1].loses || 0,
+          draws: participants[val.player1].draws || 0,
+          name: teams[participants[val.player1].id].name
+        });
+
+        newParticipants.push({
+          id: participants[val.player2].id,
+          resultText: "",
+          isWinner: false,
+          status: null,
+          score: players[val.player2].score || 0,
+          wins: participants[val.player2].wins || 0,
+          loses: participants[val.player2].loses || 0,
+          draws: participants[val.player2].draws || 0,
+          name: teams[participants[val.player2].id].name
+        });
+
+        const newGame = {
+          ...val,
+          id: nanoid(),
+          name: "",
+          eid: eid,
+          nextMatchId: null,
+          tournamentRoundText: `${val.round}`,
+          startTime: "",
+          state: "CREATED",
+          start: event.events[eid].startAt,
+          end: event.events[eid].endAt,
+          participants: newParticipants
+        };
+
+        gameIDs.push(newGame.id);
+        newGames.push(newGame);
+      });
+
+      // matches.forEach((val, i) => {
+      //   const nextMatch = matches.findIndex(
+      //     (itr) => itr.round === val.win?.round && itr.match == val.win?.match
+      //   );
+      //   if (nextMatch >= 0) {
+      //     newGames[i].nextMatchId = gameIDs[nextMatch];
+      //   }
+      // });
+      console.log(newGames);
+      // return newGames;
     }
   };
 
@@ -321,7 +385,7 @@ const Page = (props) => {
       const matches = createMatches(
         format,
         team.teams,
-        [...participants],
+        [..._.sortBy(participants, (val) => val.score)],
         participantsCount,
         randomized
       );
@@ -495,7 +559,7 @@ const Page = (props) => {
               </Box>
             </Box>
             {event?.events[eid] &&
-              event.events[eid].format < 2 &&
+              // event.events[eid].format < 2 &&
               event.events[eid].status == 0 && (
                 <CustomButton
                   variant="contained"
@@ -537,6 +601,8 @@ const Page = (props) => {
               <SingleEliminationBracket matches={games} />
             ) : event?.events[eid]?.format == 1 ? (
               <DoubleEliminationBracket matches={games} />
+            ) : event?.events[eid]?.format === 9 ? (
+              <></>
             ) : (
               <></>
             )}

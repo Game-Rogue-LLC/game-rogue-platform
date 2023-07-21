@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -9,32 +8,32 @@ import {
   OutlinedInput,
   Paper,
   Select,
-  Typography,
   Tab,
+  Typography,
   useTheme
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { LoadingButton, TabContext, TabPanel, TabList } from "@mui/lab";
+import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
+import FullCalendar, { colors } from "@/src/components/datetime/FullCalendar";
+import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import _, { isMatch } from "lodash";
+import { useEffect, useMemo, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
-import { useAppContext } from "@/src/context/app";
 import DatePicker from "@/src/components/datetime/DatePicker";
-import { useMatchContext } from "@/src/context/MatchContext";
-import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
-import { EVENT_FORMATS } from "@/src/config/global";
-import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
-import { nanoid } from "nanoid";
-import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
 import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
-import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
-import ScoresDialog from "@/src/components/dialog/ScoresDialog";
-import PublicLayout from "@/src/content/PublicLayout";
-import { useAuthContext } from "@/src/context/AuthContext";
-import FullCalendar, { colors } from "@/src/components/datetime/FullCalendar";
-import dayjs from "dayjs";
+import { EVENT_FORMATS } from "@/src/config/global";
 import EventTableView from "@/src/components/widgets/event/EventTableView";
+import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
 import MatchDialog from "@/src/components/dialog/MatchDialog";
+import PublicLayout from "@/src/content/PublicLayout";
+import ScoresDialog from "@/src/components/dialog/ScoresDialog";
+import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
+import dayjs from "dayjs";
+import { nanoid } from "nanoid";
+import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 
 const EventCoursePublic = ({ eid }) => {

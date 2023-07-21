@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import {
   DEFAULT_CONTENTBLOCK_IMAGE,
-  DEFAULT_LOGO,
+  DEFAULT_DARK_LOGO,
   EVENT_FORMATS,
   EVENT_STATES
 } from "@/src/config/global";
@@ -166,7 +166,7 @@ const Page = (props) => {
                 }}
               >
                 <Box>
-                  <Link href={`/profile/?organization=${oid}`}>
+                  <Link href={`/organization/${oid}/edit`}>
                     <Typography variant="h4" fontSize={18} color={colors.primary}>
                       VIEW ORGANIZER
                     </Typography>

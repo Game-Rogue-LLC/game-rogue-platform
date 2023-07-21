@@ -54,8 +54,14 @@ const TournamentProvider = (props) => {
       return res;
     },
     delete: async (id) => {
-      res = await store.organization.save(id, { deleted: true });
+      const res = await store.organization.save(id, { deleted: true });
       return res;
+    },
+    rogueIdExists: async (id) => {
+      const res = await store.organization.rogueIdExists(id);
+      console.log(res);
+      if (res.code === "succeed") return true;
+      return false;
     },
     upload: store.organization.uploadFile
   };
@@ -104,7 +110,7 @@ const TournamentProvider = (props) => {
       return res;
     },
     delete: async (id) => {
-      res = await store.event.save(id, { deleted: true });
+      const res = await store.event.save(id, { deleted: true });
       return res;
     },
     upload: store.event.uploadFile,
@@ -257,6 +263,11 @@ const TournamentProvider = (props) => {
       if (res.code === "succeed") return true;
       return false;
     },
+    rogueIdExists: async (id) => {
+      const res = await store.player.rogueIdExists(id);
+      if (res.code === "succeed") return true;
+      return false;
+    },
     update: async (id, newPlayer) => {
       console.log(id, newPlayer);
       const res = await store.player.save(id, newPlayer);
@@ -373,6 +384,41 @@ const TournamentProvider = (props) => {
   };
   /** End Posting Data / Functions */
 
+  /** Begin Articles Data / Functions */
+  const [articles, setArticles] = useState({});
+  const [articleLoading, setArticleLoading] = useState(true);
+  const article = {
+    articles,
+    setArticles,
+    create: async (newData) => {
+      const res = await store.article.save(null, newData);
+      return res;
+    },
+    read: async () => {
+      setArticleLoading(true);
+      const res = await store.article.read(
+        (data) => {
+          setArticles(data);
+        },
+        () => setArticleLoading(false)
+      );
+    },
+    update: async (id, newData, merge) => {
+      const res = await store.article.save(id, newData, merge);
+      return res;
+    },
+    delete: async (id) => {
+      await store.article.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.article.delete(id);
+      return res;
+    },
+    upload: store.article.uploadFile
+  };
+  /** End Posting Data / Functions */
+
   /** Begin Shop Data / Functions */
   const [shops, setShops] = useState([]);
   const [shopLoading, setShopLoading] = useState(true);
@@ -443,7 +489,7 @@ const TournamentProvider = (props) => {
   };
   /** End Product Data / Functions */
 
-  /** Begin Category Data / Functions */
+  /** Begin Shop Product Category Data / Functions */
   const [categories, setCategories] = useState([]);
   const [categoryLoading, setCategoryLoading] = useState(true);
   const category = {
@@ -476,7 +522,7 @@ const TournamentProvider = (props) => {
       return res;
     }
   };
-  /** End Product Data / Functions */
+  /** End Shop Product Category Data / Functions */
 
   const isLoading = useMemo(() => {
     return (
@@ -512,6 +558,7 @@ const TournamentProvider = (props) => {
   }, [loadTournament]);
 
   useEffect(() => {
+    article.read();
     event.read("");
     player.read();
     organization.read("");
@@ -533,26 +580,22 @@ const TournamentProvider = (props) => {
   return (
     <TournamentContext.Provider
       value={{
-        tournaments,
-        matches,
-        participants,
-        organization,
-        event,
-        team,
-        player,
-        match,
-        ticket,
-        post,
-        shop,
-        product,
+        article,
         category,
+        event,
+        matches,
         message,
-        organizationLoading,
-        eventLoading,
+        match,
+        organization,
+        participants,
+        player,
+        post,
+        product,
+        shop,
+        team,
+        ticket,
+        tournaments,
         matchLoading,
-        playerLoading,
-        teamLoading,
-        postLoading,
         currentTime,
         setCurrentTime
       }}

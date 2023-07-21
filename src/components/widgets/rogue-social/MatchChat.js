@@ -1,22 +1,23 @@
-import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
   Grid,
-  TextField,
-  Paper,
-  Typography,
-  OutlinedInput,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  OutlinedInput,
+  Paper,
+  TextField,
+  Typography
 } from "@mui/material";
-import { nanoid } from "nanoid";
+import { useEffect, useRef, useState } from "react";
+
+import CustomButton from "@/src/components/button/CustomButton";
+import { DEFAULT_DARK_LOGO } from "@/src/config/global";
 import { Send } from "@mui/icons-material";
-import { DEFAULT_LOGO } from "@/src/config/global";
 import match from "@/lib/firestore/collections/match";
+import { nanoid } from "nanoid";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import CustomButton from "@/src/components/button/CustomButton";
 
 const MatchChat = ({ item, myTeam, opTeam }) => {
   const messageBoxRef = useRef(null);

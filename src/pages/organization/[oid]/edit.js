@@ -1,7 +1,5 @@
 import {
-  Alert,
   Box,
-  Button,
   Checkbox,
   Dialog,
   DialogActions,
@@ -19,25 +17,21 @@ import {
   Paper,
   SvgIcon,
   Switch,
-  TextField,
   Typography,
   useTheme
 } from "@mui/material";
 import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
-import { brighterColor, isBrightColor } from "@/src/utils/utils";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
 import { customMessages, model, rules } from "@/lib/firestore/collections/organization";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
-import ColorSelect from "@/src/components/dropdown/ColorSelect";
 import Colors from "@/src/components/Colors";
 import ContentBlock from "@/src/components/widgets/ContentBlock";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
-import { LoadingButton } from "@mui/lab";
+import { DEFAULT_LIGHT_LOGO } from "@/src/config/global";
 import Validator from "validatorjs";
-import { htmlToMarkdown } from "@/src/utils/html-markdown";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
@@ -48,10 +42,10 @@ const initialInputs = {
 };
 
 const Page = (props) => {
-  const router = useRouter();
   const theme = useTheme();
+  const router = useRouter();
   const { setTitle } = useAppContext();
-  const { colors, setColors } = useStyleContext();
+  const { setColors } = useStyleContext();
   const { organization, event } = useTournamentContext();
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -85,7 +79,7 @@ const Page = (props) => {
   }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
   useEffect(() => {
-    setTitle("ORGANIZER PROFILE");
+    setTitle("ORGANIZER SETTINGS");
   }, []);
 
   useEffect(() => {
@@ -125,12 +119,19 @@ const Page = (props) => {
     saveName: async (e) => {
       if (validate(inputs, rules, customMessages) === false) return;
 
+      const rogueIdExists = await organization.rogueIdExists(inputs?._id);
+      if (rogueIdExists) {
+        setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
+        return;
+      } else setErrors((prev) => ({ ...prev, _id: undefined }));
+
       setSaving((prev) => ({
         ...prev,
         name: true
       }));
 
       let newOrganization = {
+        _id: inputs?._id,
         name: inputs?.name,
         tagline: inputs?.tagline,
         primary: inputs?.primary,
@@ -248,6 +249,7 @@ const Page = (props) => {
           youtube: inputs?.youtube,
           twitch: inputs?.twitch,
           discord: inputs?.discord,
+          crowd: inputs?.crowd,
           crowdFund: inputs?.crowdFund,
           actualFund: inputs?.actualFund,
           credit: inputs?.credit,
@@ -328,13 +330,13 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO
+        darkLogo: DEFAULT_DARK_LOGO
       });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO
+        lightLogo: DEFAULT_LIGHT_LOGO
       });
     },
     uploadContentImageAction: (e, name) => {
@@ -355,7 +357,11 @@ const Page = (props) => {
   return (
     <Box>
       <Paper sx={{ p: 4 }}>
-        <Typography variant="h6">Disband/Delete Profile</Typography>
+        <Typography variant="h5">Disband & Delete Organization Profile</Typography>
+        <FormHelperText>
+          The Organizer's Rogue ID name will be made publicly available until the name is taken
+          again. Controls the publically visible name of this organizer.
+        </FormHelperText>
         <CustomLoadingButton
           loading={saving?.disband}
           variant="contained"
@@ -387,7 +393,9 @@ const Page = (props) => {
 
       <Paper sx={{ p: 4, mt: 4 }}>
         <Box>
-          <Typography variant="h6">Organization Detail</Typography>
+          <Typography variant="h4" textTransform="uppercase" sx={{ fontStyle: "italic" }}>
+            Branding
+          </Typography>
 
           <Box display={"flex"} justifyContent={"center"} gap={4} alignItems={"center"} mt={2}>
             <Box display={"flex"} justifyContent={"center"} gap={2}>
@@ -414,7 +422,7 @@ const Page = (props) => {
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.darkLogo || config.DEFAULT_LOGO}
+                  src={inputs.darkLogo || config.DEFAULT_DARK_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -447,7 +455,7 @@ const Page = (props) => {
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.lightLogo || config.DEFAULT_LOGO}
+                  src={inputs.lightLogo || config.DEFAULT_LIGHT_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -458,12 +466,10 @@ const Page = (props) => {
             </Box>
           </Box>
 
-          <InputLabel htmlFor="org-name" sx={{ mt: 2 }}>
-            Organization Name
+          <InputLabel htmlFor="org-name" sx={{ mt: 2, color: "white" }}>
+            Organizer Display Name
           </InputLabel>
-          <FormHelperText>
-            Controls the publically visible name of this organization.
-          </FormHelperText>
+          <FormHelperText>Controls the publically visible name of this organizer.</FormHelperText>
           <FormControl fullWidth error={false}>
             <OutlinedInput
               id="org-name"
@@ -478,9 +484,33 @@ const Page = (props) => {
             />
           </FormControl>
 
-          <InputLabel htmlFor="org-tag" sx={{ mt: 2 }}>
+          <InputLabel htmlFor="org-name" sx={{ mt: 2, color: "white" }}>
+            Rogue ID
+          </InputLabel>
+          <FormHelperText>Controls the publically visible name of this organizer.</FormHelperText>
+          <FormControl fullWidth error={errors._id !== undefined}>
+            <OutlinedInput
+              id="rogue-id"
+              name="_id"
+              aria-describedby="rogue-id-helper"
+              value={inputs?._id || ""}
+              onChange={handle.input}
+              disabled={disabled}
+              sx={{ mt: 1 }}
+              fullWidth
+              required
+            />
+            {errors._id !== undefined && (
+              <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>
+                {errors._id}
+              </FormHelperText>
+            )}
+          </FormControl>
+
+          <InputLabel htmlFor="org-tag" sx={{ mt: 2, color: "white" }}>
             Tagline
           </InputLabel>
+          <FormHelperText>What does your organization stand for?</FormHelperText>
           <FormControl fullWidth sx={{ mt: 1 }}>
             <OutlinedInput
               id="org-tag"
@@ -497,7 +527,9 @@ const Page = (props) => {
         </Box>
 
         <Box sx={{ mt: 3 }}>
-          <Typography variant="h6">Colors</Typography>
+          <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+            Colors
+          </Typography>
           <Colors colors={inputs} onColorChange={onColorChange} />
         </Box>
 
@@ -520,9 +552,13 @@ const Page = (props) => {
       />
 
       <Paper sx={{ p: 4, mt: 4 }}>
-        <Typography variant="h6">Social Accounts</Typography>
+        <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+          Social Accounts
+        </Typography>
         <Box sx={{ mt: 2 }}>
-          <InputLabel htmlFor="org-twitter">Twitter</InputLabel>
+          <InputLabel htmlFor="org-twitter" sx={{ color: "white" }}>
+            Twitter
+          </InputLabel>
           <FormControl fullWidth>
             <OutlinedInput
               id="org-twitter"
@@ -542,7 +578,9 @@ const Page = (props) => {
           </FormControl>
         </Box>
         <Box sx={{ mt: 2 }}>
-          <InputLabel htmlFor="org-instagram">Instagram</InputLabel>
+          <InputLabel htmlFor="org-instagram" sx={{ color: "white" }}>
+            Instagram
+          </InputLabel>
           <FormControl fullWidth>
             <OutlinedInput
               id="org-instagram"
@@ -562,7 +600,9 @@ const Page = (props) => {
           </FormControl>
         </Box>
         <Box sx={{ mt: 2 }}>
-          <InputLabel htmlFor="org-youtube">YouTube</InputLabel>
+          <InputLabel htmlFor="org-youtube" sx={{ color: "white" }}>
+            YouTube
+          </InputLabel>
           <FormControl fullWidth>
             <OutlinedInput
               id="org-youtube"
@@ -582,7 +622,9 @@ const Page = (props) => {
           </FormControl>
         </Box>
         <Box sx={{ mt: 2 }}>
-          <InputLabel htmlFor="org-discord">Discord</InputLabel>
+          <InputLabel htmlFor="org-discord" sx={{ color: "white" }}>
+            Discord
+          </InputLabel>
           <FormControl fullWidth>
             <OutlinedInput
               id="org-discord"
@@ -602,7 +644,9 @@ const Page = (props) => {
           </FormControl>
         </Box>
         <Box sx={{ mt: 2 }}>
-          <InputLabel htmlFor="org-twitch">Twitch</InputLabel>
+          <InputLabel htmlFor="org-twitch" sx={{ color: "white" }}>
+            Twitch
+          </InputLabel>
           <FormControl fullWidth>
             <OutlinedInput
               id="org-twitch"
@@ -644,77 +688,87 @@ const Page = (props) => {
       </Paper>
 
       <Paper sx={{ p: 4, mt: 4 }}>
-        <Typography variant="h6">Turn on/off features</Typography>
+        <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+          On/off features
+        </Typography>
         <FormGroup sx={{ mt: 2 }}>
           <FormControlLabel
             control={<Switch checked={inputs?.signup} name="signup" onChange={handle.switch} />}
-            label="Sign-up"
+            label="Only accept Event sign-ups when this option is marked."
           />
           <FormControlLabel
             control={<Switch checked={inputs?.discord} name="discord" onChange={handle.switch} />}
-            label="Discord community preview"
+            label="Display a preview of the linked Discord on Rogue Social."
           />
           <FormControlLabel
             control={<Switch checked={inputs?.twitter} name="twitter" onChange={handle.switch} />}
-            label="Show recent Twitter activity"
+            label="Display the linked Twitter activity on Rogue Social."
           />
           <FormControlLabel
             control={
               <Switch checked={inputs?.instagram} name="instagram" onChange={handle.switch} />
             }
-            label="Show recent Instagram activity"
+            label="Display the linked Instagram activity on Rogue Social."
           />
           <FormControlLabel
             control={<Switch checked={inputs?.youtube} name="youtube" onChange={handle.switch} />}
-            label="Show recent YouTube videos"
+            label="Display the linked YouTube activity on Rogue TV."
           />
           <FormControlLabel
             control={<Switch checked={inputs?.twitch} name="twitch" onChange={handle.switch} />}
             label="Twitch streams"
           />
-        </FormGroup>
-        <Grid container spacing={2} sx={{ alignItems: "center" }}>
-          <Grid item>
-            <FormControlLabel control={<Switch defaultChecked />} label="Crowdfund" />
-          </Grid>
-          <Grid item>
-            <OutlinedInput
-              size="small"
-              name="actualFund"
-              value={Number(inputs?.actualFund).toFixed(2)}
-              disabled
-            />
-          </Grid>
-          <Grid item>
-            <span style={{ fontSize: "30px" }}>/</span>
-          </Grid>
-          <Grid item>
-            <OutlinedInput
-              size="small"
-              name="crowdFund"
-              value={inputs?.crowdFund}
-              onChange={handle.input}
-            />
-          </Grid>
-        </Grid>
-        <Box display="flex" sx={{ pl: 5 }}>
           <Box>
-            <Box display="flex" alignItems="center">
-              <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
-              <CreditCard />
-              <Typography variant="body2" sx={{ ml: 2 }}>
-                Credit/Debit Card
-              </Typography>
-            </Box>
-            <Box></Box>
+            <FormControlLabel
+              control={<Switch checked={inputs?.crowd} name="crowd" onChange={handle.switch} />}
+              label="Crowdfund"
+            />
+            {inputs?.crowd && (
+              <Box sx={{ pl: 6 }}>
+                <Box>
+                  <Typography variant="body1" sx={{ width: 200, display: "inline-block" }}>
+                    AMOUNT RAISED
+                  </Typography>
+                  <OutlinedInput size="small" name="actualFund" value={inputs?.actualFund} />
+                </Box>
+                <Box sx={{ mt: 1 }}>
+                  <Typography variant="body1" sx={{ width: 200, display: "inline-block" }}>
+                    THE GOAL
+                  </Typography>
+                  <OutlinedInput
+                    size="small"
+                    name="crowdFund"
+                    value={inputs?.crowdFund}
+                    onChange={handle.input}
+                  />
+                </Box>
+              </Box>
+            )}
           </Box>
-          <Box>
-            <Box display="flex" alignItems="center">
-              <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
-              <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
-            </Box>
+        </FormGroup>
+      </Paper>
+
+      <Paper sx={{ p: 4, mt: 4 }}>
+        <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
+          Payment Information
+        </Typography>
+        <Box>
+          <Box display="flex" alignItems="center">
+            <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
+            <CreditCard />
+            <Typography variant="body2" sx={{ ml: 2 }}>
+              Credit/Debit Card
+            </Typography>
+          </Box>
+          <Box></Box>
+        </Box>
+        <Box>
+          <Box display="flex" alignItems="center">
+            <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
+            <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
           </Box>
         </Box>
+
         <CustomLoadingButton
           loading={saving?.features}
           variant="contained"

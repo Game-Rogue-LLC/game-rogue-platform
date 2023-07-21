@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import { DEFAULT_LOGO } from "@/src/config/global";
+import { DEFAULT_DARK_LOGO } from "@/src/config/global";
 import Image from "next/image";
 import match from "@/lib/firestore/collections/match";
 import { useAuthContext } from "@/src/context/AuthContext";

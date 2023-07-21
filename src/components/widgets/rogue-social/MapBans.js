@@ -1,14 +1,14 @@
 import { Box, Button, Checkbox, Menu, MenuItem, Tooltip, Typography, styled } from "@mui/material";
 import { Check, CheckBoxOutlineBlank, Close, ExpandMore } from "@mui/icons-material";
-import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
-import { DEFAULT_LOGO } from "@/src/config/global";
+import { DEFAULT_DARK_LOGO } from "@/src/config/global";
 import { LoadingButton } from "@mui/lab";
 import _ from "lodash";
 import { useAuthContext } from "@/src/context/AuthContext";
+import { useSnackbar } from "notistack";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
@@ -223,7 +223,7 @@ const MapBans = ({ item }) => {
               width: "150px",
               filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
             }}
-            src={team1?.darkLogo || DEFAULT_LOGO}
+            src={team1?.darkLogo || DEFAULT_DARK_LOGO}
           ></Box>
           <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
             {team1?.name}
@@ -376,7 +376,7 @@ const MapBans = ({ item }) => {
               width: "150px",
               filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
             }}
-            src={team2?.darkLogo || DEFAULT_LOGO}
+            src={team2?.darkLogo || DEFAULT_DARK_LOGO}
           ></Box>
           <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
             {team2?.name}

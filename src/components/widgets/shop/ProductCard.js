@@ -1,5 +1,5 @@
 import { Box, Button, Grid, SvgIcon, Typography } from "@mui/material";
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO } from "@/src/config/global";
+import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_DARK_LOGO } from "@/src/config/global";
 import { formatDate, formatNumber } from "@/src/utils/utils";
 import { useEffect, useMemo } from "react";
 
