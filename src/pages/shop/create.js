@@ -1,3 +1,5 @@
+import * as config from "@/src/config/global";
+
 import {
   Box,
   Button,
@@ -21,7 +23,6 @@ import { Edit } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import ShopLayout from "@/src/content/ShopLayout";
 import Validator from "validatorjs";
-import config from "@/src/config/global";
 import { enqueueSnackbar } from "notistack";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";

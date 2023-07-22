@@ -17,6 +17,7 @@ import _, { template } from "lodash";
 import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
+import BakuBracket from "@/src/components/tournament-bracket/BakuBracket";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
@@ -373,8 +374,7 @@ const Page = (props) => {
       //     newGames[i].nextMatchId = gameIDs[nextMatch];
       //   }
       // });
-      console.log(newGames);
-      // return newGames;
+      return newGames;
     }
   };
 
@@ -584,7 +584,8 @@ const Page = (props) => {
               flex: 1,
               border: "solid 1px rgba(255, 255, 255, 0.2)",
               minHeight: "300px",
-              borderRadius: "4px"
+              borderRadius: "4px",
+              p: 2
             }}
           >
             {event?.events[eid] && event.events[eid].format == 2 ? (
@@ -602,7 +603,7 @@ const Page = (props) => {
             ) : event?.events[eid]?.format == 1 ? (
               <DoubleEliminationBracket matches={games} />
             ) : event?.events[eid]?.format === 9 ? (
-              <></>
+              <BakuBracket matches={games} />
             ) : (
               <></>
             )}
