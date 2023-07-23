@@ -109,7 +109,9 @@ const PublicNavbar = ({ sx }) => {
   };
   const handleClickSupport = (e) => {};
   const handleClickTools = (e) => {};
-  const handleClickPlusPlans = (e) => {};
+  const handleClickPlusPlans = (e) => {
+    router.push("/plus-plans");
+  };
 
   return (
     <AppBar
@@ -310,13 +312,13 @@ const PublicNavbar = ({ sx }) => {
                     name: "WIKI",
                     key: "wiki",
                     isLink: true,
-                    to: "/"
+                    to: "/wiki"
                   },
                   {
                     name: "FAQS",
                     key: "faqs",
                     isLink: true,
-                    to: "/"
+                    to: "/faqs"
                   }
                 ]}
               />

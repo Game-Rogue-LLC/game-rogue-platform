@@ -36,7 +36,7 @@ const Page = ({}) => {
     >
       <Lock sx={{ width: "80px", height: "80px", fill: theme.palette.primary.main }} />
       <Typography variant="h4" color={theme.palette.primary.main}>
-        This feature is currently locked. Come back on the 21st for access!
+        This feature is currently locked. Come back on the 25th for access!
       </Typography>
       <Box sx={{ height: "20px" }}></Box>
       <Typography variant="h6">Access Code</Typography>

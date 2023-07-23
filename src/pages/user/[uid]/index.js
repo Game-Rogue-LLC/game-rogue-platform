@@ -131,15 +131,6 @@ const Page = (props) => {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Box
-              component="img"
-              src={item?.banner}
-              width="100%"
-              height={300}
-              sx={{ borderRadius: 2, objectFit: "cover", maxWidth: 600 }}
-            ></Box>
-          </Grid>
         </Grid>
       </Grid>
     </Paper>
@@ -149,23 +140,5 @@ const Page = (props) => {
 Page.getLayout = (page) => {
   return <AdminLayout>{page}</AdminLayout>;
 };
-
-// export async function getStaticPaths() {
-//     return {
-//         paths: [
-//             // { params: { uid: 'FmUXaMwNu3NGoP8G19fXubvG1PD2' } }
-//         ],
-//         fallback: 'blocking'
-//     }
-// }
-
-// export async function getStaticProps(context) {
-//     const { params } = context;
-//     return {
-//         props: {
-//             uid: params.uid
-//         }
-//     }
-// }
 
 export default Page;

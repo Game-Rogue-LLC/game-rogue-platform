@@ -28,7 +28,7 @@ const RightSidebar = ({ sx }) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { user } = useAuthContext();
-  const { team, match, currentTime, setCurrentTime } = useTournamentContext();
+  const { team, match, currentTime, player } = useTournamentContext();
   const [search, setSearch] = useState("");
 
   const onViewAllClick = (e) => {
@@ -45,6 +45,12 @@ const RightSidebar = ({ sx }) => {
     }
     return [];
   }, [match?.matches, currentTime, team?.teams]);
+
+  const totalPlayers = useMemo(() => {
+    if (player.players)
+      return _.map(player.players, (val) => ({ label: val.userName || val.name, id: val.id }));
+    return [];
+  }, [player.players]);
 
   const onSearchChange = (e, newValue) => {
     setSearch(newValue);
