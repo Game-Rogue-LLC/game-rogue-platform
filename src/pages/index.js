@@ -1,5 +1,5 @@
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import { Box, Container, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Container, Grid, Tooltip, Typography, useTheme } from "@mui/material";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { useEffect, useMemo, useState } from "react";
 
@@ -7,6 +7,7 @@ import Benefits from "@/src/components/widgets/Benefits";
 import Button from "@mui/material/Button";
 import { Carousel } from "react-responsive-carousel";
 import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
+import Link from "next/link";
 import PublicLayout from "@/src/content/PublicLayout";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -65,7 +66,9 @@ const MyApp = (props) => {
           }}
         >
           <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
-            TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK HERE!
+            <Link href="/organization/create">
+              TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK HERE!
+            </Link>
           </Typography>
         </Box>
         <Box
@@ -82,7 +85,9 @@ const MyApp = (props) => {
           }}
         >
           <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
-            GET 10 PIECES OF TEAM MERCH FOR A FRACTION OF THE COST, TAILORED FOR YOU!
+            <Link href="/locked?page=">
+              GET 10 PIECES OF TEAM MERCH FOR A FRACTION OF THE COST, TAILORED FOR YOU!
+            </Link>
           </Typography>
         </Box>
         <Box
@@ -99,7 +104,7 @@ const MyApp = (props) => {
           }}
         >
           <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
-            LOOKING TO START A TEAM? LOOKING TO JOIN ONE? CLICK HERE!
+            <Link href="/organization/create">LOOKING TO START A TEAM? CLICK HERE!</Link>
           </Typography>
         </Box>
       </Box>
@@ -137,9 +142,15 @@ const MyApp = (props) => {
         >
           PLUS PLANS
           <br />
-          AVAILABLE JULY 21ST
+          AVAILABLE JULY 25TH
           <br />
-          <Button variant="contained" sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}>
+          <Button
+            variant="contained"
+            sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}
+            onClick={() => {
+              router.push("/plus-plans");
+            }}
+          >
             <Typography variant="h1" fontSize={"59px"} color={"white"} letterSpacing={"5.9px"}>
               SUBSCRIBE
             </Typography>
@@ -170,6 +181,7 @@ const MyApp = (props) => {
               xs: 0,
               xl: 28
             }}
+            alignItems="center"
           >
             <Grid item xs={12} xl={6}>
               <Box
@@ -238,6 +250,9 @@ const MyApp = (props) => {
                     my: 3,
                     borderRadius: 0
                   }}
+                  onClick={() => {
+                    router.push("/plus-plans");
+                  }}
                 >
                   <Typography variant="h4" fontSize={"35px"}>
                     VIEW NOW
@@ -259,7 +274,7 @@ const MyApp = (props) => {
                   loop={true}
                   autoPlay={true}
                   muted={true}
-                  style={{ width: "100%", height: "100%" }}
+                  style={{ width: "150%", height: "150%" }}
                 >
                   <source src="/static/animations/Laptop.webm" type="video/webm" />
                 </video>
@@ -385,23 +400,90 @@ const MyApp = (props) => {
           </Button>
         </Box>
       </Box>
-      <Box component="section" sx={{ maxWidth: "60%", mx: "auto", py: "40px" }}>
+      <Box component="section" sx={{ maxWidth: "80%", mx: "auto", py: "40px" }}>
         <Typography variant="h4" textTransform="upperase" textAlign="center">
           SPONSORED BY
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 2
-          }}
-        >
-          <img src="/static/images/sponsors/Tempr Esports Logo.webp" />
-          <img src="/static/images/sponsors/OSG Logo.webp" />
-          <img src="/static/images/sponsors/Krysos Logo White.webp" />
-          <img src="/static/images/sponsors/Chaos Nation II White.webp" />
-          <img src="/static/images/sponsors/Silent Sins White.webp" />
+        <Box sx={{ mt: 2 }}>
+          <Grid container spacing={4} rowSpacing={2} alignItems="center" justifyContent="center">
+            <Grid item>
+              <Tooltip title="All World Gaming: CSGO (Organizer)">
+                <Link href="https://twitter.com/AllWorldGaming">
+                  <img src="/static/images/sponsors/White.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Safari Legion (Organization)">
+                <Link href="https://twitter.com/SafariLegion">
+                  <img src="/static/images/sponsors/lion-logo_Black.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Vista Esports (Organization)">
+                <Link href="https://discord.gg/vistaesc">
+                  <img src="/static/images/sponsors/VISTA_White.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Ottawa Warriors (Team)">
+                <Link href="https://discord.gg/EGCNvVGFE">
+                  <img src="/static/images/sponsors/Ottawa_Warriors_Whitte.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Evil Connections (Team)">
+                <Link href="https://twitter.com/EvilConnections">
+                  <img src="/static/images/sponsors/ECE_Logomark_White.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Red Bull">
+                <Link href="https://www.redbull.com/us-en/energydrink">
+                  <img src="/static/images/sponsors/red-bull-white.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Tempr Esports (Team)">
+                <Link href="https://twitter.com/EsportsTempr">
+                  <img src="/static/images/sponsors/Tempr Esports Logo.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="One Shot Gaming (Former Organization)">
+                <Link href="#">
+                  <img src="/static/images/sponsors/OSG Logo.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Team Krysos (Former Organization)">
+                <Link href="#">
+                  <img src="/static/images/sponsors/Krysos Logo White.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Chaos Nation (Team)">
+                <Link href="https://twitter.com/ChaosNationGG">
+                  <img src="/static/images/sponsors/Chaos Nation II White.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Silent Sins (Organization)">
+                <Link href="https://twitter.com/SilentSinsLLC">
+                  <img src="/static/images/sponsors/Silent Sins White.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </>

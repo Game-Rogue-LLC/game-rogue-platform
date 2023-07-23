@@ -206,6 +206,7 @@ input:-webkit-autofill {
 }
 
 .navigating {
+  background-size: cover;
   animation-name: navigating;
   animation-duration: 1s;
 }
