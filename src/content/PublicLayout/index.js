@@ -1,5 +1,5 @@
 import { Box, Button, Container, Typography, styled, useTheme } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Footer from "@/src/content/PublicLayout/Footer";
 import Link from "next/link";
@@ -41,17 +41,25 @@ const PublicLayout = ({ overlay, children }) => {
   };
 
   const onAccept = async () => {
-    const res = await player.update(user.id, { acceptPolicy: true });
-    if (res.code === "failed") console.warn(res.message);
+    localStorage.setItem("acceptTerms", "true");
+    setPolicyVisible(false);
+    // const res = await player.update(user.id, { acceptPolicy: true });
+    // if (res.code === "failed") console.warn(res.message);
   };
   const onDeny = () => {
     setPolicyVisible(false);
   };
 
-  const showPolicy = useMemo(() => {
-    if (user && player.players[user.id]?.acceptPolicy === true) return false;
-    return true;
-  }, [user, player]);
+  // const showPolicy = useMemo(() => {
+  //   if (user && player.players[user.id]?.acceptPolicy === true) return false;
+  //   return true;
+  // }, [user, player]);
+
+  useEffect(() => {
+    if (localStorage.getItem("acceptTerms") === "true") {
+      setPolicyVisible(false);
+    }
+  }, []);
 
   return (
     <Box sx={{ background: "black", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -66,7 +74,7 @@ const PublicLayout = ({ overlay, children }) => {
       <PrivacyNoticeDialog open={privacy} onClose={onPrivacyNoticeDialogClose} />
       <TermsOfUseDialog open={terms} onClose={onTermsOfUseDialogClose} />
 
-      {showPolicy && isPolicyVisible && (
+      {isPolicyVisible && (
         <Box
           sx={{
             width: "100%",

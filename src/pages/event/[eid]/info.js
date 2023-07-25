@@ -93,17 +93,24 @@ const Page = (props) => {
           gap: 2
         }}
       >
-        <img
-          src={item?.darkLogo}
-          width={200}
-          height={200}
-          style={{
-            // borderRadius: '50%',
-            // outline: '2px solid rgba(245, 131, 31, 0.5)',
-            objectFit: "cover"
-            // outlineOffset: '2px'
+        <Box
+          sx={{
+            backgroundColor: "black",
+            borderRadius: "50%"
           }}
-        />
+        >
+          <img
+            src={item?.darkLogo}
+            width={200}
+            height={200}
+            style={{
+              // borderRadius: '50%',
+              // outline: '2px solid rgba(245, 131, 31, 0.5)',
+              objectFit: "cover"
+              // outlineOffset: '2px'
+            }}
+          />
+        </Box>
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" color={colors.primary}>
             {item?.name}
