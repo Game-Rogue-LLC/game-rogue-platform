@@ -164,7 +164,7 @@ const MyApp = (props) => {
         component={"section"}
         sx={{
           position: "relative",
-          backgroundColor: "#101216",
+          backgroundColor: "#0e0c0e",
           paddingTop: "80px",
           paddingBottom: "175px"
         }}
