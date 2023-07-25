@@ -2,18 +2,18 @@
   "database": {
     "rules": "database.rules.json"
   },
-  "headers": [
-    {
-      "source": "**/*.*",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ]
-    }
-  ],
   "hosting": {
+    "headers": [
+      {
+        "source": "**/*.*",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      }
+    ],
     "public": "out",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "cleanUrls": true,
