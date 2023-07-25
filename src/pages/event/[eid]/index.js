@@ -100,10 +100,11 @@ const Page = (props) => {
             width={200}
             height={200}
             style={{
-              // borderRadius: '50%',
-              // outline: '2px solid rgba(245, 131, 31, 0.5)',
-              objectFit: "cover"
-              // outlineOffset: '2px'
+              borderRadius: "50%",
+              outline: "2px solid rgba(245, 131, 31, 0.5)",
+              objectFit: "cover",
+              backgroundColor: "black"
+              // outlineOffset: "2px"
             }}
           />
           <Box sx={{ mb: 3 }}>

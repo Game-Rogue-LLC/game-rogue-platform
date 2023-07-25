@@ -308,6 +308,16 @@ const Page = (props) => {
           </TableBody>
         </Table>
       </Paper>
+
+      <Paper sx={{ mt: 4, p: 2 }}>
+        <CustomButton
+          onClick={() => {
+            router.push("/event/" + eid + "/edit");
+          }}
+        >
+          Re-Edit
+        </CustomButton>
+      </Paper>
     </Box>
   );
 };
