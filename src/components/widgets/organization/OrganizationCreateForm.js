@@ -21,6 +21,7 @@ import Button from "@mui/material/Button";
 import ColorSelect from "@/src/components/dropdown/ColorSelect";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import { ORGANIZATION_PROFILE_LIMIT } from "@/src/config/global";
 import Validator from "validatorjs";
 import _ from "lodash";
 import colorConvert from "color-convert";
@@ -77,7 +78,10 @@ const OrganizationCreateForm = ({ disabled: _disabled }) => {
 
   const handle = {
     create: async (e) => {
-      if (_.filter(organization.organizations, (org) => org.uid === user.id) >= 1) {
+      if (
+        _.filter(organization.organizations, (org) => org.uid === user.id) >=
+        ORGANIZATION_PROFILE_LIMIT
+      ) {
         enqueueSnackbar("You can't create more than 1 organization.", { variant: "error" });
       }
 

@@ -8,44 +8,16 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { EVENT_REGIONS, PLATFORMS } from "@/src/config/global";
-import { KeyboardArrowDown, Search, SettingsRemoteOutlined } from "@mui/icons-material";
+import { EVENT_REGIONS, GAMES, PLATFORMS } from "@/src/config/global";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
-import { useEffect, useMemo, useState } from "react";
 
 import ArticleCollection from "@/src/components/widgets/article/ArticleCollection";
 import CategoryCard from "@/src/components/widgets/article/CategoryCard";
 import DropdownMenu from "@/src/components/DropdownMenu";
-import { GAMES } from "@/src/config/global";
-import PostCard from "@/src/components/widgets/article/PostCard";
 import PublicLayout from "@/src/content/PublicLayout";
+import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
-
-const regions = [
-  {
-    id: 0,
-    name: "North America"
-  },
-  {
-    id: 1,
-    name: "Latin America"
-  },
-  {
-    id: 2,
-    name: "Europe"
-  }
-];
-
-const platforms = [
-  {
-    id: 0,
-    name: "PC"
-  },
-  {
-    id: 1,
-    name: "Console"
-  }
-];
+import { useState } from "react";
 
 const Page = (props) => {
   const theme = useTheme();
@@ -225,13 +197,13 @@ const Page = (props) => {
             <DropdownMenu
               name="region"
               title={region ? region.name : "Change Region"}
-              items={regions}
+              items={EVENT_REGIONS}
               onChange={onRegionChange}
             />
             <DropdownMenu
               name="platform"
               title={platform ? platform.name : "Change Platform"}
-              items={platforms}
+              items={PLATFORMS}
               onChange={onPlatformChange}
             />
           </Box>
