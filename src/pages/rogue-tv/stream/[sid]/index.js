@@ -1,3 +1,5 @@
+import RogueSocialSplash from "@/src/content/Splash/RogueSocialSplash";
+import TVLayout from "@/src/content/TVLayout";
 import TournamentProvider from "@/src/context/TournamentContext";
 
 const Page = ({}) => {
