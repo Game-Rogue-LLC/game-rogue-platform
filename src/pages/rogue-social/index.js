@@ -16,8 +16,8 @@ import { useEffect, useMemo, useState } from "react";
 
 import Discover from "@/src/components/widgets/rogue-social/Discover";
 import FeaturedSocial from "@/src/components/widgets/rogue-social/FeaturedSocial";
+import Leaderboard from "@/src/components/widgets/rogue-social/Leaderboard";
 import MatchHome from "@/src/components/widgets/rogue-social/Home";
-import MyCommunity from "@/src/components/widgets/rogue-social/MyCommunity";
 import MyProfile from "@/src/components/widgets/rogue-social/MyProfile";
 import Notifications from "@/src/components/widgets/rogue-social/profile/Notifications";
 import PublicLayout from "@/src/content/PublicLayout";
@@ -219,8 +219,8 @@ const Page = (props) => {
           <TabPanel value="3" sx={{ flexGrow: 1, p: 0 }}>
             <Notifications />
           </TabPanel>
-          <TabPanel value="4" sx={{ flexGrow: 1, p: 1 }}>
-            <MyCommunity />
+          <TabPanel value="4" sx={{ flexGrow: 1, p: 4 }}>
+            <Leaderboard />
           </TabPanel>
           <TabPanel value="5" sx={{ flexGrow: 1, p: 0 }}>
             <Teams items={myTeams} />
