@@ -1,3 +1,5 @@
+import TournamentProvider from "@/src/context/TournamentContext";
+
 const Page = ({}) => {
   return <></>;
 };
