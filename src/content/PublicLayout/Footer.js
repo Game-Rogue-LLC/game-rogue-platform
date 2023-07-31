@@ -1,4 +1,4 @@
-import { Box, SvgIcon, Typography, useTheme } from "@mui/material";
+import { Box, Grid, SvgIcon, Typography, useTheme } from "@mui/material";
 import { Instagram, Twitter, YouTube } from "@mui/icons-material";
 
 import Link from "next/link";
@@ -14,16 +14,20 @@ const Footer = (props) => {
           paddingTop: 5
         }}
       >
-        <Box
+        <Grid
+          container
+          spacing={2}
+          rowSpacing={4}
           sx={{
-            position: "relative",
-            display: "flex",
-            justifyContent: "space-between",
-            maxWidth: "75%",
-            mx: "auto"
+            justifyContent: "center",
+            position: "relative"
           }}
         >
-          <Box
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md
             sx={{
               textAlign: "center"
             }}
@@ -76,8 +80,12 @@ const Footer = (props) => {
                 SEARCH
               </Typography>
             </Link>
-          </Box>
-          <Box
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md
             sx={{
               textAlign: "center"
             }}
@@ -128,8 +136,12 @@ const Footer = (props) => {
                 PAST
               </Typography>
             </Link>
-          </Box>
-          <Box
+          </Grid>
+          <Grid
+            xs={6}
+            sm={4}
+            md
+            item
             sx={{
               textAlign: "center"
             }}
@@ -166,8 +178,12 @@ const Footer = (props) => {
                 CUSTOMIZE
               </Typography>
             </Link>
-          </Box>
-          <Box
+          </Grid>
+          <Grid
+            xs={6}
+            sm={4}
+            md
+            item
             sx={{
               textAlign: "center"
             }}
@@ -204,8 +220,12 @@ const Footer = (props) => {
                 ARTICLES
               </Typography>
             </Link>
-          </Box>
-          <Box
+          </Grid>
+          <Grid
+            xs={6}
+            sm={4}
+            md
+            item
             sx={{
               textAlign: "center"
             }}
@@ -258,8 +278,8 @@ const Footer = (props) => {
                 CREATE
               </Typography>
             </Link>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
         <Box
           sx={{
             width: "85%",

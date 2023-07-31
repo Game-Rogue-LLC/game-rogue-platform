@@ -22,7 +22,9 @@ import ColorSelect from "@/src/components/dropdown/ColorSelect";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 import Validator from "validatorjs";
+import _ from "lodash";
 import colorConvert from "color-convert";
+import { enqueueSnackbar } from "notistack";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -75,6 +77,10 @@ const OrganizationCreateForm = ({ disabled: _disabled }) => {
 
   const handle = {
     create: async (e) => {
+      if (_.filter(organization.organizations, (org) => org.uid === user.id) >= 1) {
+        enqueueSnackbar("You can't create more than 1 organization.", { variant: "error" });
+      }
+
       if (!validate(inputs, rules, customMessages)) return;
       const newOrg = {
         ...inputs,

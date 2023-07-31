@@ -58,7 +58,10 @@ const FeaturedTournaments = ({ sx }) => {
       <Box
         sx={{
           position: "relative",
-          width: "60%",
+          px: {
+            xs: 2,
+            lg: "20%"
+          },
           mt: 1,
           mx: "auto"
         }}

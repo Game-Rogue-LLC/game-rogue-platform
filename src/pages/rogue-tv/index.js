@@ -28,7 +28,7 @@ const channels = [
     category: 0
   },
   {
-    title: "WALKING CARP[ET PLAYS YOUR SONG REQUESTS!",
+    title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
     image: "/static/images/games/720 (2).webp",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
@@ -59,7 +59,7 @@ const r6schannels = [
     category: 0
   },
   {
-    title: "WALKING CARP[ET PLAYS YOUR SONG REQUESTS!",
+    title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
     image: "/static/images/games/720 (2).webp",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",

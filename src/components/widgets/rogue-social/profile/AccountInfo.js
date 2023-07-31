@@ -21,6 +21,7 @@ import DatePicker from "@/src/components/datetime/DatePicker";
 import { LoadingButton } from "@mui/lab";
 import UserInfo from "@/src/components/widgets/user/UserInfo";
 import Validator from "validatorjs";
+import { enqueueSnackbar } from "notistack";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
@@ -100,7 +101,7 @@ const AccountInfo = ({ item }) => {
 
       const res = await player.update(item.id, newData);
       if (res.code === "succeed") {
-        alert("Saved successfully!");
+        enqueueSnackbar("Saved successfully!", { variant: "success" });
       } else {
         console.warn(res.message);
       }

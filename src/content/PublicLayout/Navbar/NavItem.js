@@ -29,6 +29,9 @@ export const StyledMenu = styled((props) => <Menu {...props} />)(({ theme }) => 
         backgroundColor: "rgba(255, 255, 255, 0.1)"
       }
     }
+  },
+  "& .MuiList-root.MuiList-padding.MuiMenu-list": {
+    padding: 0
   }
 }));
 

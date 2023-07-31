@@ -122,14 +122,14 @@ const MapBans = ({ item }) => {
     if (isMyTeam(team1)) {
       const res = await match.update(item.id, { mapbans: { 0: banned1 } });
       if (res.code === "succeed") {
-        alert("Saved successfully!");
+        enqueueSnackbar("Saved successfully!", { variant: "success" });
       } else {
         console.warn(res.message);
       }
     } else if (isMyTeam(team2)) {
       const res = await match.update(item.id, { mapbans: { 1: banned2 } });
       if (res.code === "succeed") {
-        alert("Saved successfully!");
+        enqueueSnackbar("Saved successfully!", { variant: "success" });
       } else {
         console.warn(res.message);
       }

@@ -29,6 +29,7 @@ import { Edit } from "@mui/icons-material";
 import EventInput from "@/src/components/widgets/event/EventInput";
 import { LoadingButton } from "@mui/lab";
 import Validator from "validatorjs";
+import { enqueueSnackbar } from "notistack";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
@@ -169,7 +170,7 @@ const Page = (props) => {
 
       const res = await event.update(eid, newEvent);
       if (res.code === "succeed") {
-        alert("Saved successfully!");
+        enqueueSnackbar("Saved successfully!", { variant: "success" });
       }
       setSaving(false);
     },

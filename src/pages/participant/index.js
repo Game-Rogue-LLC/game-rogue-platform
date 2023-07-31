@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import {
   Paper,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
   TableCell,
   TableContainer,
   TableFooter,
+  TableHead,
+  TableRow,
   useTheme
 } from "@mui/material";
-import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
 import AdminLayout from "@/src/content/AdminLayout";
-import { useAppContext } from "@/src/context/app";
-import { useTournamentContext } from "@/src/context/TournamentContext";
+import Button from "@mui/material/Button";
 import TeamItem from "@/src/components/item/TeamItem";
+import { enqueueSnackbar } from "notistack";
+import { useAppContext } from "@/src/context/app";
+import { useRouter } from "next/router";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const Page = (props) => {
   const theme = useTheme();
@@ -40,7 +42,7 @@ const Page = (props) => {
   const handle = {
     addParticipant: (e) => {
       if (event.events[eid]?.participants?.length >= event.events[eid]?.participantsCount) {
-        alert("You can't add more participants.");
+        enqueueSnackbar("You can't add more participants.", { variant: "error" });
       } else {
         router.push("/participant/create?event=" + eid);
       }

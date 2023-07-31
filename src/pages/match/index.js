@@ -133,7 +133,7 @@ const Page = (props) => {
   const handle = {
     create: (e) => {
       if (event.events[eid].participants?.length < event.events[eid].participantsCount) {
-        alert("Too few participants.");
+        enqueueSnackbar("Too few participants.", { variant: "success" });
         return;
       } else if (event.events[eid].participants?.length === event.events[eid].participantsCount) {
         router.push("/match/create?event=" + eid);

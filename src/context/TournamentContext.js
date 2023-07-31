@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import Splash from "@/src/content/Splash";
 import _ from "lodash";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 import { nanoid } from "nanoid";
 import store from "@/lib/firestore/collections";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -116,14 +117,14 @@ const TournamentProvider = (props) => {
     upload: store.event.uploadFile,
     addParticipant: async (id, tid) => {
       if (events[id].participants?.length >= events[id].participantsCount) {
-        alert("Only " + events[id].participantsCount + " participants are allowed.");
+        enqueueSnackbar("Only " + events[id].participantsCount + " participants are allowed.");
         return {
           code: "failed",
           message: "Only " + events[id].participantsCount + " participants are allowed."
         };
       }
       if (events[id].participants?.findIndex((val) => val.id === tid) >= 0) {
-        alert("This team is already registered.");
+        enqueueSnackbar("This team is already registered.");
         return {
           code: "failed",
           message: "This team is already registered."

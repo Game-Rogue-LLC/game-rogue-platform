@@ -128,7 +128,7 @@ const Page = (props) => {
                 router.push(`/event/${eid}/edit`);
               }}
             >
-              Edit
+              Edit Profile
             </Button>
           </Box>
         )}

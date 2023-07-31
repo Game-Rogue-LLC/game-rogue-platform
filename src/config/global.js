@@ -1,4 +1,4 @@
-export const DEFAULT_CONTENTBLOCK_IMAGE = "/Game_Rogue_Text_2.png";
+export const DEFAULT_CONTENTBLOCK_IMAGE = "/banner_image.png";
 export const DEFAULT_LOGO = "/static/images/dark_logo.png";
 export const DEFAULT_LIGHT_LOGO = "/static/images/light_logo.png";
 export const DEFAULT_DARK_LOGO = "/static/images/dark_logo.png";

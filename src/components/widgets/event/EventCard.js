@@ -155,15 +155,12 @@ const EventCard = ({ item }) => {
           <Grid container color="lightgray" sx={{ mt: 2, alignItems: "center" }}>
             <Grid item xs>
               {isUpcoming ? (
-                <Button variant="contained" sx={{ ...buttonStyle(item?.primary), color: "white" }}>
+                <Button variant="contained" sx={{ ...buttonStyle(item?.primary) }}>
                   ${formatNumber(item?.entryFee, 2)}
                 </Button>
               ) : (
                 <>
-                  <Button
-                    variant="contained"
-                    sx={{ ...buttonStyle(item?.primary), color: "white" }}
-                  >
+                  <Button variant="contained" sx={{ ...buttonStyle(item?.primary) }}>
                     View now
                   </Button>
                   {/* <Button

@@ -25,6 +25,7 @@ import Avatar from "@/src/components/Avatar";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 import dayjs from "dayjs";
+import { enqueueSnackbar } from "notistack";
 import { getTeamPosition } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -58,7 +59,7 @@ const Page = (props) => {
     invite: (e) => {
       navigator.clipboard.writeText(inviteUrl).then(
         () => {
-          alert("Content copied successfully!");
+          enqueueSnackbar("Content copied successfully!", { variant: "success" });
         },
         () => {
           console.warn("Failed to copy");

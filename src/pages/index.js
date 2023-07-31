@@ -65,7 +65,7 @@ const MyApp = (props) => {
             transition: "all 0.5s"
           }}
         >
-          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
+          <Typography variant="h4" sx={{ color: "white", fontSize: "30px", textAlign: "center" }}>
             <Link href="/organization/create">
               TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK HERE!
             </Link>
@@ -84,7 +84,7 @@ const MyApp = (props) => {
             transition: "all 0.5s"
           }}
         >
-          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
+          <Typography variant="h4" sx={{ color: "white", fontSize: "30px", textAlign: "center" }}>
             <Link href="/locked?page=">
               GET 10 PIECES OF TEAM MERCH FOR A FRACTION OF THE COST, TAILORED FOR YOU!
             </Link>
@@ -103,7 +103,7 @@ const MyApp = (props) => {
             transition: "all 0.5s"
           }}
         >
-          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
+          <Typography variant="h4" sx={{ color: "white", fontSize: "30px", textAlign: "center" }}>
             <Link href="/organization/create">LOOKING TO START A TEAM? CLICK HERE!</Link>
           </Typography>
         </Box>
@@ -132,18 +132,20 @@ const MyApp = (props) => {
         >
           <source src="/intro.mp4" type="video/mp4" />
         </video>
-        <Typography
-          variant="h1"
-          align="center"
-          fontSize={"72px"}
-          fontStyle={"italic"}
-          color={"black"}
-          lineHeight={"100.8px"}
-        >
-          PLUS PLANS
-          <br />
-          AVAILABLE JULY 25TH
-          <br />
+        <Box sx={{ p: 1 }}>
+          <Typography
+            variant="h1"
+            align="center"
+            fontSize={"72px"}
+            fontStyle={"italic"}
+            color={"black"}
+            lineHeight={"100.8px"}
+          >
+            PLUS PLANS
+            <br />
+            AVAILABLE JULY 25TH
+            <br />
+          </Typography>
           <Button
             variant="contained"
             sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}
@@ -151,11 +153,11 @@ const MyApp = (props) => {
               router.push("/plus-plans");
             }}
           >
-            <Typography variant="h1" fontSize={"59px"} color={"white"} letterSpacing={"5.9px"}>
+            <Typography variant="h1" fontSize={"52px"} color={"white"} letterSpacing={"5.9px"}>
               SUBSCRIBE
             </Typography>
           </Button>
-        </Typography>
+        </Box>
       </Box>
 
       <FeaturedTournaments />
@@ -171,7 +173,10 @@ const MyApp = (props) => {
       >
         <Box
           sx={{
-            width: "80%",
+            px: {
+              xs: "5%",
+              lg: "10%"
+            },
             mx: "auto"
           }}
         >
@@ -190,8 +195,7 @@ const MyApp = (props) => {
                   border: "solid 3px rgba(227, 81, 6, 0.73)",
                   backgroundColor: "black",
                   textAlign: "center",
-                  px: "20px",
-                  minWidth: "500px"
+                  px: 2.5
                 }}
               >
                 <Typography
@@ -296,6 +300,7 @@ const MyApp = (props) => {
         component={"section"}
         sx={{
           pt: "70px",
+          px: 2,
           background: "url(/static/images/about_us_bg.gif)"
         }}
       >
