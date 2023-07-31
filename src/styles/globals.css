@@ -765,3 +765,36 @@ input#search::placeholder {
 .MuiChip-label {
   line-height: 1;
 }
+
+.logo-guideline {
+  position: absolute;
+  background-color: cyan;
+}
+
+.logo-guideline.top {
+  top: 15px;
+  left: 0;
+  height: 1px;
+  width: 100%;
+}
+
+.logo-guideline.right {
+  right: 15px;
+  top: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.logo-guideline.bottom {
+  bottom: 15px;
+  left: 0;
+  height: 1px;
+  width: 100%;
+}
+
+.logo-guideline.left {
+  left: 15px;
+  top: 0;
+  width: 1px;
+  height: 100%;
+}

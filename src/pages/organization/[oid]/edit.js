@@ -256,7 +256,7 @@ const Page = (props) => {
           paypal: inputs?.paypal
         })
         .then((res) => {
-          if (res.code == "succeed") alert(res.message);
+          if (res.code == "succeed") enqueueSnackbar(res.message, { variant: "success" });
           setSaving((prev) => ({
             ...prev,
             features: false

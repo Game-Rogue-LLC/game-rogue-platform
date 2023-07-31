@@ -25,6 +25,7 @@ import { LoadingButton } from "@mui/lab";
 import ScoresDialog from "@/src/components/dialog/ScoresDialog";
 import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
 import _ from "lodash";
+import { enqueueSnackbar } from "notistack";
 import { nanoid } from "nanoid";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
@@ -328,7 +329,7 @@ const Page = (props) => {
         const res = await event.update(eid, { status: 1 });
         if (res.code === "succeed") {
           // match.read(eid);
-          alert("Saved successfully!");
+          enqueueSnackbar("Saved successfully!", { variant: "success" });
         }
       }
       setSaving(false);

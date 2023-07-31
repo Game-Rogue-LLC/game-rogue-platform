@@ -1,6 +1,7 @@
 import { Box, Paper, Tab, Typography, styled, useTheme } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
+import JoinTeam from "../../team/JoinTeam";
 import { KeyboardArrowRight } from "@mui/icons-material";
 import { TEAM_PROFILE_LIMIT } from "@/src/config/global";
 import TeamCreateForm from "@/src/components/widgets/team/TeamCreateForm";
@@ -54,6 +55,12 @@ const Teams = ({ items }) => {
               label={<Typography>Manage Teams</Typography>}
               value="1"
             />
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Join Team</Typography>}
+              value="2"
+            />
           </TabList>
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1 }}>
@@ -63,6 +70,9 @@ const Teams = ({ items }) => {
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1 }}>
           <TeamList items={items} />
+        </TabPanel>
+        <TabPanel value="2" sx={{ flexGrow: 1 }}>
+          <JoinTeam />
         </TabPanel>
       </TabContext>
     </Box>

@@ -77,7 +77,6 @@ const Privacy = ({}) => {
     // });
     const res = await player.update(user.id, { onlineStatus: Number(onlineStatus) });
     if (res.code === "succeed") {
-      // alert("succeed");
       enqueueSnackbar("Saved successfully!", { variant: "success" });
     } else {
       console.warn(res.message);

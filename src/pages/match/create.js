@@ -25,6 +25,7 @@ import FullCalendar from "@/src/components/datetime/FullCalendar.js";
 import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
 import { LoadingButton } from "@mui/lab";
 import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
+import { enqueueSnackbar } from "notistack";
 import { nanoid } from "nanoid";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
@@ -495,7 +496,7 @@ const Page = (props) => {
           status: EVENT_STATES.SCHEDULING.value
         }); // Set the status of the event as CREATED/SCHEDULING.
         if (res.code === "succeed") {
-          alert("Saved successfully!");
+          enqueueSnackbar("Saved successfully!", { variant: "success" });
           router.push("/match?event=" + eid);
         }
       }

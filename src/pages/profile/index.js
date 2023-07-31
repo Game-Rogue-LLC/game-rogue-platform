@@ -187,7 +187,7 @@ const Page = (props) => {
       });
 
       if (res.code == "succeed") {
-        alert(res.message);
+        enqueueSnackbar(res.message, { variant: "success" });
       }
 
       setSaving((prev) => ({
@@ -222,7 +222,7 @@ const Page = (props) => {
       if (uploaded) {
         const res = await organization.update(oid, newOrganization);
         if (res.code === "succeed") {
-          alert("Saved successfully!");
+          enqueueSnackbar("Saved successfully!", { variant: "success" });
         } else {
           console.warn(res.message);
         }
@@ -252,7 +252,7 @@ const Page = (props) => {
           paypal: inputs?.paypal
         })
         .then((res) => {
-          if (res.code == "succeed") alert(res.message);
+          if (res.code == "succeed") enqueueSnackbar(res.message, { variant: "success" });
           setSaving((prev) => ({
             ...prev,
             features: false

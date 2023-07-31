@@ -19,6 +19,7 @@ import { LoadingButton } from "@mui/lab";
 import ParticipantInfo from "@/src/components/widgets/match/ParticipantInfo";
 import TeamItem from "@/src/components/item/TeamItem";
 import dayjs from "dayjs";
+import { enqueueSnackbar } from "notistack";
 import { formatDate } from "@/src/utils/utils";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
@@ -69,7 +70,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
     };
 
     const res = await ticket.create(newTicket);
-    if (res.code === "succeed") alert("Asked successfully!");
+    if (res.code === "succeed") enqueueSnackbar("Asked successfully!", { variant: "success" });
     else console.warn(res.message);
     setAsking(false);
   };
@@ -83,7 +84,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
       status: MATCH_STATES.SCHEDULED.value
     });
     if (res.code === "succeed") {
-      alert("Scheduled Successfully!");
+      enqueueSnackbar("Scheduled Successfully!", { variant: "success" });
     } else {
       console.warn(res.message);
     }

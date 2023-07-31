@@ -23,28 +23,28 @@ const channels = [
     category: 0
   },
   {
-    title: "WALKING CARP[ET PLAYS YOUR SONG REQUESTS!",
+    title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
     image: "/static/images/streams/360 (3).webp",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0
   },
   {
-    title: "WALKING CARP[ET PLAYS YOUR SONG REQUESTS!",
+    title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
     image: "/static/images/streams/9114f21e-a705-475d-8657-360e4f2d57c2-thumbnail.jpeg",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0
   },
   {
-    title: "WALKING CARP[ET PLAYS YOUR SONG REQUESTS!",
+    title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
     image: "/static/images/streams/e19307b6-5fc7-43f4-86e8-2cd4a8df781d-thumbnail.jpeg",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0
   },
   {
-    title: "WALKING CARP[ET PLAYS YOUR SONG REQUESTS!",
+    title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
     image: "/static/images/streams/f9f5acc5-a37f-41a9-b48f-76ebdc9e6c1a-thumbnail.jpeg",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",

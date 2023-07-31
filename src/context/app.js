@@ -14,7 +14,13 @@ export default (props) => {
   const router = useRouter();
   const [title, setTitle] = useState(null);
 
-  const ignoreAuthRouter = ["/rogue-tv", "/plus-plans", "/wiki", "/faqs", "/customize"];
+  const ignoreAuthRouter = [
+    // "/rogue-tv",
+    "/plus-plans",
+    "/wiki",
+    "/faqs",
+    "/customize"
+  ];
   const ignoreAuthRegex = ["/event/[A-Za-z0-9_-]{21}/info"];
 
   useEffect(() => {

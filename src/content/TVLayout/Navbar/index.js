@@ -28,6 +28,10 @@ import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
+const organizer = {
+  channels: []
+};
+
 const TVNavbar = ({ sx }) => {
   const user = useAuthContext();
   const router = useRouter();
@@ -245,31 +249,75 @@ const TVNavbar = ({ sx }) => {
                 <MenuItem onClick={onCloseUser} key="user-setting" disableRipple>
                   <Link href={"/user/" + user.user?.id}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <Avatar src={user.user?.profilePic} sx={{ width: 30, height: 30 }} />
+                      <Avatar
+                        src={user.user?.profilePic}
+                        sx={{ width: 30, height: 30 }}
+                        hideStatus={true}
+                      />
                       {player.players[user.user?.id]?.userName}
                     </Box>
                   </Link>
                 </MenuItem>
+
                 <Divider />
-                <MenuItem onClick={onCloseUser} key="my-team" disableRipple>
-                  <Link href={"/rogue-social/team"}>My Team</Link>
+
+                {organizer.channels && organizer.channels.length > 0 ? (
+                  <>
+                    <Typography
+                      variant="body1"
+                      textTransform="uppercase"
+                      textAlign="center"
+                      color="gray"
+                    >
+                      MY CHANNELS
+                    </Typography>
+                  </>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        router.push("/rogue-social/manage-accounts");
+                      }}
+                    >
+                      Create Organizer
+                    </Button>
+                  </Box>
+                )}
+
+                <Divider sx={{ my: 1 }} />
+
+                <MenuItem onClick={onCloseUser} key="public-channel" disableRipple>
+                  <Link href={"/rogue-tv"}>Public Channel</Link>
                 </MenuItem>
-                <MenuItem onClick={onCloseUser} key="my-organizer" disableRipple>
-                  <Link href={"/rogue-social/organization"}>My Organizer</Link>
+                <MenuItem onClick={onCloseUser} key="video-publisher" disableRipple>
+                  <Link href={"/"}>Video Publisher</Link>
                 </MenuItem>
+                <MenuItem onClick={onCloseUser} key="live-dashboard" disableRipple>
+                  <Link href={"/"}>Live Dashboard </Link>
+                </MenuItem>
+                <MenuItem onClick={onCloseUser} key="tv-analytics" disableRipple>
+                  <Link href={"/"}>TV Analytics </Link>
+                </MenuItem>
+
                 <Divider />
-                <MenuItem onClick={onCloseUser} key="my-profile" disableRipple>
-                  <Link href={`/rogue-social/profile/${user.user?.id}`}>My Profile</Link>
+
+                <MenuItem onClick={onCloseUser} key="engagements" disableRipple>
+                  <Link href={`/`}>Engagements</Link>
                 </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    onCloseUser(e);
-                    user.logout();
-                  }}
-                  key="logout-user"
-                  disableRipple
-                >
-                  LOGOUT
+                <MenuItem onClick={onCloseUser} key="payments" disableRipple>
+                  Payments
+                </MenuItem>
+
+                <Divider />
+                <MenuItem onClick={onCloseUser} key="tv-settings" disableRipple>
+                  TV Settings
                 </MenuItem>
               </StyledMenu>
             ) : (

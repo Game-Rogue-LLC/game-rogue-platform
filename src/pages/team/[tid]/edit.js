@@ -239,11 +239,21 @@ const Page = (props) => {
                     REMOVE DARK LOGO
                   </Button>
                 </Box>
-                <Box width={"200px"} height={"200px"} textAlign={"center"}>
+                <Box
+                  width="200px"
+                  height="200px"
+                  textAlign="center"
+                  position="relative"
+                  sx={{ p: "15px" }}
+                >
                   <img
                     src={inputs.darkLogo || DEFAULT_DARK_LOGO}
-                    style={{ height: "200px", maxWidth: "200px", objectFit: "contain" }}
+                    style={{ height: "170px", maxWidth: "170px", objectFit: "cover" }}
                   />
+                  <div className="logo-guideline top"></div>
+                  <div className="logo-guideline right"></div>
+                  <div className="logo-guideline bottom"></div>
+                  <div className="logo-guideline left"></div>
                 </Box>
               </Box>
               <Box display={"flex"} justifyContent={"center"} gap={2}>
@@ -263,11 +273,21 @@ const Page = (props) => {
                     REMOVE LIGHT LOGO
                   </Button>
                 </Box>
-                <Box width={"200px"} height={"200px"} textAlign={"center"}>
+                <Box
+                  width={"200px"}
+                  height={"200px"}
+                  textAlign={"center"}
+                  position="relative"
+                  sx={{ p: "15px" }}
+                >
                   <img
                     src={inputs.lightLogo || DEFAULT_LIGHT_LOGO}
-                    style={{ height: "200px", maxWidth: "200px", objectFit: "contain" }}
+                    style={{ height: "170px", maxWidth: "170px", objectFit: "cover" }}
                   />
+                  <div className="logo-guideline top"></div>
+                  <div className="logo-guideline right"></div>
+                  <div className="logo-guideline bottom"></div>
+                  <div className="logo-guideline left"></div>
                 </Box>
               </Box>
             </Box>
