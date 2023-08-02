@@ -348,7 +348,7 @@ const Benefits = () => {
               filter: "brightness(0)",
               objectFit: "contain",
             }}
-            src="/GR_Letters.png"
+            src="/static/images/home/gr_letters.png"
           />
         </Box>
       </Box>

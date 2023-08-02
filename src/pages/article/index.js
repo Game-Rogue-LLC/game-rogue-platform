@@ -56,10 +56,10 @@ const Page = (props) => {
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
           <Box
             component="img"
-            src="/static/images/Game Rogue Text 2 copy.webp"
+            src="/static/images/home/game_rogue_text.webp"
             sx={{ borderBottom: "solid 3px rgba(245,131,31)" }}
           ></Box>
-          <Box component="img" src="/static/images/Game Rogue Text 3 copy.webp"></Box>
+          <Box component="img" src="/static/images/home/editorial_text.webp"></Box>
         </Box>
 
         {/* Begin Search Field */}
@@ -100,7 +100,7 @@ const Page = (props) => {
           <Grid container sx={{ justifyContent: "center" }} spacing={2} rowSpacing={2}>
             <Grid item xs={12} md={6} lg={4}>
               <CategoryCard
-                banner="/static/images/r6s-gameinfo-discover-intro-bg.jpg"
+                banner="/static/images/home/r6s_gameinfo_discover_intro_bg.jpg"
                 title="GR - RAINBOW SIX SIEGE"
                 sx={{
                   boxShadow: "rgba(245, 131, 31, 0.6)"
@@ -114,7 +114,7 @@ const Page = (props) => {
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <CategoryCard
-                banner="/static/images/r6s-gameinfo-discover-intro-bg.jpg"
+                banner="/static/images/home/r6s_gameinfo_discover_intro_bg.jpg"
                 title="RAINBOW SIX SIEGE"
                 sx={{
                   boxShadow: "rgba(245, 131, 31, 0.6)"
@@ -128,7 +128,7 @@ const Page = (props) => {
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <CategoryCard
-                banner="/static/images/r6s-gameinfo-discover-intro-bg.jpg"
+                banner="/static/images/home/r6s_gameinfo_discover_intro_bg.jpg"
                 title="GAME ROGUE WIKI"
                 sx={{
                   boxShadow: "rgba(245, 131, 31, 0.6)"

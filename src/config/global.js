@@ -1,8 +1,8 @@
-export const DEFAULT_CONTENTBLOCK_IMAGE = "/banner_image.png";
-export const DEFAULT_LOGO = "/static/images/dark_logo.png";
-export const DEFAULT_LIGHT_LOGO = "/static/images/light_logo.png";
-export const DEFAULT_DARK_LOGO = "/static/images/dark_logo.png";
-export const DEFAULT_PROFILE_PICTURE = "/static/images/Profile_Picture.png";
+export const DEFAULT_CONTENTBLOCK_IMAGE = "/static/images/home/banner_image.png";
+export const DEFAULT_LOGO = "/static/images/home/dark_logo.png";
+export const DEFAULT_LIGHT_LOGO = "/static/images/home/light_logo.png";
+export const DEFAULT_DARK_LOGO = "/static/images/home/dark_logo.png";
+export const DEFAULT_PROFILE_PICTURE = "/static/images/avatar/default.png";
 export const ORGANIZER_PROFILE_LIMIT = 1;
 export const ORGANIZATION_PROFILE_LIMIT = 1;
 export const TEAM_PROFILE_LIMIT = 10;

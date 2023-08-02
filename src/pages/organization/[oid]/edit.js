@@ -637,7 +637,7 @@ const Page = (props) => {
               fullWidth
               startAdornment={
                 <InputAdornment position="start">
-                  <img src="/static/images/discord.svg" height={"30px"} />
+                  <img src="/static/images/home/discord.svg" height={"30px"} />
                 </InputAdornment>
               }
             />
@@ -765,7 +765,7 @@ const Page = (props) => {
         <Box>
           <Box display="flex" alignItems="center">
             <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
-            <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
+            <img src="/static/images/home/paypal_color.svg" style={{ height: "30px" }} />
           </Box>
         </Box>
 

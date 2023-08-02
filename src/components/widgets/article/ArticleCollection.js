@@ -1,3 +1,4 @@
+import { DEFAULT_CONTENTBLOCK_IMAGE } from '@/src/config/global'
 import { Grid } from "@mui/material";
 import PostCard from "@/src/components/widgets/article/PostCard";
 import { useRouter } from "next/router";
@@ -19,7 +20,7 @@ const ArticleCollection = ({ items }) => {
               <Grid key={key} item xs={12} md={4} lg={3}>
                 <PostCard
                   item={{
-                    banner: "/static/images/post_back/2.webp",
+                    banner: DEFAULT_CONTENTBLOCK_IMAGE,
                     ...item
                   }}
                   sx={{

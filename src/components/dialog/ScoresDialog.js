@@ -119,7 +119,7 @@ const ScoresDialog = ({
               justifyContent: "center"
             }}
           >
-            <img src="/static/images/vs.png" height={80} />
+            <img src="/static/images/home/vs.png" height={80} />
           </Box>
           <Box
             sx={{

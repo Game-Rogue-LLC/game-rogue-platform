@@ -27,7 +27,7 @@ const RogueSocialSplash = ({}) => {
           top: 0,
           left: 0,
           zIndex: 9999,
-          backgroundImage: "url(/rogue_social.gif)",
+          backgroundImage: "url(/static/images/rogue_social.gif)",
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",

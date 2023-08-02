@@ -137,7 +137,7 @@ const Page = ({}) => {
             py: 3,
           }}
         >
-          <Image alt="GR_Logo" src="/GR_Letters.png" width={100} height={50} />
+          <Image alt="GR_Logo" src="/static/images/home/gr_letters.png" width={100} height={50} />
         </Box>
         <Box>
           <Typography
