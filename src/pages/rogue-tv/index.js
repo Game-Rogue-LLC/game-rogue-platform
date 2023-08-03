@@ -15,21 +15,21 @@ import { useRouter } from "next/router";
 const channels = [
   {
     title: "road trip across Thailand tomorrow",
-    image: "/static/images/games/720.webp",
+    image: "/static/images/streams/720.webp",
     video: "/static/videos/CYCLE_Promo_720_60_standard.mp4",
     uid: "t1KQ33hm4aflQluIwnv1VlIkZ4e2",
     category: 0
   },
   {
     title: "LONG STRIM?",
-    image: "/static/images/games/720 (1).webp",
+    image: "/static/images/streams/720 (1).webp",
     video: "/static/videos/CYCLE_Promo_Season01_720_60.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0
   },
   {
     title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
-    image: "/static/images/games/720 (2).webp",
+    image: "/static/images/streams/720 (2).webp",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0
@@ -46,21 +46,21 @@ const r6schannels = [
   },
   {
     title: "road trip across Thailand tomorrow",
-    image: "/static/images/games/720.webp",
+    image: "/static/images/streams/720.webp",
     video: "/static/videos/CYCLE_Promo_720_60_standard.mp4",
     uid: "t1KQ33hm4aflQluIwnv1VlIkZ4e2",
     category: 0
   },
   {
     title: "LONG STRIM?",
-    image: "/static/images/games/720 (1).webp",
+    image: "/static/images/streams/720 (1).webp",
     video: "/static/videos/CYCLE_Promo_Season01_720_60.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0
   },
   {
     title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
-    image: "/static/images/games/720 (2).webp",
+    image: "/static/images/streams/720 (2).webp",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0

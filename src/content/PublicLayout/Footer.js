@@ -291,12 +291,12 @@ const Footer = (props) => {
           }}
         >
           <Box>
-            <img src="/static/images/security.png" />
-            <img src="/static/images/lock.png" />
+            <img src="/static/images/home/security.png" />
+            <img src="/static/images/home/lock.png" />
           </Box>
           <Box>
-            <img src="/static/images/paypal.png" />
-            <img src="/static/images/card.png" />
+            <img src="/static/images/home/paypal.png" />
+            <img src="/static/images/home/card.png" />
           </Box>
         </Box>
       </Box>
@@ -319,7 +319,7 @@ const Footer = (props) => {
             width: "100%"
           }}
         >
-          <img src="/GR_Letters.png" />
+          <img src="/static/images/home/gr_letters.png" />
           <Box>
             <Typography
               variant="h4"
@@ -356,7 +356,7 @@ const Footer = (props) => {
                 borderRadius: "4px"
               }}
             >
-              <img src="/static/images/discord.svg" style={{ height: "30px" }} />
+              <img src="/static/images/home/discord.svg" style={{ height: "30px" }} />
             </Link>
             <Link
               href={"#"}
@@ -438,7 +438,7 @@ const Footer = (props) => {
                 borderRadius: "4px"
               }}
             >
-              <img src="/static/images/tiktok.svg" style={{ height: "30px" }} />
+              <img src="/static/images/home/tiktok.svg" style={{ height: "30px" }} />
             </Link>
           </Box>
         </Box>

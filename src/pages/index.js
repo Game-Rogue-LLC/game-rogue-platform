@@ -50,7 +50,7 @@ const MyApp = (props) => {
             transition: "all 0.5s"
           }}
         >
-          <img src="/static/images/GRLOGO_O_B.webp" style={{ height: "57px" }} />
+          <img src="/static/images/home/grlogo_o_b.webp" style={{ height: "57px" }} />
         </Box>
         <Box
           sx={{
@@ -112,7 +112,7 @@ const MyApp = (props) => {
         component={"section"}
         sx={{
           position: "relative",
-          backgroundImage: "url(/static/images/back1.png)",
+          backgroundImage: "url(/static/images/home/back1.png)",
           height: "910px",
           backgroundPosition: "center",
           display: "flex",
@@ -128,9 +128,9 @@ const MyApp = (props) => {
           autoPlay
           loop
           muted
-          poster="/static/images/back1.png"
+          poster="/static/images/home/back1.png"
         >
-          <source src="/intro.mp4" type="video/mp4" />
+          <source src="/static/videos/intro.mp4" type="video/mp4" />
         </video>
         <Box sx={{ p: 1 }}>
           <Typography
@@ -274,13 +274,13 @@ const MyApp = (props) => {
                 }}
               >
                 <video
-                  poster="/static/images/laptop.png"
+                  poster="/static/images/home/laptop.png"
                   loop={true}
                   autoPlay={true}
                   muted={true}
                   style={{ width: "150%", height: "150%" }}
                 >
-                  <source src="/static/animations/Laptop.webm" type="video/webm" />
+                  <source src="/static/videos/laptop.webm" type="video/webm" />
                 </video>
               </Box>
             </Grid>
@@ -301,7 +301,7 @@ const MyApp = (props) => {
         sx={{
           pt: "70px",
           px: 2,
-          background: "url(/static/images/about_us_bg.gif)"
+          background: "url(/static/images/home/about_us_bg.gif)"
         }}
       >
         <Box
@@ -330,7 +330,7 @@ const MyApp = (props) => {
           </Typography>
           <Box
             component={"img"}
-            src={"/static/images/Game_Rogue_Text_1.png"}
+            src={"/static/images/home/game_rogue_text_trans.png"}
             alignSelf={"center"}
             maxWidth={"100%"}
             height={"80px"}
@@ -398,7 +398,7 @@ const MyApp = (props) => {
               gap: 2
             }}
           >
-            <img src={"/static/images/back-to-top.svg"} style={{ width: "73px", height: "56px" }} />
+            <img src={"/static/images/home/back_to_top.svg"} style={{ width: "73px", height: "56px" }} />
             <Typography variant="body1" color="white" fontSize="23px">
               BACK TO TOP
             </Typography>

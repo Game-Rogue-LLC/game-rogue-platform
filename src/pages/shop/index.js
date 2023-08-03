@@ -39,7 +39,7 @@ const Page = (props) => {
           autoPlay={true}
           loop={true}
         >
-          <source src="/static/animations/asset2.webm" type="video/webm" />
+          <source src="/static/videos/asset2.webm" type="video/webm" />
         </video>
       </Box>
       <Box sx={{ display: "flex", backgroundColor: "white" }}>
@@ -55,7 +55,7 @@ const Page = (props) => {
             autoPlay={true}
             loop={true}
           >
-            <source src="/static/animations/asset3.webm" type="video/webm" />
+            <source src="/static/videos/asset3.webm" type="video/webm" />
           </video>
         </Box>
         <Box sx={{ flex: 4, display: "flex", alignItems: "center" }}>
@@ -116,7 +116,7 @@ const Page = (props) => {
             autoPlay={true}
             loop={true}
           >
-            <source src="/static/animations/asset4.mp4" type="video/mp4" />
+            <source src="/static/videos/asset4.mp4" type="video/mp4" />
           </video>
         </Box>
       </Box>

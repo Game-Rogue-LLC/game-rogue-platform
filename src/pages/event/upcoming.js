@@ -36,7 +36,7 @@ const Page = (props) => {
         component={"section"}
         sx={{
           position: "relative",
-          backgroundImage: "url(/static/images/event_banner.png)",
+          backgroundImage: "url(/static/images/home/event_banner.png)",
           height: "998px",
           backgroundPosition: "center",
           display: "flex",
@@ -44,8 +44,8 @@ const Page = (props) => {
           alignItems: "center"
         }}
       >
-        <video autoPlay loop muted poster="/static/images/event_banner.png">
-          <source src="/static/images/event_banner.mp4" type="video/mp4" />
+        <video autoPlay loop muted poster="/static/images/home/event_banner.png">
+          <source src="/static/videos/event_banner.mp4" type="video/mp4" />
         </video>
       </Box>
 

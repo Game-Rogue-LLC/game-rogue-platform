@@ -5,7 +5,7 @@ import Stepper from "@/src/components/carousel/Stepper";
 
 const featuredTournaments = [
   {
-    src: "/static/images/back2.png",
+    src: "/static/images/home/featured_bg.png",
     name: "",
     content: (
       <Box

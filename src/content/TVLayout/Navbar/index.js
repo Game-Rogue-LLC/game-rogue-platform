@@ -107,13 +107,13 @@ const TVNavbar = ({ sx }) => {
             }}
           >
             <Box sx={{ position: "relative", height: "40px" }}>
-              {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
-              <video autoPlay loop muted poster="/GR_Letters.png">
-                <source src="/static/animations/GR_Letters.webm" type="video/webm" />
+              {/* <Box component="img" src="/static/images/home/gr_letters.png" height={40} /> */}
+              <video autoPlay loop muted poster="/static/images/home/gr_letters.png">
+                <source src="/static/videos/gr_letters.webm" type="video/webm" />
               </video>
               <Box
                 component="img"
-                src="/GR_Letters.png"
+                src="/static/images/home/gr_letters.png"
                 height={40}
                 ref={logoRef}
                 style={{

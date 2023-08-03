@@ -28,7 +28,7 @@ export default function Splash(props) {
             color={theme.palette.primary.main}
           /> */}
           <div style={{ position: "relative", zIndex: 9999 }}>
-            <img src="/loading.gif" />
+            <img src="/static/images/loading.gif" />
           </div>
           <div
             style={{

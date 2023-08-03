@@ -59,7 +59,7 @@ const MatchChatAnimation = ({ mid }) => {
         muted={true}
         autoPlay={true}
       >
-        <source src="/static/animations/mc_animation.webm" type="video/webm" />
+        <source src="/static/videos/mc_animation.webm" type="video/webm" />
       </video>
       <Box className="match-chat-team" sx={{ left: "25vw" }}>
         <Box textAlign={"center"}>

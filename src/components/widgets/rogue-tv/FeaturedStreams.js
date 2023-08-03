@@ -10,21 +10,21 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 const streams = [
   {
     title: "road trip across Thailand tomorrow",
-    image: "/static/images/games/480.webp",
+    image: "/static/images/streams/480.webp",
     video: "/static/videos/CYCLE_Promo_720_60_standard.mp4",
     uid: "t1KQ33hm4aflQluIwnv1VlIkZ4e2",
     category: 0
   },
   {
     title: "LONG STRIM?",
-    image: "/static/images/r6s-gameinfo-discover-intro-bg.jpg",
+    image: "/static/images/home/r6s_gameinfo_discover_intro_bg.jpg",
     video: "/static/videos/CYCLE_Promo_Season01_720_60.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0
   },
   {
     title: "WALKING CARPET PLAYS YOUR SONG REQUESTS!",
-    image: "/static/images/games/480-1.webp",
+    image: "/static/images/streams/480-1.webp",
     video: "/static/videos/Y1S3MarketingMovie.mp4",
     uid: "JHZmfIGnoMeSvmbxHVn8b7ksbZ42",
     category: 0
