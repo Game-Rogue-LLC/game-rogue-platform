@@ -525,6 +525,40 @@ const TournamentProvider = (props) => {
   };
   /** End Shop Product Category Data / Functions */
 
+  /** Begin Meta Data / Functions */
+  const [metaData, setMetaData] = useState([]);
+  const [metaDataLoading, setMetaDataLoading] = useState(true);
+  const meta = {
+    metaData,
+    setMetaData,
+    create: async (newData) => {
+      const res = await store.meta.save(nanoid(), newData);
+      return res;
+    },
+    read: async () => {
+      setMetaDataLoading(true);
+      const res = await store.meta.readAll();
+      if (res.code === "succeed") {
+        setMetaData(res.data);
+      }
+
+      setMetaDataLoading(false);
+    },
+    update: async (id, newData) => {
+      const res = await store.meta.save(id, newData);
+      return res;
+    },
+    delete: async (id) => {
+      await store.meta.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.meta.delete(id);
+      return res;
+    }
+  };
+  /** End Meta Data / Functions */
+
   const isLoading = useMemo(() => {
     return (
       organizationLoading ||
@@ -534,7 +568,8 @@ const TournamentProvider = (props) => {
       ticketLoading ||
       shopLoading ||
       productLoading ||
-      categoryLoading
+      categoryLoading ||
+      metaDataLoading
     );
   }, [
     organizationLoading,
@@ -544,7 +579,8 @@ const TournamentProvider = (props) => {
     ticketLoading,
     shopLoading,
     productLoading,
-    categoryLoading
+    categoryLoading,
+    metaDataLoading
   ]);
 
   const loadTournament = useCallback(() => {
@@ -570,6 +606,7 @@ const TournamentProvider = (props) => {
     shop.read();
     product.read();
     category.read();
+    meta.read();
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
@@ -596,6 +633,7 @@ const TournamentProvider = (props) => {
         team,
         ticket,
         tournaments,
+        meta,
         matchLoading,
         currentTime,
         setCurrentTime

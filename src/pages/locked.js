@@ -1,27 +1,45 @@
-import { Box, Button, Container, Grid, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { useEffect, useState } from "react";
 
-import Image from "next/image";
 import { Lock } from "@mui/icons-material";
-import MemberItem from "@/src/components/item/MemberItem";
 import PublicLayout from "@/src/content/PublicLayout";
-import TournamentProvider from "@/src/context/TournamentContext";
+import { enqueueSnackbar } from "notistack";
+import store from "@/lib/firestore/collections";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 
 const Page = ({}) => {
   const theme = useTheme();
   const router = useRouter();
+  const { user } = useAuthContext();
   const [page, setPage] = useState("/");
-  const [accessCode, setAccessCode] = useState("");
+  const [input, setInput] = useState("");
+  const [meta, setMeta] = useState(null);
 
   useEffect(() => {
     if (router?.query?.page) setPage(router.query.page);
   }, [router]);
 
+  useEffect(() => {
+    store.meta.read("locked").then((res) => {
+      if (res.code === "succeed") {
+        setMeta(res.data);
+      }
+    });
+  }, []);
+
   const onAccessCodeChange = (e) => {
-    setAccessCode(e.target.value);
+    setInput(e.target.value);
   };
-  const onAccess = (e) => {};
+  const onAccess = (e) => {
+    if (meta && input === meta.accessCode) {
+      store.meta.save("locked", { allowed: [...(meta.allowed ? meta.allowed : []), user.id] });
+      router.push(`/${page}`);
+    } else {
+      enqueueSnackbar("Access Code is not correct!", { variant: "error" });
+    }
+  };
 
   return (
     <Box
@@ -40,7 +58,7 @@ const Page = ({}) => {
       </Typography>
       <Box sx={{ height: "20px" }}></Box>
       <Typography variant="h6">Access Code</Typography>
-      <TextField value={accessCode} onChange={onAccessCodeChange} />
+      <TextField value={input} onChange={onAccessCodeChange} />
       <Button variant="contained" sx={{ color: "white" }} onClick={onAccess}>
         ACCESS
       </Button>

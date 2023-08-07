@@ -146,17 +146,19 @@ const MyApp = (props) => {
             AVAILABLE JULY 25TH
             <br />
           </Typography>
-          <Button
-            variant="contained"
-            sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}
-            onClick={() => {
-              router.push("/plus-plans");
-            }}
-          >
-            <Typography variant="h1" fontSize={"52px"} color={"white"} letterSpacing={"5.9px"}>
-              SUBSCRIBE
-            </Typography>
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              variant="contained"
+              sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}
+              onClick={() => {
+                router.push("/plus-plans");
+              }}
+            >
+              <Typography variant="h1" fontSize={"52px"} color={"white"} letterSpacing={"5.9px"}>
+                SUBSCRIBE
+              </Typography>
+            </Button>
+          </Box>
         </Box>
       </Box>
 
@@ -398,7 +400,10 @@ const MyApp = (props) => {
               gap: 2
             }}
           >
-            <img src={"/static/images/home/back_to_top.svg"} style={{ width: "73px", height: "56px" }} />
+            <img
+              src={"/static/images/home/back_to_top.svg"}
+              style={{ width: "73px", height: "56px" }}
+            />
             <Typography variant="body1" color="white" fontSize="23px">
               BACK TO TOP
             </Typography>

@@ -21,10 +21,6 @@ const Page = (props) => {
     }
   };
 
-  useEffect(() => {
-    router.push("/locked?page=rogue-tv");
-  }, []);
-
   return (
     <Box>
       <Box>
