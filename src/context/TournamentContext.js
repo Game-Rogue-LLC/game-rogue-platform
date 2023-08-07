@@ -568,8 +568,7 @@ const TournamentProvider = (props) => {
       ticketLoading ||
       shopLoading ||
       productLoading ||
-      categoryLoading ||
-      metaDataLoading
+      categoryLoading
     );
   }, [
     organizationLoading,
@@ -579,8 +578,7 @@ const TournamentProvider = (props) => {
     ticketLoading,
     shopLoading,
     productLoading,
-    categoryLoading,
-    metaDataLoading
+    categoryLoading
   ]);
 
   const loadTournament = useCallback(() => {
@@ -606,7 +604,6 @@ const TournamentProvider = (props) => {
     shop.read();
     product.read();
     category.read();
-    meta.read();
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);

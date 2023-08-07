@@ -16,17 +16,22 @@ const Page = ({}) => {
   const [page, setPage] = useState("/");
   const [input, setInput] = useState("");
   const [meta, setMeta] = useState(null);
+  const [isMetaLoading, setMetaLoading] = useState(true);
 
   useEffect(() => {
     if (router?.query?.page) setPage(router.query.page);
   }, [router]);
 
   useEffect(() => {
-    store.meta.read("locked").then((res) => {
-      if (res.code === "succeed") {
-        setMeta(res.data);
+    store.meta.read(
+      "locked",
+      (data) => {
+        setMeta(data);
+      },
+      (value) => {
+        setMetaLoading(value);
       }
-    });
+    );
   }, []);
 
   const onAccessCodeChange = (e) => {
