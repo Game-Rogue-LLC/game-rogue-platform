@@ -28,7 +28,7 @@ const MyProfile = ({ tab, onTabChange }) => {
 
   return (
     <Box sx={{ display: "flex", height: "100%" }}>
-      <TabContext value={tab}>
+      {/* <TabContext value={tab}>
         <Box
           sx={{
             position: "static",
@@ -56,7 +56,7 @@ const MyProfile = ({ tab, onTabChange }) => {
         <TabPanel value="0" sx={{ flexGrow: 1, p: 0 }}>
           <Account />
         </TabPanel>
-      </TabContext>
+      </TabContext> */}
     </Box>
   );
 };

@@ -59,6 +59,12 @@ const Settings = ({ tab, onTabChange }) => {
               label={<Typography>Privacy</Typography>}
               value="2"
             />
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Account Settings</Typography>}
+              value="3"
+            />
           </TabList>
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 0 }}>
@@ -69,6 +75,9 @@ const Settings = ({ tab, onTabChange }) => {
         </TabPanel>
         <TabPanel value="2" sx={{ flexGrow: 1, p: 0 }}>
           <Privacy />
+        </TabPanel>
+        <TabPanel value="3" sx={{ flexGrow: 1, p: 0 }}>
+          <Account />
         </TabPanel>
       </TabContext>
     </Box>

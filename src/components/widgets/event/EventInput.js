@@ -105,9 +105,9 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           </Box>
 
           <Typography variant="h6">Event Graphic</Typography>
-          <Box sx={{ textAlign: "center", position: "relative", mt: 3 }}>
+          <Box sx={{ textAlign: "left", position: "relative", mt: 3 }}>
             <IconButton
-              sx={{ position: "absolute", right: 0, bottom: 0 }}
+              sx={{ position: "absolute", right: 20, bottom: 20 }}
               component="label"
               disabled={disabled}
             >
@@ -124,8 +124,9 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             <img
               src={inputs?.banner || config.DEFAULT_CONTENTBLOCK_IMAGE}
               style={{
-                height: "200px",
-                maxWidth: "600px",
+                height: "300px",
+                width: "100%",
+                maxWidth: "100%",
                 objectFit: "cover",
                 border: "solid 1px rgba(255, 255, 255, 0.2)",
                 borderRadius: "4px"
@@ -210,7 +211,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Game Type</Typography>
+          <Typography variant="h6">Course Type</Typography>
           <Box sx={{ mt: 1 }}>
             {inputs?.category == 0 ? (
               <Select
@@ -235,7 +236,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                 <MenuItem key="pyramid-elimination" value={3}>
                   Pyramid Elimination
                 </MenuItem>
-                <MenuItem key="baku-system" value={9}>
+                <MenuItem key="2-division-split" value={4}>
+                  2 Divisions Split
+                </MenuItem>
+                <MenuItem key="baku-system" value={10}>
                   Baku Tournament
                 </MenuItem>
               </Select>
@@ -250,25 +254,94 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                 disabled={disabled}
                 fullWidth
               >
-                <MenuItem key="straight-round-robin" value={4}>
+                <MenuItem key="straight-round-robin" value={5}>
                   Straight Round Robin
                 </MenuItem>
-                <MenuItem key="round-robin-double-split" value={5}>
+                <MenuItem key="round-robin-double-split" value={6}>
                   Round Robin Double Split
                 </MenuItem>
-                <MenuItem key="round-robin-triple-split" value={6}>
+                <MenuItem key="round-robin-triple-split" value={7}>
                   Round Robin Triple Split
                 </MenuItem>
-                <MenuItem key="round-robin-quadruple-split" value={7}>
+                <MenuItem key="round-robin-quadruple-split" value={8}>
                   Round Robin Quadruple Split
                 </MenuItem>
-                <MenuItem key="semi-round-robin" value={8}>
+                <MenuItem key="semi-round-robin" value={9}>
                   Semi Round Robin
                 </MenuItem>
               </Select>
             )}
           </Box>
         </Grid>
+        {inputs?.format === 4 && (
+          <>
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h6">Division 1 - Course Type</Typography>
+              <Select
+                labelId="division1-format-select-label"
+                id="division1-format-select"
+                value={inputs?.division1}
+                name="division1"
+                onChange={handle.inputs}
+                variant="outlined"
+                disabled={disabled}
+                fullWidth
+              >
+                <MenuItem key="single-elimination" value={0}>
+                  Single Elimination
+                </MenuItem>
+                <MenuItem key="double-elimination" value={1}>
+                  Double Elimination
+                </MenuItem>
+                <MenuItem key="ladder-elimination" value={2}>
+                  Ladder Elimination
+                </MenuItem>
+                <MenuItem key="pyramid-elimination" value={3}>
+                  Pyramid Elimination
+                </MenuItem>
+                <MenuItem key="2-division-split" value={4}>
+                  2 Divisions Split
+                </MenuItem>
+                <MenuItem key="baku-system" value={10}>
+                  Baku Tournament
+                </MenuItem>
+              </Select>
+            </Grid>
+
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h6">Division 2 - Course Type</Typography>
+              <Select
+                labelId="division2-format-select-label"
+                id="division2-format-select"
+                value={inputs?.division2}
+                name="division1"
+                onChange={handle.inputs}
+                variant="outlined"
+                disabled={disabled}
+                fullWidth
+              >
+                <MenuItem key="single-elimination" value={0}>
+                  Single Elimination
+                </MenuItem>
+                <MenuItem key="double-elimination" value={1}>
+                  Double Elimination
+                </MenuItem>
+                <MenuItem key="ladder-elimination" value={2}>
+                  Ladder Elimination
+                </MenuItem>
+                <MenuItem key="pyramid-elimination" value={3}>
+                  Pyramid Elimination
+                </MenuItem>
+                <MenuItem key="2-division-split" value={4}>
+                  2 Divisions Split
+                </MenuItem>
+                <MenuItem key="baku-system" value={10}>
+                  Baku Tournament
+                </MenuItem>
+              </Select>
+            </Grid>
+          </>
+        )}
 
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">Seed Type</Typography>
@@ -281,27 +354,71 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             sx={{ mt: 1 }}
           />
         </Grid>
-
-        <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Team Limit</Typography>
-          <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
-            <OutlinedInput
-              id="participants-count"
-              name="participantsCount"
-              aria-describedby="participants-count-helper"
-              value={inputs?.participantsCount}
-              disabled={disabled}
-              type="number"
-              onChange={handle.inputs}
-              inputProps={{ min: 2 }}
-            />
-            {errors.participantsCount !== undefined && (
-              <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>
-                {errors.participantsCount}
-              </FormHelperText>
-            )}
-          </FormControl>
-        </Grid>
+        {inputs?.format === 4 ? (
+          <>
+            <Grid item xs={6} lg={3}>
+              <Typography variant="h6">Division 1 - Team Limit</Typography>
+              <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+                <OutlinedInput
+                  id="participants-count1"
+                  name="participantsCount1"
+                  aria-describedby="participants-count1-helper"
+                  value={inputs?.participantsCount1}
+                  disabled={disabled}
+                  type="number"
+                  onChange={handle.inputs}
+                  inputProps={{ min: 2 }}
+                />
+                {errors.participantsCount !== undefined && (
+                  <FormHelperText id="participants-count1-helper" sx={{ mt: 2 }}>
+                    {errors.participantsCount}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+            <Grid item xs={6} lg={3}>
+              <Typography variant="h6">Division 2 - Team Limit</Typography>
+              <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+                <OutlinedInput
+                  id="participants-count2"
+                  name="participantsCount2"
+                  aria-describedby="participants-count2-helper"
+                  value={inputs?.participantsCount2}
+                  disabled={disabled}
+                  type="number"
+                  onChange={handle.inputs}
+                  inputProps={{ min: 2 }}
+                />
+                {errors.participantsCount !== undefined && (
+                  <FormHelperText id="participants-count2-helper" sx={{ mt: 2 }}>
+                    {errors.participantsCount}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+          </>
+        ) : (
+          <Grid item xs={12} lg={6}>
+            <Typography variant="h6">Team Limit</Typography>
+            <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+              <OutlinedInput
+                id="participants-count"
+                name="participantsCount"
+                aria-describedby="participants-count-helper"
+                value={inputs?.participantsCount}
+                disabled={disabled}
+                type="number"
+                onChange={handle.inputs}
+                inputProps={{ min: 2 }}
+              />
+              {errors.participantsCount !== undefined && (
+                <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>
+                  {errors.participantsCount}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+        )}
 
         <Grid item xs={12} lg={4}>
           <Typography variant="h6">Start Date</Typography>
@@ -367,7 +484,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           <Typography variant="h6">
             {"Entry Fee "}
             <span style={{ color: theme.palette.primary.main, fontSize: 16 }}>
-              Setup where the money goes
+              Link your pay-out method
             </span>
           </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.entryFee !== undefined}>

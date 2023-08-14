@@ -281,90 +281,97 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={12}>
-          <Paper sx={{ p: 3, backgroundColor: secondaryBackgroundColor }}>
-            {user && (
-              <>
-                <InputLabel id="team-select-label">Select your team</InputLabel>
-                <TeamSelect
-                  labelId="team-select-label"
-                  id="team-select"
-                  value={myTeam}
-                  name="team"
-                  // size="small"
-                  onChange={handleSelectTeam}
-                  variant="outlined"
-                  sx={{
-                    mt: 1
-                  }}
-                  fullWidth
-                  input={<TeamSelectInput />}
-                  inputProps={{
-                    MenuProps: {
-                      disableScrollLock: true
-                    }
-                  }}
-                >
-                  {myTeams?.map((tid) => {
-                    const item = team.teams[tid];
-                    return (
-                      <MenuItem
-                        key={"team_" + tid}
-                        value={tid}
-                        sx={{ display: "flex", alignItems: "center" }}
-                      >
-                        <ListItemIcon>
-                          <img
-                            src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
-                            height={30}
-                            width={30}
-                            style={{
-                              objectFit: "cover",
-                              objectPosition: "center"
-                            }}
-                          />
-                        </ListItemIcon>
-                        {item?.name}
-                      </MenuItem>
-                    );
-                  })}
-                </TeamSelect>
-              </>
-            )}
-            {!user ? (
-              <CustomButton variant="contained" sx={{ width: "100%", mt: 1 }} onClick={handleLogin}>
-                Login to Register
-              </CustomButton>
-            ) : (
-              <Box sx={{ display: "flex", alignItems: "center", mt: 1, gap: 1 }}>
-                <TeamRegisterDialog
-                  open={openRegisterDialog}
-                  onClose={onCloseRegisterDialog}
-                  onRegister={onRegisterTeam}
-                />
-
-                <LoadingButton
-                  loading={registering}
+        {(/* item?.status < EVENT_STATES.STARTED.value || */
+          dayjs(item?.registerTo).isAfter(new Date())) && (
+          <Grid item xs={12}>
+            <Paper sx={{ p: 3, backgroundColor: secondaryBackgroundColor }}>
+              {user && (
+                <>
+                  <InputLabel id="team-select-label">Select your team</InputLabel>
+                  <TeamSelect
+                    labelId="team-select-label"
+                    id="team-select"
+                    value={myTeam}
+                    name="team"
+                    // size="small"
+                    onChange={handleSelectTeam}
+                    variant="outlined"
+                    sx={{
+                      mt: 1
+                    }}
+                    fullWidth
+                    input={<TeamSelectInput />}
+                    inputProps={{
+                      MenuProps: {
+                        disableScrollLock: true
+                      }
+                    }}
+                  >
+                    {myTeams?.map((tid) => {
+                      const item = team.teams[tid];
+                      return (
+                        <MenuItem
+                          key={"team_" + tid}
+                          value={tid}
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <ListItemIcon>
+                            <img
+                              src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
+                              height={30}
+                              width={30}
+                              style={{
+                                objectFit: "cover",
+                                objectPosition: "center"
+                              }}
+                            />
+                          </ListItemIcon>
+                          {item?.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </TeamSelect>
+                </>
+              )}
+              {!user ? (
+                <CustomButton
                   variant="contained"
-                  sx={{
-                    flex: 1,
-                    ...buttonStyle(organization.organizations[event.events[eid]?.oid]?.primary)
-                  }}
-                  onClick={onOpenRegisterDialog}
-                  disabled={
-                    myTeam === ""
-
-                    // dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
-                  }
+                  sx={{ width: "100%", mt: 1 }}
+                  onClick={handleLogin}
                 >
-                  Register
-                </LoadingButton>
+                  Login to Register
+                </CustomButton>
+              ) : (
+                <Box sx={{ display: "flex", alignItems: "center", mt: 1, gap: 1 }}>
+                  <TeamRegisterDialog
+                    open={openRegisterDialog}
+                    onClose={onCloseRegisterDialog}
+                    onRegister={onRegisterTeam}
+                  />
 
-                <CustomButton onClick={onCreateTeam}>Create Team</CustomButton>
-              </Box>
-            )}
-          </Paper>
-        </Grid>
+                  <LoadingButton
+                    loading={registering}
+                    variant="contained"
+                    sx={{
+                      flex: 1,
+                      ...buttonStyle(organization.organizations[event.events[eid]?.oid]?.primary)
+                    }}
+                    onClick={onOpenRegisterDialog}
+                    disabled={
+                      myTeam === ""
+
+                      // dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
+                    }
+                  >
+                    Register
+                  </LoadingButton>
+
+                  <CustomButton onClick={onCreateTeam}>Create Team</CustomButton>
+                </Box>
+              )}
+            </Paper>
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );

@@ -21,6 +21,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import Avatar from "@/src/components/Avatar";
 import Link from "next/link";
 import OrganizationMenu from "@/src/content/OrganizationSidebar/Menu";
+import { TEAM_PROFILE_LIMIT } from "@/src/config/global";
 import TeamMenu from "@/src/content/OrganizationSidebar/TeamMenu";
 import _ from "lodash";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -135,7 +136,7 @@ export default function OrganizationSidebar(props) {
               </ListItemButton>
             </ListItem>
             <Divider />
-            {_.filter(organization.organizations, (val) => val.uid === user.id).map((item) => {
+            {_.filter(organization.organizations, (val) => val.uid === user?.id).map((item) => {
               if (item.uid === user?.id)
                 return (
                   <OrganizationMenu key={"organization_menu_" + item.id} organization={item} />
@@ -143,7 +144,7 @@ export default function OrganizationSidebar(props) {
             })}
 
             {organization?.organizations &&
-              _.filter(organization.organizations, (val) => val.uid === user.id).length < 3 && (
+              _.filter(organization.organizations, (val) => val.uid === user?.id).length < 3 && (
                 <>
                   <ListItem component="div" disablePadding>
                     <ListItemButton
@@ -187,6 +188,30 @@ export default function OrganizationSidebar(props) {
               const item = team.teams[id];
               if (item.uid === user?.id) return <TeamMenu key={"team_menu_" + id} team={item} />;
             })}
+            <Divider />
+            
+            {team?.teams &&
+              _.filter(team.teams, (val) => val.uid === user?.id).length < TEAM_PROFILE_LIMIT && (
+                <>
+                  <ListItem component="div" disablePadding>
+                    <ListItemButton
+                      sx={{ height: 56 }}
+                      onClick={() => {
+                        router.push("/team/create");
+                      }}
+                    >
+                      <ListItemText
+                        sx={{
+                          color: theme.palette.primary.main
+                        }}
+                      >
+                        Create Team
+                      </ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                  <Divider />
+                </>
+              )}
           </FireNav>
         </FirePaper>
       </Box>

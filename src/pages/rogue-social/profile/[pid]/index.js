@@ -104,7 +104,14 @@ const Page = (props) => {
       </Box>
       <Container sx={{ position: "relative" }}>
         <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
-          <CustomButton sx={{ paddingInline: "16px" }}>Edit Profile</CustomButton>
+          <CustomButton
+            sx={{ paddingInline: "16px" }}
+            onClick={() => {
+              router.push(`/user/${user.id}/edit`);
+            }}
+          >
+            Edit Profile
+          </CustomButton>
         </Box>
 
         <Box
@@ -119,8 +126,10 @@ const Page = (props) => {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <PeopleOutline />
-            {item?.name}
+            <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 2 }}>
+              <TeamItem team={myTeams[0]} width={100} height={100} fontSize={30} />
+              <Chip label={<Typography variant="h6">#{myTeams[0].id}</Typography>} />
+            </Box>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <LocationOn />
@@ -169,9 +178,26 @@ const Page = (props) => {
         <Divider />
 
         <Box sx={{ my: 4, textAlign: "center" }}>
-          <Typography variant="h4" textAlign="center">
-            Game Statistics
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              alignItems: "center",
+              backgroundColor: "#140300",
+              padding: 2,
+              border: "solid 1px rgba(255, 255, 255, 0.2)"
+            }}
+          >
+            <Typography
+              variant="body1"
+              fontWeight={700}
+              fontSize={25}
+              color={theme.palette.primary.main}
+              textTransform="uppercase"
+            >
+              Game Statistics
+            </Typography>
+          </Box>
           <GameSelect option={game} setOption={setGame} sx={{ mt: 2 }} />
           <Grid container spacing={2} rowSpacing={2} sx={{ mt: 2, color: "white" }}>
             <Grid item xs={6} sm={4} lg={3}>
@@ -247,7 +273,17 @@ const Page = (props) => {
           <Grid container spacing={3} rowSpacing={2}>
             <Grid item xs={12} lg={6}>
               <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
-                <Box sx={{ border: "solid 1px rgba(245,131,31,.2)", borderRadius: 1 }}>
+                <Box sx={{ border: "solid 1px lightgray", borderRadius: 1 }}>
+                  <Box
+                    sx={{ display: "flex", alignItems: "end", justifyContent: "center", gap: 1 }}
+                  >
+                    <Typography variant="h5" fontSize={30} textAlign="right">
+                      Games Played
+                    </Typography>
+                    <Typography variant="h4" fontSize={40}>
+                      {`:0`}
+                    </Typography>
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -282,25 +318,11 @@ const Page = (props) => {
                       justifyContent: "center"
                     }}
                   >
-                    <Typography variant="h5" textAlign="center">
-                      Operators Top
+                    <Typography variant="h5" textAlign="center" textTransform="uppercase">
+                      Top Operators
                     </Typography>
                   </Box>
                 </Box>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}
-                >
-                  <Typography variant="h5" fontSize={30} textAlign="right">
-                    Games Played
-                  </Typography>
-                  <Typography variant="h4" fontSize={60}>
-                    :0
-                  </Typography>
-                </Box>
-              </Box>
-              <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 2 }}>
-                <TeamItem team={myTeams[0]} width={100} height={100} fontSize={30} />
-                <Chip label={<Typography variant="h6">#{myTeams[0].id}</Typography>} />
               </Box>
             </Grid>
             <Grid item xs={12} lg={6}>

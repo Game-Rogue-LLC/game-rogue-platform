@@ -1,19 +1,33 @@
 import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { useMemo, useState } from "react";
 
+import { DEFAULT_DARK_LOGO } from "@/src/config/global";
+import GameChip from "@/src/components/chip/GameChip";
+import Image from "next/image";
 import Link from "next/link";
+import PlatformChip from "@/src/components/chip/PlatformChip";
+import RegionChip from "@/src/components/chip/RegionChip";
 import _ from "lodash";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import { withOpacity } from "@/src/utils/utils";
 
-const Section = ({ title, basePath, items, viewAll, onToggleViewAll }) => {
+const EventSection = ({ title, basePath, items, viewAll, onToggleViewAll }) => {
   const theme = useTheme();
 
   return (
     <Box
       component="section"
-      sx={{ borderRadius: 2, border: "solid 1px rgba(255,255,255,.2)", px: 1 }}
+      sx={{ borderRadius: 2, border: "solid 1px rgba(255,255,255,.2)", overflow: "hidden" }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          py: 1,
+          px: 1
+        }}
+      >
         <Typography
           variant="h4"
           sx={{ fontSize: 24, textAlign: "center", color: theme.palette.primary.main }}
@@ -25,22 +39,96 @@ const Section = ({ title, basePath, items, viewAll, onToggleViewAll }) => {
         </Button>
       </Box>
       <Divider />
-      <Box sx={{ py: 1, display: "flex", flexDirection: "column", gap: 1 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
         {_.map(items, (val, i) => (
-          <Box key={`item-${i}`}>
-            <Link href={basePath + "/" + val.id}>
+          <Link href={basePath + "/" + val.id}>
+            <Box
+              key={`item-${i}`}
+              sx={{
+                py: 1,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 3,
+                ":hover": { backgroundColor: withOpacity(theme.palette.primary.main, 0.1) }
+              }}
+            >
+              <Image src={val.darkLogo ?? DEFAULT_DARK_LOGO} width={60} height={60} />
               <Typography
                 variant="body1"
                 sx={{
                   fontSize: 20,
-                  color: "white",
-                  ":hover": { color: theme.palette.primary.main }
+                  color: "white"
                 }}
               >
                 {val?.name}
               </Typography>
-            </Link>
-          </Box>
+              <Typography variant="body1" sx={{ color: "white" }}>
+                {val.organizer}
+              </Typography>
+              <GameChip />
+              <PlatformChip type={val?.platform} />
+              <RegionChip type={val?.region} />
+            </Box>
+          </Link>
+        ))}
+      </Box>
+    </Box>
+  );
+};
+
+const Section = ({ title, basePath, items, viewAll, onToggleViewAll }) => {
+  const theme = useTheme();
+
+  return (
+    <Box
+      component="section"
+      sx={{ borderRadius: 2, border: "solid 1px rgba(255,255,255,.2)", overflow: "hidden" }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          py: 1,
+          px: 1
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{ fontSize: 24, textAlign: "center", color: theme.palette.primary.main }}
+        >
+          {title}
+        </Typography>
+        <Button variant="contained" onClick={onToggleViewAll}>
+          {viewAll ? "VIEW ALL" : "VIEW LESS"}
+        </Button>
+      </Box>
+      <Divider />
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        {_.map(items, (val, i) => (
+          <Link href={basePath + "/" + val.id}>
+            <Box
+              key={`item-${i}`}
+              sx={{
+                py: 1,
+                px: 2,
+                display: "flex",
+                alignItems: "center",
+                ":hover": { backgroundColor: withOpacity(theme.palette.primary.main, 0.1) }
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: 20,
+                  color: "white"
+                }}
+              >
+                {val?.name}
+              </Typography>
+            </Box>
+          </Link>
         ))}
       </Box>
     </Box>
@@ -48,17 +136,23 @@ const Section = ({ title, basePath, items, viewAll, onToggleViewAll }) => {
 };
 
 export default function Discover({}) {
-  const { event, team, player } = useTournamentContext();
+  const { organization, event, team, player } = useTournamentContext();
   const [eventShow, setEventShow] = useState(10);
   const [teamShow, setTeamShow] = useState(10);
   const [organizerShow, setOrganizerShow] = useState(10);
   const [playerShow, setPlayerShow] = useState(10);
 
   const events = useMemo(() => {
-    const temp = _.map(event.events, (val) => val);
+    const temp = _.map(event.events, (val) => ({
+      ...val,
+      organizer:
+        player.players[organization.organizations[val.oid]?.uid]?.userName ||
+        player.players[organization.organizations[val.oid]?.uid]?.name ||
+        "UNKNOWN"
+    }));
     if (eventShow === 0) return temp;
     return temp.slice(0, eventShow);
-  }, [event, eventShow]);
+  }, [event, eventShow, organization]);
 
   const teams = useMemo(() => {
     const temp = _.map(team.teams, (val) => val);
@@ -67,13 +161,13 @@ export default function Discover({}) {
   }, [team, teamShow]);
 
   const organizers = useMemo(() => {
-    const temp = _.map(player.players, (val) => val);
+    const temp = _.filter(player.players, (val) => val.userName && val.name);
     if (organizerShow === 0) return temp;
     return temp.slice(0, organizerShow);
   }, [player, organizerShow]);
 
   const players = useMemo(() => {
-    const temp = _.map(player.players, (val) => val);
+    const temp = _.filter(player.players, (val) => val.userName && val.name);
     if (playerShow === 0) return temp;
     return temp.slice(0, playerShow);
   }, [player, playerShow]);
@@ -93,7 +187,7 @@ export default function Discover({}) {
 
   return (
     <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-      <Section
+      <EventSection
         title="Event"
         basePath="/event"
         items={events}

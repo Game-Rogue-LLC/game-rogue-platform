@@ -92,9 +92,11 @@ const Menu = (props) => {
             {Object.keys(event.events)
               .filter((key, i) => item.id == event.events[key].oid)
               .map((id, idx) => (
-                <ListItem sx={{ justifyContent: "space-between", padding: 0 }}>
+                <ListItem
+                  key={"event_menu_" + item.id + "_" + idx}
+                  sx={{ justifyContent: "space-between", padding: 0 }}
+                >
                   <ListItemButton
-                    key={"event_menu_" + item.id + "_" + idx}
                     sx={{ minHeight: 32, color: "rgba(255,255,255,.8)" }}
                     onClick={() => {
                       organization.setCurrent(item.id);

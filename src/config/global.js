@@ -118,28 +118,33 @@ export const EVENT_FORMATS = [
     name: "Straight Round Robin"
   },
   {
-    key: "round-robin-double-split",
+    key: "2-divisions-split",
     value: 5,
+    name: "2 Divisions Split"
+  },
+  {
+    key: "round-robin-double-split",
+    value: 6,
     name: "Round Robin Double Split"
   },
   {
     key: "round-robin-triple-split",
-    value: 6,
+    value: 7,
     name: "Round Robin Triple Split"
   },
   {
     key: "round-robin-quadruple-split",
-    value: 7,
+    value: 8,
     name: "Round Robin Quadruple split"
   },
   {
     key: "round-robin-semi-split",
-    value: 8,
+    value: 9,
     name: "Semi Round Robin"
   },
   {
     key: "baku-pairing",
-    value: 9,
+    value: 10,
     name: "Baku pairing System"
   }
 ];
