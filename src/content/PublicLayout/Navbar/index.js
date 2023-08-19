@@ -49,7 +49,10 @@ const PublicNavbar = ({ sx }) => {
 
   const totalPlayers = useMemo(() => {
     if (player.players)
-      return _.map(player.players, (val) => ({ label: val.userName || val.name, id: val.id }));
+      return _.filter(player.players, (val) => val.userName || val.name).map((val) => ({
+        label: val.userName || val.name,
+        ...val
+      }));
     return [];
   }, [player.players]);
 
@@ -236,7 +239,7 @@ const PublicNavbar = ({ sx }) => {
                   name: "LEADERBOARD",
                   key: "leaderboard",
                   isLink: true,
-                  to: "/rogue-social"
+                  to: "/rogue-social?tab=4"
                 }
               ]}
             />

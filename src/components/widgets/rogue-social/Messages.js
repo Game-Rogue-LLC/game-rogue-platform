@@ -50,6 +50,7 @@ const TeamItem = ({ item, width, height, onClick }) => {
         gap: 2,
         py: 2,
         px: 2,
+        color: "black",
         cursor: "pointer",
         ":hover": {
           background: withOpacity(theme.palette.primary.main, 0.2)
@@ -106,27 +107,40 @@ const Messages = ({ count = 3 }) => {
           borderTopRightRadius: 5,
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
+          cursor: "pointer",
           px: 2,
           py: 1,
           gap: 2
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box
+          sx={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 0,
+            backgroundColor: "transparent"
+          }}
+          onClick={onToggleOpen}
+        ></Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, color: "white" }}>
           <Message />
           <Typography variant="h6">Messages</Typography>
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Tooltip title="Tickets">
+        <Box sx={{ display: "flex", position: "relative", alignItems: "center", gap: 1 }}>
+          <Tooltip title="Tickets" PopperProps={{ popperOptions: { placement: "top" } }}>
             <IconButton>
               <Sell fontSize="small" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Requests">
+          <Tooltip title="Requests" PopperProps={{ popperOptions: { placement: "top" } }}>
             <IconButton>
               <QuestionAnswer fontSize="small" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Create ">
+          <Tooltip title="Create" PopperProps={{ popperOptions: { placement: "top" } }}>
             <IconButton>
               <AddComment fontSize="small" />
             </IconButton>
@@ -145,7 +159,7 @@ const Messages = ({ count = 3 }) => {
         <Box
           sx={{
             height: 500,
-            backgroundColor: "black",
+            backgroundColor: "white",
             overflow: "auto"
           }}
         >
@@ -179,6 +193,7 @@ const Messages = ({ count = 3 }) => {
                   width: "100%",
                   alignItems: "center",
                   justifyContent: "start",
+                  color: "black",
                   fontSize: 20,
                   height: 40,
                   borderBottom: "solid 1px rgba(255,255,255,.2)"

@@ -17,23 +17,24 @@ const TeamChat = ({ item, sx }) => {
 
   useEffect(() => {
     if (item?.messages) {
+      console.log(item.messages);
       setMessages(item.messages);
     } else setMessages([]);
-  }, [item]);
+  }, [item?.messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() !== "" && item?.id) {
-      team.update(item?.id, {
-        messages: [
-          ...messages,
-          {
-            id: nanoid(),
-            sender: user.id,
-            text: input,
-            sentAt: new Date()
-          }
-        ]
+      const newMessage = {
+        id: nanoid(),
+        sender: user.id,
+        text: input,
+        sentAt: new Date()
+      };
+      const res = await team.update(item?.id, {
+        messages: [...messages, newMessage]
       });
+      setMessages((prev) => [...prev, newMessage]);
+      console.log(res);
       setInput("");
     }
   };
@@ -42,6 +43,12 @@ const TeamChat = ({ item, sx }) => {
     const messageBox = messageBoxRef.current;
     messageBox.scrollTo(0, 99999);
   }, [messages]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -61,7 +68,7 @@ const TeamChat = ({ item, sx }) => {
     >
       <Box sx={{ backgroundColor: "black", padding: 1 }}>
         <Typography variant="h4" textAlign="center" fontSize="20px" color="white">
-          Team Chat
+          {item?.name}
         </Typography>
       </Box>
       <Box sx={{ flexGrow: 1, overflow: "auto", p: 1 }} ref={messageBoxRef}>
@@ -88,6 +95,7 @@ const TeamChat = ({ item, sx }) => {
                   </InputAdornment>
                 )
               }}
+              onKeyDown={handleKeyDown}
               onChange={handleInputChange}
             />
           </Grid>
