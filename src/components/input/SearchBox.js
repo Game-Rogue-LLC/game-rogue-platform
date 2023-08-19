@@ -1,5 +1,6 @@
-import { Autocomplete, Box, TextField, styled } from "@mui/material";
+import { Autocomplete, Box, TextField, autocompleteClasses, styled } from "@mui/material";
 
+import Avatar from "../Avatar";
 import { Search } from "@mui/icons-material";
 
 const SearchContainer = styled(Box)(({ theme }) => ({
@@ -60,6 +61,29 @@ const SearchBox = ({ id, name, onChange, onKeyUp, placeholder, sx, options, valu
         }}
         options={options}
         renderInput={(params) => <TextField {...params} placeholder={placeholder} />}
+        renderOption={(props, option, state, ownerState) => {
+          console.log(props, option, state, ownerState);
+          if (state.index < 5)
+            return (
+              <Box
+                sx={{
+                  borderRadius: "8px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  margin: "5px",
+                  [`&.${autocompleteClasses.option}`]: {
+                    padding: "8px"
+                  }
+                }}
+                component="li"
+                {...props}
+              >
+                <Avatar user={option} />
+                {ownerState.getOptionLabel(option)}
+              </Box>
+            );
+        }}
       />
     </SearchContainer>
   );

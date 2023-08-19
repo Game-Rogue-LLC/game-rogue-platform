@@ -21,7 +21,7 @@ const FeaturedSocial = ({}) => {
         <Divider sx={{ mt: 2, backgroundColor: withOpacity(theme.palette.primary.main, 0.5) }} />
         <FeaturedTournaments sx={{ mt: 2, borderBottom: "none" }} />
       </Box>
-      <Box sx={{ p: 4 }}>
+      {/* <Box sx={{ p: 4 }}>
         <Typography variant="h3" fontStyle="italic" color={theme.palette.primary.main}>
           ORGANIZERS
         </Typography>
@@ -29,7 +29,7 @@ const FeaturedSocial = ({}) => {
         <Box sx={{ mt: 2 }}>
           <AccountInfo item={player.players[user?.id]} />
         </Box>
-      </Box>
+      </Box> */}
       <Box sx={{ p: 4 }}>
         <Typography variant="h3" fontStyle="italic" color={theme.palette.primary.main}>
           TEAMS

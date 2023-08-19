@@ -91,13 +91,17 @@ const Page = (props) => {
             gap: 2
           }}
         >
-          <Avatar src={item?.profilePic} hideStatus={true} sx={{ width: 200, height: 200 }} />
+          <Avatar
+            src={item?.profilePic}
+            hideStatus={true}
+            sx={{ width: 200, height: 200, border: "solid 5px rgb(245, 131, 31)" }}
+          />
           <Box sx={{ mb: 4 }}>
             <Typography variant="h4" color={colors.primary}>
               {item?.name}
             </Typography>
             <Typography variant="h6" color="white">
-              {"#" + item?.id}
+              {`#${item?.userName}`}
             </Typography>
           </Box>
         </Box>
@@ -310,7 +314,7 @@ const Page = (props) => {
                     sx={{
                       height: 70,
                       mt: "-30px",
-                      backgroundColor: theme.palette.primary.main,
+                      background: "linear-gradient(to right, white, #a84900)",
                       borderBottomLeftRadius: 1,
                       borderBottomRightRadius: 1,
                       display: "flex",
@@ -318,7 +322,12 @@ const Page = (props) => {
                       justifyContent: "center"
                     }}
                   >
-                    <Typography variant="h5" textAlign="center" textTransform="uppercase">
+                    <Typography
+                      variant="h5"
+                      textAlign="center"
+                      textTransform="uppercase"
+                      sx={{ color: "black" }}
+                    >
                       Top Operators
                     </Typography>
                   </Box>

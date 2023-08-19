@@ -204,7 +204,7 @@ const UserInfo = ({ inputs, item, editable, handle }) => {
             </Typography>
           </Grid>
           <Grid item>
-            <Typography variant="body1">{item?._id}</Typography>
+            <Typography variant="body1">{`#${item?.userName}`}</Typography>
           </Grid>
         </Grid>
 

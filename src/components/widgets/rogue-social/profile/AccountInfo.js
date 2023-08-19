@@ -67,11 +67,17 @@ const AccountInfo = ({ item }) => {
   const handle = {
     save: async (e) => {
       if (validate(inputs, rules, customMessages) === false) return;
-      const rogueIdExists = await player.rogueIdExists(inputs?._id);
-      if (rogueIdExists) {
-        setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
+      // const rogueIdExists = await player.rogueIdExists(user.user?.id, inputs?._id);
+      // if (rogueIdExists) {
+      //   setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
+      //   return;
+      // } else setErrors((prev) => ({ ...prev, _id: undefined }));
+
+      const userNameExists = await player.userNameExists(user.user?.id, inputs?.userName);
+      if (userNameExists) {
+        setErrors((prev) => ({ ...prev, userName: "Username is already taken." }));
         return;
-      } else setErrors((prev) => ({ ...prev, _id: undefined }));
+      } else setErrors((prev) => ({ ...prev, userName: undefined }));
 
       setSaving(true);
       let uploaded = true,
@@ -134,7 +140,7 @@ const AccountInfo = ({ item }) => {
       </Grid>
       <Grid item xs>
         <Grid container spacing={2} rowSpacing={2}>
-          <Grid item xs={12} lg={6}>
+          {/* <Grid item xs={12} lg={6}>
             <Typography variant="h6">Rogue ID</Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors._id !== undefined}>
               <OutlinedInput
@@ -151,7 +157,7 @@ const AccountInfo = ({ item }) => {
                 </FormHelperText>
               )}
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={6}>
             <Typography variant="h6">User Name</Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors.userName !== undefined}>

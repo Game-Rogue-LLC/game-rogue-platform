@@ -264,8 +264,14 @@ const TournamentProvider = (props) => {
       if (res.code === "succeed") return true;
       return false;
     },
-    rogueIdExists: async (id) => {
-      const res = await store.player.rogueIdExists(id);
+    rogueIdExists: async (id, _id) => {
+      const res = await store.player.rogueIdExists(id, _id);
+      if (res.code === "succeed") return true;
+      return false;
+    },
+    userNameExists: async (id, userName) => {
+      const res = await store.player.userNameExists(id, userName);
+      console.log(res);
       if (res.code === "succeed") return true;
       return false;
     },
