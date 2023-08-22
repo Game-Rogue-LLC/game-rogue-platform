@@ -101,7 +101,7 @@ const Page = (props) => {
               {item?.name}
             </Typography>
             <Typography variant="h6" color="white">
-              {`#${item?.userName}`}
+              {`@${item?.userName}`}
             </Typography>
           </Box>
         </Box>
