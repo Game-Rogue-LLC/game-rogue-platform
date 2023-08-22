@@ -19,7 +19,7 @@ const FeaturedSocial = ({}) => {
           EVENTS
         </Typography>
         <Divider sx={{ mt: 2, backgroundColor: withOpacity(theme.palette.primary.main, 0.5) }} />
-        <FeaturedTournaments sx={{ mt: 2, borderBottom: "none" }} />
+        <FeaturedTournaments sx={{ mt: 2, borderBottom: "none", px: 10 }} />
       </Box>
       {/* <Box sx={{ p: 4 }}>
         <Typography variant="h3" fontStyle="italic" color={theme.palette.primary.main}>

@@ -52,23 +52,23 @@ const FeaturedTournaments = ({ sx }) => {
         backgroundColor: "black",
         paddingBottom: "50px",
         borderBottom: "solid 3px #f5831f",
+        px: {
+          xs: 2,
+          lg: "20%"
+        },
         ...sx
       }}
     >
       <Box
         sx={{
           position: "relative",
-          px: {
-            xs: 2,
-            lg: "20%"
-          },
           mt: 1,
           mx: "auto"
         }}
       >
-        <Typography variant="h1" fontSize={"40px"} fontStyle={"italic"}>
+        {/* <Typography variant="h1" fontSize={"40px"} fontStyle={"italic"}>
           FEATURED TOURNAMENTS
-        </Typography>
+        </Typography> */}
 
         <Stepper
           data={featuredTournaments}
