@@ -347,6 +347,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                     open={openRegisterDialog}
                     onClose={onCloseRegisterDialog}
                     onRegister={onRegisterTeam}
+                    eid={eid}
                   />
 
                   <LoadingButton

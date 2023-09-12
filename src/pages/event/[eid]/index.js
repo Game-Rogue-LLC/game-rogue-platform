@@ -21,6 +21,7 @@ import { useEffect, useMemo, useState } from "react";
 import EventCoursePublic from "@/src/components/widgets/event/EventCoursePublic";
 import EventInfoPublic from "@/src/components/widgets/event/EventInfoPublic";
 import Link from "next/link";
+import Policies from "@/src/components/widgets/event/Policies";
 import PublicLayout from "@/src/content/PublicLayout";
 import SlantBanner from "@/src/components/widgets/SlantBanner";
 import TeamTable from "@/src/components/table/TeamTable";
@@ -170,6 +171,11 @@ const Page = (props) => {
                 value="3"
                 sx={{ "&.Mui-selected": { color: colors.primary } }}
               />
+              <Tab
+                label="Policies"
+                value="4"
+                sx={{ "&.Mui-selected": { color: colors.primary } }}
+              />
             </TabList>
           </Box>
           <TabPanel value="1">
@@ -183,6 +189,9 @@ const Page = (props) => {
               teams={_.map(item?.participants, (val) => team.teams[val.tid])}
               showMine={false}
             />
+          </TabPanel>
+          <TabPanel value="4">
+            <Policies item={item} />
           </TabPanel>
         </TabContext>
       </Container>

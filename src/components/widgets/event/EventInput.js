@@ -161,7 +161,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
 
         <Grid item xs={12}>
           <Box>
-            <Typography variant="h6">Event Name</Typography>
+            <Typography variant="h6">Display Name</Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
               <OutlinedInput
                 id="event-name"
@@ -179,7 +179,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             </FormControl>
           </Box>
           <Box sx={{ mt: 3 }}>
-            <Typography variant="h6">Event Description</Typography>
+            <Typography variant="h6">Tagline</Typography>
             <FormControl fullWidth sx={{ mt: 1 }}>
               {/* <TextField multiline id="event-description" name="description" aria-describedby="event-description-helper" value={inputs?.description} disabled={disabled}
               onChange={handle.inputs} /> */}
@@ -441,7 +441,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <Typography variant="h6">Register Date</Typography>
+          <Typography variant="h6">Register Date<span style={{color: theme.palette.primary.main}}>*</span></Typography>
           <DateTimePicker
             value={inputs?.registerTo}
             setValue={(newDate) => handle.setDate("registerTo", newDate)}

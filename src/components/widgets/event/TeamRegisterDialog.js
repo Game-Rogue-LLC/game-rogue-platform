@@ -29,10 +29,10 @@ const customMessages = {
   "required.text": "Description is required"
 };
 
-const TeamRegisterDialog = ({ open, onClose, onRegister }) => {
+const TeamRegisterDialog = ({ open, onClose, onRegister, eid }) => {
   const router = useRouter();
   const { user } = useAuthContext();
-  const { event } = useTournamentContext();
+  const { event, organization } = useTournamentContext();
   const [text, setText] = useState("");
   const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
@@ -103,7 +103,7 @@ const TeamRegisterDialog = ({ open, onClose, onRegister }) => {
       </DialogContent>
       <DialogActions sx={{ px: 2, pb: 2, display: "flex", gap: 2 }}>
         <Box>
-          <Link href="https://link.clover.com/urlshortener/8ZGvTs" target="_blank">
+          <Link href={organization?.organizations[event?.events[eid]?.oid]?.paymentAddress} target="_blank">
             <Button variant="contained">Pay</Button>
           </Link>
         </Box>
