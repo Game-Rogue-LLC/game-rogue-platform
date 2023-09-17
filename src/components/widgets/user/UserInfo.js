@@ -50,6 +50,7 @@ const UserInfo = ({ inputs, item, editable, handle }) => {
         users: [user.user.id, item.id],
         createdBy: user.user.id,
         openedAt: new Date(),
+        createdAt: new Date(),
         closedAt: null,
         deleted: false
       });

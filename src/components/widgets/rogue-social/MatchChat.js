@@ -33,13 +33,14 @@ const MatchChat = ({ item, myTeam, opTeam }) => {
   }, [item]);
 
   const handleSend = () => {
+    console.log('sending:', input, myTeam);
     if (input.trim() !== "" && item?.id) {
       match.update(item?.id, {
         messages: [
           ...messages,
           {
             id: nanoid(),
-            sender: myTeam.id,
+            sender: myTeam?.id,
             text: input,
             sentAt: new Date()
           }
@@ -54,6 +55,12 @@ const MatchChat = ({ item, myTeam, opTeam }) => {
     messageBox.scrollTo(0, 99999);
   }, [messages]);
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
+
   const handleInputChange = (event) => {
     setInput(event.target.value);
   };
@@ -61,7 +68,7 @@ const MatchChat = ({ item, myTeam, opTeam }) => {
   return (
     <Box
       sx={{
-        width: "250px",
+        width: "100%",
         height: "400px",
         display: "flex",
         flexDirection: "column",
@@ -99,6 +106,7 @@ const MatchChat = ({ item, myTeam, opTeam }) => {
                 )
               }}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
             />
           </Grid>
         </Grid>

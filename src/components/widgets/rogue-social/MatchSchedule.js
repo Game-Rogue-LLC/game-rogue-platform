@@ -45,6 +45,11 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
   };
 
   useEffect(() => {
+    if (ticket && ticket.tickets)
+      console.log('ticket', ticket.tickets);
+  }, [ticket])
+
+  useEffect(() => {
     if (isMyTeam(team?.teams[item?.participants[0]?.id])) {
       setMyTeam(team.teams[item.participants[0].id]);
       setOpTeam(team.teams[item.participants[1].id]);
@@ -202,10 +207,10 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {_.filter(ticket?.tickets, (val) => val.type === "MATCH_SCHEDULE_REQUEST").map(
+            {_.filter(ticket?.tickets, (val) => val.type === "MATCH_SCHEDULE_REQUEST" && (val.receiver == user?.id || val.sender == user?.id)).map(
               (val) => {
                 return (
-                  <TableRow>
+                  <TableRow key={`schedule-request-${val.id}`}>
                     <TableCell>
                       <TeamItem team={team?.teams[val.data.senderTeam]} disableLink={true} />
                     </TableCell>
