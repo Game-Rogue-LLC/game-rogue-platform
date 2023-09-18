@@ -69,7 +69,7 @@ const MatchChat = ({ item, myTeam, opTeam }) => {
     <Box
       sx={{
         width: "100%",
-        height: "400px",
+        height: "600px",
         display: "flex",
         flexDirection: "column",
         bgcolor: "grey.200",

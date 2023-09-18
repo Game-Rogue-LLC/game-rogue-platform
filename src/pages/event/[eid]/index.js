@@ -186,7 +186,7 @@ const Page = (props) => {
           </TabPanel>
           <TabPanel value="3">
             <TeamTable
-              teams={_.map(item?.participants, (val) => team.teams[val.tid])}
+              teams={_.map(item?.participants, (val) => team.teams[val.id])}
               showMine={false}
             />
           </TabPanel>

@@ -441,7 +441,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           </Grid>
         )}
 
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} lg={6}>
           <Typography variant="h6">
             Start Date
             <span style={{ color: theme.palette.primary.main }}> * </span>
@@ -454,7 +454,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           />
         </Grid>
 
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} lg={6}>
           <Typography variant="h6">
             End Date
             <span style={{ color: theme.palette.primary.main }}> * </span>
@@ -467,9 +467,22 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           />
         </Grid>
 
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} lg={6}>
           <Typography variant="h6">
-            Register Date
+            Registration Opens
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
+          <DateTimePicker
+            value={inputs?.registerFrom}
+            setValue={(newDate) => handle.setDate("registerFrom", newDate)}
+            sx={{ mt: 1, width: "100%" }}
+            disabled={disabled}
+          />
+        </Grid>
+        
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h6">
+            Registration Ends
             <span style={{ color: theme.palette.primary.main }}> * </span>
           </Typography>
           <DateTimePicker
@@ -516,7 +529,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">
             Entry Fee
-            <span style={{ color: theme.palette.primary.main }}> * </span>
+            <span style={{ color: theme.palette.primary.main, fontSize: '1rem' }}> Link your pay-out method </span>
+            <span style={{ color: theme.palette.primary.main }}>*</span>
           </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.entryFee !== undefined}>
             <OutlinedInput

@@ -1,22 +1,23 @@
-import { useEffect } from 'react';
-import Button from '@mui/material/Button';
 import {
     Paper,
     Table,
-    TableHead,
     TableBody,
-    TableRow,
     TableCell,
     TableContainer,
     TableFooter,
-    useTheme,
-    Typography
+    TableHead,
+    TableRow,
+    Typography,
+    useTheme
 } from '@mui/material';
+
+import AdminLayout from '@/src/content/AdminLayout';
+import Button from '@mui/material/Button';
 import { STAFF_ROLES } from '@/src/config/global';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import AdminLayout from '@/src/content/AdminLayout';
 import { useAppContext } from '@/src/context/app';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useTournamentContext } from '@/src/context/TournamentContext';
 
@@ -60,7 +61,7 @@ const Page = (props) => {
                     {organization.organizations[organization.current]?.staff?.length > 0
                         ? organization.organizations[organization.current].staff.map((val, i) => (
                             <TableRow key={'staff_' + i}>
-                                <TableCell align='center'>{player.players[val.uid]?.name + '#' + player.players[val.uid]?._id}</TableCell>
+                                <TableCell align='center'>{player.players[val.uid]?.name + '@' + player.players[val.uid]?._id}</TableCell>
                                 <TableCell align='center'>{STAFF_ROLES[val.role].name}</TableCell>
                                 <TableCell align='center'>{dayjs(val.lastLogin.toDate()).fromNow()}</TableCell>
                                 <TableCell align='center'>{ }</TableCell>

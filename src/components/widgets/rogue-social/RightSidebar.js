@@ -126,7 +126,9 @@ const RightSidebar = ({ sx }) => {
             <Typography variant="body1" color="white" align="center" fontSize={20} marginTop={2}>
               There are no current match-chats available for you.
             </Typography>
-            <Button variant="contained" fullWidth sx={{ mt: 2 }}>
+            <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={() => {
+              router.push('/event');
+            }}>
               Join an event
             </Button>
           </>
