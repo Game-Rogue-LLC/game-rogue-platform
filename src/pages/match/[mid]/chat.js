@@ -5,13 +5,16 @@ import { useEffect, useState } from "react";
 
 import { MATCH_STATES } from "@/src/config/global";
 import MapBans from "@/src/components/widgets/rogue-social/MapBans";
+import MatchChat from "@/src/components/widgets/rogue-social/MatchChat";
 import MatchChatAnimation from "@/src/components/widgets/rogue-social/MatchChatAnimation";
 import MatchSchedule from "@/src/components/widgets/rogue-social/MatchSchedule";
 import MatchScoreBoard from "@/src/components/widgets/rogue-social/MatchScoreBoard";
 import MatchShare from "@/src/components/widgets/rogue-social/MatchShare";
 import PublicLayout from "@/src/content/PublicLayout";
 import _ from "lodash";
+import { isMyTeam } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 
@@ -19,13 +22,16 @@ const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
+  const { user } = useAuthContext();
   const { setColors } = useStyleContext();
-  const { ticket, match } = useTournamentContext();
+  const { ticket, match, team } = useTournamentContext();
   const [tab, setTab] = useState("1");
   const [mid, setMID] = useState(router?.query?.mid);
   const [item, setItem] = useState(null);
   const [step, setStep] = useState(0);
   const [matchTime, setMatchTime] = useState(new Date());
+  const [myTeam, setMyTeam] = useState(null);
+  const [opTeam, setOpTeam] = useState(null);
 
   useEffect(() => {
     if (router?.query?.id && router.query.id !== mid) {
@@ -57,12 +63,22 @@ const Page = (props) => {
   }, [match?.matches, mid]);
 
   useEffect(() => {
-    if (item?.step) setStep(item.step);
-    if (item?.start) {
+    if (!item) return;
+    if (item.participants.length == 2 && team?.teams) {
+      if (isMyTeam(team.teams[item.participants[0].id], user?.id)) {
+        setMyTeam(team.teams[item.participants[0].id]);
+        setOpTeam(team.teams[item.participants[1].id]);
+      } else {
+        setMyTeam(team.teams[item.participants[1].id]);
+        setOpTeam(team.teams[item.participants[0].id]);
+      }
+    }
+    if (item.step) setStep(item.step);
+    if (item.start) {
       setMatchTime(item.start);
     }
     // if (tab === "1" && item?.status === MATCH_STATES.SCHEDULED.value) setTab("2");
-  }, [item]);
+  }, [item, team?.teams, user]);
 
   useEffect(() => {
     setTitle("MATCH CHAT");
@@ -118,34 +134,32 @@ const Page = (props) => {
   return (
     <Container sx={{ padding: 5 }}>
       <TabContext value={tab}>
-        {item?.status !== MATCH_STATES.SCHEDULED.value ? (
-          <TabList onChange={onTabChange}>
-            <Tab value="1" label="Schedule" />
-          </TabList>
-        ) : (
-          <TabList onChange={onTabChange}>
-            <Tab value="1" label="Share/Save" />
-            <Tab value="2" label="Map Bans" />
-            <Tab value="3" label="Scoreboard" />
-          </TabList>
-        )}
-        {item?.status !== MATCH_STATES.SCHEDULED.value ? (
-          <TabPanel value="1">
+        <TabList onChange={onTabChange}>
+          {item?.status !== MATCH_STATES.SCHEDULED.value ? <Tab value="1" label="Schedule" /> : <Tab value="1" label="Share/Save" />}
+          {item?.status === MATCH_STATES.SCHEDULED.value && <Tab value="2" label="Map Bans" />}
+          {item?.status === MATCH_STATES.SCHEDULED.value && <Tab value="3" label="Scoreboard" />}
+          <Tab value="4" label="Chat" />
+        </TabList>
+        <TabPanel value="1">
+          {item?.status !== MATCH_STATES.SCHEDULED.value ? (
             <MatchSchedule matchTime={matchTime} setMatchTime={setMatchTime} item={item} />
+          ) : (
+            <MatchShare matchTime={matchTime} onComplete={onNext} />
+          )}
+        </TabPanel>
+        {item?.status === MATCH_STATES.SCHEDULED.value && (
+          <TabPanel value="2">
+            <MapBans item={item} />
           </TabPanel>
-        ) : (
-          <>
-            <TabPanel value="1">
-              <MatchShare matchTime={matchTime} onComplete={onNext} />
-            </TabPanel>
-            <TabPanel value="2">
-              <MapBans item={item} />
-            </TabPanel>
-            <TabPanel value="3">
-              <MatchScoreBoard item={item} onComplete={onNext} />
-            </TabPanel>
-          </>
         )}
+        {item?.status === MATCH_STATES.SCHEDULED.value && (
+          <TabPanel value="3">
+            <MatchScoreBoard item={item} onComplete={onNext} />
+          </TabPanel>
+        )}
+        <TabPanel value="4">
+          <MatchChat item={item} myTeam={myTeam} opTeam={opTeam} />
+        </TabPanel>
       </TabContext>
     </Container>
   );

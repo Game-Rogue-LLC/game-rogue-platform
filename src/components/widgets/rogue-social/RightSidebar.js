@@ -19,6 +19,7 @@ import { GAMES } from "@/src/config/global";
 import MatchItem from "@/src/components/widgets/rogue-social/MatchItem";
 import SearchBox from "@/src/components/input/SearchBox";
 import dayjs from "dayjs";
+import { isMyMatch } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -38,8 +39,7 @@ const RightSidebar = ({ sx }) => {
   const upcomingMatches = useMemo(() => {
     if (match?.matches) {
       const res = match.matches.filter(
-        (item) => dayjs(item.start).isAfter(currentTime) && item.participants?.length === 2
-        // isMyMatch(item, team.teams, user.id)
+        (item) => dayjs(item.start).isAfter(currentTime) && item.participants?.length === 2 && isMyMatch(item, team.teams, user.id)
       );
       return res;
     }
@@ -126,7 +126,9 @@ const RightSidebar = ({ sx }) => {
             <Typography variant="body1" color="white" align="center" fontSize={20} marginTop={2}>
               There are no current match-chats available for you.
             </Typography>
-            <Button variant="contained" fullWidth sx={{ mt: 2 }}>
+            <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={() => {
+              router.push('/event');
+            }}>
               Join an event
             </Button>
           </>

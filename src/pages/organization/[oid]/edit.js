@@ -253,7 +253,8 @@ const Page = (props) => {
           crowdFund: inputs?.crowdFund,
           actualFund: inputs?.actualFund,
           credit: inputs?.credit,
-          paypal: inputs?.paypal
+          paypal: inputs?.paypal,
+          paymentAddress: inputs?.paymentAddress
         })
         .then((res) => {
           if (res.code == "succeed") enqueueSnackbar(res.message, { variant: "success" });
@@ -752,7 +753,7 @@ const Page = (props) => {
         <Typography variant="h4" textTransform="uppercase" fontStyle="italic">
           Payment Information
         </Typography>
-        <Box>
+        {/* <Box>
           <Box display="flex" alignItems="center">
             <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
             <CreditCard />
@@ -767,6 +768,14 @@ const Page = (props) => {
             <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
             <img src="/static/images/home/paypal_color.svg" style={{ height: "30px" }} />
           </Box>
+        </Box> */}
+        <Box>
+          <OutlinedInput
+            size="small"
+            name="paymentAddress"
+            value={inputs?.paymentAddress}
+            onChange={handle.input}
+          />
         </Box>
 
         <CustomLoadingButton

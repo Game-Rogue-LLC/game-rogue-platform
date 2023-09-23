@@ -21,8 +21,10 @@ import Colors from "@/src/components/Colors";
 import CustomButton from "@/src/components/button/CustomButton";
 import DateTimePicker from "@/src/components/datetime/DateTimePicker";
 import { Edit } from "@mui/icons-material";
+import { PlaidLink } from "react-plaid-link";
 import RichTextInput from "@/src/components/input/RichTextInput";
 import SelectInput from "@/src/components/input/SelectInput";
+import axios from "axios";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
 // import DateRangePicker from "@/src/components/datetime/DateRangePicker";
@@ -30,6 +32,19 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 const EventInput = ({ handle, inputs, disabled, errors }) => {
   const theme = useTheme();
   const { organization } = useTournamentContext();
+  const [isPlaidOpen, setIsPlaidOpen] = useState(false);
+  const [linkToken, setLinkToken] = useState('');
+
+  useEffect(() => {
+    axios.post('/api/plaid/create_link_token').then((res) => {
+      console.log(res.data);
+      if (res?.data?.link_token) setLinkToken(res.data.link_token);
+    }).catch((err) => console.log(err))
+  }, [])
+
+  const onPlaidSuccess = () => {}
+  const onPlaidExit = () => {}
+
   return (
     <>
       <Grid container spacing={2} rowSpacing={4}>
@@ -136,7 +151,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h6">Organization</Typography>
+          <Typography variant="h6">
+            Organization
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <Select
             labelId="organization-select-label"
             id="organization-select"
@@ -161,7 +179,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
 
         <Grid item xs={12}>
           <Box>
-            <Typography variant="h6">Event Name</Typography>
+            <Typography variant="h6">
+              Event Name
+              <span style={{ color: theme.palette.primary.main }}> * </span>
+            </Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
               <OutlinedInput
                 id="event-name"
@@ -179,7 +200,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             </FormControl>
           </Box>
           <Box sx={{ mt: 3 }}>
-            <Typography variant="h6">Event Description</Typography>
+            <Typography variant="h6">Tagline</Typography>
             <FormControl fullWidth sx={{ mt: 1 }}>
               {/* <TextField multiline id="event-description" name="description" aria-describedby="event-description-helper" value={inputs?.description} disabled={disabled}
               onChange={handle.inputs} /> */}
@@ -199,7 +220,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Event Format</Typography>
+          <Typography variant="h6">
+            Event Format
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <SelectInput
             name="category"
             options={config.EVENT_CATEGORIES}
@@ -211,7 +235,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Course Type</Typography>
+          <Typography variant="h6">
+            Course Type
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <Box sx={{ mt: 1 }}>
             {inputs?.category == 0 ? (
               <Select
@@ -357,7 +384,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         {inputs?.format === 4 ? (
           <>
             <Grid item xs={6} lg={3}>
-              <Typography variant="h6">Division 1 - Team Limit</Typography>
+              <Typography variant="h6">
+                Division 1 - Team Limit
+                <span style={{ color: theme.palette.primary.main }}> * </span>
+              </Typography>
               <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
                 <OutlinedInput
                   id="participants-count1"
@@ -377,7 +407,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               </FormControl>
             </Grid>
             <Grid item xs={6} lg={3}>
-              <Typography variant="h6">Division 2 - Team Limit</Typography>
+              <Typography variant="h6">
+                Division 2 - Team Limit
+                <span style={{ color: theme.palette.primary.main }}> * </span>
+              </Typography>
               <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
                 <OutlinedInput
                   id="participants-count2"
@@ -399,7 +432,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           </>
         ) : (
           <Grid item xs={12} lg={6}>
-            <Typography variant="h6">Team Limit</Typography>
+            <Typography variant="h6">
+              Team Limit
+              <span style={{ color: theme.palette.primary.main }}> * </span>
+            </Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
               <OutlinedInput
                 id="participants-count"
@@ -420,8 +456,11 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           </Grid>
         )}
 
-        <Grid item xs={12} lg={4}>
-          <Typography variant="h6">Start Date</Typography>
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h6">
+            Start Date
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <DateTimePicker
             value={inputs?.startAt}
             setValue={(newDate) => handle.setDate("startAt", newDate)}
@@ -430,8 +469,11 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           />
         </Grid>
 
-        <Grid item xs={12} lg={4}>
-          <Typography variant="h6">End Date</Typography>
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h6">
+            End Date
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <DateTimePicker
             value={inputs?.endAt}
             setValue={(newDate) => handle.setDate("endAt", newDate)}
@@ -440,8 +482,24 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           />
         </Grid>
 
-        <Grid item xs={12} lg={4}>
-          <Typography variant="h6">Register Date</Typography>
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h6">
+            Registration Opens
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
+          <DateTimePicker
+            value={inputs?.registerFrom}
+            setValue={(newDate) => handle.setDate("registerFrom", newDate)}
+            sx={{ mt: 1, width: "100%" }}
+            disabled={disabled}
+          />
+        </Grid>
+        
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h6">
+            Registration Ends
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <DateTimePicker
             value={inputs?.registerTo}
             setValue={(newDate) => handle.setDate("registerTo", newDate)}
@@ -460,7 +518,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
       </Grid> */}
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Prize Pool</Typography>
+          <Typography variant="h6">
+            Prize Pool
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.prize !== undefined}>
             <OutlinedInput
               id="prize-pool"
@@ -482,10 +543,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
 
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">
-            {"Entry Fee "}
-            <span style={{ color: theme.palette.primary.main, fontSize: 16 }}>
-              Link your pay-out method
-            </span>
+            Entry Fee
+            {linkToken.toString() !== 'undefined' && <PlaidLink token={linkToken.toString()} env="sandbox" onSuccess={onPlaidSuccess} onExit={onPlaidExit}>
+            <span style={{ color: theme.palette.primary.main, fontSize: '1rem', cursor: 'pointer' }}> Link your pay-out method </span></PlaidLink>}
+            <span style={{ color: theme.palette.primary.main }}>*</span>
           </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.entryFee !== undefined}>
             <OutlinedInput
@@ -507,7 +568,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Game</Typography>
+          <Typography variant="h6">
+            Game
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <Select
             labelId="game-select-label"
             id="game-select"
@@ -526,7 +590,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Platform</Typography>
+          <Typography variant="h6">
+            Platform
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <SelectInput
             name="platform"
             options={config.PLATFORMS}
@@ -538,7 +605,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Region</Typography>
+          <Typography variant="h6">
+            Region
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <SelectInput
             name="region"
             options={config.EVENT_REGIONS}
@@ -550,7 +620,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Time Zone</Typography>
+          <Typography variant="h6">
+            Time Zone
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <Select
             labelId="timezone-select-label"
             id="timezone-select"

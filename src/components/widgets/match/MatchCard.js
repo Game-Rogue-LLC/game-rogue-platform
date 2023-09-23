@@ -28,7 +28,7 @@ const MatchCard = ({ item }) => {
     <Link href={`/match/${item?.id}/info`}>
       <Box
         sx={{
-          border: "solid 1px rgba(255, 255, 255, 0.2)",
+          border: "solid 3px rgba(255, 255, 255)",
           minHeight: "280px",
           background: "black",
           ":hover": {

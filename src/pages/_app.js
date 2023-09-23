@@ -5,6 +5,8 @@ import "@/src/styles/fullCalendar.css";
 import "@/src/styles/colorpicker.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 import * as React from "react";
 

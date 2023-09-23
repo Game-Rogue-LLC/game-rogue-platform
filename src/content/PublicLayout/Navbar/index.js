@@ -270,8 +270,8 @@ const PublicNavbar = ({ sx }) => {
                 isDropdown={true}
                 items={[
                   {
-                    name: "My Organizer",
-                    key: "my-organizer",
+                    name: "My Organization",
+                    key: "my-organization",
                     isLink: true,
                     to: "/rogue-social/organization"
                   },

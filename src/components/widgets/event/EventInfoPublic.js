@@ -347,6 +347,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                     open={openRegisterDialog}
                     onClose={onCloseRegisterDialog}
                     onRegister={onRegisterTeam}
+                    eid={eid}
                   />
 
                   <LoadingButton
@@ -363,7 +364,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                       // dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
                     }
                   >
-                    Register
+                    {`Register - $${Number(item?.entryFee).toFixed(2)}`}
                   </LoadingButton>
 
                   <CustomButton onClick={onCreateTeam}>Create Team</CustomButton>

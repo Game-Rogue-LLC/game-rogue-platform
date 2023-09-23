@@ -50,6 +50,7 @@ const UserInfo = ({ inputs, item, editable, handle }) => {
         users: [user.user.id, item.id],
         createdBy: user.user.id,
         openedAt: new Date(),
+        createdAt: new Date(),
         closedAt: null,
         deleted: false
       });
@@ -204,7 +205,7 @@ const UserInfo = ({ inputs, item, editable, handle }) => {
             </Typography>
           </Grid>
           <Grid item>
-            <Typography variant="body1">{`#${item?.userName}`}</Typography>
+            <Typography variant="body1">{`@${item?.userName}`}</Typography>
           </Grid>
         </Grid>
 

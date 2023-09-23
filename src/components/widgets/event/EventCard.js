@@ -32,7 +32,7 @@ const EventCard = ({ item }) => {
     <Link href={`/event/${item?.id}`}>
       <Box
         sx={{
-          border: "solid 1px " + item?.primary,
+          border: "solid 3px " + item?.primary,
           // minHeight: "280px",
           background: "black",
           overflow: "hidden",
