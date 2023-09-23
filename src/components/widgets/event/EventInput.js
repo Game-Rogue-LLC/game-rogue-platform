@@ -21,8 +21,10 @@ import Colors from "@/src/components/Colors";
 import CustomButton from "@/src/components/button/CustomButton";
 import DateTimePicker from "@/src/components/datetime/DateTimePicker";
 import { Edit } from "@mui/icons-material";
+import { PlaidLink } from "react-plaid-link";
 import RichTextInput from "@/src/components/input/RichTextInput";
 import SelectInput from "@/src/components/input/SelectInput";
+import axios from "axios";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
 // import DateRangePicker from "@/src/components/datetime/DateRangePicker";
@@ -30,6 +32,19 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 const EventInput = ({ handle, inputs, disabled, errors }) => {
   const theme = useTheme();
   const { organization } = useTournamentContext();
+  const [isPlaidOpen, setIsPlaidOpen] = useState(false);
+  const [linkToken, setLinkToken] = useState('');
+
+  useEffect(() => {
+    axios.post('/api/plaid/create_link_token').then((res) => {
+      console.log(res.data);
+      if (res?.data?.link_token) setLinkToken(res.data.link_token);
+    }).catch((err) => console.log(err))
+  }, [])
+
+  const onPlaidSuccess = () => {}
+  const onPlaidExit = () => {}
+
   return (
     <>
       <Grid container spacing={2} rowSpacing={4}>
@@ -529,7 +544,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">
             Entry Fee
-            <span style={{ color: theme.palette.primary.main, fontSize: '1rem' }}> Link your pay-out method </span>
+            {linkToken.toString() !== 'undefined' && <PlaidLink token={linkToken.toString()} env="sandbox" onSuccess={onPlaidSuccess} onExit={onPlaidExit}>
+            <span style={{ color: theme.palette.primary.main, fontSize: '1rem', cursor: 'pointer' }}> Link your pay-out method </span></PlaidLink>}
             <span style={{ color: theme.palette.primary.main }}>*</span>
           </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.entryFee !== undefined}>
