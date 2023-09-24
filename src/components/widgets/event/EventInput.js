@@ -544,7 +544,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">
             Entry Fee
-            {linkToken.toString() !== 'undefined' && <PlaidLink token={linkToken.toString()} env="sandbox" onSuccess={onPlaidSuccess} onExit={onPlaidExit}>
+            {linkToken.toString() !== 'undefined' && <PlaidLink token={linkToken.toString()} env="sandbox" onSuccess={onPlaidSuccess} onExit={onPlaidExit} style={{backgroundColor: 'transparent', border: "none"}}>
             <span style={{ color: theme.palette.primary.main, fontSize: '1rem', cursor: 'pointer' }}> Link your pay-out method </span></PlaidLink>}
             <span style={{ color: theme.palette.primary.main }}>*</span>
           </Typography>
