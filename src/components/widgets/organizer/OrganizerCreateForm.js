@@ -49,11 +49,6 @@ const OrganizerCreateForm = ({ disabled: _disabled }) => {
   const [disabled, setDisabled] = useState(_disabled);
 
   useEffect(() => {
-    organizer.setCurrent(null);
-    event.setCurrent(null);
-  }, []);
-
-  useEffect(() => {
     if (organizer.activeCount >= 3 || _disabled) setDisabled(true);
     else setDisabled(false);
   }, [organizer.activeCount]);

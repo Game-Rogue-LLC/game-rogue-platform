@@ -43,11 +43,11 @@ const ManageAccounts = ({}) => {
   }, [organizer?.organizers, user]);
 
   const myOrganizations = useMemo(() => {
-    if (organization?.organizations) {
-      return _.filter(organization.organizations, (val) => val.uid === user.id);
+    if (organizer?.organizers) {
+      return _.filter(organizer.organizers, (val) => val.uid === user.id);
     }
     return [];
-  }, [organization?.organizations, user]);
+  }, [organizer?.organizers, user]);
 
   const onTabChange = (e, newTab) => {
     setTab(newTab);
@@ -87,8 +87,8 @@ const ManageAccounts = ({}) => {
                     Organization
                   </Typography>
                   <Typography variant="subtitle2">
-                    {ORGANIZATION_PROFILE_LIMIT - myOrganizations.length || 0}
-                    {ORGANIZATION_PROFILE_LIMIT > 1 ? " accounts remaining" : " account remaining"}
+                    {ORGANIZER_PROFILE_LIMIT - myOrganizations.length || 0}
+                    {ORGANIZER_PROFILE_LIMIT > 1 ? " accounts remaining" : " account remaining"}
                   </Typography>
                 </>
               }

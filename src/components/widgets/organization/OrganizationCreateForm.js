@@ -181,7 +181,7 @@ const OrganizationCreateForm = ({ disabled: _disabled }) => {
         <InputLabel htmlFor="org-name" sx={{ color: "white" }}>
           Rogue ID
         </InputLabel>
-        <FormHelperText>Controls the publically visible name of this organizer.</FormHelperText>
+        <FormHelperText>Controls the publically visible name of this organization.</FormHelperText>
         <FormControl fullWidth error={errors._id !== undefined}>
           <OutlinedInput
             id="rogue-id"

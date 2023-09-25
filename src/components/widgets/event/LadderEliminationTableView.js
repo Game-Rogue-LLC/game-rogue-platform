@@ -26,7 +26,7 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
   const theme = useTheme();
-  const { organization, event, team, match } = useTournamentContext();
+  const { organizer, event, team, match } = useTournamentContext();
   const [teams, setTeams] = useState([]);
   const [rank, setRank] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);

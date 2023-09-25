@@ -44,8 +44,8 @@ const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { organization, event } = useTournamentContext();
-  const [oid, setOID] = useState(organization?.current);
+  const { organizer, event } = useTournamentContext();
+  const [oid, setOID] = useState(organizer?.current);
   const [saving, setSaving] = useState(false);
   const [rulebook, setRulebook] = useState(null);
   const [terms, setTerms] = useState(null);
@@ -73,9 +73,9 @@ const Page = (props) => {
   }, []);
 
   useEffect(() => {
-    if (router?.query?.organization) {
-      const newOID = router.query.organization;
-      organization.setCurrent(newOID);
+    if (router?.query?.organizer) {
+      const newOID = router.query.organizer;
+      organizer.setCurrent(newOID);
       setOID(newOID);
       setInputs((prev) => ({
         ...prev,

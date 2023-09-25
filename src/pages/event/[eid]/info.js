@@ -34,7 +34,7 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors, colors } = useStyleContext();
-  const { organization, event, team } = useTournamentContext();
+  const { organizer, event, team } = useTournamentContext();
   const [eid, setEID] = useState(router?.query?.eid);
   const [item, setItem] = useState(null);
   const [startTime, setStartTime] = useState(new Date());
@@ -51,7 +51,7 @@ const Page = (props) => {
       if (event?.events && event.events[newEID]) {
         setEID(newEID);
         event.setCurrent(newEID);
-        organization.setCurrent(event.events[newEID]?.oid);
+        organizer.setCurrent(event.events[newEID]?.oid);
       } else {
         console.warn("Invalid Event ID");
         // Redirect to 404 page.
@@ -116,7 +116,7 @@ const Page = (props) => {
             {item?.name}
           </Typography>
           <Typography variant="h5" fontWeight="bold" color={colors.secondary}>
-            {organization.organizations[item?.oid]?.name}
+            {organizer.organizers[item?.oid]?.name}
           </Typography>
         </Box>
         {/* Begin Display Social Links */}

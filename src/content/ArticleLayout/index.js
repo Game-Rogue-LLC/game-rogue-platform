@@ -15,7 +15,7 @@ const ArticleLayout = (props) => {
   const { children } = props;
   const { user } = useAuthContext();
   const router = useRouter();
-  const { organization, event } = useTournamentContext();
+  const { organizer, event } = useTournamentContext();
 
   return (
     <div
@@ -45,9 +45,9 @@ const ArticleLayout = (props) => {
             justifyContent: "space-between"
           }}
         >
-          {organization.activeCount > 0 &&
-            organization.current &&
-            event.activeCount[organization.current] > 0 &&
+          {organizer.activeCount > 0 &&
+            organizer.current &&
+            event.activeCount[organizer.current] > 0 &&
             event.current && <Navbar />}
           <PageContainer>
             <PageHeader />

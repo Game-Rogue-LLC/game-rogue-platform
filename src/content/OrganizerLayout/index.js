@@ -1,17 +1,15 @@
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 
-import Footer from "./Footer";
-import Header from "./Header";
-import Navbar from "./Navbar";
-import OrganizationSidebar from "@/src/content/OrganizationSidebar";
+import Footer from "@/src/content/AdminLayout/Footer";
+import OrganizerSidebar from "./OrganizerSidebar";
 import PageContainer from "./PageContainer";
-import PageHeader from "./PageHeader";
 import PublicNavbar from "@/src/content/PublicLayout/Navbar";
+import Navbar from "../AdminLayout/Navbar";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-const AdminLayout = (props) => {
+const OrganizerLayout = (props) => {
   const { children } = props;
   const { user } = useAuthContext();
   const router = useRouter();
@@ -36,7 +34,7 @@ const AdminLayout = (props) => {
           flex: 1
         }}
       >
-        <OrganizationSidebar />
+        <OrganizerSidebar />
         <div
           style={{
             flex: 1,
@@ -49,10 +47,7 @@ const AdminLayout = (props) => {
             organizer.current &&
             event.activeCount[organizer.current] > 0 &&
             event.current && <Navbar />}
-          <PageContainer>
-            <PageHeader />
-            {children}
-          </PageContainer>
+          <PageContainer>{children}</PageContainer>
           <Footer />
         </div>
       </div>
@@ -63,9 +58,7 @@ const AdminLayout = (props) => {
 const ContextProvider = (props) => {
   return (
     <TournamentProvider>
-      {/* <MatchProvider> */}
-      <AdminLayout {...props} />
-      {/* </MatchProvider> */}
+      <OrganizerLayout {...props} />
     </TournamentProvider>
   );
 };

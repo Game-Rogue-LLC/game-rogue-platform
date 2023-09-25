@@ -60,7 +60,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   const router = useRouter();
   const { user } = useAuthContext();
   const { colors, secondaryBackgroundColor, fontColor } = useStyleContext();
-  const { organization, event, ticket, team, currentTime } = useTournamentContext();
+  const { organizer, event, ticket, team, currentTime } = useTournamentContext();
   const [myTeam, setMyTeam] = useState("");
   const [registrationStatus, setRegistrationStatus] = useState(0);
   const [registering, setRegistering] = useState(false);
@@ -121,7 +121,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     const newTicket = {
       type: TICKET_TYPES.TEAM_REGISTER_REQUEST,
       sender: user.id,
-      receiver: organization.organizations[event.events[eid]?.oid]?.uid,
+      receiver: organizer.organizers[event.events[eid]?.oid]?.uid,
       data: {
         team: myTeam,
         event: eid,
@@ -176,14 +176,14 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               </Typography>
               <Typography variant="h6">
                 CROWDFUND GOAL:{" $"}
-                {organization.organizations[event.events[eid]?.oid]?.crowdFund}
+                {organizer.organizers[event.events[eid]?.oid]?.crowdFund}
               </Typography>
               <LinearProgress
                 variant="determinate"
                 value={
-                  organization.organizations[event.events[eid]?.oid]?.crowdFund
-                    ? (organization.organizations[event.events[eid]?.oid]?.actualFund * 100.0) /
-                        organization.organizations[event.events[eid]?.oid]?.crowdFund +
+                  organizer.organizers[event.events[eid]?.oid]?.crowdFund
+                    ? (organizer.organizers[event.events[eid]?.oid]?.actualFund * 100.0) /
+                        organizer.organizers[event.events[eid]?.oid]?.crowdFund +
                       5
                     : 0
                 }
@@ -281,8 +281,8 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             </Typography>
           </Paper>
         </Grid>
-        {(/* item?.status < EVENT_STATES.STARTED.value || */
-          dayjs(item?.registerTo).isAfter(new Date())) && (
+        {/* item?.status < EVENT_STATES.STARTED.value || */
+        dayjs(item?.registerTo).isAfter(new Date()) && (
           <Grid item xs={12}>
             <Paper sx={{ p: 3, backgroundColor: secondaryBackgroundColor }}>
               {user && (
@@ -355,7 +355,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                     variant="contained"
                     sx={{
                       flex: 1,
-                      ...buttonStyle(organization.organizations[event.events[eid]?.oid]?.primary)
+                      ...buttonStyle(organizer.organizers[event.events[eid]?.oid]?.primary)
                     }}
                     onClick={onOpenRegisterDialog}
                     disabled={

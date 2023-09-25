@@ -34,7 +34,7 @@ const TournamentProvider = (props) => {
     setOrganizations,
     current: useMemo(() => currentOrganization, [currentOrganization]),
     setCurrent: setCurrentOrganization,
-    activecount: (uid) => {
+    activeCount: (uid) => {
       return _.filter(organizations, (val) => val.uid === uid).length;
     },
     create: async (newOrganization) => {
@@ -71,11 +71,14 @@ const TournamentProvider = (props) => {
 
   /** Begin Organizer Data / Functions */
   const [organizers, setOrganizers] = useState({});
+  const [currentOrganizer, setCurrentOrganizer] = useState(null);
   const [organizerLoading, setOrganizerLoading] = useState(false);
   const organizer = {
     organizers,
     setOrganizers,
-    activecount: (uid) => {
+    current: useMemo(() => currentOrganizer, [currentOrganizer]),
+    setCurrent: setCurrentOrganizer,
+    activeCount: (uid) => {
       return _.filter(organizers, (val) => val.uid === uid).length;
     },
     create: async (newVal) => {
@@ -97,7 +100,7 @@ const TournamentProvider = (props) => {
       return res;
     },
     delete: async (id) => {
-      const res = await store.organization.save(id, { deleted: true });
+      const res = await store.organizer.save(id, { deleted: true });
       return res;
     },
     rogueIdExists: async (id) => {
@@ -632,7 +635,7 @@ const TournamentProvider = (props) => {
 
   const loadTournament = useCallback(() => {
     if (user && user.id) {
-      organization.read(user.id);
+      organizer.read(user.id);
       team.read(user.id);
     }
   }, [user]);

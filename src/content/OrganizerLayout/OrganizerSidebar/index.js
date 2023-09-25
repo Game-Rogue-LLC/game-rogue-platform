@@ -20,9 +20,9 @@ import { styled, useTheme } from "@mui/material/styles";
 
 import Avatar from "@/src/components/Avatar";
 import Link from "next/link";
-import OrganizationMenu from "@/src/content/OrganizationSidebar/Menu";
+import OrganizationMenu from "./Menu";
 import { TEAM_PROFILE_LIMIT } from "@/src/config/global";
-import TeamMenu from "@/src/content/OrganizationSidebar/TeamMenu";
+import TeamMenu from "./TeamMenu";
 import _ from "lodash";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -50,7 +50,7 @@ const FirePaper = styled(Paper)(({ theme }) => ({
   borderRadius: 0
 }));
 
-export default function OrganizationSidebar(props) {
+export default function OrganizerSidebar(props) {
   const theme = useTheme();
   const router = useRouter();
   const { organizer, player, team } = useTournamentContext();
@@ -156,7 +156,7 @@ export default function OrganizationSidebar(props) {
                           color: theme.palette.primary.main
                         }}
                       >
-                        Create Organization
+                        Create Organizer
                       </ListItemText>
                     </ListItemButton>
                   </ListItem>

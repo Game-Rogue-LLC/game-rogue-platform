@@ -3,8 +3,8 @@ export const DEFAULT_LOGO = "/static/images/home/dark_logo.png";
 export const DEFAULT_LIGHT_LOGO = "/static/images/home/light_logo.png";
 export const DEFAULT_DARK_LOGO = "/static/images/home/dark_logo.png";
 export const DEFAULT_PROFILE_PICTURE = "/static/images/avatar/default.png";
-export const ORGANIZER_PROFILE_LIMIT = 1;
 export const ORGANIZATION_PROFILE_LIMIT = 1;
+export const ORGANIZER_PROFILE_LIMIT = 1;
 export const TEAM_PROFILE_LIMIT = 10;
 
 export const GAMES = [
@@ -320,6 +320,6 @@ export const TICKET_TYPES = {
 //   DEFAULT_DARK_LOGO,
 //   DEFAULT_PROFILE_PICTURE,
 //   ORGANIZER_PROFILE_LIMIT,
-//   ORGANIZATION_PROFILE_LIMIT,
+//   ORGANIZER_PROFILE_LIMIT,
 //   TEAM_PROFILE_LIMIT
 // };

@@ -32,7 +32,7 @@ const customMessages = {
 const TeamRegisterDialog = ({ open, onClose, onRegister, eid }) => {
   const router = useRouter();
   const { user } = useAuthContext();
-  const { event, organization } = useTournamentContext();
+  const { event, organizer } = useTournamentContext();
   const [text, setText] = useState("");
   const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
@@ -103,7 +103,10 @@ const TeamRegisterDialog = ({ open, onClose, onRegister, eid }) => {
       </DialogContent>
       <DialogActions sx={{ px: 2, pb: 2, display: "flex", gap: 2 }}>
         <Box>
-          <Link href={organization?.organizations[event?.events[eid]?.oid]?.paymentAddress} target="_blank">
+          <Link
+            href={organizer?.organizers[event?.events[eid]?.oid]?.paymentAddress}
+            target="_blank"
+          >
             <Button variant="contained">Pay</Button>
           </Link>
         </Box>

@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
-export default function ({ organization, win, sx, disableLink }) {
+export default function ({ organizer, win, sx, disableLink }) {
   const { player } = useTournamentContext();
   if (!sx) sx = {};
   return (
-    <Link href={"/rogue-social/organization/" + organization?.id}>
+    <Link href={"/rogue-social/organizer/" + organizer?.id}>
       <Box
         sx={{
           display: "flex",
@@ -26,15 +26,15 @@ export default function ({ organization, win, sx, disableLink }) {
         }}
       >
         <img
-          src={organization?.darkLogo || player.players[organization.uid]?.profilePic}
+          src={organizer?.darkLogo || player.players[organizer.uid]?.profilePic}
           width={50}
           height={50}
-          alt={organization?.darkLogo || player.players[organization.uid]?.name}
+          alt={organizer?.darkLogo || player.players[organizer.uid]?.name}
         />
         {/* <Skeleton variant="rectangular" width={30} height={30} /> */}
         <Box>
-          <Typography>{organization?.name}</Typography>
-          <Typography variant="subtitle2">{organization?.tagline}</Typography>
+          <Typography>{organizer?.name}</Typography>
+          <Typography variant="subtitle2">{organizer?.tagline}</Typography>
         </Box>
       </Box>
     </Link>

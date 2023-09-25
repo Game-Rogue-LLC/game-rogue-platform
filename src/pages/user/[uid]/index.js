@@ -53,10 +53,10 @@ const Page = (props) => {
     router.push("/team/join");
   };
   const onOrganizationCreate = () => {
-    router.push("/organization/create");
+    router.push("/organizer/create");
   };
   const onOrganizationJoin = () => {
-    // router.push("/organization/join");
+    // router.push("/organizer/join");
   };
   const onOrganizerCreate = () => {
     // router.push("/organizer/create");
@@ -104,7 +104,7 @@ const Page = (props) => {
           <Grid item xs={12} md={6}>
             <Box>
               <Typography variant="h5" color="white">
-                ORGANIZATIONS
+                ORGANIZERS
               </Typography>
               <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 2 }}>
                 <Button variant="contained" onClick={onOrganizationCreate}>

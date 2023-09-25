@@ -36,7 +36,7 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
-  const { organization, event, team, match, matchLoading } = useTournamentContext();
+  const { organizer, event, team, match, matchLoading } = useTournamentContext();
   const [matches, setMatches] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
@@ -54,7 +54,7 @@ const Page = (props) => {
       if (event?.events && event.events[newEID]) {
         setEID(newEID);
         event.setCurrent(newEID);
-        organization.setCurrent(event.events[newEID]?.oid);
+        organizer.setCurrent(event.events[newEID]?.oid);
       } else {
         console.warn("Invalid Event ID");
         // Redirect to 404 page.

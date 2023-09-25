@@ -17,7 +17,7 @@ import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const EventCard = ({ item }) => {
-  const { currentTime, setCurrentTime, organization } = useTournamentContext();
+  const { currentTime, setCurrentTime, organizer } = useTournamentContext();
 
   useEffect(() => {
     setCurrentTime(new Date());
@@ -166,7 +166,7 @@ const EventCard = ({ item }) => {
                   {/* <Button
                     variant="contained"
                     sx={{ backgroundColor: "#9146ff", color: "white", ml: 2 }}
-                    disabled={!organization?.organizations[item?.oid]?.twitch}
+                    disabled={!organizer?.organizers[item?.oid]?.twitch}
                   >
                     <SvgIcon fontSize="medium">
                       <svg

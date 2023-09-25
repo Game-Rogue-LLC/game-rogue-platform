@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
 import { closeSnackbar, enqueueSnackbar } from "notistack";
-import { customMessages, model, rules } from "@/lib/firestore/collections/organization";
+import { customMessages, model, rules } from "@/lib/firestore/collections/organizer";
 import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
@@ -46,7 +46,7 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
-  const { organization, event } = useTournamentContext();
+  const { organizer, event } = useTournamentContext();
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
   const [oid, setOID] = useState(null);
@@ -89,21 +89,21 @@ const Page = (props) => {
   }, [router?.query?.oid]);
 
   useEffect(() => {
-    organization.setCurrent(oid);
+    organizer.setCurrent(oid);
     event.setCurrent(null);
   }, [oid]);
 
   useEffect(() => {
     setInputs((prev) => ({
       ...prev,
-      ...organization.organizations[oid]
+      ...organizer.organizers[oid]
     }));
     // setColors({
-    //   primary: organization.organizations[oid].primary,
-    //   secondary: organization.organizations[oid].secondary,
-    //   tertiary: organization.organizations[oid].tertiary,
+    //   primary: organizer.organizers[oid].primary,
+    //   secondary: organizer.organizers[oid].secondary,
+    //   tertiary: organizer.organizers[oid].tertiary,
     // });
-  }, [organization.organizations, oid]);
+  }, [organizer.organizers, oid]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -119,7 +119,7 @@ const Page = (props) => {
     saveName: async (e) => {
       if (validate(inputs, rules, customMessages) === false) return;
 
-      const rogueIdExists = await organization.rogueIdExists(inputs?._id);
+      const rogueIdExists = await organizer.rogueIdExists(inputs?._id);
       if (rogueIdExists) {
         setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
         return;
@@ -142,7 +142,7 @@ const Page = (props) => {
       let uploaded = true;
       if (darkLogo) {
         uploaded = false;
-        const res = await organization.upload(darkLogo, oid);
+        const res = await organizer.upload(darkLogo, oid);
         if (res.code === "succeed") {
           newOrganization.darkLogo = res.url;
           uploaded = true;
@@ -152,7 +152,7 @@ const Page = (props) => {
       }
       if (lightLogo) {
         uploaded = false;
-        const res = await organization.upload(lightLogo, oid);
+        const res = await organizer.upload(lightLogo, oid);
         if (res.code === "succeed") {
           newOrganization.lightLogo = res.url;
           uploaded = true;
@@ -161,7 +161,7 @@ const Page = (props) => {
         }
       }
 
-      const res = await organization.update(oid, newOrganization);
+      const res = await organizer.update(oid, newOrganization);
 
       if (res.code == "succeed") {
         const key = enqueueSnackbar("Saved Successfully!", {
@@ -181,7 +181,7 @@ const Page = (props) => {
         social: true
       }));
 
-      const res = await organization.update(oid, {
+      const res = await organizer.update(oid, {
         twitterLink: inputs?.twitterLink,
         instagramLink: inputs?.instagramLink,
         youtubeLink: inputs?.youtubeLink,
@@ -214,7 +214,7 @@ const Page = (props) => {
       let uploaded = true;
       if (contentImage) {
         uploaded = false;
-        const res = await organization.upload(contentImage, oid);
+        const res = await organizer.upload(contentImage, oid);
         if (res.code === "succeed") {
           newOrganization.contentBlock.image = res.url;
           uploaded = true;
@@ -223,7 +223,7 @@ const Page = (props) => {
         }
       }
       if (uploaded) {
-        const res = await organization.update(oid, newOrganization);
+        const res = await organizer.update(oid, newOrganization);
         if (res.code === "succeed") {
           enqueueSnackbar("Saved successfully!", { variant: "success" });
         } else {
@@ -242,7 +242,7 @@ const Page = (props) => {
         features: true
       }));
 
-      const res = await organization
+      const res = await organizer
         .update(oid, {
           twitter: inputs?.twitter,
           instagram: inputs?.instagram,
@@ -276,7 +276,7 @@ const Page = (props) => {
         ...prev,
         disband: true
       }));
-      organization.delete(oid);
+      organizer.delete(oid);
     },
     // Open/Close the Modal for delete confirm
     modalOpen: (e) => {
@@ -511,7 +511,7 @@ const Page = (props) => {
           <InputLabel htmlFor="org-tag" sx={{ mt: 2, color: "white" }}>
             Tagline
           </InputLabel>
-          <FormHelperText>What does your organization stand for?</FormHelperText>
+          <FormHelperText>What does your organizer stand for?</FormHelperText>
           <FormControl fullWidth sx={{ mt: 1 }}>
             <OutlinedInput
               id="org-tag"

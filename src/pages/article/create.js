@@ -25,7 +25,7 @@ const Page = (props) => {
   const { user } = useAuthContext();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { organization, event } = useTournamentContext();
+  const { organizer, event } = useTournamentContext();
 
   useEffect(() => {
     setTitle("ARTICLE");

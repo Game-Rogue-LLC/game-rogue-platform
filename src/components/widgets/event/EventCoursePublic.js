@@ -42,7 +42,7 @@ const EventCoursePublic = ({ eid }) => {
   const { user } = useAuthContext();
   const { setTitle } = useAppContext();
   const { colors } = useStyleContext();
-  const { organization, event, team, match, matchLoading } = useTournamentContext();
+  const { organizer, event, team, match, matchLoading } = useTournamentContext();
   const [disabled, setDisabled] = useState(false);
   const [tab, setTab] = useState("1");
   const [myTeam, setMyTeam] = useState(null);

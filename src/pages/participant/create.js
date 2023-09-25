@@ -45,7 +45,7 @@ const Page = (props) => {
   const router = useRouter();
   const { user } = useAuthContext();
   const { setTitle } = useAppContext();
-  const { organization, team, event } = useTournamentContext();
+  const { organizer, team, event } = useTournamentContext();
   const [inputs, setInputs] = useState({ ...initialInputs });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -55,7 +55,7 @@ const Page = (props) => {
     if (router?.query.event) {
       const newEID = router.query.event;
       event.setCurrent(newEID);
-      organization.setCurrent(event.events[newEID].oid);
+      organizer.setCurrent(event.events[newEID].oid);
     }
   }, [router]);
 

@@ -136,7 +136,7 @@ const Section = ({ title, basePath, items, viewAll, onToggleViewAll }) => {
 };
 
 export default function Discover({}) {
-  const { organization, event, team, player } = useTournamentContext();
+  const { organizer, event, team, player } = useTournamentContext();
   const [eventShow, setEventShow] = useState(10);
   const [teamShow, setTeamShow] = useState(10);
   const [organizerShow, setOrganizerShow] = useState(10);
@@ -146,13 +146,13 @@ export default function Discover({}) {
     const temp = _.map(event.events, (val) => ({
       ...val,
       organizer:
-        player.players[organization.organizations[val.oid]?.uid]?.userName ||
-        player.players[organization.organizations[val.oid]?.uid]?.name ||
+        player.players[organizer.organizers[val.oid]?.uid]?.userName ||
+        player.players[organizer.organizers[val.oid]?.uid]?.name ||
         "UNKNOWN"
     }));
     if (eventShow === 0) return temp;
     return temp.slice(0, eventShow);
-  }, [event, eventShow, organization]);
+  }, [event, eventShow, organizer]);
 
   const teams = useMemo(() => {
     const temp = _.map(team.teams, (val) => val);

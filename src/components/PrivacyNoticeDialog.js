@@ -186,7 +186,7 @@ const PrivacyNoticeDialog = ({ open, onClose }) => {
             </li>
             <li>
               To a buyer or other successor in the event of a merger, divestiture, restructuring,
-              reorganization, dissolution, or other sale or transfer of some or all of GAME ROGUE,
+              reorganizer, dissolution, or other sale or transfer of some or all of GAME ROGUE,
               LLC's assets, whether as a going concern or as part of bankruptcy, liquidation, or
               similar proceeding, in which personal information held by GAME ROGUE, LLC about our
               Website users is among the assets transferred.

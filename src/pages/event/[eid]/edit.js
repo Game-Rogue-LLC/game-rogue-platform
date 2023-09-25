@@ -44,7 +44,7 @@ const Page = (props) => {
   const router = useRouter();
   const [eid, setEID] = useState(null);
   const { setTitle } = useAppContext();
-  const { organization, event } = useTournamentContext();
+  const { organizer, event } = useTournamentContext();
   const [saving, setSaving] = useState(false);
   const [rulebook, setRulebook] = useState(null);
   const [terms, setTerms] = useState(null);
@@ -79,7 +79,7 @@ const Page = (props) => {
   useEffect(() => {
     if (event?.events[eid]) {
       event.setCurrent(eid);
-      organization.setCurrent(event.events[eid].oid);
+      organizer.setCurrent(event.events[eid].oid);
       setInputs({
         ...event.events[eid],
         description: markdownToHtml(event.events[eid].description)
