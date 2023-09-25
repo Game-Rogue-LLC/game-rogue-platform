@@ -1,9 +1,10 @@
 import { Box, Paper, Tab, Typography, styled, useTheme } from "@mui/material";
+import { ORGANIZATION_PROFILE_LIMIT, ORGANIZER_PROFILE_LIMIT } from "@/src/config/global";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import { KeyboardArrowRight } from "@mui/icons-material";
-import { ORGANIZATION_PROFILE_LIMIT } from "@/src/config/global";
 import OrganizationCreateForm from "@/src/components/widgets/organization/OrganizationCreateForm";
+import OrganizerCreateForm from "../../organizer/OrganizerCreateForm";
 import OrganizerList from "@/src/components/widgets/rogue-social/accounts/OrganizerList";
 import { useState } from "react";
 
@@ -58,7 +59,7 @@ const Organizers = ({ items }) => {
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1 }}>
           <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-            {/* <OrganizerCreateForm disabled={items.length >= ORGANIZATION_PROFILE_LIMIT} /> */}
+            <OrganizerCreateForm disabled={items.length >= ORGANIZER_PROFILE_LIMIT} />
           </Paper>
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1 }}>

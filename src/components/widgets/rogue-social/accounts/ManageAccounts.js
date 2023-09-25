@@ -22,7 +22,7 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 
 const ManageAccounts = ({}) => {
   const { user } = useAuthContext();
-  const { team, organization, player } = useTournamentContext();
+  const { team, organization, organizer, player } = useTournamentContext();
   const [tab, setTab] = useState("0");
 
   const myTeams = useMemo(() => {
@@ -36,11 +36,11 @@ const ManageAccounts = ({}) => {
   }, [team?.teams, user]);
 
   const myOrganizers = useMemo(() => {
-    if (player?.players) {
-      return [player.players[user.id]];
+    if (organizer?.organizers) {
+      return _.filter(organizer.organizers, (val) => val.uid === user.id);
     }
     return [];
-  }, [player?.players, user]);
+  }, [organizer?.organizers, user]);
 
   const myOrganizations = useMemo(() => {
     if (organization?.organizations) {
@@ -84,11 +84,11 @@ const ManageAccounts = ({}) => {
               label={
                 <>
                   <Typography variant="h6" color="inherit">
-                    Organizer
+                    Organization
                   </Typography>
                   <Typography variant="subtitle2">
-                    {ORGANIZER_PROFILE_LIMIT - team.length || 0}
-                    {ORGANIZER_PROFILE_LIMIT > 1 ? " accounts remaining" : " account remaining"}
+                    {ORGANIZATION_PROFILE_LIMIT - myOrganizations.length || 0}
+                    {ORGANIZATION_PROFILE_LIMIT > 1 ? " accounts remaining" : " account remaining"}
                   </Typography>
                 </>
               }
@@ -98,11 +98,11 @@ const ManageAccounts = ({}) => {
               label={
                 <>
                   <Typography variant="h6" color="inherit">
-                    Organization
+                    Event Organizer
                   </Typography>
                   <Typography variant="subtitle2">
-                    {ORGANIZATION_PROFILE_LIMIT - myOrganizations.length || 0}
-                    {ORGANIZATION_PROFILE_LIMIT > 1 ? " accounts remaining" : " account remaining"}
+                    {ORGANIZER_PROFILE_LIMIT - team.length || 0}
+                    {ORGANIZER_PROFILE_LIMIT > 1 ? " accounts remaining" : " account remaining"}
                   </Typography>
                 </>
               }
@@ -124,10 +124,10 @@ const ManageAccounts = ({}) => {
           </TabList>
         </Box>
         <TabPanel value="0" sx={{ flexGrow: 1, p: 0 }}>
-          <Organizers items={myOrganizers} />
+          <Organizations items={myOrganizations} />
         </TabPanel>
         <TabPanel value="1" sx={{ flexGrow: 1, p: 0 }}>
-          <Organizations items={myOrganizations} />
+          <Organizers items={myOrganizers} />
         </TabPanel>
         <TabPanel value="2" sx={{ flexGrow: 1, p: 0 }}>
           <Teams items={myTeams} />

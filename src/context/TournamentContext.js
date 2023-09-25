@@ -5,6 +5,7 @@ import _ from "lodash";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import { nanoid } from "nanoid";
+import organizer from "@/lib/firestore/collections/organizer";
 import store from "@/lib/firestore/collections";
 import { useAuthContext } from "@/src/context/AuthContext";
 
@@ -67,6 +68,46 @@ const TournamentProvider = (props) => {
     upload: store.organization.uploadFile
   };
   /** End Organization Data / Functions */
+
+  /** Begin Organizer Data / Functions */
+  const [organizers, setOrganizers] = useState({});
+  const [organizerLoading, setOrganizerLoading] = useState(false);
+  const organizer = {
+    organizers,
+    setOrganizers,
+    activecount: (uid) => {
+      return _.filter(organizers, (val) => val.uid === uid).length;
+    },
+    create: async (newVal) => {
+      const res = await store.organizer.save(null, newVal);
+      return res;
+    },
+    read: async (uid) => {
+      setOrganizerLoading(true);
+      const res = await store.organizer.read(
+        uid,
+        (data, active) => {
+          setOrganizers(data);
+        },
+        () => setOrganizerLoading(false)
+      );
+    },
+    update: async (id, newVal) => {
+      const res = await store.organizer.save(id, newVal);
+      return res;
+    },
+    delete: async (id) => {
+      const res = await store.organization.save(id, { deleted: true });
+      return res;
+    },
+    rogueIdExists: async (id) => {
+      const res = await store.organizer.rogueIdExists(id);
+      if (res.code === "succeed") return true;
+      return false;
+    },
+    upload: store.organizer.uploadFile
+  };
+  /** End Organizer Data / Functions */
 
   /** Begin Event Data / Functions */
   const [events, setEvents] = useState({});
@@ -568,6 +609,7 @@ const TournamentProvider = (props) => {
   const isLoading = useMemo(() => {
     return (
       organizationLoading ||
+      organizerLoading ||
       eventLoading ||
       teamLoading ||
       playerLoading ||
@@ -578,6 +620,7 @@ const TournamentProvider = (props) => {
     );
   }, [
     organizationLoading,
+    organizerLoading,
     eventLoading,
     teamLoading,
     playerLoading,
@@ -603,6 +646,7 @@ const TournamentProvider = (props) => {
     event.read("");
     player.read();
     organization.read("");
+    organizer.read("");
     team.read("");
     match.read();
     post.read();
@@ -628,6 +672,7 @@ const TournamentProvider = (props) => {
         message,
         match,
         organization,
+        organizer,
         participants,
         player,
         post,
