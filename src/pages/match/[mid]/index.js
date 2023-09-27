@@ -31,6 +31,7 @@ import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 
 const Page = (props) => {
   const theme = useTheme();
