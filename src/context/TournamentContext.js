@@ -196,6 +196,42 @@ const TournamentProvider = (props) => {
   };
   /** End Event Data / Functions */
 
+  /** Begin Staff Data / Functions */
+  const [staffs, setStaffs] = useState({});
+  const [staffLoading, setStaffLoading] = useState(false);
+  const staff = {
+    staffs,
+    setStaffs,
+    create: async (newVal) => {
+      const res = await store.staff.save(null, newVal);
+      return res;
+    },
+    read: async (id) => {
+      setStaffLoading(true);
+      const res = await store.staff.read(
+        (data, active) => {
+          setStaffs(data);
+        },
+        () => setStaffLoading(false)
+      );
+    },
+    update: async (id, newVal) => {
+      const res = await store.staff.save(id, newVal);
+      return res;
+    },
+    delete: async (id) => {
+      const res = await store.staff.save(id, { deleted: true });
+      return res;
+    },
+    rogueIdExists: async (id) => {
+      const res = await store.staff.rogueIdExists(id);
+      if (res.code === "succeed") return true;
+      return false;
+    },
+    upload: store.staff.uploadFile
+  };
+  /** End Staff Data / Functions */
+
   /** Begin Ticket Data / Functions */
   const [tickets, setTickets] = useState({});
   const [ticketLoading, setTicketLoading] = useState(true);
@@ -540,6 +576,42 @@ const TournamentProvider = (props) => {
   };
   /** End Product Data / Functions */
 
+  /** Begin Sponsor Data / Functions */
+  const [sponsors, setSponsors] = useState([]);
+  const [sponsorLoading, setSponsorLoading] = useState(true);
+  const sponsor = {
+    sponsors,
+    setSponsors,
+    create: async (newData) => {
+      const res = await store.sponsor.save(nanoid(), newData);
+      return res;
+    },
+    read: async (uid) => {
+      setSponsorLoading(true);
+      const res = await store.sponsor.read(
+        uid,
+        (data) => {
+          setSponsors(data);
+        },
+        () => setSponsorLoading(false)
+      );
+    },
+    update: async (id, newData) => {
+      const res = await store.sponsor.save(id, newData);
+      return res;
+    },
+    delete: async (id) => {
+      await store.sponsor.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.sponsor.delete(id);
+      return res;
+    },
+    upload: store.sponsor.uploadFile
+  };
+  /** End Sponsor Data / Functions */
+
   /** Begin Shop Product Category Data / Functions */
   const [categories, setCategories] = useState([]);
   const [categoryLoading, setCategoryLoading] = useState(true);
@@ -616,6 +688,8 @@ const TournamentProvider = (props) => {
       eventLoading ||
       teamLoading ||
       playerLoading ||
+      staffLoading ||
+      sponsorLoading ||
       ticketLoading ||
       shopLoading ||
       productLoading ||
@@ -630,7 +704,9 @@ const TournamentProvider = (props) => {
     ticketLoading,
     shopLoading,
     productLoading,
-    categoryLoading
+    categoryLoading,
+    staffLoading,
+    sponsorLoading
   ]);
 
   const loadTournament = useCallback(() => {
@@ -650,7 +726,9 @@ const TournamentProvider = (props) => {
     player.read();
     organization.read("");
     organizer.read("");
+    sponsor.read("");
     team.read("");
+    staff.read("");
     match.read();
     post.read();
     ticket.read();
@@ -675,6 +753,7 @@ const TournamentProvider = (props) => {
         message,
         match,
         organization,
+        sponsor,
         organizer,
         participants,
         player,
@@ -682,6 +761,7 @@ const TournamentProvider = (props) => {
         product,
         shop,
         team,
+        staff,
         ticket,
         tournaments,
         meta,

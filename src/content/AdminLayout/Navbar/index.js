@@ -165,12 +165,19 @@ function Navbar() {
                 Organizer +
               </NavItem>
             </Link>
-            <Link href={`/match/organize?event=${event.current}`}>
-              <NavItem
-                key={`/match/organize?event=${event.current}`}
-                sx={{ my: 2, color: "black", display: "block" }}
-              >
-                Organizer Profile
+            <Link href={`/find/staff?event=${event.current}`}>
+              <NavItem key={`staff-finder`} sx={{ my: 2, color: "black", display: "block" }}>
+                Staff Finder +
+              </NavItem>
+            </Link>
+            <Link href={`/find/production?event=${event.current}`}>
+              <NavItem key={`production-finder`} sx={{ my: 2, color: "black", display: "block" }}>
+                Production Finder +
+              </NavItem>
+            </Link>
+            <Link href={`/find/sponsor?event=${event.current}`}>
+              <NavItem key={`sponsor-finder`} sx={{ my: 2, color: "black", display: "block" }}>
+                Sponsor Finder +
               </NavItem>
             </Link>
           </Box>
