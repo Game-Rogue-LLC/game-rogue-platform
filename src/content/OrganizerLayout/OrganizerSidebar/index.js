@@ -118,7 +118,7 @@ export default function OrganizerSidebar(props) {
                 <Typography variant="h6">{player.players[user.id]?.name}</Typography>
               </Box>
             </ListItem>
-            <Divider />
+            {/* <Divider />
             <ListItem key={"profile_menu_container"} component="div" disablePadding>
               <ListItemButton sx={{ height: 56 }}>
                 <ListItemIcon>
@@ -209,7 +209,7 @@ export default function OrganizerSidebar(props) {
                   </ListItem>
                   <Divider />
                 </>
-              )}
+              )} */}
           </FireNav>
         </FirePaper>
       </Box>

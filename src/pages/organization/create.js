@@ -1,7 +1,7 @@
 import { Paper, useTheme } from "@mui/material";
 
 import AdminLayout from "@/src/content/AdminLayout";
-import OrganizerCreateForm from "@/src/components/widgets/organizer/OrganizerCreateForm";
+import OrganizationCreateForm from "@/src/components/widgets/organization/OrganizationCreateForm";
 import { useAppContext } from "@/src/context/app";
 import { useEffect } from "react";
 
@@ -12,12 +12,12 @@ const Page = (props) => {
   const { setTitle } = useAppContext();
 
   useEffect(() => {
-    setTitle("REGISTER AN ORGANIZER");
+    setTitle("REGISTER AN ORGANIZATION");
   }, []);
 
   return (
     <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-      <OrganizerCreateForm />
+      <OrganizationCreateForm />
     </Paper>
   );
 };

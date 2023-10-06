@@ -220,6 +220,14 @@ const Footer = (props) => {
                 ARTICLES
               </Typography>
             </Link>
+            <Link href="/sponsor">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                SPONSOR
+              </Typography>
+            </Link>
           </Grid>
           <Grid
             xs={6}
