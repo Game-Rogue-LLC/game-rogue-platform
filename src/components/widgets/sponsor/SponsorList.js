@@ -1,16 +1,10 @@
 import { Box, Button } from "@mui/material";
-import { useEffect, useMemo } from "react";
 
-import { ORGANIZER_PROFILE_LIMIT } from "@/src/config/global";
-import OrganizationItem from "@/src/components/widgets/rogue-social/accounts/OrganizationItem";
-import { useAppContext } from "@/src/context/app";
-import { useAuthContext } from "@/src/context/AuthContext";
+import SponsorItem from "./SponsorItem";
 import { useRouter } from "next/router";
-import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const OrganizationList = ({ items }) => {
   const router = useRouter();
-  const { user } = useAuthContext();
 
   return (
     <Box
@@ -24,13 +18,13 @@ const OrganizationList = ({ items }) => {
       {items &&
         items.length > 0 &&
         items.map((item) => (
-          <OrganizationItem key={"organizer_" + item.id} organizer={item} disableLink={true} />
+          <SponsorItem key={"sponsor_" + item.id} item={item} />
         ))}
-      {items && items.length < ORGANIZER_PROFILE_LIMIT && (
+      {items && items.length === 0 && (
         <Button
           variant="contained"
           onClick={() => {
-            router.push("/organizer/create");
+            router.push("/sponsor/create");
           }}
         >
           CREATE NEW ACCOUNT

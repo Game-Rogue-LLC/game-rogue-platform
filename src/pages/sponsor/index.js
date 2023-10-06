@@ -11,7 +11,7 @@ import {
 import { useEffect, useMemo } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
-import SponsorList from "@/src/components/widgets/rogue-social/accounts/SponsorList";
+import SponsorList from "@/src/components/widgets/sponsor/SponsorList";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -26,7 +26,7 @@ const Page = (props) => {
 
   useEffect(() => {
     setTitle("Sponsor");
-    if (Object.keys(sponsor.sponsors).length === 0) router.push("/sponsor/create");
+    // if (Object.keys(sponsor.sponsors).length === 0) router.push("/sponsor/create");
   }, []);
 
   const mySponsors = useMemo(() => {

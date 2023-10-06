@@ -6,8 +6,10 @@ import {
   FormHelperText,
   Grid,
   InputLabel,
+  MenuItem,
   OutlinedInput,
   Paper,
+  Select,
   TextField,
   Typography,
   useTheme
@@ -21,6 +23,7 @@ import AdminLayout from "@/src/content/AdminLayout";
 import ColorSelect from "@/src/components/dropdown/ColorSelect";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import DatePicker from "@/src/components/datetime/DatePicker";
 import { LoadingButton } from "@mui/lab";
 import Validator from "validatorjs";
 import _ from "lodash";
@@ -43,7 +46,7 @@ const Page = () => {
   const { user } = useAuthContext();
   const router = useRouter();
   const { colors, setColors } = useStyleContext();
-  const { organization, event } = useTournamentContext();
+  const { sponsor, organization } = useTournamentContext();
   const [inputs, setInputs] = useState({ ...initialInputs });
   const [errors, setErrors] = useState({});
   const [disabled, setDisabled] = useState(false);
@@ -52,11 +55,6 @@ const Page = () => {
 
   useEffect(() => {
     setTitle("CREATE SPONSOR");
-  }, []);
-
-  useEffect(() => {
-    organization.setCurrent(null);
-    event.setCurrent(null);
   }, []);
 
   const validate = (data, rule, messages) => {
@@ -83,6 +81,8 @@ const Page = () => {
         return;
       } else setErrors((prev) => ({ ...prev, _id: undefined }));
 
+      setDisabled(true);
+
       sponsor
         .create(newItem)
         .then((res) => {
@@ -94,6 +94,9 @@ const Page = () => {
         })
         .catch((err) => {
           console.warn(err);
+        })
+        .finally(() => {
+          setDisabled(false);
         });
     },
     inputs: (e) => {
@@ -103,6 +106,12 @@ const Page = () => {
         ...inputs,
         [name]: value
       });
+    },
+    deadlineChange: (newDate) => {
+      setInputs((prev) => ({
+        ...prev,
+        deadline: new Date(newDate)
+      }));
     }
   };
 
@@ -110,48 +119,47 @@ const Page = () => {
     <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
       <Grid container rowSpacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h6">CREATE SPONSOR</Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h6">
+          <InputLabel htmlFor="amount">
             Organization
             <span style={{ color: theme.palette.primary.main }}> * </span>
-          </Typography>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <Select
-              labelId="organizer-select-label"
-              id="organizer-select"
-              value={inputs?.oid}
-              onChange={handle.inputs}
-              variant="outlined"
-              name="oid"
-              disabled={disabled}
-              sx={{ mt: 1, flexGrow: 1 }}
-              fullWidth
-            >
-              {Object.keys(organizer.organizers).map((key, i) => {
-                const item = organizer.organizers[key];
-                return (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            <Button
-              variant="contained"
-              onClick={() => {
-                router.push("/organization/create");
-              }}
-            >
-              Create Organization
-            </Button>
-          </Box>
+          </InputLabel>
+          <FormControl fullWidth sx={{ mt: 1 }} error={errors.amount !== undefined}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Select
+                labelId="organization-label"
+                id="organization"
+                value={inputs?.organizationId}
+                onChange={handle.inputs}
+                variant="outlined"
+                name="organizationId"
+                disabled={disabled}
+                sx={{ flexGrow: 1 }}
+                fullWidth
+              >
+                {Object.keys(organization.organizations).map((key, i) => {
+                  const item = organizer.organizations[key];
+                  return (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  router.push("/organization/create");
+                }}
+                sx={{ whiteSpace: "nowrap", px: 4, py: 2 }}
+              >
+                Create Organization
+              </Button>
+            </Box>
+          </FormControl>
         </Grid>
 
-        <Grid item xs={12}>
-          <InputLabel htmlFor="org-name">sponsor Name</InputLabel>
+        {/* <Grid item xs={12}>
+          <InputLabel htmlFor="org-name">Sponsor Name</InputLabel>
           <FormHelperText sx={{ mt: 2 }}>
             Controls the publically visible name of this sponsor.
           </FormHelperText>
@@ -173,55 +181,112 @@ const Page = () => {
               </FormHelperText>
             )}
           </FormControl>
-        </Grid>
+        </Grid> */}
+
         <Grid item xs={12}>
-          <InputLabel htmlFor="org-tag">Tagline</InputLabel>
-          <FormControl fullWidth sx={{ mt: 1 }} error={errors.tagline !== undefined}>
+          <InputLabel htmlFor="amount">Sponsor Amount
+            <span style={{ color: theme.palette.primary.main }}> * </span></InputLabel>
+          <FormControl fullWidth sx={{ mt: 1 }} error={errors.amount !== undefined}>
             <OutlinedInput
-              id="org-tag"
-              name="tagline"
-              aria-describedby="org-tag-helper"
-              value={inputs.tagline}
-              inputProps={{ maxLength: 50 }}
+              id="amount"
+              name="amount"
+              aria-describedby="amount-helper"
+              value={inputs.amount}
               onChange={handle.inputs}
               disabled={disabled}
+              type="number"
               fullWidth
-              required
             />
-            {errors.tagline !== undefined && (
-              <FormHelperText id="org-tag-helper" sx={{ mt: 2 }}>
-                {errors.tagline}
+            {errors.amount !== undefined && (
+              <FormHelperText id="amount-helper" sx={{ mt: 2 }}>
+                {errors.amount}
               </FormHelperText>
             )}
           </FormControl>
         </Grid>
+
         <Grid item xs={12}>
-          <InputLabel htmlFor="org-name" sx={{ color: "white" }}>
-            Rogue ID
-          </InputLabel>
-          <FormHelperText>Controls the publically visible name of this sponsor.</FormHelperText>
-          <FormControl fullWidth error={errors._id !== undefined}>
+          <InputLabel htmlFor="deadline">Deadline
+            <span style={{ color: theme.palette.primary.main }}> * </span></InputLabel>
+          <FormControl fullWidth>
+            <DatePicker
+              value={inputs?.deadline}
+              setValue={handle.deadlineChange}
+              sx={{ mt: 1, width: "100%" }}
+              disabled={disabled}
+            />
+          </FormControl>
+        </Grid>
+        
+        <Grid item xs={12}>
+          <InputLabel htmlFor="views">Views
+            <span style={{ color: theme.palette.primary.main }}> * </span></InputLabel>
+          <FormControl fullWidth sx={{ mt: 1 }} error={errors.views !== undefined}>
             <OutlinedInput
-              id="rogue-id"
-              name="_id"
-              aria-describedby="rogue-id-helper"
-              value={inputs?._id || ""}
+              id="views"
+              name="views"
+              aria-describedby="views-helper"
+              value={inputs.views}
               onChange={handle.inputs}
               disabled={disabled}
-              sx={{ mt: 1 }}
+              type="number"
               fullWidth
-              required
             />
-            {errors._id !== undefined && (
-              <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>
-                {errors._id}
+            {errors.views !== undefined && (
+              <FormHelperText id="views-helper" sx={{ mt: 2 }}>
+                {errors.views}
               </FormHelperText>
             )}
           </FormControl>
         </Grid>
+
+        <Grid item xs={12}>
+          <InputLabel htmlFor="liveViewers">Live Viewers
+            <span style={{ color: theme.palette.primary.main }}> * </span></InputLabel>
+          <FormControl fullWidth sx={{ mt: 1 }} error={errors.liveViewers !== undefined}>
+            <OutlinedInput
+              id="liveViewers"
+              name="liveViewers"
+              aria-describedby="liveViewers-helper"
+              value={inputs.liveViewers}
+              onChange={handle.inputs}
+              disabled={disabled}
+              type="number"
+              fullWidth
+            />
+            {errors.liveViewers !== undefined && (
+              <FormHelperText id="liveViewers-helper" sx={{ mt: 2 }}>
+                {errors.liveViewers}
+              </FormHelperText>
+            )}
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={12}>
+          <InputLabel htmlFor="followers">Followers
+            <span style={{ color: theme.palette.primary.main }}> * </span></InputLabel>
+          <FormControl fullWidth sx={{ mt: 1 }} error={errors.followers !== undefined}>
+            <OutlinedInput
+              id="followers"
+              name="followers"
+              aria-describedby="followers-helper"
+              value={inputs.followers}
+              onChange={handle.inputs}
+              disabled={disabled}
+              type="number"
+              fullWidth
+            />
+            {errors.followers !== undefined && (
+              <FormHelperText id="followers-helper" sx={{ mt: 2 }}>
+                {errors.followers}
+              </FormHelperText>
+            )}
+          </FormControl>
+        </Grid>
+
         <Grid item>
           <LoadingButton variant="contained" onClick={handle.create} disabled={disabled}>
-            Register
+            PUBLISH
           </LoadingButton>
         </Grid>
       </Grid>
