@@ -57,6 +57,7 @@ export default function OrganizationSidebar(props) {
   const [showMenu, setShowMenu] = useState(false);
   const { user, setUser } = useAuthContext();
   const [anchorElMenu, setAnchorElMenu] = useState(null);
+  const [openMenu, setOpenMenu] = useState(null);
 
   const handleOpenMenu = (event) => {
     setAnchorElMenu(event.currentTarget);
@@ -141,6 +142,11 @@ export default function OrganizationSidebar(props) {
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <Avatar
                   size="large"
+                  user={player.players[user.id]}
+                  sx={{ width: 100, height: 100 }}
+                />
+                <Avatar
+                  size="large"
                   sx={{ width: 100, height: 100, backgroundColor: "white" }}
                   hideStatus={true}
                   src={
@@ -153,11 +159,6 @@ export default function OrganizationSidebar(props) {
                       : DEFAULT_DARK_LOGO
                   }
                 />
-                <Avatar
-                  size="large"
-                  user={player.players[user.id]}
-                  sx={{ width: 100, height: 100 }}
-                />
               </Box>
               <Box sx={{ mt: 2 }}>
                 <Typography variant="h6">{player.players[user.id]?.name}</Typography>
@@ -165,7 +166,14 @@ export default function OrganizationSidebar(props) {
               {/* Begin Connect Button */}
               <DropdownMenu
                 name="connect"
-                title="Connect"
+                title={
+                  user.connectedAccount == "organizer"
+                    ? organizer.organizers[user.organizerId]?.name
+                    : user.connectedAccount == "organization"
+                    ? organization.organizations[user.organizationId]?.name
+                    : user.connectedAccount == "team"
+                    ? team.teams[user.teamId]?.name
+                    : "Connect"}
                 sx={{ mt: 2 }}
                 onChange={(item) => {
                   if (Object.keys(organizer.organizers).includes(item.id)) {
@@ -247,6 +255,9 @@ export default function OrganizationSidebar(props) {
               organizerEvents.map((item, idx) => (
                 <Menu
                   key={`event_terminal_menu_${idx}`}
+                  isOpen={openMenu === item.id}
+                  onOpen={() => setOpenMenu(item.id)}
+                  onClose={() => setOpenMenu(null)}
                   item={{
                     id: `event-terminal-menu_${idx}`,
                     name: `${item.name} Terminal`,
@@ -296,6 +307,9 @@ export default function OrganizationSidebar(props) {
             ) : (
               <Menu
                 key="event_terminal_menu"
+                isOpen={openMenu === 'event'}
+                onOpen={() => setOpenMenu('event')}
+                onClose={() => setOpenMenu(null)}
                 item={{
                   id: "event-terminal-menu",
                   name: "Event Terminal",
@@ -352,6 +366,9 @@ export default function OrganizationSidebar(props) {
             )}
             <Menu
               key="plus_terminal_menu"
+              isOpen={openMenu === 'plus'}
+              onOpen={() => setOpenMenu('plus')}
+              onClose={() => setOpenMenu(null)}
               item={{
                 id: "plus-terminal-menu",
                 name: "Plus Terminal",
@@ -391,6 +408,9 @@ export default function OrganizationSidebar(props) {
             />
             <Menu
               key="marketing_terminal_menu"
+              isOpen={openMenu === 'marketing'}
+              onOpen={() => setOpenMenu('marketing')}
+              onClose={() => setOpenMenu(null)}
               item={{
                 id: "marketing-terminal-menu",
                 name: "Marketing Terminal",
@@ -435,6 +455,9 @@ export default function OrganizationSidebar(props) {
             />
             <Menu
               key="payments_terminal_menu"
+              isOpen={openMenu === 'payments'}
+              onOpen={() => setOpenMenu('payments')}
+              onClose={() => setOpenMenu(null)}
               item={{
                 id: "payments-terminal-menu",
                 name: "Payments Terminal",

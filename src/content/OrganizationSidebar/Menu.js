@@ -18,9 +18,9 @@ import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
-const Menu = ({ item }) => {
+const Menu = ({ item, isOpen, onOpen, onClose }) => {
   const { organizer, event } = useTournamentContext();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(isOpen);
   const router = useRouter();
   const theme = useTheme();
 
@@ -32,7 +32,7 @@ const Menu = ({ item }) => {
     <>
       <Box
         sx={{
-          bgcolor: open
+          bgcolor: (isOpen && open)
             ? alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity)
             : null,
           pb: 0
@@ -58,17 +58,27 @@ const Menu = ({ item }) => {
             }}
             sx={{ my: 0 }}
           />
-          <IconButton onClick={handleOpen}>
+          <IconButton onClick={() => {
+            if (onClose && isOpen) {
+              onClose();
+              setOpen(false);
+            }
+            else if (onOpen && !isOpen) {
+              onOpen();
+              setOpen(true);
+            }
+            if (!onOpen && !onClose) handleOpen();
+          }}>
             <KeyboardArrowDown
               sx={{
                 // opacity: 0,
-                transform: open ? "rotate(-180deg)" : "rotate(0)",
+                transform: (isOpen && open) ? "rotate(-180deg)" : "rotate(0)",
                 transition: "0.2s"
               }}
             />
           </IconButton>
         </ListItem>
-        {open &&
+        {(isOpen && open) &&
           _.map(item.children, (child, idx) =>
             child.name == "divider" ? (
               <Divider />
