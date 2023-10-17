@@ -82,6 +82,7 @@ const Menu = ({ item }) => {
                   onClick={() => {
                     router.push(child.href);
                   }}
+                  disabled={!!child.disabled}
                 >
                   <ListItemText
                     primary={child.name}

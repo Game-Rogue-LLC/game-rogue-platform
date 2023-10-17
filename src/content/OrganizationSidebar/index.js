@@ -302,41 +302,49 @@ export default function OrganizationSidebar(props) {
                   children: [
                     {
                       name: "Matches",
-                      href: "/"
+                      href: "/",
+                      disabled: true
                     },
                     {
                       name: "Tickets",
-                      href: "/"
+                      href: "/",
+                      disabled: true
                     },
                     {
                       name: "Staff",
-                      href: "/"
+                      href: "/",
+                      disabled: true
                     },
                     {
                       name: "Participants",
-                      href: "/"
+                      href: "/",
+                      disabled: true
                     },
                     {
                       name: "Edit Event",
-                      href: "/"
+                      href: "/",
+                      disabled: true
                     },
                     {
                       name: "divider"
                     },
                     {
                       name: "Event Calendar",
-                      href: "/"
+                      href: "/",
+                      disabled: true
                     },
                     {
                       name: "Event Format",
-                      href: "/"
+                      href: "/",
+                      disabled: true
                     },
                     {
                       name: "divider"
                     },
                     {
                       name: "Organizer+",
-                      href: "/"
+                      href: "/",
+                      disabled: true
                     }
                   ]
                 }}
@@ -350,7 +358,7 @@ export default function OrganizationSidebar(props) {
                 children: [
                   {
                     name: "Staff Finder+",
-                    href: "/"
+                    href: `/find/staff`
                   },
                   {
                     name: "Team Finder+",
@@ -358,11 +366,11 @@ export default function OrganizationSidebar(props) {
                   },
                   {
                     name: "Production Finder+",
-                    href: "/"
+                    href: `/find/production`
                   },
                   {
                     name: "Sponsor Finder+",
-                    href: "/"
+                    href: `/find/sponsor`
                   },
                   {
                     name: "divider"
