@@ -80,7 +80,7 @@ const SearchBox = ({ id, name, onChange, onKeyUp, placeholder, sx, options, valu
                 {...props}
               >
                 <Avatar user={option} />
-                {ownerState.getOptionLabel(option)}
+                {option && ownerState?.getOptionLabel(option)}
               </Box>
             );
         }}

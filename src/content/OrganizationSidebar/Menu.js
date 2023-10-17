@@ -18,8 +18,7 @@ import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 
-const Menu = (props) => {
-  const { organizer: item } = props;
+const Menu = ({ item }) => {
   const { organizer, event } = useTournamentContext();
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -27,17 +26,6 @@ const Menu = (props) => {
 
   const handleOpen = () => {
     setOpen(!open);
-  };
-
-  const onDeleteEvent = async (eid) => {
-    if (confirm("Are you sure you want to delete " + event.events[eid].name)) {
-      const res = await event.delete(eid);
-      if (res.code === "succeed") {
-        enqueueSnackbar("Event deleted successfully", { variant: "success" });
-      } else {
-        console.warn(res.message);
-      }
-    }
   };
 
   return (
@@ -55,7 +43,7 @@ const Menu = (props) => {
           alignItems="flex-start"
           sx={{
             px: 3,
-            py: 2.5,
+            py: 2,
             alignItems: "center"
             // '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
           }}
@@ -67,13 +55,6 @@ const Menu = (props) => {
               fontWeight: "medium",
               lineHeight: "20px",
               mb: "2px"
-            }}
-            secondary={!open && item.tagline}
-            secondaryTypographyProps={{
-              noWrap: true,
-              fontSize: 12,
-              lineHeight: "16px"
-              // color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
             }}
             sx={{ my: 0 }}
           />
@@ -87,83 +68,32 @@ const Menu = (props) => {
             />
           </IconButton>
         </ListItem>
-        {open && (
-          <>
-            {Object.keys(event.events)
-              .filter((key, i) => item.id == event.events[key].oid)
-              .map((id, idx) => (
-                <ListItem
-                  key={"event_menu_" + item.id + "_" + idx}
-                  sx={{ justifyContent: "space-between", padding: 0 }}
-                >
-                  <ListItemButton
-                    sx={{ minHeight: 32, color: "rgba(255,255,255,.8)" }}
-                    onClick={() => {
-                      organizer.setCurrent(item.id);
-                      event.setCurrent(id);
-                      router.push("/match?event=" + id);
-                    }}
-                  >
-                    <ListItemIcon sx={{ color: "inherit" }}>
-                      <Event />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={event.events[id].name}
-                      primaryTypographyProps={{
-                        fontSize: 14,
-                        fontWeight: "medium"
-                      }}
-                    />
-                  </ListItemButton>
-
-                  <IconButton
-                    sx={{ color: "inherit" }}
-                    onClick={() => {
-                      onDeleteEvent(id);
-                    }}
-                  >
-                    <Delete />
-                  </IconButton>
-                </ListItem>
-              ))}
-            <Box
-              sx={{
-                display: "flex"
-              }}
-            >
-              <Button
-                variant="outlined"
-                onClick={() => router.push("/organizer/" + item.id + "/edit")}
-                sx={{
-                  flexGrow: 1,
-                  m: 1
-                }}
-                size="small"
+        {open &&
+          _.map(item.children, (child, idx) =>
+            child.name == "divider" ? (
+              <Divider />
+            ) : (
+              <ListItem
+                key={"menu_" + item.id + "_" + idx}
+                sx={{ justifyContent: "space-between", padding: 0 }}
               >
-                Edit Organization
-              </Button>
-              <Tooltip title="Create Event">
-                <Button
-                  variant="contained"
-                  onClick={() => router.push("/event/create?organizer=" + item.id)}
-                  sx={{
-                    flexGrow: 0,
-                    my: 1,
-                    mr: 1,
-                    color: "white",
-                    border: "1px solid rgba(255, 255, 255, .5)",
-                    display: event.activeCount[item.id] >= 5 ? "none" : "block"
+                <ListItemButton
+                  sx={{ minHeight: 32, color: "rgba(255,255,255,.8)" }}
+                  onClick={() => {
+                    router.push(child.href);
                   }}
-                  color="secondary"
-                  size="small"
                 >
-                  {" "}
-                  +{" "}
-                </Button>
-              </Tooltip>
-            </Box>
-          </>
-        )}
+                  <ListItemText
+                    primary={child.name}
+                    primaryTypographyProps={{
+                      fontSize: 14,
+                      fontWeight: "medium"
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            )
+          )}
       </Box>
       <Divider />
     </>

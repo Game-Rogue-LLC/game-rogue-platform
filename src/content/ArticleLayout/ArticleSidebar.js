@@ -37,8 +37,6 @@ import { useMemo, useState } from "react";
 import Avatar from "@/src/components/Avatar";
 import Link from "next/link";
 import { LoadingButton } from "@mui/lab";
-import OrganizationMenu from "@/src/content/OrganizationSidebar/Menu";
-import TeamMenu from "@/src/content/OrganizationSidebar/TeamMenu";
 import _ from "lodash";
 import { isMyArticle } from "../../utils/utils";
 import { model } from "@/lib/firestore/collections/articles";

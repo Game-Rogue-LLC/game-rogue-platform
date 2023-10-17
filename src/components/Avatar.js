@@ -41,7 +41,7 @@ const Avatar = ({
     <Box
       onClick={() => {
         if (editable === true) return;
-        else router.push("/user/" + user.id);
+        else if (user) router.push("/user/" + user.id);
       }}
       sx={{
         position: "relative",

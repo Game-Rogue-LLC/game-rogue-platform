@@ -14,7 +14,7 @@ import {
   OutlinedInput
 } from "@mui/material";
 
-import OrganizerLayout from "@/src/content/OrganizerLayout";
+import AdminLayout from "@/src/content/AdminLayout";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
@@ -121,7 +121,7 @@ const Page = (props) => {
 };
 
 Page.getLayout = (page) => {
-  return <OrganizerLayout>{page}</OrganizerLayout>;
+  return <AdminLayout>{page}</AdminLayout>;
 };
 
 export default Page;
