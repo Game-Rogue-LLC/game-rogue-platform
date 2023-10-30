@@ -45,10 +45,6 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
   };
 
   useEffect(() => {
-    if (ticket && ticket.tickets)
-  }, [ticket])
-
-  useEffect(() => {
     if (isMyTeam(team?.teams[item?.participants[0]?.id])) {
       setMyTeam(team.teams[item.participants[0].id]);
       setOpTeam(team.teams[item.participants[1].id]);
