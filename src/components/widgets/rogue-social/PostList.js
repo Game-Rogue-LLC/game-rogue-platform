@@ -64,7 +64,6 @@ const PostList = ({ loading, posts, sx }) => {
   };
   const onPostReply = async (data) => {
     if (selectedPost) {
-      console.log(selectedPost);
       const res = await postController.update(selectedPost, {
         reply: posts[selectedPost].reply + 1,
         replies: [
@@ -85,7 +84,6 @@ const PostList = ({ loading, posts, sx }) => {
           }
         ]
       });
-      console.log(res);
       // add conditional which checks update success
       if (res.code === "succeed") {
         dispatch(setPost(res.data));

@@ -39,10 +39,9 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
     axios
       .post("/api/plaid/create_link_token")
       .then((res) => {
-        console.log(res.data);
         if (res?.data?.link_token) setLinkToken(res.data.link_token);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, []);
 
   const onPlaidSuccess = () => {};

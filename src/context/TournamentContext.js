@@ -19,12 +19,6 @@ const TournamentProvider = (props) => {
   const [participants, setParticipants] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // useEffect(() => {
-  //     axios.get('/api/tournament').then(res => {
-  //         console.log(res.data)
-  //     })
-  // }, [])
-
   /** Begin Organization Data / Functions */
   const [organizations, setOrganizations] = useState({});
   const [currentOrganization, setCurrentOrganization] = useState(null);
@@ -61,7 +55,6 @@ const TournamentProvider = (props) => {
     },
     rogueIdExists: async (id) => {
       const res = await store.organization.rogueIdExists(id);
-      console.log(res);
       if (res.code === "succeed") return true;
       return false;
     },
@@ -351,12 +344,10 @@ const TournamentProvider = (props) => {
     },
     userNameExists: async (id, userName) => {
       const res = await store.player.userNameExists(id, userName);
-      console.log(res);
       if (res.code === "succeed") return true;
       return false;
     },
     update: async (id, newPlayer) => {
-      console.log(id, newPlayer);
       const res = await store.player.save(id, newPlayer);
       return res;
     },
@@ -627,7 +618,6 @@ const TournamentProvider = (props) => {
       const res = await store.category.read(
         (data) => {
           setCategories(data);
-          console.log(data);
         },
         () => setCategoryLoading(false)
       );

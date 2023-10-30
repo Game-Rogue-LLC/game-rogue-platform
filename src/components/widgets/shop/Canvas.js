@@ -1,22 +1,22 @@
-import { useEffect, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { IconButtonk, Box, IconButton, Grid } from "@mui/material";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { Close } from "@mui/icons-material";
-
 import {
-  useGLTF,
-  useTexture,
   AccumulativeShadows,
-  RandomizedLight,
+  Center,
   Decal,
   Environment,
-  Center,
-  OrbitControls
+  OrbitControls,
+  RandomizedLight,
+  useGLTF,
+  useTexture
 } from "@react-three/drei";
+import { Box, Grid, IconButton, IconButtonk } from "@mui/material";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { useEffect, useRef, useState } from "react";
+
+import { Close } from "@mui/icons-material";
 import { easing } from "maath";
-import { useSnapshot } from "valtio";
 import { state } from "@/src/store";
+import { useSnapshot } from "valtio";
 
 export default ({ position = [0, 0, -220], fov = 25, sx }) => {
   const snap = useSnapshot(state);
@@ -422,22 +422,14 @@ function Shirt(props) {
   const texture = useTexture(snap.texture);
 
   const shirtRef = useRef();
-  console.log(snap.texture);
   const { nodes, materials } = useGLTF("/static/models/HOODIE.glb");
-  console.log({ nodes, materials });
   useFrame((state, delta) => {
     easing.dampC(materials.default.color, snap.color, 0.25, delta);
   });
 
   useEffect(() => {
     shirtRef.current.position.set(0, 0, 0);
-    // shirtRef.current.position.z = -120;
   }, []);
-  // useEffect(() => {
-  //   console.log('lambert', materials.lambert1);
-
-  // }, [materials.lambert1.color])
-
   return (
     <mesh
       ref={shirtRef}

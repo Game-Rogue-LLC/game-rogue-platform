@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     const response = await plaidClient
       .exchangePublicToken(req.body.public_token)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
     const accessToken = response.access_token;
     const itemId = response.item_id;
@@ -17,8 +17,8 @@ export default async function handler(req, res) {
       access_token: accessToken,
       item_id: itemId
     });
-    console.log("access token below: ", accessToken);
   } catch (e) {
+    console.error(e);
     res.status(200).json({ code: "failed", message: e.message });
   }
 }

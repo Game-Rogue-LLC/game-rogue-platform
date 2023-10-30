@@ -35,7 +35,6 @@ export default (props) => {
   useEffect(() => {
     if (isMetaLoading === false) {
       if (meta && user && user.user && user.user.id) {
-        console.log("meta", meta);
         if (meta.allowed && _.includes(meta.allowed, user.user.id) === true) {
           if (router.pathname.includes("locked")) router.push(`/${router.query.page}`);
           return;

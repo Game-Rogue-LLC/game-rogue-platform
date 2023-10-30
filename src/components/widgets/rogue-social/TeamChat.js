@@ -17,7 +17,6 @@ const TeamChat = ({ item, sx }) => {
 
   useEffect(() => {
     if (item?.messages) {
-      console.log(item.messages);
       setMessages(item.messages);
     } else setMessages([]);
   }, [item?.messages]);
@@ -34,7 +33,6 @@ const TeamChat = ({ item, sx }) => {
         messages: [...messages, newMessage]
       });
       setMessages((prev) => [...prev, newMessage]);
-      console.log(res);
       setInput("");
     }
   };

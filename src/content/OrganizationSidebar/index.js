@@ -287,11 +287,11 @@ export default function OrganizationSidebar(props) {
                       },
                       {
                         name: "Event Calendar",
-                        href: "/"
+                        href: `/event/${item.id}/calendar`
                       },
                       {
                         name: "Event Format",
-                        href: "/"
+                        href: `/event/${item.id}/format`
                       },
                       {
                         name: "divider"

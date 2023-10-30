@@ -8,7 +8,6 @@ export const splashSlice = createSlice({
   reducers: {
     setRogueSocialSplash: (state, action) => {
       state.rogueSocial = false;
-      console.log("123");
     }
   }
 });

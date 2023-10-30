@@ -62,7 +62,6 @@ const SearchBox = ({ id, name, onChange, onKeyUp, placeholder, sx, options, valu
         options={options}
         renderInput={(params) => <TextField {...params} placeholder={placeholder} />}
         renderOption={(props, option, state, ownerState) => {
-          console.log(props, option, state, ownerState);
           if (state.index < 5)
             return (
               <Box

@@ -45,7 +45,6 @@ const Page = (props) => {
   }, []);
 
   const registerRequests = useMemo(() => {
-    console.log(ticket.tickets);
     if (ticket.tickets)
       return _.filter(
         ticket.tickets,

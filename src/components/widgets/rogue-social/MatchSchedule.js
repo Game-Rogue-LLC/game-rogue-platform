@@ -46,7 +46,6 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
 
   useEffect(() => {
     if (ticket && ticket.tickets)
-      console.log('ticket', ticket.tickets);
   }, [ticket])
 
   useEffect(() => {

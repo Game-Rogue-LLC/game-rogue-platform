@@ -321,7 +321,6 @@ const Page = (props) => {
       let newGames = [],
         gameIDs = [];
       const matches = Swiss(players, event.events[eid]?.currentRound);
-      console.log(matches);
       matches.forEach((val, i) => {
         let newParticipants = [];
 
@@ -448,8 +447,6 @@ const Page = (props) => {
           }
         }
       } else if (event.events[eid].format == 2) {
-        // const newSchedule = events.sort((a, b) => a.start.getTime() - b.start.getTime());
-        // console.log(newSchedule);
         let participants = [];
         event.events[eid].participants.forEach((item) => {
           participants.push({

@@ -1,28 +1,28 @@
-import { useEffect, useMemo, useState } from "react";
-import Button from "@mui/material/Button";
 import {
+  Alert,
   Box,
   FormControl,
-  InputLabel,
   FormHelperText,
   Grid,
+  InputLabel,
+  OutlinedInput,
   Paper,
-  useTheme,
-  Typography,
   TextField,
-  Alert,
-  OutlinedInput
+  Typography,
+  useTheme
 } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
+import Button from "@mui/material/Button";
+import OrganizationList from "@/src/components/widgets/rogue-social/accounts/OrganizationList";
+import OrganizerList from "@/src/components/widgets/rogue-social/accounts/OrganizerList";
+import TeamList from "@/src/components/widgets/rogue-social/accounts/TeamList";
+import { isMyTeam } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { useAuthContext } from "@/src/context/AuthContext";
-import OrganizerList from "@/src/components/widgets/rogue-social/accounts/OrganizerList";
-import OrganizationList from "@/src/components/widgets/rogue-social/accounts/OrganizationList";
-import { isMyTeam } from "@/src/utils/utils";
-import TeamList from "@/src/components/widgets/rogue-social/accounts/TeamList";
 
 const Page = (props) => {
   const theme = useTheme();
@@ -72,7 +72,7 @@ const Page = (props) => {
           >
             My Event Organizers
           </Typography>
-          <Button variant="contained">Create Event</Button>
+          <Button variant="contained" onClick={() => {router.push('/event/create')}}>Create Event</Button>
         </Box>
         {myOrganizers.length > 0 ? (
           <OrganizerList items={myOrganizers} />
@@ -84,13 +84,16 @@ const Page = (props) => {
       </Paper>
 
       <Paper sx={{ px: 4, py: 2, mt: 5 }}>
-        <Typography
-          variant="h4"
-          color={theme.palette.primary.main}
-          sx={{ fontStyle: "italic", mb: 2 }}
-        >
-          My Organizations
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Typography
+            variant="h4"
+            color={theme.palette.primary.main}
+            sx={{ fontStyle: "italic", mb: 2 }}
+          >
+            My Organizations
+          </Typography>
+          <Button variant="contained" onClick={() => {router.push('/organization/create')}}>Create Organization</Button>
+        </Box>
         {myOrganizations.length > 0 ? (
           <OrganizationList items={myOrganizations} />
         ) : (
@@ -101,13 +104,16 @@ const Page = (props) => {
       </Paper>
 
       <Paper sx={{ px: 4, py: 2, mt: 5 }}>
-        <Typography
-          variant="h4"
-          color={theme.palette.primary.main}
-          sx={{ fontStyle: "italic", mb: 2 }}
-        >
-          My Teams
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Typography
+            variant="h4"
+            color={theme.palette.primary.main}
+            sx={{ fontStyle: "italic", mb: 2 }}
+          >
+            My Teams
+          </Typography>
+          <Button variant="contained" onClick={() => {router.push('/team/create')}}>Create Team</Button>
+        </Box>
         {myTeams.length > 0 ? (
           <TeamList items={myTeams} />
         ) : (

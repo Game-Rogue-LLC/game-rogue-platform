@@ -4,7 +4,6 @@ export default async function handler(req, res) {
   try {
     const response = await plaidClient.getBalance(req.body.access_token).catch((err) => {
       // handle error
-      console.log(err);
     });
     //const accounts = response.accounts;
     res.json({
