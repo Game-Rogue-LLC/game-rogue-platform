@@ -1,10 +1,13 @@
 import {
   Alert,
   Box,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   Grid,
   IconButton,
+  InputBase,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -12,16 +15,18 @@ import {
   Select,
   TextField,
   Typography,
+  styled,
   useTheme
 } from "@mui/material";
+import { DEFAULT_DARK_LOGO, DEFAULT_LIGHT_LOGO, TEAM_TYPES } from "@/src/config/global";
+import { Edit, Lock } from "@mui/icons-material";
 import { customMessages, model, rules } from "@/lib/firestore/collections/team";
 import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
 import Button from "@mui/material/Button";
+import Colors from "@/src/components/Colors";
 import CountrySelect from "@/src/components/dropdown/CountrySelect";
-import { DEFAULT_LOGO } from "@/src/config/global";
-import { Edit } from "@mui/icons-material";
 import GameSelect from "@/src/components/dropdown/GameSelect";
 import { LoadingButton } from "@mui/lab";
 import Validator from "validatorjs";
@@ -30,6 +35,24 @@ import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
 import { useUser } from "@/lib/firebase/useUser";
+
+const TeamTypeInput = styled(InputBase)(({ theme }) => ({
+  "& .MuiInputBase-input": {
+    padding: theme.spacing("15px"),
+    borderRadius: 4,
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    "& .MuiListItemIcon-root": {
+      minWidth: "40px",
+      "& :hover": {
+        border: "none"
+      }
+    }
+  }
+}));
 
 const initialInputs = {
   ...model
@@ -136,13 +159,13 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs((prev) => ({
         ...prev,
-        darkLogo: DEFAULT_LOGO
+        darkLogo: DEFAULT_DARK_LOGO
       }));
     },
     removeLightLogo: (e) => {
       setInputs((prev) => ({
         ...prev,
-        lightLogo: DEFAULT_LOGO
+        lightLogo: DEFAULT_LIGHT_LOGO
       }));
     },
     upload: (e, name) => {
@@ -154,6 +177,13 @@ const Page = (props) => {
         [name]: url
       }));
     }
+  };
+
+  const onColorChange = (name, value) => {
+    setInputs({
+      ...inputs,
+      [name]: value?.hex
+    });
   };
 
   useEffect(() => {
@@ -230,12 +260,27 @@ const Page = (props) => {
                   <Button variant="contained" component="label" onClick={handle.removeDarkLogo}>
                     REMOVE DARK LOGO
                   </Button>
-                </Box>
-                <Box width={"200px"} height={"200px"} textAlign={"center"}>
-                  <img
-                    src={inputs.darkLogo || DEFAULT_LOGO}
-                    style={{ height: "200px", maxWidth: "200px", objectFit: "contain" }}
+                  <FormControlLabel
+                    sx={{ flexDirection: "row-reverse" }}
+                    control={<Checkbox name="gilad" />}
+                    label="Choose favorite logo"
                   />
+                </Box>
+                <Box
+                  width="200px"
+                  height="200px"
+                  textAlign="center"
+                  position="relative"
+                  sx={{ p: "15px" }}
+                >
+                  <img
+                    src={inputs.darkLogo || DEFAULT_DARK_LOGO}
+                    style={{ height: "170px", maxWidth: "170px", objectFit: "cover" }}
+                  />
+                  <div className="logo-guideline top"></div>
+                  <div className="logo-guideline right"></div>
+                  <div className="logo-guideline bottom"></div>
+                  <div className="logo-guideline left"></div>
                 </Box>
               </Box>
               <Box display={"flex"} justifyContent={"center"} gap={2}>
@@ -254,12 +299,27 @@ const Page = (props) => {
                   <Button variant="contained" component="label" onClick={handle.removeLightLogo}>
                     REMOVE LIGHT LOGO
                   </Button>
-                </Box>
-                <Box width={"200px"} height={"200px"} textAlign={"center"}>
-                  <img
-                    src={inputs.lightLogo || DEFAULT_LOGO}
-                    style={{ height: "200px", maxWidth: "200px", objectFit: "contain" }}
+                  <FormControlLabel
+                    sx={{ flexDirection: "row-reverse" }}
+                    control={<Checkbox name="gilad" />}
+                    label="Choose favorite logo"
                   />
+                </Box>
+                <Box
+                  width={"200px"}
+                  height={"200px"}
+                  textAlign={"center"}
+                  position="relative"
+                  sx={{ p: "15px" }}
+                >
+                  <img
+                    src={inputs.lightLogo || DEFAULT_LIGHT_LOGO}
+                    style={{ height: "170px", maxWidth: "170px", objectFit: "cover" }}
+                  />
+                  <div className="logo-guideline top"></div>
+                  <div className="logo-guideline right"></div>
+                  <div className="logo-guideline bottom"></div>
+                  <div className="logo-guideline left"></div>
                 </Box>
               </Box>
             </Box>
@@ -351,10 +411,29 @@ const Page = (props) => {
             value={inputs.type}
             name="type"
             onChange={handle.inputs}
+            input={<TeamTypeInput />}
             fullWidth
           >
-            <MenuItem value={0}>Casual</MenuItem>
-            <MenuItem value={1}>Major</MenuItem>
+            {TEAM_TYPES.map((val) => {
+              if (val.id === 0) {
+                return (
+                  <MenuItem
+                    key={`team-type-${val.id}`}
+                    value={val.value}
+                    disabled
+                    sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}
+                  >
+                    {val.name}
+                    <Lock />
+                  </MenuItem>
+                );
+              }
+              return (
+                <MenuItem key={`team-type-${val.id}`} value={val.value}>
+                  {val.name}
+                </MenuItem>
+              );
+            })}
           </Select>
         </Grid>
         <Grid item xs={12}>
@@ -372,7 +451,13 @@ const Page = (props) => {
             />
           </FormControl>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
+          <Box sx={{ mt: 3 }}>
+            <Typography variant="h5">Colors</Typography>
+            <Colors colors={inputs} onColorChange={onColorChange} />
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
           <LoadingButton loading={saving} sx={{ mr: 2 }} variant="contained" onClick={handle.save}>
             Save
           </LoadingButton>

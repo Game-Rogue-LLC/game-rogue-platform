@@ -1,14 +1,14 @@
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import { Box, Grid, Typography, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Container, Grid, Tooltip, Typography, useTheme } from "@mui/material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+import { useEffect, useMemo, useState } from "react";
 
 import Benefits from "@/src/components/widgets/Benefits";
 import Button from "@mui/material/Button";
 import { Carousel } from "react-responsive-carousel";
 import FeaturedTournaments from "@/src/components/widgets/FeaturedTournaments";
+import Link from "next/link";
 import PublicLayout from "@/src/content/PublicLayout";
-import Stepper from "@/src/components/carousel/Stepper";
-import TournamentProvider from "../context/TournamentContext";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -16,7 +16,6 @@ import { useRouter } from "next/router";
 const MyApp = (props) => {
   const theme = useTheme();
   const router = useRouter();
-  const user = useAuthContext();
   const { setTitle } = useAppContext();
   const [banner, setBanner] = useState(0);
   const [aboutUsHover, setAboutUsHover] = useState(false);
@@ -51,7 +50,7 @@ const MyApp = (props) => {
             transition: "all 0.5s"
           }}
         >
-          <img src="/static/images/GRLOGO_O_B.webp" style={{ height: "57px" }} />
+          <img src="/static/images/home/grlogo_o_b.webp" style={{ height: "57px" }} />
         </Box>
         <Box
           sx={{
@@ -66,8 +65,10 @@ const MyApp = (props) => {
             transition: "all 0.5s"
           }}
         >
-          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
-            TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK HERE!
+          <Typography variant="h4" sx={{ color: "white", fontSize: "30px", textAlign: "center" }}>
+            <Link href="/organizer/create">
+              TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK HERE!
+            </Link>
           </Typography>
         </Box>
         <Box
@@ -83,8 +84,10 @@ const MyApp = (props) => {
             transition: "all 0.5s"
           }}
         >
-          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
-            GET 10 PIECES OF TEAM MERCH FOR A FRACTION OF THE COST, TAILORED FOR YOU!
+          <Typography variant="h4" sx={{ color: "white", fontSize: "30px", textAlign: "center" }}>
+            <Link href="/locked?page=">
+              GET 10 PIECES OF TEAM MERCH FOR A FRACTION OF THE COST, TAILORED FOR YOU!
+            </Link>
           </Typography>
         </Box>
         <Box
@@ -100,8 +103,8 @@ const MyApp = (props) => {
             transition: "all 0.5s"
           }}
         >
-          <Typography variant="h4" sx={{ position: "absolute", color: "white", fontSize: "30px" }}>
-            LOOKING TO START A TEAM? LOOKING TO JOIN ONE? CLICK HERE!
+          <Typography variant="h4" sx={{ color: "white", fontSize: "30px", textAlign: "center" }}>
+            <Link href="/organizer/create">LOOKING TO START A TEAM? CLICK HERE!</Link>
           </Typography>
         </Box>
       </Box>
@@ -109,7 +112,7 @@ const MyApp = (props) => {
         component={"section"}
         sx={{
           position: "relative",
-          backgroundImage: "url(/static/images/back1.png)",
+          backgroundImage: "url(/static/images/home/back1.png)",
           height: "910px",
           backgroundPosition: "center",
           display: "flex",
@@ -125,28 +128,38 @@ const MyApp = (props) => {
           autoPlay
           loop
           muted
-          poster="/static/images/back1.png"
+          poster="/static/images/home/back1.png"
         >
-          <source src="/intro.mp4" type="video/mp4" />
+          <source src="/static/videos/intro.mp4" type="video/mp4" />
         </video>
-        <Typography
-          variant="h1"
-          align="center"
-          fontSize={"72px"}
-          fontStyle={"italic"}
-          color={"black"}
-          lineHeight={"100.8px"}
-        >
-          PLUS PLANS
-          <br />
-          AVAILABLE NOW
-          <br />
-          <Button variant="contained" sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}>
-            <Typography variant="h1" fontSize={"59px"} color={"white"} letterSpacing={"5.9px"}>
-              SUBSCRIBE
-            </Typography>
-          </Button>
-        </Typography>
+        <Box sx={{ p: 1 }}>
+          <Typography
+            variant="h1"
+            align="center"
+            fontSize={"72px"}
+            fontStyle={"italic"}
+            color={"black"}
+            lineHeight={"100.8px"}
+          >
+            PLUS PLANS
+            <br />
+            AVAILABLE JULY 25TH
+            <br />
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              variant="contained"
+              sx={{ mt: "22px", px: "22px", py: "8px", borderRadius: 0 }}
+              onClick={() => {
+                router.push("/plus-plans");
+              }}
+            >
+              <Typography variant="h1" fontSize={"52px"} color={"white"} letterSpacing={"5.9px"}>
+                SUBSCRIBE
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
       </Box>
 
       <FeaturedTournaments />
@@ -155,14 +168,17 @@ const MyApp = (props) => {
         component={"section"}
         sx={{
           position: "relative",
-          backgroundColor: "#101216",
+          backgroundColor: "#0e0c0e",
           paddingTop: "80px",
           paddingBottom: "175px"
         }}
       >
         <Box
           sx={{
-            width: "80%",
+            px: {
+              xs: "5%",
+              lg: "10%"
+            },
             mx: "auto"
           }}
         >
@@ -172,6 +188,7 @@ const MyApp = (props) => {
               xs: 0,
               xl: 28
             }}
+            alignItems="center"
           >
             <Grid item xs={12} xl={6}>
               <Box
@@ -180,8 +197,7 @@ const MyApp = (props) => {
                   border: "solid 3px rgba(227, 81, 6, 0.73)",
                   backgroundColor: "black",
                   textAlign: "center",
-                  px: "20px",
-                  minWidth: "500px"
+                  px: 2.5
                 }}
               >
                 <Typography
@@ -240,6 +256,9 @@ const MyApp = (props) => {
                     my: 3,
                     borderRadius: 0
                   }}
+                  onClick={() => {
+                    router.push("/plus-plans");
+                  }}
                 >
                   <Typography variant="h4" fontSize={"35px"}>
                     VIEW NOW
@@ -251,11 +270,20 @@ const MyApp = (props) => {
               <Box
                 sx={{
                   display: "flex",
+                  height: "100%",
                   alignItems: "center",
                   justifyContent: "center"
                 }}
               >
-                <img src="/static/images/laptop.png" />
+                <video
+                  poster="/static/images/home/laptop.png"
+                  loop={true}
+                  autoPlay={true}
+                  muted={true}
+                  style={{ width: "150%", height: "150%" }}
+                >
+                  <source src="/static/videos/laptop.webm" type="video/webm" />
+                </video>
               </Box>
             </Grid>
           </Grid>
@@ -269,89 +297,13 @@ const MyApp = (props) => {
       >
         <Benefits />
       </Box>
-      {/* <Box component={"section"}>
-        <Carousel
-          sx={{
-            position: "relative",
-          }}
-          showThumbs={false}
-          showStatus={false}
-          infiniteLoop={true}
-          showIndicators={false}
-          renderArrowPrev={(clickHandler) => (
-            <button
-              onClick={clickHandler}
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                display: "flex",
-                padding: 30,
-                justifyContent: "center",
-                alignItems: "center",
-                color: theme.palette.primary.main,
-                backgroundColor: "transparent",
-                cursor: "pointer",
-                border: "none",
-                zIndex: 20,
-              }}
-            >
-              <ArrowBackIos
-                sx={{ fontSize: "60px", ":hover": { opacity: 0.7 } }}
-              ></ArrowBackIos>
-            </button>
-          )}
-          renderArrowNext={(clickHandler) => (
-            <button
-              onClick={clickHandler}
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                right: 0,
-                display: "flex",
-                padding: 30,
-                justifyContent: "center",
-                alignItems: "center",
-                color: theme.palette.primary.main,
-                backgroundColor: "transparent",
-                cursor: "pointer",
-                border: "none",
-                zIndex: 20,
-              }}
-            >
-              <ArrowForwardIos
-                sx={{ fontSize: "60px", ":hover": { opacity: 0.7 } }}
-              ></ArrowForwardIos>
-            </button>
-          )}
-        >
-          <Box
-            sx={{
-              backgroundImage: "url(/static/images/carousel1.png)",
-              height: "478px",
-            }}
-          ></Box>
-          <Box
-            sx={{
-              backgroundImage: "url(/static/images/carousel2.png)",
-              height: "478px",
-            }}
-          ></Box>
-          <Box
-            sx={{
-              backgroundImage: "url(/static/images/carousel3.png)",
-              height: "478px",
-            }}
-          ></Box>
-        </Carousel>
-      </Box> */}
+
       <Box
         component={"section"}
         sx={{
           pt: "70px",
-          background: "url(/static/images/about_us_bg.gif)"
+          px: 2,
+          background: "url(/static/images/home/about_us_bg.gif)"
         }}
       >
         <Box
@@ -380,7 +332,7 @@ const MyApp = (props) => {
           </Typography>
           <Box
             component={"img"}
-            src={"/static/images/Game_Rogue_Text_1.png"}
+            src={"/static/images/home/game_rogue_text_trans.png"}
             alignSelf={"center"}
             maxWidth={"100%"}
             height={"80px"}
@@ -448,30 +400,100 @@ const MyApp = (props) => {
               gap: 2
             }}
           >
-            <img src={"/static/images/back-to-top.svg"} style={{ width: "73px", height: "56px" }} />
+            <img
+              src={"/static/images/home/back_to_top.svg"}
+              style={{ width: "73px", height: "56px" }}
+            />
             <Typography variant="body1" color="white" fontSize="23px">
               BACK TO TOP
             </Typography>
           </Button>
         </Box>
       </Box>
-      <Box component="section" sx={{ maxWidth: "60%", mx: "auto", py: "40px" }}>
+      <Box component="section" sx={{ maxWidth: "80%", mx: "auto", py: "40px" }}>
         <Typography variant="h4" textTransform="upperase" textAlign="center">
           SPONSORED BY
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 2
-          }}
-        >
-          <img src="/static/images/sponsors/Tempr Esports Logo.webp" />
-          <img src="/static/images/sponsors/OSG Logo.webp" />
-          <img src="/static/images/sponsors/Krysos Logo White.webp" />
-          <img src="/static/images/sponsors/Chaos Nation II White.webp" />
-          <img src="/static/images/sponsors/Silent Sins White.webp" />
+        <Box sx={{ mt: 2 }}>
+          <Grid container spacing={4} rowSpacing={2} alignItems="center" justifyContent="center">
+            <Grid item>
+              <Tooltip title="All World Gaming: CSGO (Organizer)">
+                <Link href="https://twitter.com/AllWorldGaming">
+                  <img src="/static/images/sponsors/White.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Safari Legion (Organization)">
+                <Link href="https://twitter.com/SafariLegion">
+                  <img src="/static/images/sponsors/lion-logo_Black.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Vista Esports (Organization)">
+                <Link href="https://discord.gg/vistaesc">
+                  <img src="/static/images/sponsors/VISTA_White.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Ottawa Warriors (Team)">
+                <Link href="https://discord.gg/EGCNvVGFE">
+                  <img src="/static/images/sponsors/Ottawa_Warriors_Whitte.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Evil Connections (Team)">
+                <Link href="https://twitter.com/EvilConnections">
+                  <img src="/static/images/sponsors/ECE_Logomark_White.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Red Bull">
+                <Link href="https://www.redbull.com/us-en/energydrink">
+                  <img src="/static/images/sponsors/red-bull-white.png" height={80} />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Tempr Esports (Team)">
+                <Link href="https://twitter.com/EsportsTempr">
+                  <img src="/static/images/sponsors/Tempr Esports Logo.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="One Shot Gaming (Former Organization)">
+                <Link href="#">
+                  <img src="/static/images/sponsors/OSG Logo.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Team Krysos (Former Organization)">
+                <Link href="#">
+                  <img src="/static/images/sponsors/Krysos Logo White.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Chaos Nation (Team)">
+                <Link href="https://twitter.com/ChaosNationGG">
+                  <img src="/static/images/sponsors/Chaos Nation II White.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Silent Sins (Organization)">
+                <Link href="https://twitter.com/SilentSinsLLC">
+                  <img src="/static/images/sponsors/Silent Sins White.webp" />
+                </Link>
+              </Tooltip>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </>

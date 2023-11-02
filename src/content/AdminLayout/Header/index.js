@@ -119,8 +119,8 @@ const Header = () => {
         }}
       >
         <Button
-          id="organization-button"
-          aria-controls={openOrganization ? "organization-menu" : undefined}
+          id="organizer-button"
+          aria-controls={openOrganization ? "organizer-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={openOrganization ? "true" : undefined}
           // variant="contained"
@@ -188,16 +188,16 @@ const Header = () => {
         </MenuItem>
       </StyledMenu>
       <StyledMenu
-        id="organization-menu"
+        id="organizer-menu"
         MenuListProps={{
-          "aria-labelledby": "organization-button"
+          "aria-labelledby": "organizer-button"
         }}
         anchorEl={anchorElOrganization}
         open={openOrganization}
         onClose={handleCloseOrganization}
       >
-        <MenuItem onClick={handleCloseOrganization} key="create-organization" disableRipple>
-          <Link href="/organization/create">CREATE</Link>
+        <MenuItem onClick={handleCloseOrganization} key="create-organizer" disableRipple>
+          <Link href="/organizer/create">CREATE</Link>
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleCloseOrganization} key="production-setting" disableRipple>

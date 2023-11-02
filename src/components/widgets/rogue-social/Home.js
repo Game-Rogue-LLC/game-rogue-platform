@@ -8,10 +8,10 @@ import PostList from "@/src/components/widgets/rogue-social/PostList";
 import RichTextInput from "@/src/components/input/RichTextInput";
 import RightSidebar from "@/src/components/widgets/rogue-social/RightSidebar";
 import { htmlToMarkdown } from "@/src/utils/html-markdown";
-import { useAuthContext } from "@/src/context/AuthContext";
-import { useTournamentContext } from "@/src/context/TournamentContext";
 import { nanoid } from "nanoid";
 import { setPost } from "@/src/redux/features/postSlice";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const StyledTabList = styled(TabList)(({ theme }) => ({
   ".MuiTabs-flexContainer": {
@@ -98,7 +98,7 @@ const Home = () => {
               <RichTextInput
                 content={content}
                 className="tweet-textedit"
-                placeholder="What's happening?"
+                placeholder="What's new?"
                 handleContentChange={onContentChange}
               />
               <Box

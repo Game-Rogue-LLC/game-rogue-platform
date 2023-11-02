@@ -9,7 +9,7 @@ import {
   Settings,
   Notifications,
   People,
-  Man,
+  Man
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -28,7 +28,7 @@ import {
   MenuItem,
   Paper,
   Tooltip,
-  Typography,
+  Typography
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 
@@ -60,14 +60,14 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
+    "aria-controls": `vertical-tabpanel-${index}`
   };
 }
 
 export default function SocialLeftSidebar({ sx }) {
   const theme = useTheme();
   const router = useRouter();
-  const { organization, player } = useTournamentContext();
+  const { organizer, player } = useTournamentContext();
   const [showMenu, setShowMenu] = React.useState(false);
   const { user } = useAuthContext();
 
@@ -83,7 +83,7 @@ export default function SocialLeftSidebar({ sx }) {
         position: "relative",
         width: "500px",
         zIndex: 1,
-        ...sx,
+        ...sx
       }}
     >
       <Tabs

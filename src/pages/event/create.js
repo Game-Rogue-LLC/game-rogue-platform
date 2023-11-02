@@ -13,7 +13,12 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { DEFAULT_CONTENTBLOCK_IMAGE, DEFAULT_LOGO, EVENT_STATES } from "@/src/config/global";
+import {
+  DEFAULT_CONTENTBLOCK_IMAGE,
+  DEFAULT_DARK_LOGO,
+  DEFAULT_LIGHT_LOGO,
+  EVENT_STATES
+} from "@/src/config/global";
 import { customMessages, model, rules } from "@/lib/firestore/collections/event";
 import { useEffect, useState } from "react";
 
@@ -24,6 +29,7 @@ import { Edit } from "@mui/icons-material";
 import EventInput from "@/src/components/widgets/event/EventInput";
 import { LoadingButton } from "@mui/lab";
 import Validator from "validatorjs";
+import { enqueueSnackbar } from "notistack";
 import { htmlToMarkdown } from "@/src/utils/html-markdown";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
@@ -38,8 +44,8 @@ const Page = (props) => {
   const theme = useTheme();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { organization, event } = useTournamentContext();
-  const [oid, setOID] = useState(organization?.current);
+  const { organizer, event } = useTournamentContext();
+  const [oid, setOID] = useState(organizer?.current);
   const [saving, setSaving] = useState(false);
   const [rulebook, setRulebook] = useState(null);
   const [terms, setTerms] = useState(null);
@@ -67,9 +73,9 @@ const Page = (props) => {
   }, []);
 
   useEffect(() => {
-    if (router?.query?.organization) {
-      const newOID = router.query.organization;
-      organization.setCurrent(newOID);
+    if (router?.query?.organizer) {
+      const newOID = router.query.organizer;
+      organizer.setCurrent(newOID);
       setOID(newOID);
       setInputs((prev) => ({
         ...prev,
@@ -156,7 +162,7 @@ const Page = (props) => {
         }
         const res = await event.update(data.id, newEvent);
         if (res.code === "succeed") {
-          alert("Saved successfully!");
+          enqueueSnackbar("Saved successfully!", { variant: "success" });
         }
       } else if (data.code === "failed") {
         console.warn(data.message);
@@ -217,13 +223,13 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO
+        darkLogo: DEFAULT_DARK_LOGO
       });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO
+        lightLogo: DEFAULT_LIGHT_LOGO
       });
     },
     colorChange: (name, value) => {

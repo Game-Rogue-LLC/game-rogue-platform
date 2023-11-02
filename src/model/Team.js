@@ -1,4 +1,4 @@
-import { DEFAULT_LOGO } from "@/src/config/global";
+import { DEFAULT_DARK_LOGO, DEFAULT_LIGHT_LOGO } from "@/src/config/global";
 
 export const Team = {
   uid: "",
@@ -6,8 +6,8 @@ export const Team = {
   name: "",
   short: "",
   description: "",
-  darkLogo: DEFAULT_LOGO,
-  lightLogo: DEFAULT_LOGO,
+  darkLogo: DEFAULT_DARK_LOGO,
+  lightLogo: DEFAULT_LIGHT_LOGO,
   accessCode: "",
   score: 0,
   level: 0,
@@ -23,6 +23,6 @@ export const Team = {
   },
   type: 0,
   deleted: false
-}
+};
 
 export default Team;

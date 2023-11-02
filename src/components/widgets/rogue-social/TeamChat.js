@@ -1,10 +1,16 @@
-import { useRef, useState } from "react";
-import { Box, ListItemIcon } from "@mui/material";
+import { Box, Grid, IconButton, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 
-const TeamChat = ({ item }) => {
+import Avatar from "@/src/components/Avatar";
+import { Send } from "@mui/icons-material";
+import { nanoid } from "nanoid";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+
+const TeamChat = ({ item, sx }) => {
   const messageBoxRef = useRef(null);
   const { user } = useAuthContext();
-  const { message } = useTournamentContext();
+  const { team } = useTournamentContext();
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
@@ -12,19 +18,21 @@ const TeamChat = ({ item }) => {
   useEffect(() => {
     if (item?.messages) {
       setMessages(item.messages);
-    }
-  }, [item]);
+    } else setMessages([]);
+  }, [item?.messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() !== "" && item?.id) {
-      message.update(item?.id, {
+      const newMessage = {
         id: nanoid(),
-        type: "team",
-        _id: item.id,
         sender: user.id,
         text: input,
         sentAt: new Date()
+      };
+      const res = await team.update(item?.id, {
+        messages: [...messages, newMessage]
       });
+      setMessages((prev) => [...prev, newMessage]);
       setInput("");
     }
   };
@@ -33,6 +41,12 @@ const TeamChat = ({ item }) => {
     const messageBox = messageBoxRef.current;
     messageBox.scrollTo(0, 99999);
   }, [messages]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
 
   const handleInputChange = (event) => {
     setInput(event.target.value);
@@ -46,17 +60,18 @@ const TeamChat = ({ item }) => {
         display: "flex",
         flexDirection: "column",
         bgcolor: "grey.200",
-        border: "solid 1px rgba(255,255,255,0.1)"
+        border: "solid 1px rgba(255,255,255,0.1)",
+        ...sx
       }}
     >
-      <Box sx={{ backgroundColor: "black" }}>
+      <Box sx={{ backgroundColor: "black", padding: 1 }}>
         <Typography variant="h4" textAlign="center" fontSize="20px" color="white">
-          Game Chat
+          {item?.name}
         </Typography>
       </Box>
       <Box sx={{ flexGrow: 1, overflow: "auto", p: 1 }} ref={messageBoxRef}>
         {messages.map((message) => (
-          <Message key={message.id} message={message} team1={opTeam} team2={myTeam} />
+          <Message key={message.id} message={message} me={user} />
         ))}
       </Box>
       <Box sx={{ p: 2, backgroundColor: "background.default" }}>
@@ -78,6 +93,7 @@ const TeamChat = ({ item }) => {
                   </InputAdornment>
                 )
               }}
+              onKeyDown={handleKeyDown}
               onChange={handleInputChange}
             />
           </Grid>
@@ -87,8 +103,10 @@ const TeamChat = ({ item }) => {
   );
 };
 
-const Message = ({ message, team1, team2 }) => {
-  const isLeft = message.sender === team1.id;
+const Message = ({ message, me }) => {
+  const isLeft = message.sender !== me.id;
+  const { player } = useTournamentContext();
+
   return (
     <Box
       sx={{
@@ -104,7 +122,8 @@ const Message = ({ message, team1, team2 }) => {
           alignItems: "center"
         }}
       >
-        <img src={isLeft ? team1?.darkLogo : team2?.darkLogo} width={40} height={40} />
+        <Avatar user={player.players[message.sender]} size="small" />
+        {/* <img src={player.players[message.sender]?.profilePic} width={40} height={40} /> */}
         <Paper
           variant="outlined"
           sx={{

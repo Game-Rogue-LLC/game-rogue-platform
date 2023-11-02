@@ -106,6 +106,16 @@ input:-webkit-autofill {
   }
 }
 
+.terms-policy-link {
+  user-select: none;
+  cursor: pointer;
+  color: white;
+}
+
+.terms-policy-link:hover {
+  color: #f5831f;
+}
+
 .opacity-0 {
   opacity: 0;
 }
@@ -196,6 +206,7 @@ input:-webkit-autofill {
 }
 
 .navigating {
+  background-size: cover;
   animation-name: navigating;
   animation-duration: 1s;
 }
@@ -516,16 +527,16 @@ input#search::placeholder {
 
 .ql-toolbar .ql-stroke {
   fill: none;
-  stroke: #f5831f;
+  /* stroke: #f5831f !important; */
 }
 
 .ql-toolbar .ql-fill {
-  fill: #f5831f;
+  /* fill: #f5831f !important; */
   stroke: none;
 }
 
 .ql-toolbar .ql-picker {
-  color: #f5831f;
+  /* color: #f5831f !important; */
 }
 
 .tweet-textedit {
@@ -726,4 +737,64 @@ input#search::placeholder {
   transform: translate(-50%, -50%);
   width: 100vw;
   height: 100vh;
+}
+
+.ck-editor {
+  color: black;
+}
+
+.ck-content {
+  min-height: 400px;
+  height: 400px;
+  overflow: auto;
+}
+
+.se-wrapper-inner {
+  min-height: 500px !important;
+  height: 500px !important;
+}
+
+.sun-editor .se-wrapper {
+  overflow: auto !important;
+}
+
+.se-wrapper-inner.se-wrapper-wysiwyg.sun-editor-editable {
+  transform-origin: top left;
+}
+
+.MuiChip-label {
+  line-height: 1;
+}
+
+.logo-guideline {
+  position: absolute;
+  background-color: cyan;
+}
+
+.logo-guideline.top {
+  top: 15px;
+  left: 0;
+  height: 1px;
+  width: 100%;
+}
+
+.logo-guideline.right {
+  right: 15px;
+  top: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.logo-guideline.bottom {
+  bottom: 15px;
+  left: 0;
+  height: 1px;
+  width: 100%;
+}
+
+.logo-guideline.left {
+  left: 15px;
+  top: 0;
+  width: 1px;
+  height: 100%;
 }

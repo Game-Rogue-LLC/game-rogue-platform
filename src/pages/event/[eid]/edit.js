@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -8,27 +7,33 @@ import {
   IconButton,
   MenuItem,
   OutlinedInput,
-  TextField,
   Paper,
   Select,
+  TextField,
   Typography,
   useTheme
 } from "@mui/material";
-import { useRouter } from "next/router";
+import {
+  DEFAULT_CONTENTBLOCK_IMAGE,
+  DEFAULT_DARK_LOGO,
+  DEFAULT_LIGHT_LOGO
+} from "@/src/config/global";
+import { customMessages, model, rules } from "@/lib/firestore/collections/event";
+import { htmlToMarkdown, markdownToHtml } from "@/src/utils/html-markdown";
+import { useEffect, useState } from "react";
+
+import AdminLayout from "@/src/content/AdminLayout";
+import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import DateTimePicker from "@/src/components/datetime/DateTimePicker";
+import { Edit } from "@mui/icons-material";
+import EventInput from "@/src/components/widgets/event/EventInput";
 import { LoadingButton } from "@mui/lab";
 import Validator from "validatorjs";
-
-import { Edit } from "@mui/icons-material";
-import AdminLayout from "@/src/content/AdminLayout";
+import { enqueueSnackbar } from "notistack";
 import { useAppContext } from "@/src/context/app";
-import DateTimePicker from "@/src/components/datetime/DateTimePicker";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { DEFAULT_LOGO, DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
-import EventInput from "@/src/components/widgets/event/EventInput";
-import { model, rules, customMessages } from "@/lib/firestore/collections/event";
-import { htmlToMarkdown, markdownToHtml } from "@/src/utils/html-markdown";
+import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
-import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const initialInputs = {
   ...model
@@ -39,7 +44,7 @@ const Page = (props) => {
   const router = useRouter();
   const [eid, setEID] = useState(null);
   const { setTitle } = useAppContext();
-  const { organization, event } = useTournamentContext();
+  const { organizer, event } = useTournamentContext();
   const [saving, setSaving] = useState(false);
   const [rulebook, setRulebook] = useState(null);
   const [terms, setTerms] = useState(null);
@@ -74,7 +79,7 @@ const Page = (props) => {
   useEffect(() => {
     if (event?.events[eid]) {
       event.setCurrent(eid);
-      organization.setCurrent(event.events[eid].oid);
+      organizer.setCurrent(event.events[eid].oid);
       setInputs({
         ...event.events[eid],
         description: markdownToHtml(event.events[eid].description)
@@ -165,7 +170,7 @@ const Page = (props) => {
 
       const res = await event.update(eid, newEvent);
       if (res.code === "succeed") {
-        alert("Saved successfully!");
+        enqueueSnackbar("Saved successfully!", { variant: "success" });
       }
       setSaving(false);
     },
@@ -223,13 +228,13 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO
+        darkLogo: DEFAULT_DARK_LOGO
       });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO
+        lightLogo: DEFAULT_LIGHT_LOGO
       });
     },
     colorChange: (name, value) => {

@@ -1,38 +1,28 @@
 import {
   AppBar,
+  Autocomplete,
   Box,
   Button,
   Container,
   Divider,
-  FormControl,
   IconButton,
   InputAdornment,
-  Menu,
   MenuItem,
   OutlinedInput,
+  TextField,
   Toolbar,
   Typography,
   styled,
   useTheme
 } from "@mui/material";
-import {
-  ArrowRight,
-  ArrowRightAlt,
-  ArrowRightOutlined,
-  ArrowRightSharp,
-  ChevronRight,
-  Login,
-  Logout,
-  Person,
-  Search
-} from "@mui/icons-material";
+import { ChevronRight, Search } from "@mui/icons-material";
 import NavItem, { StyledMenu } from "@/src/content/PublicLayout/Navbar/NavItem";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import Avatar from "@/src/components/Avatar";
 import { DEFAULT_PROFILE_PICTURE } from "@/src/config/global";
 import Link from "next/link";
-import SearchInput from "@/src/components/input/SearchInput";
+import SearchBox from "@/src/components/input/SearchBox";
 import _ from "lodash";
 import { isMyTeam } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
@@ -44,13 +34,10 @@ const PublicNavbar = ({ sx }) => {
   const user = useAuthContext();
   const router = useRouter();
   const theme = useTheme();
-  const [logoNav, setLogoNav] = useState(true);
   const [search, setSearch] = useState("");
-  const [fund, setFund] = useState("");
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(router?.pathname);
   const logoRef = useRef();
-  let currentHoverUser = false;
   const { player, team } = useTournamentContext();
 
   const myTeams = useMemo(() => {
@@ -60,6 +47,15 @@ const PublicNavbar = ({ sx }) => {
     return [];
   }, [team?.teams, user.user]);
 
+  const totalPlayers = useMemo(() => {
+    if (player.players)
+      return _.filter(player.players, (val) => val.userName || val.name).map((val) => ({
+        label: val.userName || val.name,
+        ...val
+      }));
+    return [];
+  }, [player.players]);
+
   useEffect(() => {
     if (router?.pathname) {
       const pathname = router.pathname;
@@ -67,7 +63,7 @@ const PublicNavbar = ({ sx }) => {
       else if (pathname.substring(1, 6) === "event" || pathname.substring(1, 6) === "match")
         setCurrentPage("event");
       else if (pathname.substring(1, 6) === "rogue") setCurrentPage("rogue-social");
-      else if (pathname.substring(1, 13) === "organization") setCurrentPage("organization");
+      else if (pathname.substring(1, 13) === "organizer") setCurrentPage("organizer");
       else if (pathname.substring(1, 5) === "tool") setCurrentPage("tool");
     }
   }, [router]);
@@ -80,14 +76,14 @@ const PublicNavbar = ({ sx }) => {
   }, [user.user?.id]);
 
   const handle = {
-    switchLogoNav: (e) => {
-      setLogoNav((prev) => !prev);
+    changeSearch: (e, val) => {
+      router.push("/rogue-social/profile/" + val.id);
+      setSearch(val);
     },
-    changeSearch: (e) => {
-      setSearch(e.target.value);
-    },
-    changeFund: (e) => {
-      setFund(e.target.value);
+    typeSearch: (e) => {
+      if (e.key === "Enter") {
+        router.push("/search?uid=" + search);
+      }
     }
   };
 
@@ -106,7 +102,7 @@ const PublicNavbar = ({ sx }) => {
   };
 
   const handleClickOrganize = (e) => {
-    router.push("/organization");
+    router.push("/organizer");
   };
   const handleClickEvent = (e) => {
     router.push("/event");
@@ -116,7 +112,9 @@ const PublicNavbar = ({ sx }) => {
   };
   const handleClickSupport = (e) => {};
   const handleClickTools = (e) => {};
-  const handleClickPlusPlans = (e) => {};
+  const handleClickPlusPlans = (e) => {
+    router.push("/plus-plans");
+  };
 
   return (
     <AppBar
@@ -130,8 +128,9 @@ const PublicNavbar = ({ sx }) => {
         ...sx
       }}
     >
-      <Container maxWidth="xxl" sx={{ borderBottom: "solid 3px #f5831f" }}>
+      <Box sx={{ px: 1, borderBottom: "solid 3px #f5831f" }}>
         <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between" }}>
+          {/* Begin Left menus */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -139,42 +138,57 @@ const PublicNavbar = ({ sx }) => {
               alignItems: "center"
             }}
           >
-            <Box sx={{ position: "relative" }}>
-              {/* <Box component="img" src="/GR_Letters.png" height={40} /> */}
-              <video autoPlay loop muted poster="/GR_Letters.png">
-                <source src="/static/animations/GR_Letters.webm" type="video/webm" />
-              </video>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {/* Begin Logo */}
               <Box
-                component="img"
-                src="/GR_Letters.png"
-                height={40}
-                ref={logoRef}
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  filter: "brightness(10)",
-                  display: "none"
-                }}
-              />
-            </Box>
-            <Box className="search-box">
-              <SearchInput
-                id="search"
-                name="search"
-                placeholder="Search"
-                value={search}
-                onChange={handle.changeSearch}
                 sx={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "end",
+                  gap: 1,
                   height: "40px"
                 }}
-                startAdornment={
-                  <InputAdornment position="start">
-                    <Search fontSize="large" />
-                  </InputAdornment>
-                }
-              />
+              >
+                {/* <Box component="img" src="/static/images/home/gr_letters.png" height={40} /> */}
+                <video autoPlay loop muted poster="/static/images/home/gr_letters.png">
+                  <source src="/static/videos/gr_letters.webm" type="video/webm" />
+                </video>
+                <Box
+                  component="img"
+                  src="/static/images/home/gr_letters.png"
+                  height={40}
+                  ref={logoRef}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    filter: "brightness(10)",
+                    display: "none"
+                  }}
+                />
+                <Typography variant="h4" sx={{ lineHeight: 1, fontSize: 16 }}>
+                  OB 1.0
+                </Typography>
+              </Box>
+              {/* End Logo */}
+              {/* Begin Search Box */}
+              <Box className="search-box">
+                <SearchBox
+                  id="search"
+                  name="search"
+                  placeholder="Search"
+                  value={search}
+                  onChange={handle.changeSearch}
+                  onKeyUp={handle.typeSearch}
+                  sx={{
+                    height: "40px"
+                  }}
+                  options={totalPlayers}
+                />
+              </Box>
+              {/* End Search Box */}
             </Box>
+
             <NavItem name="HOME" active={currentPage === "home"} handleClick={handleClickHome} />
             <NavItem
               name="Events"
@@ -225,12 +239,12 @@ const PublicNavbar = ({ sx }) => {
                   name: "LEADERBOARD",
                   key: "leaderboard",
                   isLink: true,
-                  to: "/rogue-social"
+                  to: "/rogue-social?tab=4"
                 }
               ]}
             />
-            <NavItem name="ROGUE TV" handleClick={() => {}} />
-            <NavItem name="ARTICLES" handleClick={() => {}} />
+            <NavItem name="ROGUE TV" handleClick={() => router.push("/rogue-tv")} />
+            <NavItem name="ARTICLES" handleClick={() => router.push("/article")} />
             <NavItem
               name="SHOP"
               handleClick={() => {
@@ -238,6 +252,9 @@ const PublicNavbar = ({ sx }) => {
               }}
             />
           </Box>
+          {/* End Left menus */}
+
+          {/* Begin Right menus */}
           <Box sx={{ display: "flex", gap: 3 }}>
             <Box
               sx={{
@@ -248,12 +265,12 @@ const PublicNavbar = ({ sx }) => {
             >
               <NavItem
                 name="Organize"
-                active={currentPage === "organization"}
+                active={currentPage === "organizer"}
                 handleClick={handleClickOrganize}
                 isDropdown={true}
                 items={[
                   {
-                    name: "My Organizer",
+                    name: "My Organization",
                     key: "my-organizer",
                     isLink: true,
                     to: "/rogue-social/organizer"
@@ -266,38 +283,6 @@ const PublicNavbar = ({ sx }) => {
                   }
                 ]}
               />
-              {/* <NavItem
-                name="Play"
-                active={currentPage === "event"}
-                handleClick={handleClickTools}
-                isDropdown={true}
-                items={[
-                  {
-                    name: "Upcoming Matches",
-                    key: "upcoming-matches",
-                    isLink: true,
-                    to: "/match/upcoming",
-                  },
-                  {
-                    name: "Upcoming Events",
-                    key: "upcoming-events",
-                    isLink: true,
-                    to: "/event/upcoming",
-                  },
-                  {
-                    name: "Ongoing Events",
-                    key: "ongoing-events",
-                    isLink: true,
-                    to: "/event/ongoing",
-                  },
-                  {
-                    name: "Completed Events",
-                    key: "completed-events",
-                    isLink: true,
-                    to: "/event/completed",
-                  },
-                ]}
-              /> */}
               <NavItem
                 name="Tools"
                 active={currentPage === "tool"}
@@ -330,13 +315,13 @@ const PublicNavbar = ({ sx }) => {
                     name: "WIKI",
                     key: "wiki",
                     isLink: true,
-                    to: "/"
+                    to: "/wiki"
                   },
                   {
                     name: "FAQS",
                     key: "faqs",
                     isLink: true,
-                    to: "/"
+                    to: "/faqs"
                   }
                 ]}
               />
@@ -362,11 +347,13 @@ const PublicNavbar = ({ sx }) => {
                     name: "Organizer Plus",
                     key: "add-organizer",
                     isLink: true,
-                    to: "/organization/create"
+                    to: "/organizer/create"
                   }
                 ]}
               />
             </Box>
+
+            {/* Begin User Menu */}
             {user.user && user.user.id && player?.players[user.user.id] ? (
               <Box
                 sx={{
@@ -434,6 +421,7 @@ const PublicNavbar = ({ sx }) => {
                 </IconButton>
               </Box>
             )}
+            {/* Begin User Menu */}
             {/* Begin User Submenu */}
             {user.user && user.user.id && player?.players[user.user.id] ? (
               <StyledMenu
@@ -466,11 +454,11 @@ const PublicNavbar = ({ sx }) => {
                   <Link href={"/rogue-social/team"}>My Team</Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUser} key="my-organizer" disableRipple>
-                  <Link href={"/rogue-social/organizer"}>My Organizer</Link>
+                  <Link href={"/organizer"}>My Organizer</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-profile" disableRipple>
-                  <Link href={`/rogue-social/my-profile/${user.user?.id}`}>My Profile</Link>
+                  <Link href={`/rogue-social/profile/${user.user?.id}`}>My Profile</Link>
                 </MenuItem>
                 <MenuItem
                   onClick={(e) => {
@@ -517,7 +505,7 @@ const PublicNavbar = ({ sx }) => {
             {/* End User Submenu */}
           </Box>
         </Toolbar>
-      </Container>
+      </Box>
     </AppBar>
   );
 };

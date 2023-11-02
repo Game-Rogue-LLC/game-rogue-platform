@@ -1,34 +1,57 @@
-import { useEffect, useState } from "react";
+import * as config from "@/src/config/global";
+
 import {
   Box,
   Button,
-  IconButton,
   FormControl,
   FormHelperText,
   Grid,
+  IconButton,
+  InputAdornment,
   MenuItem,
   OutlinedInput,
-  InputAdornment,
   Select,
+  TextField,
   Typography,
-  TextField
+  useTheme
 } from "@mui/material";
-import { Edit } from "@mui/icons-material";
-import DateTimePicker from "@/src/components/datetime/DateTimePicker";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import RichTextInput from "@/src/components/input/RichTextInput";
-import SelectInput from "@/src/components/input/SelectInput";
-import * as config from "@/src/config/global";
+import { useEffect, useState } from "react";
+
 import Colors from "@/src/components/Colors";
 import CustomButton from "@/src/components/button/CustomButton";
+import DateTimePicker from "@/src/components/datetime/DateTimePicker";
+import { Edit } from "@mui/icons-material";
+import { PlaidLink } from "react-plaid-link";
+import RichTextInput from "@/src/components/input/RichTextInput";
+import SelectInput from "@/src/components/input/SelectInput";
+import axios from "axios";
+import { useTournamentContext } from "@/src/context/TournamentContext";
+
 // import DateRangePicker from "@/src/components/datetime/DateRangePicker";
 
 const EventInput = ({ handle, inputs, disabled, errors }) => {
-  const { organization } = useTournamentContext();
+  const theme = useTheme();
+  const { organizer } = useTournamentContext();
+  const [isPlaidOpen, setIsPlaidOpen] = useState(false);
+  const [linkToken, setLinkToken] = useState("");
+
+  useEffect(() => {
+    axios
+      .post("/api/plaid/create_link_token")
+      .then((res) => {
+        if (res?.data?.link_token) setLinkToken(res.data.link_token);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  const onPlaidSuccess = () => {};
+  const onPlaidExit = () => {};
+
   return (
     <>
       <Grid container spacing={2} rowSpacing={4}>
         <Grid item xs={12}>
+          <Typography variant="h6">Event Logo</Typography>
           <Box display={"flex"} justifyContent={"center"} gap={4} alignItems={"center"} mt={2}>
             <Box display={"flex"} justifyContent={"center"} gap={2}>
               <Box display={"flex"} flexDirection={"column"} gap={2} alignItems={"baseline"}>
@@ -47,13 +70,14 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   variant="contained"
                   component="label"
                   disabled={disabled}
-                  onClick={handle.removeDarkLogo}>
+                  onClick={handle.removeDarkLogo}
+                >
                   REMOVE DARK LOGO
                 </CustomButton>
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.darkLogo || config.DEFAULT_LOGO}
+                  src={inputs.darkLogo || config.DEFAULT_DARK_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -79,13 +103,14 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   variant="contained"
                   component="label"
                   disabled={disabled}
-                  onClick={handle.removeLightLogo}>
+                  onClick={handle.removeLightLogo}
+                >
                   REMOVE LIGHT LOGO
                 </CustomButton>
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.lightLogo || config.DEFAULT_LOGO}
+                  src={inputs.lightLogo || config.DEFAULT_LIGHT_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -96,11 +121,13 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             </Box>
           </Box>
 
-          <Box sx={{ textAlign: "center", position: "relative", mt: 3 }}>
+          <Typography variant="h6">Event Graphic</Typography>
+          <Box sx={{ textAlign: "left", position: "relative", mt: 3 }}>
             <IconButton
-              sx={{ position: "absolute", right: 0, bottom: 0 }}
+              sx={{ position: "absolute", right: 20, bottom: 20 }}
               component="label"
-              disabled={disabled}>
+              disabled={disabled}
+            >
               <Edit />
               <input
                 type="file"
@@ -114,8 +141,9 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             <img
               src={inputs?.banner || config.DEFAULT_CONTENTBLOCK_IMAGE}
               style={{
-                height: "200px",
-                maxWidth: "600px",
+                height: "300px",
+                width: "100%",
+                maxWidth: "100%",
                 objectFit: "cover",
                 border: "solid 1px rgba(255, 255, 255, 0.2)",
                 borderRadius: "4px"
@@ -125,19 +153,23 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h6">Organization</Typography>
+          <Typography variant="h6">
+            Organization
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <Select
-            labelId="organization-select-label"
-            id="organization-select"
+            labelId="organizer-select-label"
+            id="organizer-select"
             value={inputs?.oid}
             onChange={handle.inputs}
             variant="outlined"
             name="oid"
             disabled={disabled}
             sx={{ mt: 1 }}
-            fullWidth>
-            {Object.keys(organization.organizations).map((key, i) => {
-              const item = organization.organizations[key];
+            fullWidth
+          >
+            {Object.keys(organizer.organizers).map((key, i) => {
+              const item = organizer.organizers[key];
               return (
                 <MenuItem key={item.id} value={item.id}>
                   {item.name}
@@ -149,7 +181,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
 
         <Grid item xs={12}>
           <Box>
-            <Typography variant="h6">Event Name</Typography>
+            <Typography variant="h6">
+              Event Name
+              <span style={{ color: theme.palette.primary.main }}> * </span>
+            </Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors.name !== undefined}>
               <OutlinedInput
                 id="event-name"
@@ -167,7 +202,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             </FormControl>
           </Box>
           <Box sx={{ mt: 3 }}>
-            <Typography variant="h6">Event Description</Typography>
+            <Typography variant="h6">Tagline</Typography>
             <FormControl fullWidth sx={{ mt: 1 }}>
               {/* <TextField multiline id="event-description" name="description" aria-describedby="event-description-helper" value={inputs?.description} disabled={disabled}
               onChange={handle.inputs} /> */}
@@ -187,7 +222,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Event Format</Typography>
+          <Typography variant="h6">
+            Event Format
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <SelectInput
             name="category"
             options={config.EVENT_CATEGORIES}
@@ -199,7 +237,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Game Type</Typography>
+          <Typography variant="h6">
+            Course Type
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <Box sx={{ mt: 1 }}>
             {inputs?.category == 0 ? (
               <Select
@@ -210,7 +251,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                 onChange={handle.inputs}
                 variant="outlined"
                 disabled={disabled}
-                fullWidth>
+                fullWidth
+              >
                 <MenuItem key="single-elimination" value={0}>
                   Single Elimination
                 </MenuItem>
@@ -223,6 +265,12 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                 <MenuItem key="pyramid-elimination" value={3}>
                   Pyramid Elimination
                 </MenuItem>
+                <MenuItem key="2-division-split" value={4}>
+                  2 Divisions Split
+                </MenuItem>
+                <MenuItem key="baku-system" value={10}>
+                  Baku Tournament
+                </MenuItem>
               </Select>
             ) : (
               <Select
@@ -233,26 +281,96 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                 onChange={handle.inputs}
                 variant="outlined"
                 disabled={disabled}
-                fullWidth>
-                <MenuItem key="straight-round-robin" value={4}>
+                fullWidth
+              >
+                <MenuItem key="straight-round-robin" value={5}>
                   Straight Round Robin
                 </MenuItem>
-                <MenuItem key="round-robin-double-split" value={5}>
+                <MenuItem key="round-robin-double-split" value={6}>
                   Round Robin Double Split
                 </MenuItem>
-                <MenuItem key="round-robin-triple-split" value={6}>
+                <MenuItem key="round-robin-triple-split" value={7}>
                   Round Robin Triple Split
                 </MenuItem>
-                <MenuItem key="round-robin-quadruple-split" value={7}>
+                <MenuItem key="round-robin-quadruple-split" value={8}>
                   Round Robin Quadruple Split
                 </MenuItem>
-                <MenuItem key="semi-round-robin" value={8}>
+                <MenuItem key="semi-round-robin" value={9}>
                   Semi Round Robin
                 </MenuItem>
               </Select>
             )}
           </Box>
         </Grid>
+        {inputs?.format === 4 && (
+          <>
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h6">Division 1 - Course Type</Typography>
+              <Select
+                labelId="division1-format-select-label"
+                id="division1-format-select"
+                value={inputs?.division1}
+                name="division1"
+                onChange={handle.inputs}
+                variant="outlined"
+                disabled={disabled}
+                fullWidth
+              >
+                <MenuItem key="single-elimination" value={0}>
+                  Single Elimination
+                </MenuItem>
+                <MenuItem key="double-elimination" value={1}>
+                  Double Elimination
+                </MenuItem>
+                <MenuItem key="ladder-elimination" value={2}>
+                  Ladder Elimination
+                </MenuItem>
+                <MenuItem key="pyramid-elimination" value={3}>
+                  Pyramid Elimination
+                </MenuItem>
+                <MenuItem key="2-division-split" value={4}>
+                  2 Divisions Split
+                </MenuItem>
+                <MenuItem key="baku-system" value={10}>
+                  Baku Tournament
+                </MenuItem>
+              </Select>
+            </Grid>
+
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h6">Division 2 - Course Type</Typography>
+              <Select
+                labelId="division2-format-select-label"
+                id="division2-format-select"
+                value={inputs?.division2}
+                name="division1"
+                onChange={handle.inputs}
+                variant="outlined"
+                disabled={disabled}
+                fullWidth
+              >
+                <MenuItem key="single-elimination" value={0}>
+                  Single Elimination
+                </MenuItem>
+                <MenuItem key="double-elimination" value={1}>
+                  Double Elimination
+                </MenuItem>
+                <MenuItem key="ladder-elimination" value={2}>
+                  Ladder Elimination
+                </MenuItem>
+                <MenuItem key="pyramid-elimination" value={3}>
+                  Pyramid Elimination
+                </MenuItem>
+                <MenuItem key="2-division-split" value={4}>
+                  2 Divisions Split
+                </MenuItem>
+                <MenuItem key="baku-system" value={10}>
+                  Baku Tournament
+                </MenuItem>
+              </Select>
+            </Grid>
+          </>
+        )}
 
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">Seed Type</Typography>
@@ -265,30 +383,86 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             sx={{ mt: 1 }}
           />
         </Grid>
+        {inputs?.format === 4 ? (
+          <>
+            <Grid item xs={6} lg={3}>
+              <Typography variant="h6">
+                Division 1 - Team Limit
+                <span style={{ color: theme.palette.primary.main }}> * </span>
+              </Typography>
+              <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+                <OutlinedInput
+                  id="participants-count1"
+                  name="participantsCount1"
+                  aria-describedby="participants-count1-helper"
+                  value={inputs?.participantsCount1}
+                  disabled={disabled}
+                  type="number"
+                  onChange={handle.inputs}
+                  inputProps={{ min: 2 }}
+                />
+                {errors.participantsCount !== undefined && (
+                  <FormHelperText id="participants-count1-helper" sx={{ mt: 2 }}>
+                    {errors.participantsCount}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+            <Grid item xs={6} lg={3}>
+              <Typography variant="h6">
+                Division 2 - Team Limit
+                <span style={{ color: theme.palette.primary.main }}> * </span>
+              </Typography>
+              <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+                <OutlinedInput
+                  id="participants-count2"
+                  name="participantsCount2"
+                  aria-describedby="participants-count2-helper"
+                  value={inputs?.participantsCount2}
+                  disabled={disabled}
+                  type="number"
+                  onChange={handle.inputs}
+                  inputProps={{ min: 2 }}
+                />
+                {errors.participantsCount !== undefined && (
+                  <FormHelperText id="participants-count2-helper" sx={{ mt: 2 }}>
+                    {errors.participantsCount}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+          </>
+        ) : (
+          <Grid item xs={12} lg={6}>
+            <Typography variant="h6">
+              Team Limit
+              <span style={{ color: theme.palette.primary.main }}> * </span>
+            </Typography>
+            <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
+              <OutlinedInput
+                id="participants-count"
+                name="participantsCount"
+                aria-describedby="participants-count-helper"
+                value={inputs?.participantsCount}
+                disabled={disabled}
+                type="number"
+                onChange={handle.inputs}
+                inputProps={{ min: 2 }}
+              />
+              {errors.participantsCount !== undefined && (
+                <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>
+                  {errors.participantsCount}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+        )}
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Team Limit</Typography>
-          <FormControl sx={{ mt: 1 }} fullWidth error={errors.participantsCount !== undefined}>
-            <OutlinedInput
-              id="participants-count"
-              name="participantsCount"
-              aria-describedby="participants-count-helper"
-              value={inputs?.participantsCount}
-              disabled={disabled}
-              type="number"
-              onChange={handle.inputs}
-              inputProps={{ min: 2 }}
-            />
-            {errors.participantsCount !== undefined && (
-              <FormHelperText id="participants-count-helper" sx={{ mt: 2 }}>
-                {errors.participantsCount}
-              </FormHelperText>
-            )}
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12} lg={4}>
-          <Typography variant="h6">Start Date</Typography>
+          <Typography variant="h6">
+            Start Date
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <DateTimePicker
             value={inputs?.startAt}
             setValue={(newDate) => handle.setDate("startAt", newDate)}
@@ -297,8 +471,11 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           />
         </Grid>
 
-        <Grid item xs={12} lg={4}>
-          <Typography variant="h6">End Date</Typography>
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h6">
+            End Date
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <DateTimePicker
             value={inputs?.endAt}
             setValue={(newDate) => handle.setDate("endAt", newDate)}
@@ -307,8 +484,24 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
           />
         </Grid>
 
-        <Grid item xs={12} lg={4}>
-          <Typography variant="h6">Register Date</Typography>
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h6">
+            Registration Opens
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
+          <DateTimePicker
+            value={inputs?.registerFrom}
+            setValue={(newDate) => handle.setDate("registerFrom", newDate)}
+            sx={{ mt: 1, width: "100%" }}
+            disabled={disabled}
+          />
+        </Grid>
+
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h6">
+            Registration Ends
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <DateTimePicker
             value={inputs?.registerTo}
             setValue={(newDate) => handle.setDate("registerTo", newDate)}
@@ -327,7 +520,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
       </Grid> */}
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Prize Pool</Typography>
+          <Typography variant="h6">
+            Prize Pool
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.prize !== undefined}>
             <OutlinedInput
               id="prize-pool"
@@ -348,7 +544,26 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <Typography variant="h6">Entry Fee</Typography>
+          <Typography variant="h6">
+            Entry Fee
+            {linkToken.toString() !== "undefined" && (
+              <PlaidLink
+                token={linkToken.toString()}
+                env="sandbox"
+                onSuccess={onPlaidSuccess}
+                onExit={onPlaidExit}
+                style={{ backgroundColor: "transparent", border: "none" }}
+              >
+                <span
+                  style={{ color: theme.palette.primary.main, fontSize: "1rem", cursor: "pointer" }}
+                >
+                  {" "}
+                  Link your pay-out method{" "}
+                </span>
+              </PlaidLink>
+            )}
+            <span style={{ color: theme.palette.primary.main }}>*</span>
+          </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.entryFee !== undefined}>
             <OutlinedInput
               id="entry-fee"
@@ -369,7 +584,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Game</Typography>
+          <Typography variant="h6">
+            Game
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <Select
             labelId="game-select-label"
             id="game-select"
@@ -379,7 +597,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             variant="outlined"
             disabled={disabled}
             sx={{ mt: 1 }}
-            fullWidth>
+            fullWidth
+          >
             <MenuItem key="rainbow-six-siege" value={0}>
               Rainbow Six Siege
             </MenuItem>
@@ -387,7 +606,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Platform</Typography>
+          <Typography variant="h6">
+            Platform
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <SelectInput
             name="platform"
             options={config.PLATFORMS}
@@ -399,7 +621,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Region</Typography>
+          <Typography variant="h6">
+            Region
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <SelectInput
             name="region"
             options={config.EVENT_REGIONS}
@@ -411,7 +636,10 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Typography variant="h6">Time Zone</Typography>
+          <Typography variant="h6">
+            Time Zone
+            <span style={{ color: theme.palette.primary.main }}> * </span>
+          </Typography>
           <Select
             labelId="timezone-select-label"
             id="timezone-select"
@@ -421,7 +649,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             variant="outlined"
             disabled={disabled}
             sx={{ mt: 1 }}
-            fullWidth>
+            fullWidth
+          >
             <MenuItem key="ast" value={0}>
               Atlantic Standard Time (AST)
             </MenuItem>
@@ -453,7 +682,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between"
-          }}>
+          }}
+        >
           <Box>
             <Typography variant="h6">Add a Rulebook</Typography>
             <Typography variant="subtitle2">
@@ -469,7 +699,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               sx={{ mt: 1 }}
               component="label"
               fullWidth
-              disabled={disabled}>
+              disabled={disabled}
+            >
               + Upload
               <input
                 type="file"
@@ -492,7 +723,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between"
-          }}>
+          }}
+        >
           <Box>
             <Typography variant="h6">Add Terms and Conditions</Typography>
             <Typography variant="subtitle2">
@@ -508,7 +740,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               sx={{ mt: 1 }}
               component="label"
               fullWidth
-              disabled={disabled}>
+              disabled={disabled}
+            >
               + Upload
               <input
                 type="file"
@@ -531,7 +764,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between"
-          }}>
+          }}
+        >
           <Box>
             <Typography variant="h6">Add Privacy Policy</Typography>
             <Typography variant="subtitle2">
@@ -548,7 +782,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
               sx={{ mt: 1 }}
               component="label"
               fullWidth
-              disabled={disabled}>
+              disabled={disabled}
+            >
               + Upload
               <input
                 type="file"

@@ -6,7 +6,7 @@ const NotificationList = ({ items }) => {
   return (
     <Box>
       {items.length > 0 ? (
-        items.map((item) => <NotificationItem item={item} />)
+        items.map((item) => <NotificationItem key={item.id} item={item} />)
       ) : (
         <Typography textAlign="center" fontSize={20} color="white">
           No notifications

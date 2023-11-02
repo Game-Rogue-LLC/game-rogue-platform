@@ -20,7 +20,7 @@ export const games = [
   // "Zula Global"
 ];
 
-export default function GameSelect({ option, setOption, sx }) {
+export default function GameSelect({ option, setOption, sx, disabled }) {
   const [options, setOptions] = useState([...games]);
 
   const handleChange = (e) => {
@@ -33,6 +33,7 @@ export default function GameSelect({ option, setOption, sx }) {
 
   return (
     <Select
+      disabled={disabled}
       labelId="game-select-label"
       id="game-select"
       sx={{ ...sx }}

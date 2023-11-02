@@ -17,7 +17,7 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { DEFAULT_LOGO, TEAM_POSITIONS } from "@/src/config/global";
+import { DEFAULT_DARK_LOGO, DEFAULT_LIGHT_LOGO, TEAM_POSITIONS } from "@/src/config/global";
 import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
@@ -25,6 +25,7 @@ import Avatar from "@/src/components/Avatar";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 import dayjs from "dayjs";
+import { enqueueSnackbar } from "notistack";
 import { getTeamPosition } from "@/src/utils/utils";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -38,8 +39,8 @@ const initialInputs = {
   residency: "",
   game: "",
   type: 0,
-  darkLogo: DEFAULT_LOGO,
-  lightLogo: DEFAULT_LOGO,
+  darkLogo: DEFAULT_DARK_LOGO,
+  lightLogo: DEFAULT_LIGHT_LOGO,
   description: "",
   deleted: false
 };
@@ -58,7 +59,7 @@ const Page = (props) => {
     invite: (e) => {
       navigator.clipboard.writeText(inviteUrl).then(
         () => {
-          alert("Content copied successfully!");
+          enqueueSnackbar("Content copied successfully!", { variant: "success" });
         },
         () => {
           console.warn("Failed to copy");
@@ -97,7 +98,7 @@ const Page = (props) => {
         <Grid item xs={4} sx={{ minWidth: "200px" }}>
           <Box textAlign={"center"}>
             <img
-              src={item.darkLogo ?? DEFAULT_LOGO}
+              src={item.darkLogo ?? DEFAULT_DARK_LOGO}
               style={{ height: "200px", maxWidth: "200px", objectFit: "contain" }}
             />
             <Typography variant="h6">{item?.name}</Typography>

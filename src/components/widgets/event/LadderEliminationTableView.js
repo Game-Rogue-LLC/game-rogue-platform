@@ -2,29 +2,31 @@ import {
   Box,
   Button,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
-  event,
+  DialogTitle,
   Menu,
   MenuItem,
   MenuList,
   Typography,
-  useTheme,
-  DialogActions
+  event,
+  useTheme
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { useTournamentContext } from "@/src/context/TournamentContext";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import MatchTable from "@/src/components/table/MatchTable";
 import { EVENT_STATES, MATCH_STATES } from "@/src/config/global";
-import TeamItem from "@/src/components/item/TeamItem";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 import FullCalendar from "@/src/components/datetime/FullCalendar";
+import { LoadingButton } from "@mui/lab";
+import MatchTable from "@/src/components/table/MatchTable";
+import TeamItem from "@/src/components/item/TeamItem";
+import { enqueueSnackbar } from "notistack";
+import { useRouter } from "next/router";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
   const theme = useTheme();
-  const { organization, event, team, match } = useTournamentContext();
+  const { organizer, event, team, match } = useTournamentContext();
   const [teams, setTeams] = useState([]);
   const [rank, setRank] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -94,7 +96,10 @@ const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
     saveMatch: async (e) => {
       setSavingMatch(true);
       if (!newMatch?.id) {
-        alert("There is nothing to save. Please choose opponent team and schedule the match.");
+        enqueueSnackbar(
+          "There is nothing to save. Please choose opponent team and schedule the match.",
+          { variant: "success" }
+        );
         setSavingMatch(false);
         return;
       }
@@ -115,14 +120,16 @@ const LadderEliminationTableView = ({ myTeam, eid, matches }) => {
         deleted: false
       });
       if (res.code === "succeed") {
-        alert("Saved successfully!");
+        enqueueSnackbar("Saved successfully!", { variant: "success" });
       }
       setSavingMatch(false);
       setOpponent(null);
     },
     openCalendar: (id) => {
       if (event.events[eid].status >= EVENT_STATES.STARTED.value) {
-        alert("Can not schedule the match. Check if the event is started.");
+        enqueueSnackbar("Can not schedule the match. Check if the event is started.", {
+          variant: "success"
+        });
       } else {
         setOpponent(id);
         setShowCalendar(true);

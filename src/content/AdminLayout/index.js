@@ -1,23 +1,21 @@
-import { useEffect } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
-import Navbar from "./Navbar";
-import PageHeader from "./PageHeader";
-import PageContainer from "./PageContainer";
-import PublicNavbar from "@/src/content/PublicLayout/Navbar";
-
-import OrganizationSidebar from "@/src/content/OrganizationSidebar";
-import MatchProvider, { useMatchContext } from "@/src/context/MatchContext";
-
-import { useAuthContext } from "@/src/context/AuthContext";
-import { useRouter } from "next/router";
 import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
+
+import Footer from "./Footer";
+import Header from "./Header";
+import Navbar from "./Navbar";
+import OrganizationSidebar from "@/src/content/OrganizationSidebar";
+import PageContainer from "./PageContainer";
+import PageHeader from "./PageHeader";
+import PublicNavbar from "@/src/content/PublicLayout/Navbar";
+import { useAuthContext } from "@/src/context/AuthContext";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const AdminLayout = (props) => {
   const { children } = props;
   const { user } = useAuthContext();
   const router = useRouter();
-  const { organization, event } = useTournamentContext();
+  const { organizer, event } = useTournamentContext();
 
   return (
     <div
@@ -47,9 +45,9 @@ const AdminLayout = (props) => {
             justifyContent: "space-between"
           }}
         >
-          {organization.activeCount > 0 &&
-            organization.current &&
-            event.activeCount[organization.current] > 0 &&
+          {organizer.activeCount(user?.id) > 0 &&
+            organizer.current &&
+            event.activeCount[organizer.current] > 0 &&
             event.current && <Navbar />}
           <PageContainer>
             <PageHeader />

@@ -3,7 +3,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import Splash from "@/src/content/Splash";
 import _ from "lodash";
 import axios from "axios";
+import { enqueueSnackbar } from "notistack";
 import { nanoid } from "nanoid";
+import organizer from "@/lib/firestore/collections/organizer";
 import store from "@/lib/firestore/collections";
 import { useAuthContext } from "@/src/context/AuthContext";
 
@@ -17,12 +19,6 @@ const TournamentProvider = (props) => {
   const [participants, setParticipants] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // useEffect(() => {
-  //     axios.get('/api/tournament').then(res => {
-  //         console.log(res.data)
-  //     })
-  // }, [])
-
   /** Begin Organization Data / Functions */
   const [organizations, setOrganizations] = useState({});
   const [currentOrganization, setCurrentOrganization] = useState(null);
@@ -32,7 +28,7 @@ const TournamentProvider = (props) => {
     setOrganizations,
     current: useMemo(() => currentOrganization, [currentOrganization]),
     setCurrent: setCurrentOrganization,
-    activecount: (uid) => {
+    activeCount: (uid) => {
       return _.filter(organizations, (val) => val.uid === uid).length;
     },
     create: async (newOrganization) => {
@@ -54,12 +50,60 @@ const TournamentProvider = (props) => {
       return res;
     },
     delete: async (id) => {
-      res = await store.organization.save(id, { deleted: true });
+      const res = await store.organization.save(id, { deleted: true });
       return res;
+    },
+    rogueIdExists: async (id) => {
+      const res = await store.organization.rogueIdExists(id);
+      if (res.code === "succeed") return true;
+      return false;
     },
     upload: store.organization.uploadFile
   };
   /** End Organization Data / Functions */
+
+  /** Begin Organizer Data / Functions */
+  const [organizers, setOrganizers] = useState({});
+  const [currentOrganizer, setCurrentOrganizer] = useState(null);
+  const [organizerLoading, setOrganizerLoading] = useState(false);
+  const organizer = {
+    organizers,
+    setOrganizers,
+    current: useMemo(() => currentOrganizer, [currentOrganizer]),
+    setCurrent: setCurrentOrganizer,
+    activeCount: (uid) => {
+      return _.filter(organizers, (val) => val.uid === uid).length;
+    },
+    create: async (newVal) => {
+      const res = await store.organizer.save(null, newVal);
+      return res;
+    },
+    read: async (uid) => {
+      setOrganizerLoading(true);
+      const res = await store.organizer.read(
+        uid,
+        (data, active) => {
+          setOrganizers(data);
+        },
+        () => setOrganizerLoading(false)
+      );
+    },
+    update: async (id, newVal) => {
+      const res = await store.organizer.save(id, newVal);
+      return res;
+    },
+    delete: async (id) => {
+      const res = await store.organizer.save(id, { deleted: true });
+      return res;
+    },
+    rogueIdExists: async (id) => {
+      const res = await store.organizer.rogueIdExists(id);
+      if (res.code === "succeed") return true;
+      return false;
+    },
+    upload: store.organizer.uploadFile
+  };
+  /** End Organizer Data / Functions */
 
   /** Begin Event Data / Functions */
   const [events, setEvents] = useState({});
@@ -104,20 +148,20 @@ const TournamentProvider = (props) => {
       return res;
     },
     delete: async (id) => {
-      res = await store.event.save(id, { deleted: true });
+      const res = await store.event.save(id, { deleted: true });
       return res;
     },
     upload: store.event.uploadFile,
     addParticipant: async (id, tid) => {
       if (events[id].participants?.length >= events[id].participantsCount) {
-        alert("Only " + events[id].participantsCount + " participants are allowed.");
+        enqueueSnackbar("Only " + events[id].participantsCount + " participants are allowed.");
         return {
           code: "failed",
           message: "Only " + events[id].participantsCount + " participants are allowed."
         };
       }
       if (events[id].participants?.findIndex((val) => val.id === tid) >= 0) {
-        alert("This team is already registered.");
+        enqueueSnackbar("This team is already registered.");
         return {
           code: "failed",
           message: "This team is already registered."
@@ -144,6 +188,42 @@ const TournamentProvider = (props) => {
     }
   };
   /** End Event Data / Functions */
+
+  /** Begin Staff Data / Functions */
+  const [staffs, setStaffs] = useState({});
+  const [staffLoading, setStaffLoading] = useState(false);
+  const staff = {
+    staffs,
+    setStaffs,
+    create: async (newVal) => {
+      const res = await store.staff.save(null, newVal);
+      return res;
+    },
+    read: async (id) => {
+      setStaffLoading(true);
+      const res = await store.staff.read(
+        (data, active) => {
+          setStaffs(data);
+        },
+        () => setStaffLoading(false)
+      );
+    },
+    update: async (id, newVal) => {
+      const res = await store.staff.save(id, newVal);
+      return res;
+    },
+    delete: async (id) => {
+      const res = await store.staff.save(id, { deleted: true });
+      return res;
+    },
+    rogueIdExists: async (id) => {
+      const res = await store.staff.rogueIdExists(id);
+      if (res.code === "succeed") return true;
+      return false;
+    },
+    upload: store.staff.uploadFile
+  };
+  /** End Staff Data / Functions */
 
   /** Begin Ticket Data / Functions */
   const [tickets, setTickets] = useState({});
@@ -257,8 +337,17 @@ const TournamentProvider = (props) => {
       if (res.code === "succeed") return true;
       return false;
     },
+    rogueIdExists: async (id, _id) => {
+      const res = await store.player.rogueIdExists(id, _id);
+      if (res.code === "succeed") return true;
+      return false;
+    },
+    userNameExists: async (id, userName) => {
+      const res = await store.player.userNameExists(id, userName);
+      if (res.code === "succeed") return true;
+      return false;
+    },
     update: async (id, newPlayer) => {
-      console.log(id, newPlayer);
       const res = await store.player.save(id, newPlayer);
       return res;
     },
@@ -373,14 +462,49 @@ const TournamentProvider = (props) => {
   };
   /** End Posting Data / Functions */
 
+  /** Begin Articles Data / Functions */
+  const [articles, setArticles] = useState({});
+  const [articleLoading, setArticleLoading] = useState(true);
+  const article = {
+    articles,
+    setArticles,
+    create: async (newData) => {
+      const res = await store.article.save(null, newData);
+      return res;
+    },
+    read: async () => {
+      setArticleLoading(true);
+      const res = await store.article.read(
+        (data) => {
+          setArticles(data);
+        },
+        () => setArticleLoading(false)
+      );
+    },
+    update: async (id, newData, merge) => {
+      const res = await store.article.save(id, newData, merge);
+      return res;
+    },
+    delete: async (id) => {
+      await store.article.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.article.delete(id);
+      return res;
+    },
+    upload: store.article.uploadFile
+  };
+  /** End Posting Data / Functions */
+
   /** Begin Shop Data / Functions */
-  const [shops, setShops] = useState({});
+  const [shops, setShops] = useState([]);
   const [shopLoading, setShopLoading] = useState(true);
   const shop = {
     shops,
     setShops,
     create: async (newShop) => {
-      const res = await store.shop.save(null, newShop);
+      const res = await store.shop.save(nanoid(), newShop);
       return res;
     },
     read: async () => {
@@ -392,8 +516,8 @@ const TournamentProvider = (props) => {
         () => setShopLoading(false)
       );
     },
-    update: async (id, newShop, merge) => {
-      const res = await store.shop.save(id, newShop, merge);
+    update: async (id, newShop) => {
+      const res = await store.shop.save(id, newShop);
       return res;
     },
     delete: async (id) => {
@@ -404,24 +528,180 @@ const TournamentProvider = (props) => {
       const res = await store.shop.delete(id);
       return res;
     },
-    upload: store.match.uploadFile
+    upload: store.shop.uploadFile
   };
   /** End Shop Data / Functions */
+
+  /** Begin Product Data / Functions */
+  const [products, setProducts] = useState([]);
+  const [productLoading, setProductLoading] = useState(true);
+  const product = {
+    products,
+    setProducts,
+    create: async (newData) => {
+      const res = await store.product.save(nanoid(), newData);
+      return res;
+    },
+    read: async () => {
+      setProductLoading(true);
+      const res = await store.product.read(
+        (data) => {
+          setProducts(data);
+        },
+        () => setProductLoading(false)
+      );
+    },
+    update: async (id, newData) => {
+      const res = await store.product.save(id, newData);
+      return res;
+    },
+    delete: async (id) => {
+      await store.product.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.product.delete(id);
+      return res;
+    },
+    upload: store.product.uploadFile
+  };
+  /** End Product Data / Functions */
+
+  /** Begin Sponsor Data / Functions */
+  const [sponsors, setSponsors] = useState([]);
+  const [sponsorLoading, setSponsorLoading] = useState(true);
+  const sponsor = {
+    sponsors,
+    setSponsors,
+    create: async (newData) => {
+      const res = await store.sponsor.save(nanoid(), newData);
+      return res;
+    },
+    read: async (uid) => {
+      setSponsorLoading(true);
+      const res = await store.sponsor.read(
+        uid,
+        (data) => {
+          setSponsors(data);
+        },
+        () => setSponsorLoading(false)
+      );
+    },
+    update: async (id, newData) => {
+      const res = await store.sponsor.save(id, newData);
+      return res;
+    },
+    delete: async (id) => {
+      await store.sponsor.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.sponsor.delete(id);
+      return res;
+    },
+    upload: store.sponsor.uploadFile
+  };
+  /** End Sponsor Data / Functions */
+
+  /** Begin Shop Product Category Data / Functions */
+  const [categories, setCategories] = useState([]);
+  const [categoryLoading, setCategoryLoading] = useState(true);
+  const category = {
+    categories,
+    setCategories,
+    create: async (newData) => {
+      const res = await store.category.save(nanoid(), newData);
+      return res;
+    },
+    read: async () => {
+      setCategoryLoading(true);
+      const res = await store.category.read(
+        (data) => {
+          setCategories(data);
+        },
+        () => setCategoryLoading(false)
+      );
+    },
+    update: async (id, newData) => {
+      const res = await store.category.save(id, newData);
+      return res;
+    },
+    delete: async (id) => {
+      await store.category.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.category.delete(id);
+      return res;
+    }
+  };
+  /** End Shop Product Category Data / Functions */
+
+  /** Begin Meta Data / Functions */
+  const [metaData, setMetaData] = useState([]);
+  const [metaDataLoading, setMetaDataLoading] = useState(true);
+  const meta = {
+    metaData,
+    setMetaData,
+    create: async (newData) => {
+      const res = await store.meta.save(nanoid(), newData);
+      return res;
+    },
+    read: async () => {
+      setMetaDataLoading(true);
+      const res = await store.meta.readAll();
+      if (res.code === "succeed") {
+        setMetaData(res.data);
+      }
+
+      setMetaDataLoading(false);
+    },
+    update: async (id, newData) => {
+      const res = await store.meta.save(id, newData);
+      return res;
+    },
+    delete: async (id) => {
+      await store.meta.save(id, { deleted: true });
+      // router.push('/');
+    },
+    fullDelete: async (id) => {
+      const res = await store.meta.delete(id);
+      return res;
+    }
+  };
+  /** End Meta Data / Functions */
 
   const isLoading = useMemo(() => {
     return (
       organizationLoading ||
+      organizerLoading ||
       eventLoading ||
       teamLoading ||
       playerLoading ||
+      staffLoading ||
+      sponsorLoading ||
       ticketLoading ||
-      shopLoading
+      shopLoading ||
+      productLoading ||
+      categoryLoading
     );
-  }, [organizationLoading, eventLoading, teamLoading, playerLoading, ticketLoading, shopLoading]);
+  }, [
+    organizationLoading,
+    organizerLoading,
+    eventLoading,
+    teamLoading,
+    playerLoading,
+    ticketLoading,
+    shopLoading,
+    productLoading,
+    categoryLoading,
+    staffLoading,
+    sponsorLoading
+  ]);
 
   const loadTournament = useCallback(() => {
     if (user && user.id) {
-      organization.read(user.id);
+      organizer.read(user.id);
       team.read(user.id);
     }
   }, [user]);
@@ -431,14 +711,20 @@ const TournamentProvider = (props) => {
   }, [loadTournament]);
 
   useEffect(() => {
+    article.read();
     event.read("");
     player.read();
     organization.read("");
+    organizer.read("");
+    sponsor.read("");
     team.read("");
+    staff.read("");
     match.read();
     post.read();
     ticket.read();
     shop.read();
+    product.read();
+    category.read();
     const intervalId = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
@@ -450,24 +736,26 @@ const TournamentProvider = (props) => {
   return (
     <TournamentContext.Provider
       value={{
-        tournaments,
-        matches,
-        participants,
-        organization,
+        article,
+        category,
         event,
-        team,
-        player,
-        match,
-        ticket,
-        post,
-        shop,
+        matches,
         message,
-        organizationLoading,
-        eventLoading,
+        match,
+        organization,
+        sponsor,
+        organizer,
+        participants,
+        player,
+        post,
+        product,
+        shop,
+        team,
+        staff,
+        ticket,
+        tournaments,
+        meta,
         matchLoading,
-        playerLoading,
-        teamLoading,
-        postLoading,
         currentTime,
         setCurrentTime
       }}

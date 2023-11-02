@@ -2,7 +2,7 @@ import { Box, Tooltip, Typography, styled, tooltipClasses, useTheme } from "@mui
 import { useDispatch, useSelector } from "react-redux";
 
 import Link from "next/link";
-import PostItem from "../PostItem";
+import PostItem from "@/src/components/widgets/rogue-social/PostItem";
 import dayjs from "dayjs";
 import { readPost } from "@/src/redux/features/postSlice";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -50,8 +50,12 @@ const Notifications = ({ notifications }) => {
         </Box>
         <Box sx={{ p: 2, borderTop: "solid 1px rgba(255,255,255,.2)" }}>
           <Typography color="white">
-            {followers.slice(0, 3).map((follower) => (
-              <Link href={"/user/" + follower.id} style={{ color: theme.palette.primary.main }}>
+            {followers.slice(0, 3).map((follower, i) => (
+              <Link
+                key={`follower-${i}`}
+                href={"/user/" + follower.id}
+                style={{ color: theme.palette.primary.main }}
+              >
                 {follower.name}
               </Link>
             ))}
@@ -70,8 +74,11 @@ const Notifications = ({ notifications }) => {
             NO POSTS
           </Typography>
         ) : (
-          myPosts.map((val) => (
-            <Box sx={{ borderTop: "solid 1px rgba(255,255,255,.2)", px: 2, py: 1 }}>
+          myPosts.map((val, i) => (
+            <Box
+              key={`post-${i}`}
+              sx={{ borderTop: "solid 1px rgba(255,255,255,.2)", px: 2, py: 1 }}
+            >
               <Link href={"/rogue-social/?tab=0"}>
                 <Typography
                   sx={{ color: "white", ":hover": { color: theme.palette.primary.main } }}
@@ -93,8 +100,11 @@ const Notifications = ({ notifications }) => {
             NO POSTS
           </Typography>
         ) : (
-          myPosts.map((val) => (
-            <Box sx={{ borderTop: "solid 1px rgba(255,255,255,.2)", px: 2, py: 1 }}>
+          myPosts.map((val, i) => (
+            <Box
+              key={`post-${i}`}
+              sx={{ borderTop: "solid 1px rgba(255,255,255,.2)", px: 2, py: 1 }}
+            >
               <Link href={"/rogue-social/?tab=0"}>
                 <Typography
                   sx={{ color: "white", ":hover": { color: theme.palette.primary.main } }}
@@ -129,8 +139,11 @@ const Notifications = ({ notifications }) => {
             NO POSTS
           </Typography>
         ) : (
-          myPosts.map((val) => (
-            <Box sx={{ borderTop: "solid 1px rgba(255,255,255,.2)", px: 2, py: 1 }}>
+          myPosts.map((val, i) => (
+            <Box
+              key={`post-${i}`}
+              sx={{ borderTop: "solid 1px rgba(255,255,255,.2)", px: 2, py: 1 }}
+            >
               <Typography sx={{ color: "white", ":hover": { color: theme.palette.primary.main } }}>
                 <StyledTooltip title={<PostItem item={val} asTooltip={true} />}>
                   <Link href={"/rogue-social/?tab=0"}>{val.reply + " replied to your post."}</Link>

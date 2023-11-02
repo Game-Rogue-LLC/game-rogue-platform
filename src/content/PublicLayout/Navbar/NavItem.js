@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { Box, Button, Divider, Menu, MenuItem, Typography, styled, useTheme } from "@mui/material";
+import { useMemo, useState } from "react";
+
 import Link from "next/link";
-import { Box, Button, Menu, MenuItem, Typography, useTheme, styled, Divider } from "@mui/material";
 
 export const StyledMenu = styled((props) => <Menu {...props} />)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -28,6 +29,9 @@ export const StyledMenu = styled((props) => <Menu {...props} />)(({ theme }) => 
         backgroundColor: "rgba(255, 255, 255, 0.1)"
       }
     }
+  },
+  "& .MuiList-root.MuiList-padding.MuiMenu-list": {
+    padding: 0
   }
 }));
 

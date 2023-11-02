@@ -1,48 +1,54 @@
-import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-  Grid,
-  Paper,
-  useTheme,
-  Typography,
-  TextField,
-  Alert,
-  OutlinedInput,
-} from "@mui/material";
+import { Alert, Box, OutlinedInput, Paper, TextField, Typography, useTheme } from "@mui/material";
+import { useEffect, useMemo } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
+import Button from "@mui/material/Button";
+import OrganizationList from "@/src/components/widgets/rogue-social/accounts/OrganizationList";
 import { useAppContext } from "@/src/context/app";
+import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { useAuthContext } from "@/src/context/AuthContext";
 
 const Page = (props) => {
   const theme = useTheme();
   const { user } = useAuthContext();
   const router = useRouter();
   const { setTitle } = useAppContext();
-  const { organization, event } = useTournamentContext();
+  const { organization, event, team } = useTournamentContext();
 
   useEffect(() => {
-    setTitle("ORGANIZATION");
-    if (Object.keys(organization.organizations).length === 0)
-      router.push("/organization/create");
+    setTitle("Event Organization");
+    if (Object.keys(organization.organizations).length === 0) router.push("/organization/create");
     organization.setCurrent(null);
     event.setCurrent(null);
   }, []);
 
+  const myOrganizations = useMemo(() => {
+    if (organization?.organizations) {
+      return _.filter(organization.organizations, (val) => val.uid === user.id);
+    }
+    return [];
+  }, [organization?.organizations, user]);
+
   return (
-    <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
-      <Grid container rowSpacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h6">Organization Dashboard</Typography>
-        </Grid>
-        <Grid item xs={12}></Grid>
-      </Grid>
+    <Paper sx={{ px: 4, py: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Typography
+          variant="h4"
+          color={theme.palette.primary.main}
+          sx={{ fontStyle: "italic", mb: 2 }}
+        >
+          My Organizations
+        </Typography>
+        <Button variant="contained">Create Event</Button>
+      </Box>
+      {myOrganizations.length > 0 ? (
+        <OrganizationList items={myOrganizations} />
+      ) : (
+        <Typography variant="subtitle1" sx={{ textAlign: "center" }}>
+          No Organizations
+        </Typography>
+      )}
     </Paper>
   );
 };

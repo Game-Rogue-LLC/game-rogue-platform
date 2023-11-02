@@ -13,6 +13,7 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
+import { customMessages, model, rules } from "@/lib/firestore/collections/player";
 import { useEffect, useState } from "react";
 
 import CountrySelect from "@/src/components/dropdown/CountrySelect";
@@ -20,9 +21,9 @@ import DatePicker from "@/src/components/datetime/DatePicker";
 import { LoadingButton } from "@mui/lab";
 import UserInfo from "@/src/components/widgets/user/UserInfo";
 import Validator from "validatorjs";
+import { enqueueSnackbar } from "notistack";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { model, rules, customMessages } from "@/lib/firestore/collections/player";
 
 const initialInputs = {
   ...model
@@ -66,11 +67,17 @@ const AccountInfo = ({ item }) => {
   const handle = {
     save: async (e) => {
       if (validate(inputs, rules, customMessages) === false) return;
-      const playerExists = await player.exists(inputs?._id);
-      if (playerExists) {
-        setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
+      // const rogueIdExists = await player.rogueIdExists(user.user?.id, inputs?._id);
+      // if (rogueIdExists) {
+      //   setErrors((prev) => ({ ...prev, _id: "Rogue ID is already taken." }));
+      //   return;
+      // } else setErrors((prev) => ({ ...prev, _id: undefined }));
+
+      const userNameExists = await player.userNameExists(user.user?.id, inputs?.userName);
+      if (userNameExists) {
+        setErrors((prev) => ({ ...prev, userName: "Username is already taken." }));
         return;
-      } else setErrors((prev) => ({ ...prev, _id: undefined }));
+      } else setErrors((prev) => ({ ...prev, userName: undefined }));
 
       setSaving(true);
       let uploaded = true,
@@ -100,7 +107,7 @@ const AccountInfo = ({ item }) => {
 
       const res = await player.update(item.id, newData);
       if (res.code === "succeed") {
-        alert("Saved successfully!");
+        enqueueSnackbar("Saved successfully!", { variant: "success" });
       } else {
         console.warn(res.message);
       }
@@ -134,7 +141,7 @@ const AccountInfo = ({ item }) => {
       </Grid>
       <Grid item xs>
         <Grid container spacing={2} rowSpacing={2}>
-          <Grid item xs={12} lg={6}>
+          {/* <Grid item xs={12} lg={6}>
             <Typography variant="h6">Rogue ID</Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors._id !== undefined}>
               <OutlinedInput
@@ -146,12 +153,12 @@ const AccountInfo = ({ item }) => {
                 onChange={handle.inputs}
               />
               {errors._id !== undefined && (
-                <FormHelperText id="user-name-helper" sx={{ mt: 2 }}>
+                <FormHelperText id="rogue-id-helper" sx={{ mt: 2 }}>
                   {errors._id}
                 </FormHelperText>
               )}
             </FormControl>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} lg={6}>
             <Typography variant="h6">User Name</Typography>
             <FormControl sx={{ mt: 1 }} fullWidth error={errors.userName !== undefined}>

@@ -1,8 +1,12 @@
 import {
+  Box,
   Button,
   Chip,
+  FormControl,
   Grid,
   InputBase,
+  InputLabel,
+  LinearProgress,
   ListItemIcon,
   MenuItem,
   Paper,
@@ -10,16 +14,19 @@ import {
   Typography,
   styled
 } from "@mui/material";
-import { EVENT_FORMATS, EVENT_STATES } from "@/src/config/global";
+import { EVENT_FORMATS, EVENT_STATES, TICKET_TYPES } from "@/src/config/global";
 import { useEffect, useMemo, useState } from "react";
 
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 import { DEFAULT_CONTENTBLOCK_IMAGE } from "@/src/config/global";
+import { GAMES } from "@/src/config/global";
 import { LoadingButton } from "@mui/lab";
 import TeamItem from "@/src/components/item/TeamItem";
+import TeamRegisterDialog from "./TeamRegisterDialog";
+import { buttonStyle } from "@/src/utils/utils";
 import dayjs from "dayjs";
-import { games } from "@/src/components/dropdown/GameSelect";
+import { enqueueSnackbar } from "notistack";
 import { markdownToHtml } from "@/src/utils/html-markdown";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
@@ -53,10 +60,11 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   const router = useRouter();
   const { user } = useAuthContext();
   const { colors, secondaryBackgroundColor, fontColor } = useStyleContext();
-  const { organization, event, team, currentTime } = useTournamentContext();
+  const { organizer, event, ticket, team, currentTime } = useTournamentContext();
   const [myTeam, setMyTeam] = useState("");
   const [registrationStatus, setRegistrationStatus] = useState(0);
   const [registering, setRegistering] = useState(false);
+  const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
 
   const myTeams = useMemo(() => {
     if (team?.teams) {
@@ -65,6 +73,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     return [];
   }, [team?.teams, user]);
 
+  // <a href="https://link.clover.com/urlshortener/8ZGvTs" style="background-color:#f5831f;border:1px solid #f5831f;min-height:50px;color:#000;padding:10px 20px;text-decoration:none;border-radius:4px;">REGISTER  $30.00</a>
   useEffect(() => {
     if (currentTime) {
       if (dayjs(currentTime).isAfter(dayjs(endTime))) setRegistrationStatus(2);
@@ -73,11 +82,11 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     }
   }, [currentTime]);
 
-  useEffect(() => {
-    if (myTeams.length > 0) {
-      setMyTeam(myTeams[0]);
-    }
-  }, [myTeams]);
+  // useEffect(() => {
+  //   if (myTeams.length > 0) {
+  //     setMyTeam(myTeams[0]);
+  //   }
+  // }, [myTeams]);
 
   const handleSelectTeam = (e) => {
     const { value } = e.target;
@@ -88,40 +97,103 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     router.push("/auth");
   };
 
-  const handleRegister = async (e) => {
-    setRegistering(true);
-    const res = await event.addParticipant(eid, myTeam);
-    setRegistering(false);
-    if (res.code === "succeed") {
-      if (organization.organizations[event.events[eid].oid]?.uid == user?.id)
-        router.push("/participant?event=" + eid);
-      else alert("Registered Successfully!");
-    } else if (res.code === "failed") {
-      console.warn(res.message);
+  const onOpenRegisterDialog = (e) => {
+    setOpenRegisterDialog(true);
+  };
+  const onCloseRegisterDialog = () => {
+    setOpenRegisterDialog(false);
+  };
+  const onRegisterTeam = async ({ text }) => {
+    if (_.find(event.events[eid]?.participants, (val) => val.id === myTeam)) {
+      return {
+        code: "failed",
+        message: "Team already registered!"
+      };
     }
+
+    if (_.size(event.events[eid]?.participants) >= event.events[eid]?.participantsCount) {
+      return {
+        code: "failed",
+        message: `Only ${event.events[eid]?.participantsCount} teams can register!`
+      };
+    }
+
+    const newTicket = {
+      type: TICKET_TYPES.TEAM_REGISTER_REQUEST,
+      sender: user.id,
+      receiver: organizer.organizers[event.events[eid]?.oid]?.uid,
+      data: {
+        team: myTeam,
+        event: eid,
+        text
+      },
+      openedAt: new Date(),
+      createdAt: new Date(),
+      deleted: false
+    };
+
+    const res = await ticket.create(newTicket);
+    return res;
+  };
+  const onCreateTeam = () => {
+    router.push("/team/create");
   };
 
   return (
     <Grid container spacing={2} rowSpacing={3} sx={{ mt: 2 }}>
       <Grid item xs={12} lg={6}>
-        <Paper
-          sx={{
-            p: 3,
-            minHeight: "200px",
-            backgroundColor: secondaryBackgroundColor
-          }}
-        >
-          <Typography variant="h4" fontSize={24} color={colors.primary}>
-            Description
-          </Typography>
-          <div
-            className="html-wrapper"
-            style={{ marginTop: "16px" }}
-            dangerouslySetInnerHTML={{
-              __html: markdownToHtml(item?.description)
-            }}
-          ></div>
-        </Paper>
+        <Grid container spacing={2} rowSpacing={2}>
+          <Grid item xs={12}>
+            <Paper
+              sx={{
+                p: 3,
+                minHeight: "200px",
+                backgroundColor: secondaryBackgroundColor
+              }}
+            >
+              <Typography variant="h4" fontSize={24} color={colors.primary}>
+                Description
+              </Typography>
+              <div
+                className="html-wrapper"
+                style={{ marginTop: "16px" }}
+                dangerouslySetInnerHTML={{
+                  __html: markdownToHtml(item?.description)
+                }}
+              ></div>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper
+              sx={{
+                p: 3,
+                minHeight: "200px",
+                backgroundColor: secondaryBackgroundColor
+              }}
+            >
+              <Typography variant="h4" fontSize={24} color={colors.primary}>
+                Contribute
+              </Typography>
+              <Typography variant="h6">
+                CROWDFUND GOAL:{" $"}
+                {organizer.organizers[event.events[eid]?.oid]?.crowdFund}
+              </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={
+                  organizer.organizers[event.events[eid]?.oid]?.crowdFund
+                    ? (organizer.organizers[event.events[eid]?.oid]?.actualFund * 100.0) /
+                        organizer.organizers[event.events[eid]?.oid]?.crowdFund +
+                      5
+                    : 0
+                }
+              />
+              <Button variant="contained" sx={{ ...buttonStyle(colors.primary), mt: 3 }}>
+                Contribute
+              </Button>
+            </Paper>
+          </Grid>
+        </Grid>
       </Grid>
       <Grid item xs={12} lg={6} container spacing={2} rowSpacing={2}>
         <Grid item xs={12}>
@@ -159,7 +231,7 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
               Game
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              {games[item?.game]?.name}
+              {GAMES[item?.game]?.name}
             </Typography>
           </Paper>
         </Grid>
@@ -209,72 +281,98 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={12}>
-          <Paper sx={{ p: 3, backgroundColor: secondaryBackgroundColor }}>
-            {user && (
-              <TeamSelect
-                labelId="team-select-label"
-                id="team-select"
-                value={myTeam}
-                name="team"
-                size="small"
-                onChange={handleSelectTeam}
-                variant="outlined"
-                sx={{
-                  mt: 1
-                }}
-                fullWidth
-                input={<TeamSelectInput />}
-                inputProps={{
-                  MenuProps: {
-                    disableScrollLock: true
-                  }
-                }}
-              >
-                {myTeams?.map((tid) => {
-                  const item = team.teams[tid];
-                  return (
-                    <MenuItem
-                      key={"team_" + tid}
-                      value={tid}
-                      sx={{ display: "flex", alignItems: "center" }}
-                    >
-                      <ListItemIcon>
-                        <img
-                          src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
-                          height={30}
-                          width={30}
-                          style={{
-                            objectFit: "cover",
-                            objectPosition: "center"
-                          }}
-                        />
-                      </ListItemIcon>
-                      {item?.name}
-                    </MenuItem>
-                  );
-                })}
-              </TeamSelect>
-            )}
-            {!user ? (
-              <CustomButton variant="contained" sx={{ width: "100%", mt: 1 }} onClick={handleLogin}>
-                Login to Register
-              </CustomButton>
-            ) : (
-              <CustomLoadingButton
-                loading={registering}
-                variant="contained"
-                sx={{ width: "100%", mt: 1 }}
-                onClick={handleRegister}
-                disabled={
-                  dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
-                }
-              >
-                Register to an event
-              </CustomLoadingButton>
-            )}
-          </Paper>
-        </Grid>
+        {/* item?.status < EVENT_STATES.STARTED.value || */
+        dayjs(item?.registerTo).isAfter(new Date()) && (
+          <Grid item xs={12}>
+            <Paper sx={{ p: 3, backgroundColor: secondaryBackgroundColor }}>
+              {user && (
+                <>
+                  <InputLabel id="team-select-label">Select your team</InputLabel>
+                  <TeamSelect
+                    labelId="team-select-label"
+                    id="team-select"
+                    value={myTeam}
+                    name="team"
+                    // size="small"
+                    onChange={handleSelectTeam}
+                    variant="outlined"
+                    sx={{
+                      mt: 1
+                    }}
+                    fullWidth
+                    input={<TeamSelectInput />}
+                    inputProps={{
+                      MenuProps: {
+                        disableScrollLock: true
+                      }
+                    }}
+                  >
+                    {myTeams?.map((tid) => {
+                      const item = team.teams[tid];
+                      return (
+                        <MenuItem
+                          key={"team_" + tid}
+                          value={tid}
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <ListItemIcon>
+                            <img
+                              src={item?.darkLogo || DEFAULT_CONTENTBLOCK_IMAGE}
+                              height={30}
+                              width={30}
+                              style={{
+                                objectFit: "cover",
+                                objectPosition: "center"
+                              }}
+                            />
+                          </ListItemIcon>
+                          {item?.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </TeamSelect>
+                </>
+              )}
+              {!user ? (
+                <CustomButton
+                  variant="contained"
+                  sx={{ width: "100%", mt: 1 }}
+                  onClick={handleLogin}
+                >
+                  Login to Register
+                </CustomButton>
+              ) : (
+                <Box sx={{ display: "flex", alignItems: "center", mt: 1, gap: 1 }}>
+                  <TeamRegisterDialog
+                    open={openRegisterDialog}
+                    onClose={onCloseRegisterDialog}
+                    onRegister={onRegisterTeam}
+                    eid={eid}
+                  />
+
+                  <LoadingButton
+                    loading={registering}
+                    variant="contained"
+                    sx={{
+                      flex: 1,
+                      ...buttonStyle(organizer.organizers[event.events[eid]?.oid]?.primary)
+                    }}
+                    onClick={onOpenRegisterDialog}
+                    disabled={
+                      myTeam === ""
+
+                      // dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
+                    }
+                  >
+                    {`Register - $${Number(item?.entryFee).toFixed(2)}`}
+                  </LoadingButton>
+
+                  <CustomButton onClick={onCreateTeam}>Create Team</CustomButton>
+                </Box>
+              )}
+            </Paper>
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );

@@ -63,8 +63,8 @@ const Auth = () => {
           top: 0,
           left: 0
         }}>
-        <video autoPlay loop muted poster="/static/images/event_banner.png">
-          <source src="/static/images/event_banner.mp4" type="video/mp4" />
+        <video autoPlay loop muted poster="/static/images/home/event_banner.png">
+          <source src="/static/videos/event_banner.mp4" type="video/mp4" />
         </video>
       </Box>
       <Box
@@ -117,7 +117,7 @@ const Auth = () => {
             }}>
             <Box maxWidth="sm">
               <Box className="gr-login-banner" sx={{ py: 4 }}>
-                <img src="/GR_Letters.png" style={{ filter: "brightness(0)" }} />
+                <img src="/static/images/home/gr_letters.png" style={{ filter: "brightness(0)" }} />
               </Box>
               <Box sx={{ mt: 4, px: 4 }}></Box>
               <Box sx={{ mt: 2, p: 4 }}>

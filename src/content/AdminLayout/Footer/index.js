@@ -22,7 +22,7 @@ const Footer = () => {
 				<Typography variant="h6">Welcome to Game Rogue</Typography>
 			</Box>
 			<Box>
-				<img src={'/GR_Letters.png'} style={{height:50}} />
+				<img src={'/static/images/home/gr_letters.png'} style={{height:50}} />
 			</Box>
 		</Box>
 	</Card>

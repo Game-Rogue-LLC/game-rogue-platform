@@ -1,6 +1,6 @@
 import { Box, Skeleton } from "@mui/material";
+import { DEFAULT_DARK_LOGO, DEFAULT_LIGHT_LOGO } from "@/src/config/global";
 
-import { DEFAULT_LOGO } from "@/src/config/global";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,10 +21,9 @@ export default function ({ team, win, sx, width, height, fontSize, disableLink }
         ...sx
       }}
     >
-      {/* <img src={team?.darkLogo ?? DEFAULT_LOGO} style={{ height: '30px' }} />&nbsp; */}
       <Image
         loading="lazy"
-        src={team?.darkLogo ?? DEFAULT_LOGO}
+        src={team?.darkLogo ?? DEFAULT_DARK_LOGO}
         alt={team?.darkLogo}
         width={width || 30}
         height={height || 30}

@@ -1,94 +1,103 @@
+import * as config from "@/src/config/global";
+
 import {
-  Alert,
   Box,
+  Button,
   Container,
   FormControl,
   FormHelperText,
   Grid,
+  IconButton,
   InputLabel,
   OutlinedInput,
   Paper,
-  TextField,
   Typography,
-  IconButton,
   useTheme
 } from "@mui/material";
+import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
 import { customMessages, model, rules } from "@/lib/firestore/collections/shops";
 import { useEffect, useState } from "react";
 
-import AdminLayout from "@/src/content/AdminLayout";
-import Button from "@mui/material/Button";
-import CountrySelect from "@/src/components/dropdown/CountrySelect";
-import { DEFAULT_LOGO } from "@/src/config/global";
-import GameSelect from "@/src/components/dropdown/GameSelect";
+import ColorSelect from "@/src/components/dropdown/ColorSelect";
 import { Edit } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import * as config from "@/src/config/global";
+import ShopLayout from "@/src/content/ShopLayout";
 import Validator from "validatorjs";
-import { useAppContext } from "@/src/context/app";
+import { enqueueSnackbar } from "notistack";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
-import TournamentProvider, { useTournamentContext } from "@/src/context/TournamentContext";
-import PublicLayout from "@/src/content/PublicLayout";
+import { useStyleContext } from "@/src/context/StyleContext";
 
 const initialInputs = {
   ...model
 };
 
 const Page = (props) => {
-  const theme = useTheme();
   const router = useRouter();
+  const theme = useTheme();
   const { user } = useAuthContext();
-  const { setTitle } = useAppContext();
+  const { shop } = useTournamentContext();
+  const { colors, setColors } = useStyleContext();
+  const [banner, setBanner] = useState(null);
   const [inputs, setInputs] = useState({ ...initialInputs });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
-  const [banner, setBanner] = useState(null);
   const [disabled, setDisabled] = useState(false);
-  const { shop } = useTournamentContext();
+
+  useEffect(() => {
+    setColors({
+      primary: inputs?.primary,
+      secondary: inputs?.secondary,
+      tertiary: inputs?.tertiary
+    });
+  }, [inputs?.primary, inputs?.secondary, inputs?.tertiary]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
     if (validator.fails()) {
-      setErrors(validator.errors.errors);
+      setErrors((prev) => ({
+        ...prev,
+        ...validator.errors.errors
+      }));
       return false;
     }
+
     setErrors({});
     return true;
   };
 
   const handle = {
     create: async (e) => {
-      if (validate(inputs, rules, customMessages) === false) return;
-
+      if (validate(inputs, rules, customMessages) === false) {
+        return;
+      }
+      let newShop = { ...inputs, uid: user.id };
       setSaving(true);
 
-      const newShop = {
-        ...inputs,
-        uid: user.id,
-        createdAt: new Date()
-      };
-
-      const data = await shop.create(newShop);
-
-      if (data.code === "succeed") {
-        let uploaded = true;
-
+      const res = await shop.create(newShop);
+      if (res.code === "succeed") {
         if (banner) {
-          uploaded = false;
-          const res = await shop.upload(banner, data.data.id, "banner");
-          if (res.code === "succeed") {
-            uploaded = true;
-            await shop.update(data.data.id, { banner: res.url });
+          const res1 = await shop.upload(banner, res.data.id, "banner");
+          if (res1.code === "succeed") {
+            const res2 = await shop.update(res.data.id, { banner: res1.url });
+            if (res2.code === "succeed") {
+              enqueueSnackbar("Saved successfully!", { variant: "success" });
+            } else {
+              console.warn(res2.message);
+            }
+          } else {
+            console.warn(res1.message);
           }
         }
       } else {
-        console.warn(data.message);
+        console.warn(res.message);
       }
+
       setSaving(false);
     },
     inputs: (e) => {
       let { name, type, value } = e.target;
+      if (type === "number") value = Number(value);
       setInputs({
         ...inputs,
         [name]: value
@@ -114,8 +123,15 @@ const Page = (props) => {
     setTitle("CREATE SHOP");
   }, []);
 
+  const onColorChange = (name, value) => {
+    setInputs({
+      ...inputs,
+      [name]: value?.hex
+    });
+  };
+
   return (
-    <Container sx={{ marginTop: "20px", marginBottom: "20px" }}>
+    <Container sx={{ py: 4 }}>
       <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
         <Grid container rowSpacing={3} spacing={2}>
           <Grid item xs={12}>
@@ -147,14 +163,13 @@ const Page = (props) => {
               />
             </Box>
           </Grid>
-
           <Grid item xs={12}>
-            <InputLabel htmlFor="shop-name">Shop Name</InputLabel>
+            <InputLabel htmlFor="name">Shop Name</InputLabel>
             <FormControl fullWidth error={errors.name !== undefined}>
               <OutlinedInput
-                id="shop-name"
+                id="name"
                 name="name"
-                aria-describedby="shop-name-helper"
+                aria-describedby="name-helper"
                 value={inputs.name}
                 onChange={handle.inputs}
                 sx={{ mt: 1 }}
@@ -162,35 +177,70 @@ const Page = (props) => {
                 required
               />
               {errors.name !== undefined && (
-                <FormHelperText id="shop-name-helper" sx={{ mt: 2 }}>
+                <FormHelperText id="name-helper" sx={{ mt: 2 }}>
                   {errors.name}
                 </FormHelperText>
               )}
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <InputLabel htmlFor="shop-description">Description</InputLabel>
-            <FormControl fullWidth error={errors.short !== undefined}>
+            <InputLabel htmlFor="description">Tagline</InputLabel>
+            <FormControl fullWidth error={errors.description !== undefined}>
               <OutlinedInput
-                id="shop-description"
+                id="description"
                 name="description"
-                value={inputs.short}
-                aria-describedby="shop-description"
+                value={inputs.description}
+                aria-describedby="description-helper"
                 onChange={handle.inputs}
                 sx={{ mt: 1 }}
                 fullWidth
                 required
               />
-              {errors.short !== undefined && (
-                <FormHelperText id="shop-description-helper" sx={{ mt: 2 }}>
-                  {errors.short}
+              {errors.description !== undefined && (
+                <FormHelperText id="description-helper" sx={{ mt: 2 }}>
+                  {errors.description}
                 </FormHelperText>
               )}
             </FormControl>
           </Grid>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={12} lg={4}>
+              <InputLabel>Primary</InputLabel>
+              <ColorSelect
+                name="primary"
+                label="Primary"
+                value={inputs?.primary}
+                disabled={disabled}
+                onChange={(val) => onColorChange("primary", val)}
+                sx={{ mt: 1 }}
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <InputLabel>Secondary</InputLabel>
+              <ColorSelect
+                name="secondary"
+                label="Secondary"
+                disabled={disabled}
+                value={inputs?.secondary}
+                onChange={(val) => onColorChange("secondary", val)}
+                sx={{ mt: 1 }}
+              />
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <InputLabel>Tertiary</InputLabel>
+              <ColorSelect
+                name="tertiary"
+                label="Tertiary"
+                disabled={disabled}
+                value={inputs?.tertiary}
+                onChange={(val) => onColorChange("tertiary", val)}
+                sx={{ mt: 1 }}
+              />
+            </Grid>
+          </Grid>
           <Grid item>
             <LoadingButton loading={saving} variant="contained" onClick={handle.create}>
-              Create Shop
+              Register
             </LoadingButton>
           </Grid>
         </Grid>
@@ -202,7 +252,7 @@ const Page = (props) => {
 Page.getLayout = (page) => {
   return (
     <TournamentProvider>
-      <PublicLayout>{page}</PublicLayout>
+      <ShopLayout>{page}</ShopLayout>
     </TournamentProvider>
   );
 };

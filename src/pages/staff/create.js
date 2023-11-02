@@ -47,16 +47,16 @@ const Page = (props) => {
   const router = useRouter();
   const { user } = useAuthContext();
   const { setTitle } = useAppContext();
-  const { organization, player } = useTournamentContext();
+  const { organizer, player } = useTournamentContext();
   const [inputs, setInputs] = useState({ ...initialInputs });
   const [errors, setErrors] = useState({});
   const [disabled, setDisabled] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
-    if (router?.query.organization) {
-      const newOID = router.query.organization;
-      organization.setCurrent(newOID);
+    if (router?.query.organizer) {
+      const newOID = router.query.organizer;
+      organizer.setCurrent(newOID);
     }
   }, [router]);
 
@@ -82,7 +82,7 @@ const Page = (props) => {
 
   const handle = {
     create: async (e) => {
-      let newStaff = organization.organizations[organization.current]?.staff;
+      let newStaff = organizer.organizers[organizer.current]?.staff;
       if (!newStaff) newStaff = [];
       newStaff = [
         ...newStaff.filter((val) => val.uid !== inputs.uid),
@@ -96,12 +96,12 @@ const Page = (props) => {
         }
       ];
 
-      const res = await organization.update(organization.current, {
+      const res = await organizer.update(organizer.current, {
         staff: newStaff
       });
 
       if (res.code === "succeed") {
-        router.push("/staff?organization=" + organization.current);
+        router.push("/staff?organizer=" + organizer.current);
       } else if (res.code === "failed") {
         console.warn(res.message);
       }

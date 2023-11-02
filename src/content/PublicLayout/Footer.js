@@ -1,4 +1,4 @@
-import { Box, SvgIcon, Typography, useTheme } from "@mui/material";
+import { Box, Grid, SvgIcon, Typography, useTheme } from "@mui/material";
 import { Instagram, Twitter, YouTube } from "@mui/icons-material";
 
 import Link from "next/link";
@@ -14,124 +14,280 @@ const Footer = (props) => {
           paddingTop: 5
         }}
       >
-        <Box
+        <Grid
+          container
+          spacing={2}
+          rowSpacing={4}
           sx={{
-            position: "relative",
-            display: "flex",
-            justifyContent: "space-between",
-            maxWidth: "75%",
-            mx: "auto"
+            justifyContent: "center",
+            position: "relative"
           }}
         >
-          <Box
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md
             sx={{
               textAlign: "center"
             }}
           >
-            <Typography variant="h4" sx={{ color: theme.palette.primary.main, fontSize: "25px" }}>
-              HOME
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              <Link href="/about">ABOUT US</Link>
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              TICKETS
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              WIKI
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              FAQS
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              SEARCH
-            </Typography>
-          </Box>
-          <Box
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: theme.palette.primary.main, fontSize: "25px", userSelect: "none" }}
+              >
+                HOME
+              </Typography>
+            </Link>
+            <Link href="/about">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                ABOUT US
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                TICKETS
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                WIKI
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                FAQS
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                SEARCH
+              </Typography>
+            </Link>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md
             sx={{
               textAlign: "center"
             }}
           >
-            <Typography variant="h4" sx={{ color: theme.palette.primary.main, fontSize: "25px" }}>
-              EVENTS
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
+            <Link href="/event">
+              <Typography
+                variant="h4"
+                sx={{ color: theme.palette.primary.main, fontSize: "25px", userSelect: "none" }}
+              >
+                EVENTS
+              </Typography>
+            </Link>
+            <Typography
+              variant="h4"
+              sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+            >
               FEATURED
             </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              LIVE NOW
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              ONGOING
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              <Link href={"/event/upcoming"}>UPCOMING</Link>
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              PAST
-            </Typography>
-          </Box>
-          <Box
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                LIVE NOW
+              </Typography>
+            </Link>
+            <Link href="/event/ongoing">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                ONGOING
+              </Typography>
+            </Link>
+            <Link href="/event/upcoming">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                UPCOMING
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                PAST
+              </Typography>
+            </Link>
+          </Grid>
+          <Grid
+            xs={6}
+            sm={4}
+            md
+            item
             sx={{
               textAlign: "center"
             }}
           >
-            <Typography variant="h4" sx={{ color: theme.palette.primary.main, fontSize: "25px" }}>
-              MY TEAM
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              MY MATCHES
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              MY PROFILE
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              ARTICLES
-            </Typography>
-          </Box>
-          <Box
+            <Link href="/shop">
+              <Typography
+                variant="h4"
+                sx={{ color: theme.palette.primary.main, fontSize: "25px", userSelect: "none" }}
+              >
+                SHOP
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                ROGUE MERCH
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                TEAM MERCH
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                CUSTOMIZE
+              </Typography>
+            </Link>
+          </Grid>
+          <Grid
+            xs={6}
+            sm={4}
+            md
+            item
             sx={{
               textAlign: "center"
             }}
           >
-            <Typography variant="h4" sx={{ color: theme.palette.primary.main, fontSize: "25px" }}>
-              SHOP
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              ROGUE MERCH
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              TEAM MERCH
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              CUSTOMIZE
-            </Typography>
-          </Box>
-          <Box
+            <Link href="/team">
+              <Typography
+                variant="h4"
+                sx={{ color: theme.palette.primary.main, fontSize: "25px", userSelect: "none" }}
+              >
+                MY TEAM
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                MY MATCHES
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                MY PROFILE
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                ARTICLES
+              </Typography>
+            </Link>
+            <Link href="/sponsor">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                SPONSOR
+              </Typography>
+            </Link>
+          </Grid>
+          <Grid
+            xs={6}
+            sm={4}
+            md
+            item
             sx={{
               textAlign: "center"
             }}
           >
-            <Typography variant="h4" sx={{ color: theme.palette.primary.main, fontSize: "25px" }}>
-              ORGANIZER
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              DASHBOARD
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              MATCH CHATS
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              GO LIVE
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              COMMUNITY
-            </Typography>
-            <Typography variant="h4" sx={{ color: "white", fontSize: "25px", mt: 3 }}>
-              CREATE
-            </Typography>
-          </Box>
-        </Box>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: theme.palette.primary.main, fontSize: "25px", userSelect: "none" }}
+              >
+                ORGANIZER
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                DASHBOARD
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                MATCH CHATS
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                GO LIVE
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                COMMUNITY
+              </Typography>
+            </Link>
+            <Link href="/">
+              <Typography
+                variant="h4"
+                sx={{ color: "white", fontSize: "25px", mt: 3, userSelect: "none" }}
+              >
+                CREATE
+              </Typography>
+            </Link>
+          </Grid>
+        </Grid>
         <Box
           sx={{
             width: "85%",
@@ -143,12 +299,12 @@ const Footer = (props) => {
           }}
         >
           <Box>
-            <img src="/static/images/security.png" />
-            <img src="/static/images/lock.png" />
+            <img src="/static/images/home/security.png" />
+            <img src="/static/images/home/lock.png" />
           </Box>
           <Box>
-            <img src="/static/images/paypal.png" />
-            <img src="/static/images/card.png" />
+            <img src="/static/images/home/paypal.png" />
+            <img src="/static/images/home/card.png" />
           </Box>
         </Box>
       </Box>
@@ -160,7 +316,7 @@ const Footer = (props) => {
           mt: 2,
           borderTop: "solid 3px white",
           pt: "40px",
-          pb: "80px"
+          pb: "20px"
         }}
       >
         <Box
@@ -171,7 +327,7 @@ const Footer = (props) => {
             width: "100%"
           }}
         >
-          <img src="/GR_Letters.png" />
+          <img src="/static/images/home/gr_letters.png" />
           <Box>
             <Typography
               variant="h4"
@@ -208,7 +364,7 @@ const Footer = (props) => {
                 borderRadius: "4px"
               }}
             >
-              <img src="/static/images/discord.svg" style={{ height: "30px" }} />
+              <img src="/static/images/home/discord.svg" style={{ height: "30px" }} />
             </Link>
             <Link
               href={"#"}
@@ -290,9 +446,21 @@ const Footer = (props) => {
                 borderRadius: "4px"
               }}
             >
-              <img src="/static/images/tiktok.svg" style={{ height: "30px" }} />
+              <img src="/static/images/home/tiktok.svg" style={{ height: "30px" }} />
             </Link>
           </Box>
+        </Box>
+
+        <Box
+          sx={{
+            mt: 2,
+            textAlign: "center",
+            width: "100%"
+          }}
+        >
+          <Typography variant="subtitle1" textTransform="uppercase" fontSize={20}>
+            Open Beta 1.0
+          </Typography>
         </Box>
       </Box>
     </Box>

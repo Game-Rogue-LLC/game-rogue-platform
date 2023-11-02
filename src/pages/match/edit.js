@@ -34,9 +34,9 @@ import { NULL_FUNCTION } from "@/src/config/global";
 import ScoresDialog from "@/src/components/dialog/ScoresDialog";
 import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
 import _ from "lodash";
+import { enqueueSnackbar } from "notistack";
 import { nanoid } from "nanoid";
 import { useAppContext } from "@/src/context/app";
-import { useMatchContext } from "@/src/context/MatchContext";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
@@ -46,7 +46,7 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
-  const { organization, event, team, match, matchLoading } = useTournamentContext();
+  const { organizer, event, team, match, matchLoading } = useTournamentContext();
   const [matches, setMatches] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
@@ -89,7 +89,7 @@ const Page = (props) => {
       if (event?.events && event.events[newEID]) {
         setEID(newEID);
         event.setCurrent(newEID);
-        organization.setCurrent(event.events[newEID]?.oid);
+        organizer.setCurrent(event.events[newEID]?.oid);
       } else {
         console.warn("Invalid Event ID");
         // TODO: Redirect to 404 page.
@@ -157,7 +157,7 @@ const Page = (props) => {
           status: EVENT_STATES.SCHEDULED.value
         });
         if (res.code === "succeed") {
-          alert("Scheduled successfully!");
+          enqueueSnackbar("Scheduled successfully!", { variant: "success" });
         }
       }
       setChangingStatus(false);
@@ -174,7 +174,7 @@ const Page = (props) => {
           status: EVENT_STATES.STARTED.value
         });
         if (res.code === "succeed") {
-          alert("Event started!");
+          enqueueSnackbar("Event started!", { variant: "success" });
         }
       }
       setChangingStatus(false);
@@ -191,7 +191,7 @@ const Page = (props) => {
           status: EVENT_STATES.FINISHED.value
         });
         if (res.code === "succeed") {
-          alert("Event finished!");
+          enqueueSnackbar("Event finished!", { variant: "success" });
         }
       }
       setChangingStatus(false);
@@ -223,7 +223,7 @@ const Page = (props) => {
       if (saved) {
         // const res = await event.update(eid, { status: 1 });
         // if (res.code === 'succeed') {
-        alert("Saved successfully!");
+        enqueueSnackbar("Saved successfully!", { variant: "success" });
         // }
       }
       setSaving(false);

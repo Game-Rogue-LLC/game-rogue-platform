@@ -1,8 +1,8 @@
-import { Badge, Box, Avatar as MuiAvatar, IconButton, styled, useTheme } from "@mui/material";
 import { AddAPhoto, Edit } from "@mui/icons-material";
+import { Badge, Box, IconButton, Avatar as MuiAvatar, styled, useTheme } from "@mui/material";
 
 import { useRouter } from "next/router";
-import { useTournamentContext } from "../context/TournamentContext";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
 export const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -41,7 +41,7 @@ const Avatar = ({
     <Box
       onClick={() => {
         if (editable === true) return;
-        else router.push("/user/" + user.id);
+        else if (user) router.push("/user/" + user.id);
       }}
       sx={{
         position: "relative",
@@ -51,7 +51,13 @@ const Avatar = ({
     >
       {hideStatus === true ? (
         <>
-          <MuiAvatar variant={variant} src={src || user?.profilePic} alt={user?.name} {...props} sx={{ ...sx }} />
+          <MuiAvatar
+            variant={variant}
+            src={src || user?.profilePic}
+            alt={user?.name}
+            {...props}
+            sx={{ ...sx }}
+          />
           {editable === true && (
             <IconButton
               size="large"
@@ -106,7 +112,13 @@ const Avatar = ({
             }
           }}
         >
-          <MuiAvatar variant={variant} src={src || user?.profilePic} alt={user?.name} {...props} sx={{ ...sx }} />
+          <MuiAvatar
+            variant={variant}
+            src={src || user?.profilePic}
+            alt={user?.name}
+            {...props}
+            sx={{ ...sx }}
+          />
           {editable === true && (
             <IconButton
               size="large"

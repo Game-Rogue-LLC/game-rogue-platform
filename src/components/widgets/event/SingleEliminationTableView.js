@@ -24,7 +24,7 @@ import { MATCH_STATES } from "@/src/config/global";
 const SingleEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
   const theme = useTheme();
-  const { organization, event, team, match } = useTournamentContext();
+  const { organizer, event, team, match } = useTournamentContext();
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {

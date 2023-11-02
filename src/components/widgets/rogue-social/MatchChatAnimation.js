@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import { DEFAULT_LOGO } from "@/src/config/global";
+import { DEFAULT_DARK_LOGO } from "@/src/config/global";
 import Image from "next/image";
 import match from "@/lib/firestore/collections/match";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -59,7 +59,7 @@ const MatchChatAnimation = ({ mid }) => {
         muted={true}
         autoPlay={true}
       >
-        <source src="/static/animations/mc_animation.webm" type="video/webm" />
+        <source src="/static/videos/mc_animation.webm" type="video/webm" />
       </video>
       <Box className="match-chat-team" sx={{ left: "25vw" }}>
         <Box textAlign={"center"}>

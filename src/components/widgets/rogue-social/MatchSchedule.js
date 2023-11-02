@@ -10,16 +10,16 @@ import {
   Typography
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { MATCH_STATES, TICKET_TYPES } from "@/src/config/global";
 import { useEffect, useState } from "react";
 
 import CustomDateTimePicker from "@/src/components/datetime/DateTimePicker";
-import { DEFAULT_LOGO } from "@/src/config/global";
 import Link from "next/link";
 import { LoadingButton } from "@mui/lab";
-import { MATCH_STATES } from "@/src/config/global";
 import ParticipantInfo from "@/src/components/widgets/match/ParticipantInfo";
 import TeamItem from "@/src/components/item/TeamItem";
 import dayjs from "dayjs";
+import { enqueueSnackbar } from "notistack";
 import { formatDate } from "@/src/utils/utils";
 import { useAuthContext } from "@/src/context/AuthContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
@@ -57,7 +57,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
   const onAsk = async () => {
     setAsking(true);
     const newTicket = {
-      type: "MATCH_SCHEDULE_REQUEST",
+      type: TICKET_TYPES.MATCH_SCHEDULE_REQUEST,
       sender: myTeam.uid,
       receiver: opTeam.uid,
       data: {
@@ -70,7 +70,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
     };
 
     const res = await ticket.create(newTicket);
-    if (res.code === "succeed") alert("Asked successfully!");
+    if (res.code === "succeed") enqueueSnackbar("Asked successfully!", { variant: "success" });
     else console.warn(res.message);
     setAsking(false);
   };
@@ -84,7 +84,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
       status: MATCH_STATES.SCHEDULED.value
     });
     if (res.code === "succeed") {
-      alert("Scheduled Successfully!");
+      enqueueSnackbar("Scheduled Successfully!", { variant: "success" });
     } else {
       console.warn(res.message);
     }
@@ -112,7 +112,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
                 width: "150px",
                 filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
               }}
-              src={myTeam?.darkLogo || DEFAULT_LOGO}
+              src={myTeam?.darkLogo || DEFAULT_DARK_LOGO}
             ></Box>
             <Typography variant="body1" textAlign="center" fontSize="1.5rem" color="white">
               {myTeam?.name}
@@ -182,7 +182,7 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
                 width: "150px",
                 filter: "drop-shadow(0px 0px 20px rgb(171, 1, 56))"
               }}
-              src={opTeam?.darkLogo || DEFAULT_LOGO}
+              src={opTeam?.darkLogo || DEFAULT_DARK_LOGO}
             ></Box>
             <Typography variant="body1" textAlign={"center"} fontSize={"1.5rem"} color={"white"}>
               {opTeam?.name}
@@ -202,56 +202,57 @@ const MatchSchedule = ({ item, matchTime, setMatchTime }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(ticket?.tickets).map((key) => {
-              const val = ticket.tickets[key];
-              return (
-                <TableRow>
-                  <TableCell>
-                    <TeamItem team={team?.teams[val.data.senderTeam]} disableLink={true} />
-                  </TableCell>
-                  <TableCell>
-                    <TeamItem team={team?.teams[val.data.receiverTeam]} disableLink={true} />
-                  </TableCell>
-                  <TableCell align="center">
-                    {formatDate(val.data.time.toDate(), "YYYY-MM-DD HH:mm")}
-                  </TableCell>
-                  {val.sender === user.id ? (
+            {_.filter(ticket?.tickets, (val) => val.type === "MATCH_SCHEDULE_REQUEST" && (val.receiver == user?.id || val.sender == user?.id)).map(
+              (val) => {
+                return (
+                  <TableRow key={`schedule-request-${val.id}`}>
+                    <TableCell>
+                      <TeamItem team={team?.teams[val.data.senderTeam]} disableLink={true} />
+                    </TableCell>
+                    <TableCell>
+                      <TeamItem team={team?.teams[val.data.receiverTeam]} disableLink={true} />
+                    </TableCell>
                     <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        color="error"
-                        onClick={(e) => onDeny(key)}
-                      >
-                        Cancel
-                      </Button>
+                      {formatDate(val.data.time.toDate(), "YYYY-MM-DD HH:mm")}
                     </TableCell>
-                  ) : (
-                    <TableCell
-                      align="center"
-                      sx={{ display: "flex", gap: 1, justifyContent: "center" }}
-                    >
-                      <Button
-                        variant="contained"
-                        size="small"
-                        color="success"
-                        onClick={(e) => onAccept(val.data.time)}
+                    {val.sender === user.id ? (
+                      <TableCell align="center">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="error"
+                          onClick={(e) => onDeny(key)}
+                        >
+                          Cancel
+                        </Button>
+                      </TableCell>
+                    ) : (
+                      <TableCell
+                        align="center"
+                        sx={{ display: "flex", gap: 1, justifyContent: "center" }}
                       >
-                        Accept
-                      </Button>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        color="error"
-                        onClick={(e) => onDeny(key)}
-                      >
-                        Deny
-                      </Button>
-                    </TableCell>
-                  )}
-                </TableRow>
-              );
-            })}
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="success"
+                          onClick={(e) => onAccept(val.data.time)}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="error"
+                          onClick={(e) => onDeny(key)}
+                        >
+                          Deny
+                        </Button>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                );
+              }
+            )}
           </TableBody>
         </Table>
       </Box>

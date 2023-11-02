@@ -1,66 +1,80 @@
-import { Box, Button } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { Box, Paper, Tab, Typography, styled, useTheme } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 
+import JoinTeam from "../../team/JoinTeam";
+import { KeyboardArrowRight } from "@mui/icons-material";
 import { TEAM_PROFILE_LIMIT } from "@/src/config/global";
-import TeamItem from "@/src/components/widgets/rogue-social/accounts/TeamItem";
-import dayjs from "dayjs";
-import { isMyTeam } from "@/src/utils/utils";
-import { useAppContext } from "@/src/context/app";
-import { useAuthContext } from "@/src/context/AuthContext";
-import { useRouter } from "next/router";
-import { useTournamentContext } from "@/src/context/TournamentContext";
+import TeamCreateForm from "@/src/components/widgets/team/TeamCreateForm";
+import TeamList from "@/src/components/widgets/rogue-social/accounts/TeamList";
+import { useState } from "react";
 
-const Teams = ({ isMainPage }) => {
-  const router = useRouter();
-  const { setTitle } = useAppContext();
-  const { user } = useAuthContext();
-  const { team } = useTournamentContext();
+const StyledTab = styled(Tab)(({ theme }) => ({
+  justifyContent: "space-between",
+  paddingInline: theme.spacing(2),
+  ":hover": {
+    background: "rgba(0,0,0,.2)"
+  }
+}));
 
-  const myTeams = useMemo(() => {
-    if (team?.teams) {
-      const res = Object.keys(team.teams)
-        .filter((key) => isMyTeam(team.teams[key], user.id))
-        .map((key) => team.teams[key]);
-      return res;
-    }
-    return [];
-  }, [team?.teams]);
+const Teams = ({ items }) => {
+  const theme = useTheme();
+  const [tab, setTab] = useState("0");
 
-  useEffect(() => {
-    setTitle("MY TEAMS");
-  }, []);
+  const onTabChange = (e, newTab) => {
+    setTab(newTab);
+  };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "left",
-        gap: 1,
-        flexDirection: "column"
-      }}
-    >
-      {myTeams.length > 0
-        ? myTeams.map((item) => <TeamItem key={"team_" + item.id} team={item} disableLink={true} />)
-        : isMainPage === false && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                router.push("/rogue-social/manage-accounts");
-              }}
-            >
-              GO TO MANAGE ACCOUNTS PAGE
-            </Button>
-          )}
-      {isMainPage === true && myTeams.length < TEAM_PROFILE_LIMIT && (
-        <Button
-          variant="outlined"
-          onClick={() => {
-            router.push("/team/create");
+    <Box sx={{ display: "flex", height: "100%" }}>
+      <TabContext value={tab}>
+        <Box
+          sx={{
+            position: "static",
+            borderRight: 1,
+            borderColor: "divider"
           }}
         >
-          CREATE NEW ACCOUNT
-        </Button>
-      )}
+          <TabList
+            onChange={onTabChange}
+            orientation="vertical"
+            sx={{
+              width: "280px",
+              height: "100%",
+              background: "linear-gradient(to top,#28160c 60%,#000)"
+            }}
+          >
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Create Team</Typography>}
+              value="0"
+            />
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Manage Teams</Typography>}
+              value="1"
+            />
+            <StyledTab
+              icon={<KeyboardArrowRight />}
+              iconPosition="end"
+              label={<Typography>Join Team</Typography>}
+              value="2"
+            />
+          </TabList>
+        </Box>
+        <TabPanel value="0" sx={{ flexGrow: 1 }}>
+          <Paper sx={{ p: 4, bgcolor: theme.palette.card.main }}>
+            <TeamCreateForm disabled={items?.length >= TEAM_PROFILE_LIMIT} />
+          </Paper>
+        </TabPanel>
+        <TabPanel value="1" sx={{ flexGrow: 1 }}>
+          <TeamList items={items} />
+        </TabPanel>
+        <TabPanel value="2" sx={{ flexGrow: 1 }}>
+          <JoinTeam />
+        </TabPanel>
+      </TabContext>
     </Box>
   );
 };

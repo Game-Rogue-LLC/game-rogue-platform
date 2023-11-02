@@ -11,12 +11,13 @@ import {
   Typography,
   useTheme
 } from "@mui/material";
-import { DoubleElimination, SingleElimination, Stepladder } from "tournament-pairings";
+import { DoubleElimination, SingleElimination, Stepladder, Swiss } from "tournament-pairings";
 import { EVENT_FORMATS, EVENT_STATES, MATCH_STATES } from "@/src/config/global";
 import _, { template } from "lodash";
 import { useEffect, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
+import BakuBracket from "@/src/components/tournament-bracket/BakuBracket";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
 import DoubleEliminationBracket from "@/src/components/tournament-bracket/DoubleEliminationBracket";
@@ -24,6 +25,7 @@ import FullCalendar from "@/src/components/datetime/FullCalendar.js";
 import LadderEliminationBracket from "@/src/components/tournament-bracket/LadderEliminationBracket";
 import { LoadingButton } from "@mui/lab";
 import SingleEliminationBracket from "@/src/components/tournament-bracket/SingleEliminationBracket";
+import { enqueueSnackbar } from "notistack";
 import { nanoid } from "nanoid";
 import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
@@ -35,7 +37,7 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
-  const { organization, event, team, match } = useTournamentContext();
+  const { organizer, event, team, match } = useTournamentContext();
   const [games, setGames] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
@@ -57,7 +59,7 @@ const Page = (props) => {
 
         setEID(newEID);
         event.setCurrent(newEID);
-        organization.setCurrent(event.events[newEID]?.oid);
+        organizer.setCurrent(event.events[newEID]?.oid);
       } else {
         console.warn("Invalid Event ID");
         // TODO: Redirect to 404 page.
@@ -311,6 +313,68 @@ const Page = (props) => {
         }
       });
       return newGames;
+    } else if (type === 9) {
+      const players = _.map(participants, (val, i) => ({
+        id: i,
+        score: val.score + (i < 8 ? 1 : 0)
+      }));
+      let newGames = [],
+        gameIDs = [];
+      const matches = Swiss(players, event.events[eid]?.currentRound);
+      matches.forEach((val, i) => {
+        let newParticipants = [];
+
+        newParticipants.push({
+          id: participants[val.player1].id,
+          resultText: "",
+          isWinner: false,
+          status: null,
+          score: players[val.player1].score || 0,
+          wins: participants[val.player1].wins || 0,
+          loses: participants[val.player1].loses || 0,
+          draws: participants[val.player1].draws || 0,
+          name: teams[participants[val.player1].id].name
+        });
+
+        newParticipants.push({
+          id: participants[val.player2].id,
+          resultText: "",
+          isWinner: false,
+          status: null,
+          score: players[val.player2].score || 0,
+          wins: participants[val.player2].wins || 0,
+          loses: participants[val.player2].loses || 0,
+          draws: participants[val.player2].draws || 0,
+          name: teams[participants[val.player2].id].name
+        });
+
+        const newGame = {
+          ...val,
+          id: nanoid(),
+          name: "",
+          eid: eid,
+          nextMatchId: null,
+          tournamentRoundText: `${val.round}`,
+          startTime: "",
+          state: "CREATED",
+          start: event.events[eid].startAt,
+          end: event.events[eid].endAt,
+          participants: newParticipants
+        };
+
+        gameIDs.push(newGame.id);
+        newGames.push(newGame);
+      });
+
+      // matches.forEach((val, i) => {
+      //   const nextMatch = matches.findIndex(
+      //     (itr) => itr.round === val.win?.round && itr.match == val.win?.match
+      //   );
+      //   if (nextMatch >= 0) {
+      //     newGames[i].nextMatchId = gameIDs[nextMatch];
+      //   }
+      // });
+      return newGames;
     }
   };
 
@@ -321,7 +385,7 @@ const Page = (props) => {
       const matches = createMatches(
         format,
         team.teams,
-        [...participants],
+        [..._.sortBy(participants, (val) => val.score)],
         participantsCount,
         randomized
       );
@@ -383,8 +447,6 @@ const Page = (props) => {
           }
         }
       } else if (event.events[eid].format == 2) {
-        // const newSchedule = events.sort((a, b) => a.start.getTime() - b.start.getTime());
-        // console.log(newSchedule);
         let participants = [];
         event.events[eid].participants.forEach((item) => {
           participants.push({
@@ -431,7 +493,7 @@ const Page = (props) => {
           status: EVENT_STATES.SCHEDULING.value
         }); // Set the status of the event as CREATED/SCHEDULING.
         if (res.code === "succeed") {
-          alert("Saved successfully!");
+          enqueueSnackbar("Saved successfully!", { variant: "success" });
           router.push("/match?event=" + eid);
         }
       }
@@ -495,7 +557,7 @@ const Page = (props) => {
               </Box>
             </Box>
             {event?.events[eid] &&
-              event.events[eid].format < 2 &&
+              // event.events[eid].format < 2 &&
               event.events[eid].status == 0 && (
                 <CustomButton
                   variant="contained"
@@ -520,7 +582,8 @@ const Page = (props) => {
               flex: 1,
               border: "solid 1px rgba(255, 255, 255, 0.2)",
               minHeight: "300px",
-              borderRadius: "4px"
+              borderRadius: "4px",
+              p: 2
             }}
           >
             {event?.events[eid] && event.events[eid].format == 2 ? (
@@ -537,6 +600,8 @@ const Page = (props) => {
               <SingleEliminationBracket matches={games} />
             ) : event?.events[eid]?.format == 1 ? (
               <DoubleEliminationBracket matches={games} />
+            ) : event?.events[eid]?.format === 9 ? (
+              <BakuBracket matches={games} />
             ) : (
               <></>
             )}

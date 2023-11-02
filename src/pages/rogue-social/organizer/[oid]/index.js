@@ -27,18 +27,18 @@ const Page = (props) => {
   const theme = useTheme();
   const { setTitle } = useAppContext();
   const { setColors, colors } = useStyleContext();
-  const { organization, player, event, match, team, currentTime } = useTournamentContext();
+  const { organizer, player, event, match, team, currentTime } = useTournamentContext();
   const [oid, setOID] = useState(router?.query?.oid);
   const [item, setItem] = useState(null);
 
   const upcomingEventIds = useMemo(() => {
-    if (organization?.organizations && event?.events) {
+    if (organizer?.organizers && event?.events) {
       return Object.keys(event.events).filter((key) =>
         dayjs(event.events[key].startAt).isAfter(currentTime)
       );
     }
     return [];
-  }, [organization?.organizations, event?.events, currentTime]);
+  }, [organizer?.organizers, event?.events, currentTime]);
 
   const recentStreams = useMemo(() => {
     if (match?.matches) {
@@ -58,26 +58,26 @@ const Page = (props) => {
   useEffect(() => {
     if (router?.query?.oid) {
       const newOID = router.query.oid;
-      if (organization?.organizations && organization.organizations[newOID]) {
+      if (organizer?.organizers && organizer.organizers[newOID]) {
         setOID(newOID);
-        organization.setCurrent(oid);
+        organizer.setCurrent(oid);
       } else {
         console.warn("Invalid Organizaiton ID");
         // Redirect to 404 page.
       }
     }
-  }, [router, organization?.organizations]);
+  }, [router, organizer?.organizers]);
 
   useEffect(() => {
-    if (organization?.organizations[oid]) {
-      setItem(organization.organizations[oid]);
+    if (organizer?.organizers[oid]) {
+      setItem(organizer.organizers[oid]);
       setColors({
-        primary: organization.organizations[oid].primary,
-        secondary: organization.organizations[oid].secondary,
-        tertiary: organization.organizations[oid].tertiary
+        primary: organizer.organizers[oid].primary,
+        secondary: organizer.organizers[oid].secondary,
+        tertiary: organizer.organizers[oid].tertiary
       });
     }
-  }, [oid, organization?.organizations]);
+  }, [oid, organizer?.organizers]);
 
   return (
     <Box sx={{ pb: 4 }}>
@@ -122,14 +122,16 @@ const Page = (props) => {
         </Box>
       </Box>
       <Container sx={{ position: "relative" }}>
-        <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
-          <CustomButton
-            sx={{ paddingInline: "16px" }}
-            onClick={(e) => router.push("/organization/" + oid + "/edit")}
-          >
-            Edit Profile
-          </CustomButton>
-        </Box>
+        {organizer?.organizers[oid]?.uid === user.id && (
+          <Box textAlign="right" sx={{ position: "absolute", top: -70, right: 30 }}>
+            <CustomButton
+              sx={{ paddingInline: "16px" }}
+              onClick={(e) => router.push("/organizer/" + oid + "/edit")}
+            >
+              Edit Profile
+            </CustomButton>
+          </Box>
+        )}
 
         <Box sx={{ mt: 5 }}>
           <Typography variant="h4" sx={{ fontSize: "24px" }}>

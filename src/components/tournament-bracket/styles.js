@@ -1,10 +1,12 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
-const primaryColor = '#180e05'
+import theme from "@/src/components/tournament-bracket/themes/themes";
+
+const primaryColor = "#180e05";
 
 export default () => {
-  return <>Style</>
-}
+  return <>Style</>;
+};
 
 export const Wrapper = styled.div`
   display: flex;
@@ -12,15 +14,15 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   align-items: stretch;
   height: 100%;
-  font-family: ${({ theme }) => theme.fontFamily};
+  font-family: ${() => theme.fontFamily};
 `;
 export const TopText = styled.p`
-  color: ${({ theme }) => theme.textColor.dark};
+  color: ${() => theme.textColor.dark};
   margin-bottom: 0.2rem;
   min-height: 1.25rem;
 `;
 export const BottomText = styled.p`
-  color: ${({ theme }) => theme.textColor.dark};
+  color: ${() => theme.textColor.dark};
   flex: 0 0 none;
   text-align: center;
   margin-top: 0.2rem;
@@ -42,10 +44,8 @@ export const Score = styled.div`
   align-items: center;
   width: 20%;
   justify-content: center;
-  background: ${({ theme, won }) =>
-    won ? theme.score.background.wonColor : theme.score.background.lostColor};
-  color: ${({ theme, won }) =>
-    won ? theme.textColor.highlighted : theme.textColor.dark};
+  background: ${() => theme.score.background.lostColor};
+  color: ${theme.textColor.dark};
 `;
 export const Side = styled.div`
   display: flex;
@@ -53,8 +53,7 @@ export const Side = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 0 0 1rem;
-  background: ${({ theme, won }) =>
-    won ? theme.matchBackground.wonColor : theme.matchBackground.lostColor};
+  background: ${theme.matchBackground.lostColor};
   :first-of-type {
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
@@ -65,32 +64,21 @@ export const Side = styled.div`
     border-bottom-left-radius: 3px;
     border-bottom-width: 2px;
   }
-  border-right: 4px solid ${({ theme }) => theme.border.color};
-  border-left: 4px solid ${({ theme }) => theme.border.color};
-  border-top: 1px solid ${({ theme }) => theme.border.color};
-  border-bottom: 1px solid ${({ theme }) => theme.border.color};
-  transition: border-color 0.5s ${({ theme }) => theme.transitionTimingFunction};
+  border-right: 4px solid
+    ${({ hovered }) => (hovered ? theme.border.highlightedColor : theme.border.color)};
+  border-left: 4px solid
+    ${({ hovered }) => (hovered ? theme.border.highlightedColor : theme.border.color)};
+  border-top: 1px solid
+    ${({ hovered }) => (hovered ? theme.border.highlightedColor : theme.border.color)};
+  border-bottom: 1px solid
+    ${({ hovered }) => (hovered ? theme.border.highlightedColor : theme.border.color)};
+  transition: border-color 0.5s ${theme.transitionTimingFunction};
   ${Team} {
-    color: ${({ theme, won }) =>
-    won ? theme.textColor.highlighted : theme.textColor.dark};
+    color: ${theme.textColor.dark};
   }
   ${Score} {
-    color: ${({ theme, won }) =>
-    won ? theme.textColor.highlighted : theme.textColor.dark};
+    color: ${theme.textColor.dark};
   }
-  ${({ hovered, theme, won }) =>
-    hovered &&
-    css`
-      border-color: ${theme.border.highlightedColor};
-      ${Team} {
-        color: ${theme.textColor.highlighted};
-      }
-      ${Score} {
-        color: ${won
-        ? theme.score.text.highlightedWonColor
-        : theme.score.text.highlightedLostColor};
-      }
-    `}
 `;
 
 export const Line = styled.div`
@@ -98,16 +86,14 @@ export const Line = styled.div`
   transition: border-color 0.5s ${({ theme }) => theme.smooth};
   border-width: 1px;
   border-style: solid;
-  border-color: ${({ highlighted, theme }) =>
-    highlighted ? theme.border.highlightedColor : theme.border.color};
+  border-color: ${theme.border.color};
 `;
 
 export const Anchor = styled.a`
-  font-family: ${(props) =>
-    props.font ? props.font : props.theme.fontFamily};
-  font-weight: ${(props) => (props.bold ? '700' : '400')};
-  color: ${(props) => props.theme.textColor.main};
-  font-size: ${(props) => (props.size ? props.size : '1rem')};
+  font-family: ${theme.fontFamily};
+  font-weight: ${"700"};
+  color: ${theme.textColor.main};
+  font-size: ${"1rem"};
   line-height: 1.375rem;
   text-decoration: none;
   cursor: pointer;

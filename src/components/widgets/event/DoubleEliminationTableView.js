@@ -23,7 +23,7 @@ import TeamList from "@/src/components/list/TeamList";
 const DoubleEliminationTableView = ({ myTeam, eid, matches }) => {
   const router = useRouter();
   const theme = useTheme();
-  const { organization, event, team, match } = useTournamentContext();
+  const { organizer, event, team, match } = useTournamentContext();
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {

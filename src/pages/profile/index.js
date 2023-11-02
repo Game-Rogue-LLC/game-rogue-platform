@@ -25,7 +25,8 @@ import {
 } from "@mui/material";
 import { CreditCard, Instagram, Twitter, YouTube } from "@mui/icons-material";
 import { brighterColor, isBrightColor } from "@/src/utils/utils";
-import { customMessages, model, rules } from "@/lib/firestore/collections/organization";
+import { closeSnackbar, enqueueSnackbar } from "notistack";
+import { customMessages, model, rules } from "@/lib/firestore/collections/organizer";
 import { useEffect, useMemo, useState } from "react";
 
 import AdminLayout from "@/src/content/AdminLayout";
@@ -34,6 +35,7 @@ import Colors from "@/src/components/Colors";
 import ContentBlock from "@/src/components/widgets/ContentBlock";
 import CustomButton from "@/src/components/button/CustomButton";
 import CustomLoadingButton from "@/src/components/button/CustomLoadingButton";
+import { DEFAULT_LIGHT_LOGO } from "@/src/config/global";
 import { LoadingButton } from "@mui/lab";
 import Validator from "validatorjs";
 import { htmlToMarkdown } from "@/src/utils/html-markdown";
@@ -41,7 +43,6 @@ import { useAppContext } from "@/src/context/app";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
-import { closeSnackbar, enqueueSnackbar } from "notistack";
 
 const initialInputs = {
   ...model
@@ -52,7 +53,7 @@ const Page = (props) => {
   const theme = useTheme();
   const { setTitle } = useAppContext();
   const { colors, setColors } = useStyleContext();
-  const { organization, event } = useTournamentContext();
+  const { organizer, event } = useTournamentContext();
   const [disabled, setDisabled] = useState(false);
   const [open, setOpen] = useState(false);
   const [oid, setOID] = useState(null);
@@ -89,24 +90,24 @@ const Page = (props) => {
   }, []);
 
   useEffect(() => {
-    if (router?.query?.organization) {
-      setOID(router.query.organization);
-      organization.setCurrent(oid);
+    if (router?.query?.organizer) {
+      setOID(router.query.organizer);
+      organizer.setCurrent(oid);
       event.setCurrent(null);
     }
-  }, [router?.query?.organization]);
+  }, [router?.query?.organizer]);
 
   useEffect(() => {
     setInputs((prev) => ({
       ...prev,
-      ...organization.organizations[oid]
+      ...organizer.organizers[oid]
     }));
     // setColors({
-    //   primary: organization.organizations[oid].primary,
-    //   secondary: organization.organizations[oid].secondary,
-    //   tertiary: organization.organizations[oid].tertiary,
+    //   primary: organizer.organizers[oid].primary,
+    //   secondary: organizer.organizers[oid].secondary,
+    //   tertiary: organizer.organizers[oid].tertiary,
     // });
-  }, [organization.organizations, oid]);
+  }, [organizer.organizers, oid]);
 
   const validate = (data, rule, messages) => {
     let validator = new Validator(data, rule, messages);
@@ -138,7 +139,7 @@ const Page = (props) => {
       let uploaded = true;
       if (darkLogo) {
         uploaded = false;
-        const res = await organization.upload(darkLogo, oid);
+        const res = await organizer.upload(darkLogo, oid);
         if (res.code === "succeed") {
           newOrganization.darkLogo = res.url;
           uploaded = true;
@@ -148,7 +149,7 @@ const Page = (props) => {
       }
       if (lightLogo) {
         uploaded = false;
-        const res = await organization.upload(lightLogo, oid);
+        const res = await organizer.upload(lightLogo, oid);
         if (res.code === "succeed") {
           newOrganization.lightLogo = res.url;
           uploaded = true;
@@ -157,7 +158,7 @@ const Page = (props) => {
         }
       }
 
-      const res = await organization.update(oid, newOrganization);
+      const res = await organizer.update(oid, newOrganization);
 
       if (res.code == "succeed") {
         const key = enqueueSnackbar("Saved Successfully!", {
@@ -177,7 +178,7 @@ const Page = (props) => {
         social: true
       }));
 
-      const res = await organization.update(oid, {
+      const res = await organizer.update(oid, {
         twitterLink: inputs?.twitterLink,
         instagramLink: inputs?.instagramLink,
         youtubeLink: inputs?.youtubeLink,
@@ -186,7 +187,7 @@ const Page = (props) => {
       });
 
       if (res.code == "succeed") {
-        alert(res.message);
+        enqueueSnackbar(res.message, { variant: "success" });
       }
 
       setSaving((prev) => ({
@@ -210,7 +211,7 @@ const Page = (props) => {
       let uploaded = true;
       if (contentImage) {
         uploaded = false;
-        const res = await organization.upload(contentImage, oid);
+        const res = await organizer.upload(contentImage, oid);
         if (res.code === "succeed") {
           newOrganization.contentBlock.image = res.url;
           uploaded = true;
@@ -219,9 +220,9 @@ const Page = (props) => {
         }
       }
       if (uploaded) {
-        const res = await organization.update(oid, newOrganization);
+        const res = await organizer.update(oid, newOrganization);
         if (res.code === "succeed") {
-          alert("Saved successfully!");
+          enqueueSnackbar("Saved successfully!", { variant: "success" });
         } else {
           console.warn(res.message);
         }
@@ -238,7 +239,7 @@ const Page = (props) => {
         features: true
       }));
 
-      const res = await organization
+      const res = await organizer
         .update(oid, {
           twitter: inputs?.twitter,
           instagram: inputs?.instagram,
@@ -251,7 +252,7 @@ const Page = (props) => {
           paypal: inputs?.paypal
         })
         .then((res) => {
-          if (res.code == "succeed") alert(res.message);
+          if (res.code == "succeed") enqueueSnackbar(res.message, { variant: "success" });
           setSaving((prev) => ({
             ...prev,
             features: false
@@ -270,7 +271,7 @@ const Page = (props) => {
         ...prev,
         disband: true
       }));
-      organization.delete(oid);
+      organizer.delete(oid);
     },
     // Open/Close the Modal for delete confirm
     modalOpen: (e) => {
@@ -325,13 +326,13 @@ const Page = (props) => {
     removeDarkLogo: (e) => {
       setInputs({
         ...inputs,
-        darkLogo: DEFAULT_LOGO
+        darkLogo: DEFAULT_DARK_LOGO
       });
     },
     removeLightLogo: (e) => {
       setInputs({
         ...inputs,
-        lightLogo: DEFAULT_LOGO
+        lightLogo: DEFAULT_LIGHT_LOGO
       });
     },
     uploadContentImageAction: (e, name) => {
@@ -411,7 +412,7 @@ const Page = (props) => {
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.darkLogo || config.DEFAULT_LOGO}
+                  src={inputs.darkLogo || config.DEFAULT_DARK_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -444,7 +445,7 @@ const Page = (props) => {
               </Box>
               <Box width={"200px"} height={"200px"} textAlign={"center"}>
                 <img
-                  src={inputs.lightLogo || config.DEFAULT_LOGO}
+                  src={inputs.lightLogo || config.DEFAULT_LIGHT_LOGO}
                   style={{
                     height: "200px",
                     maxWidth: "200px",
@@ -458,9 +459,7 @@ const Page = (props) => {
           <InputLabel htmlFor="org-name" sx={{ mt: 2 }}>
             Organization Name
           </InputLabel>
-          <FormHelperText>
-            Controls the publically visible name of this organization.
-          </FormHelperText>
+          <FormHelperText>Controls the publically visible name of this organizer.</FormHelperText>
           <FormControl fullWidth error={false}>
             <OutlinedInput
               id="org-name"
@@ -592,7 +591,7 @@ const Page = (props) => {
               fullWidth
               startAdornment={
                 <InputAdornment position="start">
-                  <img src="/static/images/discord.svg" height={"30px"} />
+                  <img src="/static/images/home/discord.svg" height={"30px"} />
                 </InputAdornment>
               }
             />
@@ -670,45 +669,49 @@ const Page = (props) => {
             label="Twitch streams"
           />
         </FormGroup>
-        <Grid container spacing={2} sx={{ alignItems: "center" }}>
-          <Grid item>
-            <FormControlLabel control={<Switch defaultChecked />} label="Crowdfund" />
+
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h6">Payment Information</Typography>
+          <Grid container spacing={2} sx={{ alignItems: "center", mt: 0 }}>
+            <Grid item>
+              <FormControlLabel control={<Switch defaultChecked />} label="Crowdfund" />
+            </Grid>
+            <Grid item>
+              <OutlinedInput
+                size="small"
+                name="actualFund"
+                value={Number(inputs?.actualFund).toFixed(2)}
+                disabled
+              />
+            </Grid>
+            <Grid item>
+              <span style={{ fontSize: "30px" }}>/</span>
+            </Grid>
+            <Grid item>
+              <OutlinedInput
+                size="small"
+                name="crowdFund"
+                value={inputs?.crowdFund}
+                onChange={handle.input}
+              />
+            </Grid>
           </Grid>
-          <Grid item>
-            <OutlinedInput
-              size="small"
-              name="actualFund"
-              value={Number(inputs?.actualFund).toFixed(2)}
-              disabled
-            />
-          </Grid>
-          <Grid item>
-            <span style={{ fontSize: "30px" }}>/</span>
-          </Grid>
-          <Grid item>
-            <OutlinedInput
-              size="small"
-              name="crowdFund"
-              value={inputs?.crowdFund}
-              onChange={handle.input}
-            />
-          </Grid>
-        </Grid>
-        <Box display="flex" sx={{ pl: 5 }}>
-          <Box>
-            <Box display="flex" alignItems="center">
-              <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
-              <CreditCard />
-              <Typography variant="body2" sx={{ ml: 2 }}>
-                Credit/Debit Card
-              </Typography>
+          <Box display="flex" sx={{ pl: 5 }}>
+            <Box>
+              <Box display="flex" alignItems="center">
+                <Checkbox name="credit" checked={inputs?.credit} onChange={handle.switch} />
+                <CreditCard />
+                <Typography variant="body2" sx={{ ml: 2 }}>
+                  Credit/Debit Card
+                </Typography>
+              </Box>
+              <Box></Box>
             </Box>
-            <Box></Box>
-          </Box>
-          <Box>
-            <Box display="flex" alignItems="center">
-              <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
-              <img src="/static/images/paypal-color.svg" style={{ height: "30px" }} />
+            <Box>
+              <Box display="flex" alignItems="center">
+                <Checkbox name="paypal" checked={inputs?.paypal} onChange={handle.switch} />
+                <img src="/static/images/home/paypal_color.svg" style={{ height: "30px" }} />
+              </Box>
             </Box>
           </Box>
         </Box>

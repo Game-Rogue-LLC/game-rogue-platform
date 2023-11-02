@@ -1,9 +1,10 @@
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
 import { useEffect, useState } from "react";
 
-export default function CountrySelect({ option, setOption, sx }) {
+import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+
+export default function CountrySelect({ option, setOption, sx, disabled }) {
   const [options, setOptions] = useState([...countries]);
 
   const handleChange = (e, val) => {
@@ -22,6 +23,7 @@ export default function CountrySelect({ option, setOption, sx }) {
       autoHighlight
       onChange={handleChange}
       value={option || options[0]}
+      disabled={disabled}
       isOptionEqualToValue={(opt, val) => opt?.code == val?.code}
       renderOption={(props, item) => (
         <Box component="li" sx={{ "& > img": { mr: 2, flexShrink: 0 } }} {...props}>

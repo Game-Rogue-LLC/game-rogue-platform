@@ -53,7 +53,7 @@ export default function ApparelSplash(props) {
               muted={true}
               autoPlay={true}
             >
-              <source src="/202306091138.mp4" type="video/mp4" />
+              <source src="/static/videos/shop_loading.mp4" type="video/mp4" />
             </video>
           </div>
           {!isFinished && (

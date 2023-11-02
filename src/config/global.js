@@ -1,9 +1,53 @@
-export const DEFAULT_CONTENTBLOCK_IMAGE = "/Game_Rogue_Text_2.png";
-export const DEFAULT_LOGO = "/LOGO.png";
-export const DEFAULT_PROFILE_PICTURE = "/static/images/Profile_Picture.png";
-export const ORGANIZER_PROFILE_LIMIT = 1;
+export const DEFAULT_CONTENTBLOCK_IMAGE = "/static/images/home/banner_image.png";
+export const DEFAULT_LOGO = "/static/images/home/dark_logo.png";
+export const DEFAULT_LIGHT_LOGO = "/static/images/home/light_logo.png";
+export const DEFAULT_DARK_LOGO = "/static/images/home/dark_logo.png";
+export const DEFAULT_PROFILE_PICTURE = "/static/images/avatar/default.png";
 export const ORGANIZATION_PROFILE_LIMIT = 1;
+export const ORGANIZER_PROFILE_LIMIT = 1;
 export const TEAM_PROFILE_LIMIT = 10;
+
+export const GAMES = [
+  {
+    id: 0,
+    name: "Rainbow Six Siege",
+    image: "/static/images/games/r6s.webp"
+  }
+  // "Valorant",
+  // "Counter-Strike: Global Offensive",
+  // "Roller Champions",
+  // "Rocket League",
+  // "League of Legends",
+  // "Trackmania",
+  // "Magic: The Gathering",
+  // "Overwatch 2",
+  // "Modern Warfare 2",
+  // "FIFA",
+  // "Zula Global"
+];
+
+export const TEAM_TYPES = [
+  {
+    id: 0,
+    value: 0,
+    name: "Pro Team"
+  },
+  {
+    id: 1,
+    value: 1,
+    name: "Challenger Team"
+  },
+  {
+    id: 2,
+    value: 2,
+    name: "Semi-Professional Team"
+  },
+  {
+    id: 3,
+    value: 3,
+    name: "Casual Team"
+  }
+];
 
 export const STAFF_ROLES = [
   {
@@ -74,24 +118,34 @@ export const EVENT_FORMATS = [
     name: "Straight Round Robin"
   },
   {
-    key: "round-robin-double-split",
+    key: "2-divisions-split",
     value: 5,
+    name: "2 Divisions Split"
+  },
+  {
+    key: "round-robin-double-split",
+    value: 6,
     name: "Round Robin Double Split"
   },
   {
     key: "round-robin-triple-split",
-    value: 6,
+    value: 7,
     name: "Round Robin Triple Split"
   },
   {
     key: "round-robin-quadruple-split",
-    value: 7,
+    value: 8,
     name: "Round Robin Quadruple split"
   },
   {
     key: "round-robin-semi-split",
-    value: 8,
+    value: 9,
     name: "Semi Round Robin"
+  },
+  {
+    key: "baku-pairing",
+    value: 10,
+    name: "Baku pairing System"
   }
 ];
 
@@ -115,6 +169,11 @@ export const EVENT_REGIONS = [
   {
     id: 1,
     value: 1,
+    name: "Latin America"
+  },
+  {
+    id: 2,
+    value: 2,
     name: "Europe"
   }
 ];
@@ -169,7 +228,7 @@ export const PLATFORMS = [
   {
     id: 0,
     value: 0,
-    name: "XBox",
+    name: "Xbox",
     image: "/static/images/platforms/xbox.png"
   },
   {
@@ -230,3 +289,37 @@ export const TEAM_POSITIONS = [
     name: "Player"
   }
 ];
+
+export const TICKET_TYPES = {
+  FOLLOW_USER: "FOLLOW_USER",
+  TEAM_REGISTER_REQUEST: "TEAM_REGISTER_REQUEST",
+  MATCH_SCHEDULE_REQUEST: "MATCH_SCHEDULE_REQUEST"
+};
+
+// export default {
+//   TICKET_TYPES,
+//   TEAM_POSITIONS,
+//   PARTICIPANT_STATES,
+//   SCORE_WIN,
+//   SCORE_LOSE,
+//   SCORE_DRAW,
+//   NULL_FUNCTION,
+//   PLATFORMS,
+//   MATCH_STATES,
+//   EVENT_STATES,
+//   EVENT_REGIONS,
+//   EVENT_SEED_TYPES,
+//   EVENT_FORMATS,
+//   EVENT_CATEGORIES,
+//   STAFF_ROLES,
+//   TEAM_TYPES,
+//   GAMES,
+//   DEFAULT_CONTENTBLOCK_IMAGE,
+//   DEFAULT_LOGO,
+//   DEFAULT_LIGHT_LOGO,
+//   DEFAULT_DARK_LOGO,
+//   DEFAULT_PROFILE_PICTURE,
+//   ORGANIZER_PROFILE_LIMIT,
+//   ORGANIZER_PROFILE_LIMIT,
+//   TEAM_PROFILE_LIMIT
+// };
