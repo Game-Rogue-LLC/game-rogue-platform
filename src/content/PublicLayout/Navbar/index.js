@@ -63,7 +63,7 @@ const PublicNavbar = ({ sx }) => {
       else if (pathname.substring(1, 6) === "event" || pathname.substring(1, 6) === "match")
         setCurrentPage("event");
       else if (pathname.substring(1, 6) === "rogue") setCurrentPage("rogue-social");
-      else if (pathname.substring(1, 13) === "organization") setCurrentPage("organization");
+      else if (pathname.substring(1, 13) === "organizer") setCurrentPage("organizer");
       else if (pathname.substring(1, 5) === "tool") setCurrentPage("tool");
     }
   }, [router]);
@@ -102,7 +102,7 @@ const PublicNavbar = ({ sx }) => {
   };
 
   const handleClickOrganize = (e) => {
-    router.push("/organization");
+    router.push("/organizer");
   };
   const handleClickEvent = (e) => {
     router.push("/event");
@@ -265,15 +265,15 @@ const PublicNavbar = ({ sx }) => {
             >
               <NavItem
                 name="Organize"
-                active={currentPage === "organization"}
+                active={currentPage === "organizer"}
                 handleClick={handleClickOrganize}
                 isDropdown={true}
                 items={[
                   {
                     name: "My Organization",
-                    key: "my-organization",
+                    key: "my-organizer",
                     isLink: true,
-                    to: "/rogue-social/organization"
+                    to: "/rogue-social/organizer"
                   },
                   {
                     name: "Producer Dashboard",
@@ -347,7 +347,7 @@ const PublicNavbar = ({ sx }) => {
                     name: "Organizer Plus",
                     key: "add-organizer",
                     isLink: true,
-                    to: "/organization/create"
+                    to: "/organizer/create"
                   }
                 ]}
               />
@@ -454,7 +454,7 @@ const PublicNavbar = ({ sx }) => {
                   <Link href={"/rogue-social/team"}>My Team</Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUser} key="my-organizer" disableRipple>
-                  <Link href={"/rogue-social/organization"}>My Organizer</Link>
+                  <Link href={"/organizer"}>My Organizer</Link>
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={handleCloseUser} key="my-profile" disableRipple>

@@ -33,7 +33,6 @@ const MatchChat = ({ item, myTeam, opTeam }) => {
   }, [item]);
 
   const handleSend = () => {
-    console.log('sending:', input, myTeam);
     if (input.trim() !== "" && item?.id) {
       match.update(item?.id, {
         messages: [

@@ -44,7 +44,7 @@ const Page = (props) => {
   const { setTitle } = useAppContext();
   const theme = useTheme();
   const { colors, setColors, ...style } = useStyleContext();
-  const { organization, event, team, match, player } = useTournamentContext();
+  const { organizer, event, team, match, player } = useTournamentContext();
   const [oid, setOID] = useState();
   const [eid, setEID] = useState();
   const [mid, setMID] = useState(router?.query?.mid);
@@ -137,7 +137,7 @@ const Page = (props) => {
             {event?.events[eid]?.name}
           </Typography>
           <Typography variant="h5" fontWeight="bold" color={colors.secondary}>
-            {organization.organizations[event?.events[eid]?.oid]?.name}
+            {organizer.organizers[event?.events[eid]?.oid]?.name}
           </Typography>
         </Box>
       </Box>
@@ -166,12 +166,12 @@ const Page = (props) => {
                 }}
               >
                 <Box>
-                  <Link href={`/organization/${oid}/edit`}>
+                  <Link href={`/organizer/${oid}/edit`}>
                     <Typography variant="h4" fontSize={18} color={colors.primary}>
                       VIEW ORGANIZER
                     </Typography>
                     <Typography variant="body1" paddingLeft="5px">
-                      {organization?.organizations[oid]?.name}
+                      {organizer?.organizers[oid]?.name}
                     </Typography>
                   </Link>
                 </Box>

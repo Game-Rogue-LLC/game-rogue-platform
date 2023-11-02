@@ -336,7 +336,7 @@ const TermsOfUseDialog = ({ open, onClose }) => {
             </li>
             <li>
               Impersonate any person, or misrepresent your identity or affiliation with any person
-              or organization.
+              or organizer.
             </li>
             <li>
               Involve commercial activities or sales, such as contests, sweepstakes, and other sales

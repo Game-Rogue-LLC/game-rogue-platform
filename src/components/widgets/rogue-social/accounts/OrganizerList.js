@@ -28,7 +28,7 @@ const OrganizerList = ({ items }) => {
         <Button
           variant="contained"
           onClick={() => {
-            // router.push("/organization/create");
+            // router.push("/organizer/create");
           }}
         >
           CREATE NEW ACCOUNT

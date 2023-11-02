@@ -37,7 +37,7 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
-  const { organization, event, team, match } = useTournamentContext();
+  const { organizer, event, team, match } = useTournamentContext();
   const [games, setGames] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [eid, setEID] = useState(router?.query.event);
@@ -59,7 +59,7 @@ const Page = (props) => {
 
         setEID(newEID);
         event.setCurrent(newEID);
-        organization.setCurrent(event.events[newEID]?.oid);
+        organizer.setCurrent(event.events[newEID]?.oid);
       } else {
         console.warn("Invalid Event ID");
         // TODO: Redirect to 404 page.
@@ -321,7 +321,6 @@ const Page = (props) => {
       let newGames = [],
         gameIDs = [];
       const matches = Swiss(players, event.events[eid]?.currentRound);
-      console.log(matches);
       matches.forEach((val, i) => {
         let newParticipants = [];
 
@@ -448,8 +447,6 @@ const Page = (props) => {
           }
         }
       } else if (event.events[eid].format == 2) {
-        // const newSchedule = events.sort((a, b) => a.start.getTime() - b.start.getTime());
-        // console.log(newSchedule);
         let participants = [];
         event.events[eid].participants.forEach((item) => {
           participants.push({

@@ -1,18 +1,20 @@
 import { Box, Skeleton, Typography } from "@mui/material";
 
-import Avatar from "@/src/components/Avatar";
+import Image from "next/image";
 import Link from "next/link";
+import { useTournamentContext } from "@/src/context/TournamentContext";
 
-export default function ({ organizer, sx, width, height, fontSize }) {
+export default function ({ organizer, win, sx, disableLink }) {
+  const { player } = useTournamentContext();
   if (!sx) sx = {};
   return (
-    <Link href={"/rogue-social/profile/" + organizer?.id}>
+    <Link href={"/rogue-social/organizer/" + organizer?.id}>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           gap: 2,
-          padding: 2,
+          padding: 1,
           border: "solid 1px rgba(255, 255, 255, .5)",
           borderRadius: "5px",
           textAlign: "left",
@@ -23,25 +25,17 @@ export default function ({ organizer, sx, width, height, fontSize }) {
           ...sx
         }}
       >
-        {organizer?.profilePic ? (
-          <Avatar
-            src={organizer.profilePic}
-            width={width ? width : 30}
-            height={height ? height : 30}
-            alt={organizer.profilePic}
-            hideStatus={true}
-          />
-        ) : (
-          <Skeleton
-            variant="rectangular"
-            width={width ? width : 30}
-            height={height ? height : 30}
-          />
-        )}
-        &nbsp;
-        <Typography sx={{ color: "white", fontSize: fontSize ? fontSize : "16px" }}>
-          {organizer?.name}
-        </Typography>
+        <img
+          src={organizer?.darkLogo || player.players[organizer.uid]?.profilePic}
+          width={50}
+          height={50}
+          alt={organizer?.darkLogo || player.players[organizer.uid]?.name}
+        />
+        {/* <Skeleton variant="rectangular" width={30} height={30} /> */}
+        <Box>
+          <Typography>{organizer?.name}</Typography>
+          <Typography variant="subtitle2">{organizer?.tagline}</Typography>
+        </Box>
       </Box>
     </Link>
   );

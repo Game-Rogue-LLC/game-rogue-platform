@@ -31,19 +31,21 @@ import { useTournamentContext } from "@/src/context/TournamentContext";
 
 const EventInput = ({ handle, inputs, disabled, errors }) => {
   const theme = useTheme();
-  const { organization } = useTournamentContext();
+  const { organizer } = useTournamentContext();
   const [isPlaidOpen, setIsPlaidOpen] = useState(false);
-  const [linkToken, setLinkToken] = useState('');
+  const [linkToken, setLinkToken] = useState("");
 
   useEffect(() => {
-    axios.post('/api/plaid/create_link_token').then((res) => {
-      console.log(res.data);
-      if (res?.data?.link_token) setLinkToken(res.data.link_token);
-    }).catch((err) => console.log(err))
-  }, [])
+    axios
+      .post("/api/plaid/create_link_token")
+      .then((res) => {
+        if (res?.data?.link_token) setLinkToken(res.data.link_token);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
-  const onPlaidSuccess = () => {}
-  const onPlaidExit = () => {}
+  const onPlaidSuccess = () => {};
+  const onPlaidExit = () => {};
 
   return (
     <>
@@ -156,8 +158,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             <span style={{ color: theme.palette.primary.main }}> * </span>
           </Typography>
           <Select
-            labelId="organization-select-label"
-            id="organization-select"
+            labelId="organizer-select-label"
+            id="organizer-select"
             value={inputs?.oid}
             onChange={handle.inputs}
             variant="outlined"
@@ -166,8 +168,8 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             sx={{ mt: 1 }}
             fullWidth
           >
-            {Object.keys(organization.organizations).map((key, i) => {
-              const item = organization.organizations[key];
+            {Object.keys(organizer.organizers).map((key, i) => {
+              const item = organizer.organizers[key];
               return (
                 <MenuItem key={item.id} value={item.id}>
                   {item.name}
@@ -494,7 +496,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
             disabled={disabled}
           />
         </Grid>
-        
+
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">
             Registration Ends
@@ -544,8 +546,22 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">
             Entry Fee
-            {linkToken.toString() !== 'undefined' && <PlaidLink token={linkToken.toString()} env="sandbox" onSuccess={onPlaidSuccess} onExit={onPlaidExit} style={{backgroundColor: 'transparent', border: "none"}}>
-            <span style={{ color: theme.palette.primary.main, fontSize: '1rem', cursor: 'pointer' }}> Link your pay-out method </span></PlaidLink>}
+            {linkToken.toString() !== "undefined" && (
+              <PlaidLink
+                token={linkToken.toString()}
+                env="sandbox"
+                onSuccess={onPlaidSuccess}
+                onExit={onPlaidExit}
+                style={{ backgroundColor: "transparent", border: "none" }}
+              >
+                <span
+                  style={{ color: theme.palette.primary.main, fontSize: "1rem", cursor: "pointer" }}
+                >
+                  {" "}
+                  Link your pay-out method{" "}
+                </span>
+              </PlaidLink>
+            )}
             <span style={{ color: theme.palette.primary.main }}>*</span>
           </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.entryFee !== undefined}>

@@ -66,7 +66,7 @@ const MyApp = (props) => {
           }}
         >
           <Typography variant="h4" sx={{ color: "white", fontSize: "30px", textAlign: "center" }}>
-            <Link href="/organization/create">
+            <Link href="/organizer/create">
               TOO MANY HEADACHES FROM HOSTING EVENTS? WE GOT YOU COVERED, CLICK HERE!
             </Link>
           </Typography>
@@ -104,7 +104,7 @@ const MyApp = (props) => {
           }}
         >
           <Typography variant="h4" sx={{ color: "white", fontSize: "30px", textAlign: "center" }}>
-            <Link href="/organization/create">LOOKING TO START A TEAM? CLICK HERE!</Link>
+            <Link href="/organizer/create">LOOKING TO START A TEAM? CLICK HERE!</Link>
           </Typography>
         </Box>
       </Box>

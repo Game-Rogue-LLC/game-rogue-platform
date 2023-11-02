@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { useEffect, useMemo } from "react";
 
-import { ORGANIZATION_PROFILE_LIMIT } from "@/src/config/global";
+import { ORGANIZER_PROFILE_LIMIT } from "@/src/config/global";
 import OrganizationItem from "@/src/components/widgets/rogue-social/accounts/OrganizationItem";
 import { useAppContext } from "@/src/context/app";
 import { useAuthContext } from "@/src/context/AuthContext";
@@ -24,17 +24,13 @@ const OrganizationList = ({ items }) => {
       {items &&
         items.length > 0 &&
         items.map((item) => (
-          <OrganizationItem
-            key={"organization_" + item.id}
-            organization={item}
-            disableLink={true}
-          />
+          <OrganizationItem key={"organizer_" + item.id} organizer={item} disableLink={true} />
         ))}
-      {items && items.length < ORGANIZATION_PROFILE_LIMIT && (
+      {items && items.length < ORGANIZER_PROFILE_LIMIT && (
         <Button
           variant="contained"
           onClick={() => {
-            router.push("/organization/create");
+            router.push("/organizer/create");
           }}
         >
           CREATE NEW ACCOUNT

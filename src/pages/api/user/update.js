@@ -23,14 +23,12 @@ export default async function handler(req, res) {
   try {
     const { id, data } = req.body;
     if (id) {
-      console.log(id, data);
       firestore
         .collection("player")
         .doc(id)
         .set({ ...data }, { merge: true });
       const docRef = firestore.collection("player").doc(id);
       const docSnap = await docRef.get();
-      console.log(docSnap.data());
       res.status(200).json({
         code: "succeed",
         data: docSnap.data(),

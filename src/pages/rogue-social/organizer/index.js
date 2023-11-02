@@ -8,14 +8,14 @@ import { useMemo } from "react";
 
 const Page = (props) => {
   const { user } = useAuthContext();
-  const { organization } = useTournamentContext();
+  const { organizer } = useTournamentContext();
 
   const myOrganizations = useMemo(() => {
-    if (organization?.organizations) {
-      return _.filter(organization.organizations, (val) => val.uid === user.id);
+    if (organizer?.organizers) {
+      return _.filter(organizer.organizers, (val) => val.uid === user.id);
     }
     return [];
-  }, [organization?.organizations, user]);
+  }, [organizer?.organizers, user]);
 
   return (
     <Box>

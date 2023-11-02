@@ -34,7 +34,7 @@ const Page = (props) => {
   const router = useRouter();
   const { setTitle } = useAppContext();
   const { setColors } = useStyleContext();
-  const { organization, event, team, player, match, ticket } = useTournamentContext();
+  const { organizer, event, team, player, match, ticket } = useTournamentContext();
   const [eid, setEID] = useState(router?.query?.event);
   const [matches, setMatches] = useState([]);
   const [openView, setOpenView] = useState(false);
@@ -45,7 +45,6 @@ const Page = (props) => {
   }, []);
 
   const registerRequests = useMemo(() => {
-    console.log(ticket.tickets);
     if (ticket.tickets)
       return _.filter(
         ticket.tickets,
@@ -89,7 +88,7 @@ const Page = (props) => {
       if (event?.events && event.events[newEID]) {
         setEID(newEID);
         event.setCurrent(newEID);
-        organization.setCurrent(event.events[newEID]?.oid);
+        organizer.setCurrent(event.events[newEID]?.oid);
       } else {
         console.warn("Invalid Event ID");
         // Redirect to 404 page.
@@ -170,10 +169,7 @@ const Page = (props) => {
                   <TableCell align="center">{item.id}</TableCell>
                   <TableCell align="center">{getStatus(item)}</TableCell>
                   <TableCell align="center">
-                    {
-                      player.players[organization.organizations[event.events[item.eid].oid].uid]
-                        .userName
-                    }
+                    {player.players[organizer.organizers[event.events[item.eid].oid].uid].userName}
                   </TableCell>
                   <TableCell align="center">{dayjs(item.createdAt).format("MMM DD")}</TableCell>
                   <TableCell align="center">{"ROUND" + item.round}</TableCell>
