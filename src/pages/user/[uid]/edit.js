@@ -83,6 +83,69 @@ const Page = (props) => {
     setTitle("EDIT USER PROFILE");
   }, []);
 
+  const validate = (data, rule, messages) => {
+    let validator = new Validator(data, rule, messages);
+    if (validator.fails()) {
+      setErrors(validator.errors.errors);
+      return false;
+    }
+    setErrors({});
+    return true;
+  };
+
+  const setDate = (newDate) => {
+    setInputs((prev) => ({
+      ...prev,
+      birthday: new Date(newDate)
+    }));
+  };
+
+  const handle = {
+    save: async (e) => {
+      if (validate(inputs, rules, customMessages) === false) return;
+      setSaving(true);
+      let uploaded = true,
+        newData = { ...inputs };
+
+      if (avatar) {
+        uploaded = false;
+        const res = await player.upload(avatar, uid, "profilePic");
+        if (res.code === "succeed") {
+          newData.profilePic = res.url;
+          uploaded = true;
+        } else {
+          console.warn(res.message);
+        }
+      }
+
+      const res = await player.update(uid, newData);
+      if (res.code === "succeed") {
+        alert("Saved successfully!");
+      } else {
+        console.warn(res.message);
+      }
+      setSaving(false);
+    },
+    inputs: (e) => {
+      let { name, type, value } = e.target;
+      if (type === "number") value = Number(value);
+      setInputs((prev) => ({
+        ...prev,
+        [name]: value
+      }));
+    },
+    upload: (e, name) => {
+      if (e.target.files.length === 0) return;
+      const file = e.target?.files[0];
+      const url = URL.createObjectURL(file);
+      setAvatar(file);
+      setInputs((prev) => ({
+        ...prev,
+        [name]: url
+      }));
+    }
+  };
+
   return (
     <Paper sx={{ p: 2 }}>
       <AccountInfo item={item} />
