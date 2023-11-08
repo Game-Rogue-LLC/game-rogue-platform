@@ -122,6 +122,9 @@ const Page = (props) => {
           });
           break;
       }
+    },
+    cancel: () => {
+      router.push(`/shop/${sid}`);
     }
   };
 
@@ -244,6 +247,9 @@ const Page = (props) => {
             <LoadingButton loading={saving} variant="contained" onClick={handle.save}>
               Save
             </LoadingButton>
+            <Button variant="contained" onClick={handle.cancel} sx={{ ml: 2 }}>
+              Cancel
+            </Button>
           </Grid>
         </Grid>
       </Paper>
