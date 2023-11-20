@@ -39,7 +39,7 @@ const RightSidebar = ({ sx }) => {
   const upcomingMatches = useMemo(() => {
     if (match?.matches) {
       const res = match.matches.filter(
-        (item) => dayjs(item.start).isAfter(currentTime) && item.participants?.length === 2 && isMyMatch(item, team.teams, user.id)
+        (item) => dayjs(item.end).isAfter(currentTime) && item.participants?.length === 2 && isMyMatch(item, team.teams, user.id)
       );
       return res;
     }
