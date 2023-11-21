@@ -1,9 +1,11 @@
 import { Box, Button, Tab, Typography, styled, useTheme } from "@mui/material";
+import { EVENT_REGIONS, GAMES, PLATFORMS } from "@/src/config/global";
 import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
 import { createPost, readPost } from "@/src/redux/features/postSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
+import DropdownMenu from "@/src/components/DropdownMenu";
 import PostList from "@/src/components/widgets/rogue-social/PostList";
 import RichTextInput from "@/src/components/input/RichTextInput";
 import RightSidebar from "@/src/components/widgets/rogue-social/RightSidebar";
@@ -33,6 +35,9 @@ const Home = () => {
   const [saving, setSaving] = useState(false);
   const { post: postController } = useTournamentContext();
   const [tab, setTab] = useState("1");
+  const [game, setGame] = useState(null);
+  const [platform, setPlatform] = useState(null);
+  const [region, setRegion] = useState(null);
 
   const onTabChange = (e, newTab) => {
     setTab(newTab);
@@ -69,13 +74,62 @@ const Home = () => {
     dispatch(readPost());
   }, []);
 
+  const onGameChange = (newGame) => {
+    setGame(newGame);
+  };
+  
+  const onPlatformChange = (newPlatform) => {
+    setPlatform(newPlatform);
+  };
+
+  const onRegionChange = (newRegion) => {
+    setRegion(newRegion);
+  };
+
+  const filteredPosts = useMemo(() => {
+    if (postController?.posts) {
+      let posts = postController.posts;
+      if (game) {
+        posts = _.filter(posts, (val) => val.game == game.value);
+      }
+      if (region) {
+        posts = _.filter(posts, (val) => val.region == region.value);
+      }
+      if (platform) {
+        posts = _.filter(posts, (val) => val.platform == platform.value);
+      }
+      return posts;
+    }
+    return [];
+  }, [game, region, platform, postController?.posts]);
+  
   return (
     <Box sx={{ width: "100%", display: "flex" }}>
       <Box sx={{ flexGrow: 1 }}>
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Typography variant="h4" color="white">
             Home
           </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <DropdownMenu
+              name="game"
+              title={game ? game.name : "Change Game"}
+              items={GAMES}
+              onChange={onGameChange}
+            />
+            <DropdownMenu
+              name="region"
+              title={region ? region.name : "Change Region"}
+              items={EVENT_REGIONS}
+              onChange={onRegionChange}
+            />
+            <DropdownMenu
+              name="platform"
+              title={platform ? platform.name : "Change Platform"}
+              items={PLATFORMS}
+              onChange={onPlatformChange}
+            />
+          </Box>
         </Box>
         <TabContext value={tab}>
           <StyledTabList
@@ -139,7 +193,7 @@ const Home = () => {
           /> */}
           </Box>
           <TabPanel value="1" sx={{ p: 0 }}>
-            <PostList posts={post.posts} loading={post.status === "loading"} />
+            <PostList posts={filteredPosts} loading={post.status === "loading"} />
           </TabPanel>
           <TabPanel value="2"></TabPanel>
         </TabContext>

@@ -48,13 +48,13 @@ const PublicNavbar = ({ sx }) => {
   }, [team?.teams, user.user]);
 
   const totalPlayers = useMemo(() => {
-    if (player.players)
+    if (player?.players)
       return _.filter(player.players, (val) => val.userName || val.name).map((val) => ({
         label: val.userName || val.name,
         ...val
       }));
     return [];
-  }, [player.players]);
+  }, [player?.players]);
 
   useEffect(() => {
     if (router?.pathname) {

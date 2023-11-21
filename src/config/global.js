@@ -10,6 +10,7 @@ export const TEAM_PROFILE_LIMIT = 10;
 export const GAMES = [
   {
     id: 0,
+    value: 0,
     name: "Rainbow Six Siege",
     image: "/static/images/games/r6s.webp"
   }
@@ -82,10 +83,12 @@ export const STAFF_ROLES = [
 
 export const EVENT_CATEGORIES = {
   tournament: {
+    id: 0,
     value: 0,
     name: "Tournament"
   },
   league: {
+    id: 1,
     value: 1,
     name: "League"
   }
