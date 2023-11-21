@@ -119,6 +119,10 @@ const Page = (props) => {
     }
   };
 
+  useEffect(() => {
+    setTitle("CREATE SHOP");
+  }, []);
+
   const onColorChange = (name, value) => {
     setInputs({
       ...inputs,

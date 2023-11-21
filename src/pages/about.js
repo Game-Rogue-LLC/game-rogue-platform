@@ -11,7 +11,7 @@ const members = [
   },
   {
     nickName: "Titane",
-    name: "McClaine Stanek",
+    name: "Mack Stanek",
     position: "Chief Operations Officer",
   },
   {
