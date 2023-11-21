@@ -1,3 +1,10 @@
+import './plus-plan.css';
+import './script';
+
+const PlusPlan = () => {
+  return (
+
+
 <main class="main flow">
   <h1 class="main__heading">PLUS PLANS</h1>
   <div class="main__cards cards">
@@ -58,3 +65,7 @@
     <div class="overlay cards__inner"></div>
   </div>
 </main>
+
+  )
+}
+export default PlusPlan;
