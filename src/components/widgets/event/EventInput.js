@@ -546,7 +546,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
         <Grid item xs={12} lg={6}>
           <Typography variant="h6">
             Entry Fee
-            {linkToken.toString() !== "undefined" && (
+            {/* {linkToken.toString() !== "undefined" && (
               <PlaidLink
                 token={linkToken.toString()}
                 env="sandbox"
@@ -561,7 +561,7 @@ const EventInput = ({ handle, inputs, disabled, errors }) => {
                   Link your pay-out method{" "}
                 </span>
               </PlaidLink>
-            )}
+            )} */}
             <span style={{ color: theme.palette.primary.main }}>*</span>
           </Typography>
           <FormControl sx={{ mt: 1 }} fullWidth error={errors.entryFee !== undefined}>

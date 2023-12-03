@@ -32,6 +32,11 @@ import { useAuthContext } from "@/src/context/AuthContext";
 import { useRouter } from "next/router";
 import { useStyleContext } from "@/src/context/StyleContext";
 import { useTournamentContext } from "@/src/context/TournamentContext";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+
+const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = loadStripe(publishableKey);
 
 const TeamSelectInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
@@ -72,6 +77,12 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
     }
     return [];
   }, [team?.teams, user]);
+
+  const isRegisterable = useMemo(() => {
+    if (myTeam == "") return false;
+    if (item && (_.size(item.participants) === item.participantsCount || _.find(item.participants, (val) => val.id === myTeam))) return false;
+    return true;
+  }, [myTeam, item])
 
   // <a href="https://link.clover.com/urlshortener/8ZGvTs" style="background-color:#f5831f;border:1px solid #f5831f;min-height:50px;color:#000;padding:10px 20px;text-decoration:none;border-radius:4px;">REGISTER  $30.00</a>
   useEffect(() => {
@@ -137,6 +148,32 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
   };
   const onCreateTeam = () => {
     router.push("/team/create");
+  };
+
+  const createCheckOutSession = async () => {
+    const stripe = await stripePromise;
+    const checkoutSession = await axios.post('/api/checkout_session', {
+      item: {
+        id: item?.id,
+        tid: myTeam,
+        name: item?.name,
+        price: item?.entryFee,
+        image: item?.darkLogo,
+        description: 'Payment for registering in ' + item?.name,
+        quantity: 1,
+        redirectURL: process.env.NODE_ENV === 'development'
+          ? 'http://localhost:3000/'
+          : 'https://gamerogue.com/'
+      },
+    });
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id,
+    });
+    if (result.error) {
+      alert(result.error.message);
+    } else {
+      alert('Successfully registered!');
+    }
   };
 
   return (
@@ -357,9 +394,12 @@ const EventInfoPublic = ({ eid, item, startTime, endTime }) => {
                       flex: 1,
                       ...buttonStyle(organizer.organizers[event.events[eid]?.oid]?.primary)
                     }}
-                    onClick={onOpenRegisterDialog}
+                    onClick={() => {
+                      // onOpenRegisterDialog();
+                      createCheckOutSession();
+                    }}
                     disabled={
-                      myTeam === ""
+                      !isRegisterable
 
                       // dayjs(currentTime).isBefore(startTime) || dayjs(currentTime).isAfter(endTime)
                     }
